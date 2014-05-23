@@ -1,0 +1,1071 @@
+.bg-main-back {
+    background: url("/images/bg.png") repeat 0 0;
+}
+
+.course-info,  .lesson-header
+{
+    background-color: white;
+    /*border-radius: 10px;*/
+    padding-top: 10px !important;
+    padding-bottom:10px !important;
+}
+
+.course-info
+{
+    margin-right: 10px !important;
+}
+
+.lesson-info, .pass-lesson .exercises
+{
+    /*margin-right: -10px !important;*/
+}
+
+h1{
+    font-family: 'Lobster', cursive !important;
+    font-weight: bold;
+}
+
+h2{
+    font-family: 'Bad Script', cursive !important;
+    font-weight: bold;
+    font-size:20px !important;
+    border-bottom:2px dotted silver;
+}
+
+#main-menu a, #menu-logo {
+    padding: 22px 15px;
+    height: 64px;
+}
+
+#main-menu #myprogress a {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 5px 15px;
+}
+
+/*------*/
+
+#container {
+    margin-bottom: 80px;
+}
+
+.page-header {
+    margin: 0 0 10px 0 !important;
+}
+.page-header h2 {
+    margin: 0;
+    float: left;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.page-header a {
+    float: right;
+}
+
+.head-data {
+    margin-top: 10px;
+}
+
+.header-lesson {
+    padding-bottom: 9px;
+    /*border-bottom: 1px solid #eee;*/
+}
+
+.header-lesson .names h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.header-lesson .skills {
+
+    
+}
+
+.header-lesson .next {
+    text-align: right;
+}
+
+.lessongroup, .exercisegroup {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+}
+
+.zgrid .save-row {
+    font-size:16px;
+    display: none;
+}
+
+.zgrid .save-row i {
+    vertical-align: middle;
+    margin-top: 2px;
+    margin-right: 1px;
+}
+
+.order-rows {
+    text-align: center;
+    height: 34px;
+    padding-right: 0;
+}
+
+.order-rows i {
+    line-height: 34px;
+    vertical-align: middle;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.order-rows i:hover {
+    color: #47a447;
+}
+
+.zgrid .order-rows {
+    text-align: center;
+}
+.zgrid .order-rows i {
+    font-size: 12px;
+}
+
+.save-row:hover {
+    text-decoration: none;
+    color: #428bca;
+}
+
+.btn-icon .glyphicon {
+   top: 2px;
+   right: 3px;
+   padding-right: 4px;
+}
+
+.btn-icon-right .glyphicon {
+   top: 2px;
+   left: 3px;
+   padding-left: 4px;
+}
+
+.form {
+    margin-top: 12px;
+}
+
+.form .line {
+    margin-bottom: 10px;
+    width: 400px;
+}
+
+.zgrid th, .zgrid td {
+    text-align: center;
+}
+
+.zgrid textarea {
+    resize: vertical;
+}
+
+.zgrid input {
+    text-align: center;
+}
+
+.zgrid .inputs-mini {
+    
+}
+/*#dff0d8; #d9edf7; #428bca;*/
+.zgrid .inputs-mini .input-mini-container {
+    background: #d9edf7;
+    text-align: left;
+    margin-bottom: 3px;
+    border-radius: 5px;
+}
+
+.zgrid .inputs-mini .input-mini-container .name {
+    text-align: left;
+    width: 80%;
+    margin: 3px 0 0 5px;
+    font-size: 11px;
+    float: left;
+    word-break: break-word;
+}
+
+.mydrop {
+
+}
+.zgrid .mydrop input {
+    text-align: left;
+    height: 25px;
+    padding: 4px 8px;
+    font-size: 11px;
+}
+
+.zgrid  .mydrop .dropdown-toggle {
+    padding: 1px 8px;
+    height: 25px;
+}
+
+.mydrop .input-group-btn {
+    position: static;
+}
+
+.mydrop .input-group-btn .dropdown-menu {
+    min-width: 0;
+    width: 100%;
+}
+
+.mydrop .input-group-btn .dropdown-menu a {
+    white-space: normal;
+    font-size: 12px;
+    word-break: break-word;
+    text-align: left;
+}
+
+.inputs-mini .input-mini-container .close {
+    margin: 2px 5px 0 0;
+    font-size: 18px;
+    width: 7%;
+}
+
+.ui-autocomplete {
+    font-size: 10px;
+}
+
+.ui-autocomplete .ui-menu-item a {
+    font-size: 10px;
+}
+
+.section {
+    
+}
+
+.section .head {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.section .row {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.chosen-skills .skill {
+    margin-bottom: 3px;
+    background: #d9edf7;
+    border-radius: 5px;
+}
+
+.chosen-skills .name {
+    text-align: left;
+    width: 80%;
+    margin: 3px 0 0 5px;
+    font-size: 11px;
+    float: left;
+    word-break: break-word;
+}
+
+.chosen-skills .close {
+    margin: 2px 5px 0 0;
+    font-size: 18px;
+    width: 7%;
+}
+
+.form-profile form {
+    margin-bottom: 12px;
+}
+
+.form-profile .row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.form-profile h4 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.errorMessage {
+    color: #D00;
+}
+
+.course-info {
+    padding: 0 12px;
+    margin: 0;
+}
+
+.course-info h1, .lesson-info h1 {
+    font-size: 20px;
+    margin: 0 0 3px 0;
+}
+
+.course-info h2, .lesson-info h2 {
+    font-size: 18px;
+}
+
+.course-info .skills ul {
+    padding-left: 20px;
+}
+
+.course-info .skills ul li {
+    list-style: none;
+    font-size: 13px;
+}
+
+.course-info .lessons h3 {
+    font-size: 15px;
+    font-weight: bold;
+    /*margin: 7px 0 7px 20px;*/
+}
+
+.course-info .lessons ul {
+    padding-left: 30px;
+    list-style: none;
+    margin: 0;
+}
+
+.course-info .lessons ul li {
+    margin: 3px 0;
+}
+
+.course-info .lessons ul li .link {
+    text-decoration: none;
+    width: 230px;
+    float: left;
+    margin-right: 10px;
+}
+
+.course-info .lessons ul li .link:hover {
+    color: #007;
+    font-weight: bold;
+}
+
+.course-info .lessons ul li .current {
+    color: #007;
+    font-weight: bold;
+}
+
+.course-info .left-block {
+    float: left;
+    margin-right: 2%;
+    width: 68%;
+}
+
+.course-info .right-block {
+    float: right;
+    width: 30%;
+}
+
+.course-info .left-block .desc {
+    margin-bottom: 5px;
+}
+
+.course-info .right-block .progress {
+    margin-bottom: 4px;
+}
+
+.course-info .lessons ul li .btn {
+    float: left;
+}
+
+.list-exercises ul {
+    padding-left: 20px;
+    list-style: none;
+    margin: 0;
+}
+
+.list-exercises ul a {
+    text-decoration: none;
+}
+
+.lesson-info {
+    /*padding: 0 12px;*/
+    margin: 0;
+}
+
+.divider {
+    border-left: 2px solid #ddd;
+    height: 100%;
+    left: 58.4%;
+    position: absolute;
+}
+
+.pass-lesson {
+    margin-bottom: 80px;
+}
+
+.pass-lesson h2 {
+    font-size: 18px;
+}
+
+.pass-lesson .theory {
+    padding: 0 0 10px;
+}
+
+.pass-lesson .list-exercises {
+    /*border-top: 2px solid #ddd;*/
+    margin-left: -13px;
+    padding-left: 15px;
+}
+
+.pass-lesson .list-exercises ul li {
+    margin: 3px 0;
+}
+
+.pass-lesson .list-exercises ul li .link {
+    text-decoration: none;
+}
+
+.pass-lesson .list-exercises ul li .link:hover {
+    color: #007;
+    font-weight: bold;
+}
+
+.pass-lesson .list-exercises ul li .current {
+    color: #007;
+    font-weight: bold;
+}
+
+.pass-lesson .exercise {
+    padding: 5px;
+    width: 70%;
+    margin: 0 auto 10px;
+}
+
+.pass-lesson .exercise.gray {
+    background: #f7f7f7;
+}
+
+.pass-lesson .control-buttons {
+    width: 70%;
+    margin: 10px auto;
+    text-align: right;
+}
+
+.pass-lesson .label {
+    float: right;
+    margin-top: 5px;
+    display: inline-block;
+    line-height: 16px;
+    width: 150px;
+    word-break: break-all;
+    white-space: normal;
+}
+
+.pass-lesson .question {
+    margin-bottom: 5px;
+    float: left;
+    width: 60%;
+}
+
+.pass-lesson .answer {
+    width: 39%;
+    margin-left: 1%;
+    float: left;
+}
+.pass-lesson .answer .result {
+    float: left;
+    line-height: 21px;
+    margin-top: 5px;
+    vertical-align: middle;
+}
+
+.pass-lesson .answer input {
+
+}
+
+.pass-lesson .answer .form-control-feedback {
+    top: 0;
+}
+
+.color-right {
+    color: #5cb85c;
+}
+
+.color-unright {
+    color: #d9534f;
+}
+
+.pass-lesson .header-lesson .popover {
+    max-width: 390px;
+}
+
+/*.pass-lesson .skills {
+    text-align: left;
+}
+
+.pass-lesson .skills ul {
+    list-style: none;
+    padding-left: 0;
+    ******
+    margin-bottom:10px;
+    overflow:hidden;
+}
+
+.pass-lesson .skills ul li {
+    font-size: 14px;
+    width: 293px;
+    float:left;
+    margin-right:10px;
+}
+
+.pass-lesson .skills ul li .label {
+    white-space: normal;
+    text-align: left;
+}*/
+
+.header {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+/*.header h1 {
+    float: left;
+    width: 70%;
+}*/
+
+.header .btn {
+    float: right;
+}
+
+/*.header .progress {
+    float: right;
+    width: 30%;
+    margin: 0;
+}*/
+
+.copyright {
+    float: right;
+}
+
+#regModel .modal-body .row {
+    padding: 3px 30px;
+}
+
+#loginForm .modal-body .row {
+    padding: 3px 30px;
+}
+
+#regModel .modal-body .body-input, #loginForm .modal-body .body-input {
+    width: 50%;
+    float: right;
+}
+
+#regModel .modal-body label, #loginForm .modal-body label {
+    float: left;
+    vertical-align: middle;
+    line-height: 34px;
+    margin-bottom: 0;
+}
+
+#first-page .rememberMe input {
+    float: left;
+    margin: 1px 0 0 8px;
+    height: 34px;
+}
+
+#reg-success {
+    margin: 200px auto;
+    width: 400px;
+    text-align: left;
+    font-size: 16px;
+    color: #444;
+    padding: 40px;
+    background: #dff0d8;
+    border-radius: 15px;
+    border: 4px solid #ddd;
+}
+
+#first-page {
+   text-align: left;
+   margin-bottom: 30px;
+}
+
+#first-page .list {
+    margin-top: 10px;
+}
+
+#first-page .list h2 {
+   margin-top: 0;
+   margin-bottom: 22px;
+   border-bottom: 0;
+}
+
+#first-page .list ul {
+    padding-left: 46px;
+    list-style: none;
+}
+
+#first-page .list ul li {
+    margin-bottom: 17px;
+    font-size: 17px;
+}
+
+#first-page .btn-lg {
+    font-size: 26px;
+    width: 360px;
+}
+
+#first-page #header h1 {
+    font-size: 32px;
+    line-height: 30px;
+    margin-top: 17px;
+    margin-bottom: 16px;
+}
+
+#first-page #header h2 {
+    margin-top: 0;
+    margin-bottom: 33px;
+    border-bottom: 0;
+}
+
+#first-page #login-open {
+    font-size: 19px;
+    color: #003366;
+    display: inline-block;
+    margin-top: 18px;
+    text-decoration: none;
+    border-bottom: 1px dotted #003366;
+}
+
+.bg-cell {
+    background: url(/images/cell.png);
+    padding: 0 21px !important;
+}
+
+.widget
+{
+    background-color:white;
+    overflow: hidden;
+    padding:0 15px 15px;
+    min-height: 300px;
+}
+
+.exercises
+{
+    padding-left:0 !important;
+    padding-right:0 !important;
+}
+
+.lesson-info
+{
+    padding-right:0 !important;
+}
+
+#check .head h1 {
+    font-size: 30px;
+    margin-top: 11px;
+    margin-bottom: 12px;
+    line-height: 41px;
+}
+
+#check .head .fordummy {
+    font-size: 18px;
+}
+
+#check .reg {
+    margin-top: 20px;
+    text-align: right;
+}
+
+#check .reg a {
+    width: 70%;
+}
+
+#check .login {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 15px;
+    width: 70%;
+    float: right;
+}
+
+#check .login a {
+    text-decoration: underline;
+    color: #006699;
+    font-size: 16px;
+}
+
+#check #exercises {
+    margin-top: 21px;
+}
+
+#check .exercise {
+    margin-bottom: 17px;
+}
+
+#check .exercise h2 {
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+#check .exercise .question {
+    margin-top: 10px;
+}
+
+#check .exercise .answer .form-control-feedback {
+    top: 0;
+    right: 15px;
+}
+
+#check #bottom .btn {
+    min-width: 180px;
+    font-size: 16px;
+    margin: 30px 0;
+}
+
+#check #bottom #leftStep {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#check #result {
+    font-size: 17px;
+    margin-bottom: 16px;
+}
+
+#check #recommend {
+    font-size: 17px;
+}
+
+#ochivki #progress {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#ochivki #progress tr td {
+    padding: 8px;
+    text-align: center;
+}
+
+#ochivki #progress .name {
+    font-weight: bold;
+}
+
+#ochivki #progress .desc {
+    width: 35%;
+}
+
+#ochivki #progress .value {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#ochivki #progress .place {
+    width: 14%;
+}
+
+#htmlEditor .modal-dialog {
+    width: 900px;
+}
+
+.for-editor-field  {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    word-break: break-all;
+    padding: 6px 12px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.for-editor-field:hover {
+    cursor: pointer;
+}
+
+#course-themes {
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    width: 100%;
+}
+
+#course-themes table {
+    width: 100%;
+}
+
+#course-themes td {
+}
+
+#course-themes thead th {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 6px;
+    text-align: center;
+}
+
+#course-themes #skills {
+
+}
+
+#course-themes .theme-name {
+    border-bottom: 2px solid #006699;
+    padding: 5px;
+    text-align: center;
+}
+
+#course-themes .theme-name textarea {
+    float: left;
+    width: 90%;
+    resize: none;
+    height: 100%;
+}
+
+#course-themes .theme-name a {
+    float: right;
+    width: 9%;
+    color: #D2322D;
+}
+
+#course-themes .lesson {
+    height: 78px;
+    border-bottom: 2px solid #ff6600;
+}
+
+#course-themes .lesson-name {
+    text-align: center;
+    padding: 5px;
+}
+
+#course-themes .lesson-name textarea {
+    float: left;
+    width: 90%;
+    resize: none;
+    height: 100%;
+}
+
+#course-themes .lesson-name .lesson-remove {
+    float: right;
+    width: 9%;
+}
+
+#course-themes .lesson-name .lesson-remove a {
+    color: #D2322D;
+}
+
+#course-themes .blocks {
+    border-bottom: 2px solid #ff6600;
+    text-align: center;
+}
+
+#course-themes .blocks > tbody, .lessons-container > table > tbody {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    min-height: 76px;
+}
+
+#course-themes #blocks-course .blocks > tbody {
+    min-height: 40px;
+}
+
+#course-themes #blocks-course .blocks {
+    border-bottom: none;
+}
+
+#course-themes .block > td {
+    padding: 3px 0;
+}
+
+#course-themes .blocks .block .block-name {
+    width: 40%;
+    padding-right: 1%;
+}
+
+#course-themes .blocks .block .block-type {
+    width: 15%;
+    padding-right: 1%;
+}
+
+#course-themes .blocks .block .block-type select {
+    padding: 0;
+}
+
+#course-themes .blocks .block .block-count {
+    width: 5%;
+    padding-right: 1%;
+}
+
+#course-themes .blocks .block .block-skills {
+    width: 30%;
+    padding-right: 1%;
+}
+
+#course-themes .blocks .block .block-skills select {
+    padding: 0;
+}
+
+#course-themes .blocks .block .block-operation {
+    width: 6%;
+}
+
+#course-themes .blocks .block .block-operation .edit {
+    color: #006699;
+}
+
+#course-themes .blocks .block .block-operation .remove {
+    color: #D2322D;
+}
+
+#additional {
+    border-top: 2px solid #999;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+#select-skills {
+    width: 24%;
+    float: left;
+    margin-right: 1%;
+}
+
+#additional #add-skill {
+    width: 24%;
+    float: left;
+    margin-right: 1%;
+}
+
+#additional #add-block {
+    width: 23%;
+    float: left;
+    margin: 0 1%;
+}
+
+#additional #add-block input, #additional #add-skill input {
+    width: 53%;
+    float: left;
+}
+
+#additional #add-block select, #additional #add-skill select {
+    width: 30%;
+    margin: 0 1%;
+    float: left;
+}
+
+#additional #add-block a, #additional #add-skill a {
+    width: 15%;
+    float: right;
+}
+
+#additional #add-lesson {
+    width: 23%;
+    float: left;
+    margin: 0 1%;
+}
+
+#additional #add-lesson input {
+    width: 84%;
+    float: left;
+}
+
+#additional #add-lesson a {
+    width: 15%;
+    float: left;
+    margin-left: 1%;
+}
+
+#additional #add-theme {
+    width: 24%;
+    float: left;
+    margin-left: 1%;
+}
+
+#additional #add-theme input {
+    width: 84%;
+    float: left;
+}
+
+#additional #add-theme a {
+    width: 15%;
+    float: left;
+    margin-left: 1%;
+}
+
+.skill-course
+{
+    padding:10px 0;
+    text-align: center;
+    vertical-align: top;
+}
+
+.skill-course .skill-remove-icon
+{
+    visibility:hidden;
+}
+
+.skill-course:hover .skill-remove-icon
+{
+    visibility: visible !important;/*
+    position:relative;
+    z-index: 1000000;*/
+}
+
+.droppable-hover
+{
+    background-color:yellow !important;
+}
+
+/*.ui-sortable-placeholder td
+{
+    width:100%;
+}
+
+.ui-sortable-placeholder
+{
+    background-color:yellow !important;
+}*/
+
+.skill-course:hover .skill-remove-icon
+{
+    /*visibility: visible !important;
+    position:relative;
+    z-index:1000000000000;*/
+}
+
+#skills-table
+{
+    position:relative;
+}
+
+.skill-course
+{
+    position:relative;
+}
+
+.skill-course span{
+    font-size:8px;
+    text-overflow: ellipsis;
+    max-width:90%;
+    overflow:hidden;
+    display:inline-block;
+    max-height: 22px;
+}
+
+.skill-course a{
+    display: block;
+position: absolute;
+top: 0px;
+
+z-index:10000000;
+}
+
+#newskills .skills-row
+{
+    position:relative;
+    overflow:hidden;
+}
+
+#skills .skills-row
+{
+    position:absolute;
+    display:block;
+    overflow:hidden;
+    width:100%;
+}
+
+.skills-row div
+{
+    float:left;
+}
+
+.blocks-container
+{
+    vertical-align:top;
+}
