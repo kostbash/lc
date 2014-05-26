@@ -35,6 +35,23 @@
             }
         });
         
+        $('#GeneratorsTemplates_template').live('change keyup input click', function() {
+            template = /[^x\+\-\*\d\/\(\)\s]/gi;
+            if (this.value.match(template))
+                this.value = this.value.replace(template, '');
+        });
+        
+        $('.condition input[name*=condition]').live('change keyup input click', function() {
+            template = /[^x\+\-\*\d\/\(\)\s=mod]/gi;
+            if (this.value.match(template))
+                this.value = this.value.replace(template, '');
+        });
+        
+        $('.only-number').live('change keyup input click', function() {
+            if (this.value.match(/[^0-9]/g))
+                this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        
         $('#add-condition').click(function(){
             current = $(this);
             current.addClass('disabled');
@@ -102,10 +119,6 @@
         return true;
     }
     
-    function checkVariable() {
-        variables = $('.variable');
-    }
-    
     function checkVariables() {
         variables = $('.variable');
         res = 1;
@@ -119,13 +132,23 @@
             if(!minVal.val()) {
                 errorMin.html('Введите мин. значение');
                 res = 0;
-            } else
-                errorMin.html('');
-            
+            } else {
+                if(minVal.val() >= maxVal.val()) {
+                    errorMin.html('Мин. значение не может быть больше или равно макс. значению');
+                    res = 0;
+                }
+                else
+                    errorMin.html('');
+            }
             if(!maxVal.val()) {
                 errorMax.html('Введите макс. значение');
                 res = 0;
             } else
+                if(minVal.val() >= maxVal.val()) {
+                    errorMax.html('Макс. значение не может быть меньше или равно мин. значению');
+                    res = 0;
+                }
+                else
                 errorMax.html('');
         });
         if(res) {
@@ -190,7 +213,7 @@
                   <?php echo CHtml::label('Число заданий', 'GeneratorsTemplates_number_exercises'); ?>
               </div>
               <div class="col-lg-6 col-md-6">
-                  <?php echo CHtml::textField("GeneratorsTemplates[number_exercises]", $generator->Template->number_exercises, array('maxlength'=>11, 'class'=>'form-control', 'placeholder' => 'Введите число заданий')); ?>
+                  <?php echo CHtml::textField("GeneratorsTemplates[number_exercises]", $generator->Template->number_exercises, array('maxlength'=>11, 'class'=>'form-control only-number', 'placeholder' => 'Введите число заданий')); ?>
                   <div class="errorMessage"></div>
               </div>
             </div>

@@ -29,6 +29,7 @@ class GeneratorsTemplates extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_user, id_generator, template, number_exercises', 'required'),
+                    	array('template', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
 			array('id_user, id_generator, number_exercises', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

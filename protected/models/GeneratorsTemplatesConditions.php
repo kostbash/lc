@@ -29,6 +29,7 @@ class GeneratorsTemplatesConditions extends CActiveRecord
 			array('id_template, condition', 'required'),
 			array('id_template', 'numerical', 'integerOnly'=>true),
 			array('condition', 'length', 'max'=>255),
+			array('condition', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s=mod]+$/i'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, id_template, condition', 'safe', 'on'=>'search'),
