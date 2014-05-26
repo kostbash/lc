@@ -465,8 +465,19 @@ Yii::app()->clientScript->registerScript("skills-grid",
                                 ),
                             ),
                     )); ?>
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon')) ?>
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon')) ?>
+            </div>
+        </div>
+        <div class="clearfix">
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left; margin: 0 5px')) ?>
+
+            <div id="dropdown-generators">
+                <div class="input-group-btn">
+                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+                    <ul class="dropdown-menu" role="menu">
+                        <?php echo Generators::ListGenerators($exerciseGroup->id); ?>
+                    </ul>
+                </div>
             </div>
         </div>
         <?php elseif($exerciseGroup->type == 2) : ?>
@@ -519,8 +530,19 @@ Yii::app()->clientScript->registerScript("skills-grid",
                                 ),
                             ),
                     )); ?>
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из глобальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon')) ?>
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из локальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon')) ?>
+            </div>
+        </div>
+        <div class="clearfix">
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из глобальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из локальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left; margin: 0 5px')) ?>
+
+            <div id="dropdown-generators" style="width: 273px;">
+                <div class="input-group-btn">
+                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+                    <ul class="dropdown-menu" role="menu">
+                        <?php echo Generators::ListGenerators($exerciseGroup->id); ?>
+                    </ul>
+                </div>
             </div>
         </div>
         <?php endif; ?>

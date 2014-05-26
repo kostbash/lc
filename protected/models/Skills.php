@@ -161,10 +161,10 @@ class Skills extends CActiveRecord
             return 1;
         }
         
-        public function HtmlForCourse($id_course, $n, $title = true) {
+        public function HtmlForCourse($id_course, $n, $title = false) {
             return "
-            <div data-id='$this->id' class='skill-course' style='background: #". Courses::$bgColors[$n%count(Courses::$bgColors)] ."; width:164px;'>"
-                ."<span class=name title='$this->name'>".($title?$this->name:"")."</span>". CHtml::link("<i class='glyphicon glyphicon-remove'></i>", array('/admin/courseandskills/delete', 'id_skill'=>$this->id, 'id_course'=>$id_course), array('title'=>$this->name, 'class'=>'skill-remove-icon') )."</div>";
+            <td data-id='$this->id' class='skill-course' style='background: #". Courses::$bgColors[$n%count(Courses::$bgColors)] ."; width:164px;'>"
+                ."<span class=name title='$this->name'>".($title?$this->name:"")."</span>". CHtml::link("<i class='glyphicon glyphicon-remove'></i>", array('/admin/courseandskills/delete', 'id_skill'=>$this->id, 'id_course'=>$id_course), array('title'=>$this->name, 'class'=>'skill-remove-icon') )."</td>";
         }
         
         public function existsInCourse($course_id)

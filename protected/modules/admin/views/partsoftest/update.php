@@ -164,7 +164,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
     );
 ?>
 <div class="page-header clearfix">
-    <?php echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>К тесту', array('/admin/groupofexercises/update', 'id'=>$part->Group->id,'id_course'=>$part->Group->id_course), array('class'=>'btn btn-success btn-icon', 'style'=>'float:left; margin-right: 2%')); ?>
+    <?php echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>К тесту', array('/admin/groupofexercises/update', 'id'=>$part->Group->id), array('class'=>'btn btn-success btn-icon', 'style'=>'float:left; margin-right: 2%')); ?>
     <h2>Задания <?php echo "теста \"{$part->Group->name}\""; ?></h2>
 </div>
 
@@ -271,8 +271,20 @@ $this->widget('ZGridView', array(
         ),
     ),
 )); ?>
-<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_part'=>$part->id), array('class'=>'btn btn-sm btn-success btn-icon')) ?>
-<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_part'=>$part->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'margin-left: 14px;')) ?>
+
+<div class="clearfix">
+<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_part'=>$part->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
+<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_part'=>$part->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon','style'=>'float: left; margin: 0 5px')) ?>
+
+<div id="dropdown-generators">
+    <div class="input-group-btn">
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <ul class="dropdown-menu" role="menu">
+            <?php echo Generators::ListGenerators($part->id, 'part'); ?>
+        </ul>
+    </div>
+</div>
+</div>
 
 <?php
 Yii::app()->clientScript->registerScript('search' . $x . $this->id, '

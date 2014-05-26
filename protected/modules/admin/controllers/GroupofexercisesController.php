@@ -16,7 +16,7 @@ class GroupOfExercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
+				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax'),
 				'users'=>Users::Admins(),
 			),
 			array('deny',  // deny all users
@@ -48,7 +48,7 @@ class GroupOfExercisesController extends Controller
 		}
 	}
         
-	public function actionUpdate($id, $id_course)
+	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
                 $skills = new GroupExerciseAndSkills('search');
@@ -57,7 +57,6 @@ class GroupOfExercisesController extends Controller
 		$this->render('update',array(
 			'exerciseGroup'=>$model,
                         'skills'=>$skills,
-                        'id_course'=>$id_course,
 		));
 	}
 
@@ -125,10 +124,9 @@ class GroupOfExercisesController extends Controller
                             }
 
                         } elseif ($model->type == 2) {
-                            foreach($model->TestCriteria as $testCriteria)
+                            foreach($model->PartsOfTest as $partsOfTest)
                             {
-                                LessonGroupCriteriaAndSkills::model()->deleteAllByAttributes(array('id_lesson_criteria'=>$testCriteria->id));
-                                $testCriteria->delete();
+                                $partsOfTest->delete();
                             }
                             
                             foreach($usersExerciseGroups as $usersExerciseGroup)
@@ -194,26 +192,6 @@ class GroupOfExercisesController extends Controller
         public function actionRemoveSkill($id) {
             $model= GroupExerciseAndSkills::model()->findByPk($id);
             $model->delete();
-        }
-        
-        public function actionRemoveSkillByGroup($id_group, $id_skill)
-        {
-            if($gof = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$id_group, 'id_skill'=>$id_skill)))
-            {
-                if($gof->delete()) {
-                        $res['success'] = 1;
-                        $res['html'] = '';
-                    } else {
-                        $res['success'] = 0;
-                        $res['message'] = 'Удаление не произошло';
-                    }
-            }
-            else
-            {
-                $res['success'] = 0;
-                $res['message'] = 'Удаление не произошло: такого умения нет в блоке';
-            }
-            echo CJSON::encode($res);
         }
 
 	protected function performAjaxValidation($model)

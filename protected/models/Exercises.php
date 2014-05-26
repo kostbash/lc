@@ -16,6 +16,7 @@ class Exercises extends CActiveRecord
         static $needAnswer = array('1'=>'Да', '0'=>'Нет');
         public $SkillsIds;
         public $limit;
+        public $number;
         public $pageSize = 10;
         public static $pageSizes = array(
             //'0' => 'Все',

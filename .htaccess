@@ -7,5 +7,4 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # otherwise forward it to index.php
-RewriteCond $1 !^(index\.php|files|robots\.txt)
 RewriteRule . index.php

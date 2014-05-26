@@ -296,10 +296,9 @@ class CUrlManager extends CApplicationComponent
 			$anchor='';
 		$route=trim($route,'/');
 		foreach($this->_rules as $i=>$rule)
-		{ 
+		{
 			if(is_array($rule))
 				$this->_rules[$i]=$rule=Yii::createComponent($rule);
-                        
 			if(($url=$rule->createUrl($this,$route,$params,$ampersand))!==false)
 			{
 				if($rule->hasHostInfo)

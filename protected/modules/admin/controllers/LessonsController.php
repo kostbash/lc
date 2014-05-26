@@ -485,12 +485,12 @@ class LessonsController extends Controller
             {
                 if($_POST['positions'])
                 {
-                    $criteria = new CDbCriteria;
-                    $criteria->addNotInCondition('id_group_exercises', $_POST['positions']);
-                    $criteria->compare('id_lesson', $id_lesson);
-                    LessonAndExerciseGroup::model()->deleteAll($criteria);
                     foreach($_POST['positions'] as $key => $id_group)
                     {
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id_group_exercises', $_POST['positions']);
+                        $criteria->compare('id_lesson', $id_lesson);
+                        LessonAndExerciseGroup::model()->deleteAll($criteria);
                         $lessonAndExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$id_group));
                         if($lessonAndExerciseGroup)
                         {
@@ -511,12 +511,12 @@ class LessonsController extends Controller
             } elseif($id_course) {
                 if($_POST['positions'])
                 {
-                    $criteria = new CDbCriteria;
-                    $criteria->addNotInCondition('id_group', $_POST['positions']);
-                    $criteria->compare('id_course', $id_course);
-                    CoursesAndGroupExercise::model()->deleteAll($criteria);
                     foreach($_POST['positions'] as $key => $id_group)
                     {
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id_group', $_POST['positions']);
+                        $criteria->compare('id_course', $id_course);
+                        CoursesAndGroupExercise::model()->deleteAll($criteria);
                         $coursesAndGroupExercise = CoursesAndGroupExercise::model()->findByAttributes(array('id_course'=>$id_course, 'id_group'=>$id_group));
                         if($coursesAndGroupExercise)
                         {

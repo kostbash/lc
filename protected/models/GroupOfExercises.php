@@ -173,7 +173,7 @@ class GroupOfExercises extends CActiveRecord
                     <td class='block-count'>$this->CountExercises</td>
                     <td class='block-skills'>$this->htmlSkills</td>
                     <td class='block-operation'>
-                        ".CHtml::link("<i class='glyphicon glyphicon-pencil'></i>", Yii::app()->createUrl("/admin/groupofexercises/update", array("id"=>$this->id, 'id_course'=>$this->id_course)), array('class'=>'edit'))."
+                        ".CHtml::link("<i class='glyphicon glyphicon-pencil'></i>", Yii::app()->createUrl("/admin/groupofexercises/update", array("id"=>$this->id)), array('class'=>'edit'))."
                         ".CHtml::link("<i class='glyphicon glyphicon glyphicon-remove'></i>", Yii::app()->createUrl("/admin/groupofexercises/delete", array("id"=>$this->id)), array('class'=>'remove'))."
                     </td>
                 </tr>";

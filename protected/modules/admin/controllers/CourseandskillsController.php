@@ -99,14 +99,11 @@ class CourseandskillsController extends Controller
             } else {
                 $res['success'] = 0;
             }
-            $res['type']='removefromcourse';
             echo CJSON::encode($res);
 	}
 
-	public function actionSkillsByAjax($id_course)
+	public function actionSkillsByAjax($id_course, $with_used=true)
 	{
-            $course = Courses::model()->findByPk($id_course);
-            
             $criteria = new CDbCriteria;
 
             if (isset($_POST['term']))// если переданы символы
@@ -114,9 +111,13 @@ class CourseandskillsController extends Controller
                 $criteria->condition = '`name` LIKE :name';
                 $criteria->params['name'] = '%' . $_POST['term'] . '%';
             }
-
-            $criteria->addNotInCondition('id', $course->idsUsedSkills);
-            $criteria->addInCondition('id_course', array(0,$course->id));
+            if($with_used)
+            {
+                $course = Courses::model()->findByPk($id_course);
+                if($course)
+                    $criteria->addNotInCondition('id', $course->idsUsedSkills);
+            }
+            $criteria->addInCondition('id_course', array(0, $id_course));
             $criteria->limit = 10;
             $skills = Skills::model()->findAll($criteria);
             $res = '';

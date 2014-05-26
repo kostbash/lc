@@ -6,7 +6,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'�������� ������� ������',
+	'name'=>'Education',
         'timeZone' => 'Europe/Moscow',
         'language' => 'ru',
 
@@ -41,7 +41,7 @@ return array(
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
 			'urlFormat'=>'path',
-                        'baseUrl' => 'http://lc2',
+                        'baseUrl' => 'http://education.loc',
                         'showScriptName' => false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -58,12 +58,12 @@ return array(
                 ),
             
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=lc222',
+			'connectionString' => 'mysql:host=localhost;dbname=education',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => '',
 			'charset' => 'utf8',
-                    'enableProfiling'=>true
+                        'enableProfiling'=>true,
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -77,11 +77,9 @@ return array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
 				array(
 					'class'=>'CProfileLogRoute',
 				),
-				//*/
 			),
 		),
 	),
