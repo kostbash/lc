@@ -573,7 +573,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
                 $.ajax({
                     'url':'".Yii::app()->createUrl('/admin/skills/create')."',
                     'type':'POST',
-                    'data': {'Skills':{'name':$(this).val(), 'type':2, 'fromcourse':1}}, //2=навык
+                    'data': {'Skills':{'name':$(this).val(), 'type':2, 'fromcourse':1, id_course:$model->id}}, //2=навык
                     'success': function(result) { 
                                     if(result!='')
                                     {
