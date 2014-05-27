@@ -188,9 +188,9 @@ class GeneratorsController extends Controller
                     
                     if($template->save())
                     {
+                        GeneratorsTemplatesVariables::model()->deleteAllByAttributes(array('id_template'=>$template->id));
                         if($_POST['GeneratorsTemplatesVariables'])
                         {
-                            GeneratorsTemplatesVariables::model()->deleteAllByAttributes(array('id_template'=>$template->id));
                             $newVar = new GeneratorsTemplatesVariables;
                             foreach($_POST['GeneratorsTemplatesVariables'] as $attributesVar)
                             {
@@ -205,9 +205,9 @@ class GeneratorsController extends Controller
                             }
                         }
                         
+                        GeneratorsTemplatesConditions::model()->deleteAllByAttributes(array('id_template'=>$template->id));
                         if($_POST['GeneratorsTemplatesConditions'])
                         {
-                            GeneratorsTemplatesConditions::model()->deleteAllByAttributes(array('id_template'=>$template->id));
                             $newCond = new GeneratorsTemplatesConditions;
                             foreach($_POST['GeneratorsTemplatesConditions'] as $attributesCond)
                             {

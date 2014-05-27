@@ -31,8 +31,11 @@
                             </thead>
                             <?php
                             foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson) :
-                                if($keyLesson == 0 && $pos==1)
-                                    continue;
+//                                if($keyLesson == 0 && $pos==0)
+//                                {
+//                                    ++$pos;
+//                                    continue;
+//                                }
                                 $userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id);
                                 $popover_content = "<b>Умения:</b><br />";
 
