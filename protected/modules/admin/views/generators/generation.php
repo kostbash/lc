@@ -108,10 +108,10 @@
 
 <div id='result-generation'>
     <div class="page-header clearfix">
-        <h2 style="width: 60%; margin: 0 1% 0 0; border-bottom: none;">Настройки заданий</h2>
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-remove"></i>Отмена', array('/admin/groupofexercises/update', 'id'=>$group->id), array('class'=>'btn btn-danger btn-icon btn-sm', 'style'=>'float:left; margin: 0 1% 0 0; width: 11%;')); ?>
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-repeat"></i>Еще раз', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:left; margin: 0 1% 0 0; width: 11%;', 'onclick'=>'location.reload(); return false;')); ?>
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить задания', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'onclick'=>"$('#template-form').submit(); return false;", 'style'=>'float:left; width: 14%;')); ?>
+        <h2 style="width: 60%; margin-right: 1%; border-bottom: none;">Настройки заданий</h2>
+        <?php if($exercises) echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить задания', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'onclick'=>"$('#template-form').submit(); return false;", 'style'=>'float:right; margin-left: 1%; width: 14%;')); ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-repeat"></i>Еще раз', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:right; margin-left: 1%; width: 11%;', 'onclick'=>'location.reload(); return false;')); ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-remove"></i>Отмена', array('/admin/groupofexercises/update', 'id'=>$group->id), array('class'=>'btn btn-danger btn-icon btn-sm', 'style'=>'float:right; width: 11%;')); ?>
     </div>
 
     <div class="section">

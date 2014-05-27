@@ -55,6 +55,8 @@ class GeneratorsController extends Controller
                 if(!$group)
                     $this->redirect('/');
                 
+                error_reporting(E_ERROR); // максимальная ошибка, которая может быть Parse error. В случае шаблона или условия без оператора между двумя пременными - '5 + 5 x1 x2'
+                
                 if($_POST['Exercises'])
                 {
                     if($group->type == 1) // если добавляем задания в блок
@@ -192,11 +194,14 @@ class GeneratorsController extends Controller
                             $newVar = new GeneratorsTemplatesVariables;
                             foreach($_POST['GeneratorsTemplatesVariables'] as $attributesVar)
                             {
-                                $newVar->attributes = $attributesVar;
-                                $newVar->id_template = $template->id;
-                                $newVar->save();
-                                $newVar->isNewRecord = true;
-                                $newVar->id = false;
+                                if($attributesVar['value_max'] > $attributesVar['value_min'])
+                                {
+                                    $newVar->attributes = $attributesVar;
+                                    $newVar->id_template = $template->id;
+                                    $newVar->save();
+                                    $newVar->isNewRecord = true;
+                                    $newVar->id = false;
+                                }
                             }
                         }
                         

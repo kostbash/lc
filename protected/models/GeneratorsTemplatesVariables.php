@@ -95,11 +95,11 @@ class GeneratorsTemplatesVariables extends CActiveRecord
                     ".CHtml::label($this->name, __CLASS__."_{$num}_value_min")."
                 </div>
                 <div class='col-lg-2 col-md-2'>
-                    ".CHtml::textField(__CLASS__."[$num][value_min]", $minVal, array('maxlength'=>11, 'class'=>'form-control', 'placeholder' => 'Введите мин.значение'))."
+                    ".CHtml::textField(__CLASS__."[$num][value_min]", $minVal, array('maxlength'=>11, 'class'=>'form-control only-number', 'placeholder' => 'Введите мин.значение'))."
                     <div class='errorMessage'></div>
                 </div>
                 <div class='col-lg-2 col-md-2'>
-                    ".CHtml::textField(__CLASS__."[$num][value_max]", $maxVal, array('maxlength'=>11, 'class'=>'form-control', 'placeholder' => 'Введите макс.значение'))."
+                    ".CHtml::textField(__CLASS__."[$num][value_max]", $maxVal, array('maxlength'=>11, 'class'=>'form-control only-number', 'placeholder' => 'Введите макс.значение'))."
                     <div class='errorMessage'></div>
                 </div>
             </div>";
