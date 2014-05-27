@@ -1021,6 +1021,8 @@ h2{
 #dropdown-generators {
     float: left;
     width: 239px;
+    display:block;
+    position:relative;
 }
 
 #dropdown-generators .dropdown-menu {

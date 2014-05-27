@@ -21,7 +21,7 @@
             if(data.length)
             {
                 $.ajax({
-                    url: '<?php echo Yii::app()->createUrl('admin/generatorstemplatesvariables/gethtmlvars'); ?>',
+                    url: '<?php echo Yii::app()->createUrl('admin/generatorsTemplatesVariables/getHtmlVars'); ?>',
                     type: 'POST',
                     data: { names:data, lastNum: $('.variable:last-child').data('num') },
                     dataType: 'json',
@@ -39,7 +39,7 @@
             current = $(this);
             current.addClass('disabled');
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/generatorstemplatesconditions/gethtmlcondition'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/generatorsTemplatesConditions/getHtmlCondition'); ?>',
                 type: 'POST',
                 data: { lastNum: $('.condition:last-child').data('num') },
                 dataType: 'json',
