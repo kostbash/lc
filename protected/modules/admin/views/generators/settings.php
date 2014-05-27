@@ -133,7 +133,7 @@
                 errorMin.html('Введите мин. значение');
                 res = 0;
             } else {
-                if(minVal.val() >= maxVal.val()) {
+                if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
                     errorMin.html('Мин. значение не может быть больше или равно макс. значению');
                     res = 0;
                 }
@@ -144,7 +144,7 @@
                 errorMax.html('Введите макс. значение');
                 res = 0;
             } else
-                if(minVal.val() >= maxVal.val()) {
+                if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
                     errorMax.html('Макс. значение не может быть меньше или равно мин. значению');
                     res = 0;
                 }
