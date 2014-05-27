@@ -536,7 +536,7 @@ class ExercisesController extends Controller
                             fclose($handle);
                         }
                     
-                    echo "<script>alert('Импорт успешно выполнен! Импортировано $x записей из $y.');location.reload();</script>";
+                    echo "<script>alert('".(($x==$y && $x > 0)?"Импорт успешно выполнен! ":"")."Импортировано $x записей из $y.');location.reload();</script>";
                 }
             }
         }
