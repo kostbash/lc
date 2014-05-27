@@ -507,7 +507,15 @@ class ExercisesController extends Controller
                                         
                                         foreach(explode(';', $skills) as $s)
                                         {
-                                            if($skill = Skills::model()->findByAttributes(array('name'=>$s)))
+                                            if(!($skill = Skills::model()->findByAttributes(array('name'=>$s))))
+                                            {
+                                                $skill = new Skill;
+                                                $skill->name = $s;
+                                                $skill->type = 2;
+                                                $skill->id_course = $id_course;
+                                                $skill->save();
+                                            }
+                                            if($skill->id)
                                             {
                                                 $exerciseandskills = new ExerciseAndSkills;
                                                 $exerciseandskills->id_exercise = $exercise->id;
