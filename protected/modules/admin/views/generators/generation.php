@@ -1,7 +1,39 @@
 <script type='text/javascript'>
     $(function(){
         $('#searchSkill').keyup(function(e){
+            e.preventDefault();
             current = $(this);
+            if(e.keyCode==13){
+            current = $(this);
+            name = $.trim(current.val());
+            if(name) {
+                $.ajax({
+                    url:'<?php echo Yii::app()->createUrl('admin/skills/addcourseskill', array('id_course'=>$group->id_course))?>',
+                    type:'POST',
+                    data: current.serialize(),
+                    dataType: 'json',
+                    success: function(result) {
+                        if(result.success) {
+                            id = result.id;
+                            
+                           if(id)
+                            {
+                                name = result.name;
+                                skillsContainer = current.closest('#add-skills').find('.skills');
+                                skillExist = skillsContainer.find('.skill[data-id='+id+']');
+                                if(!skillExist.length)
+                                    skillsContainer.append(getSkills(id, name));
+                            }
+                            current.siblings('.input-group-btn').removeClass('open');
+                            current.val('');
+                        }
+                    }
+                });
+            }
+            
+        }
+        else
+        {
             $.ajax({
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
@@ -12,11 +44,17 @@
                         current.siblings('.input-group-btn').addClass('open');
                 }
             });
-        });
+            }
+            return false;
+        }).keydown(function( event ) {
+  if ( event.which == 13 ) {
+    event.preventDefault();
+  }
+});
 
-        $('#add-skills .dropdown-toggle').click(function(){
+        $('#add-skills .dropdown-toggle').click(function(e){
             current = $(this);
-            
+
             $.ajax({
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
@@ -27,7 +65,7 @@
                     }
                 }
             });
-            
+        
         });
 
         $('#add-skills .dropdown-menu li').live('click', function(){

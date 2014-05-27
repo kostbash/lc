@@ -72,6 +72,8 @@ class SkillsController extends Controller
                     $courseAndSkills->save();
                     $res['success'] = 1;
                     $res['html'] = $model->htmlForCourse($id_course, $countSkills, true);
+                    $res['id']=$model->id;
+                    $res['name']=$model->name;
                 } else {
                     $res['success'] = 0;
                 }
