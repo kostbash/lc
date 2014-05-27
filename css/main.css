@@ -982,13 +982,19 @@ h2{
 {
     padding:10px 0;
     text-align: center;
+    vertical-align: top;
+}
+
+.skill-course .skill-remove-icon
+{
+    visibility:hidden;
 }
 
 .skill-course:hover .skill-remove-icon
 {
-    visibility: visible !important;
+    visibility: visible !important;/*
     position:relative;
-    z-index: 1000000;
+    z-index: 1000000;*/
 }
 
 .droppable-hover
@@ -1008,9 +1014,9 @@ h2{
 
 .skill-course:hover .skill-remove-icon
 {
-    visibility: visible !important;
+    /*visibility: visible !important;
     position:relative;
-    z-index:1000000000000;
+    z-index:1000000000000;*/
 }
 
 #skills-table
@@ -1096,4 +1102,51 @@ h2{
 
 #result-generation .skills .skill .remove:hover {
     opacity: 0.5;
+}
+
+
+.skill-course
+{
+    position:relative;
+}
+
+.skill-course span{
+    font-size:8px;
+    text-overflow: ellipsis;
+    max-width:90%;
+    overflow:hidden;
+    display:inline-block;
+    max-height: 22px;
+}
+
+.skill-course a{
+    display: block;
+position: absolute;
+top: 0px;
+
+z-index:10000000;
+}
+
+#newskills .skills-row
+{
+    position:relative;
+    overflow:hidden;
+}
+
+#skills .skills-row
+{
+    position:absolute;
+    display:block;
+    overflow:hidden;
+    width:100%;
+}
+
+.skills-row div
+{
+    float:left;
+}
+
+.blocks-container
+{
+    vertical-align:top;
 }

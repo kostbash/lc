@@ -2,9 +2,13 @@
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js");
 Yii::app()->clientScript->registerScript('#courses', "
     var skill_number=1;
-    $(function(){
-        $('#courseSkill input').live('keyup', function(){
-            current = $(this);
+    var globalTimeout = null;  
+    var current = null;
+    var ee = null;
+    
+    function SkillsByAjax()
+    {
+    if(ee.keyCode!=13){
             $.ajax({
                 'url':'".Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$model->id))."',
                 'type':'POST',
@@ -15,6 +19,15 @@ Yii::app()->clientScript->registerScript('#courses', "
                         current.siblings('.input-group-btn').addClass('open');
                 }
             });
+            }
+    }
+
+    $(function(){
+        $('#courseSkill input').live('keyup', function(e){
+        if(globalTimeout != null) clearTimeout(globalTimeout);  
+        globalTimeout =setTimeout(SkillsByAjax,200);  
+            current = $(this);
+            ee = e;
         });
 
         $('#courseSkill .dropdown-toggle').live('click', function(){
@@ -48,7 +61,7 @@ Yii::app()->clientScript->registerScript('#courses', "
                         if(dataId) {
                             $('#newskills').append('<tr>'+result.html+'</tr>');
                             $('#skills-row').append(result.html);
-                            $('#skills-row').find('span').text('');
+                            //$('#skills-row').find('span').text('');
                             //$('#skills-row').find('span').text('');
                             dropSkills();
                         }
@@ -73,10 +86,19 @@ Yii::app()->clientScript->registerScript('#courses', "
                     success: function(result) {
                         if(result.success)
                         {
+                            if(result.type=='removefromcourse')
+                            {
+                                 $('#skills-row').find('[data-id='+current.closest('.skill-course').data('id')+']').remove();
                             
-                            $('#skills-row').children('[data-id='+current.closest('.skill-course').data('id')+']').remove();
-                            $('.block .block-skills select[data-id='+current.closest('.skill-course').data('id')+']').remove();
+                            }
+                            else
+                            {
+                                $('.block[data-id='+current.closest('.skill-course').data('block')+'] .block-skills select[data-id='+current.closest('.skill-course').data('id')+']').remove();
+                                //current.closest('.skill-course').data('block')
                             current.closest('.skill-course').remove();
+                            }
+                           
+                            
                             makeSkills();
                         }
                     }
@@ -254,6 +276,7 @@ Yii::app()->clientScript->registerScript('#courses', "
                             lesson = current.closest('.lesson');
                             blocks = lesson.closest('.lessons-container').siblings('.blocks-container').find('.blocks[data-id='+lesson.data('id')+'] .block');
                             $('#blocks-course .blocks-container > table > tbody').append(blocks);
+                            $('.blocks[data-id='+lesson.data('id')+']').remove();
                             lesson.remove();
                             makeSkills();
                         } else {
@@ -310,7 +333,7 @@ Yii::app()->clientScript->registerScript('#courses', "
     function setHeightLessons() {
         $('.lesson').each(calcLessonsHeight);
         
-        moveNewSkills();
+       
     }
     
     setHeightLessons();
@@ -367,6 +390,7 @@ Yii::app()->clientScript->registerScript('#courses', "
     function sortBlocks()
     {
         $('.blocks > tbody').sortable({
+            delay:0,
             axis: 'y',
             connectWith: '.blocks > tbody',
             cursor: 'move',
@@ -387,10 +411,11 @@ Yii::app()->clientScript->registerScript('#courses', "
                         if(result.success)
                         {
                             setHeightLessons();
+                            makeSkills();
                         }
                     }
                 });
-                makeSkills();
+                
             },
             
             activate: function(event, ui) {
@@ -481,103 +506,113 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
     {
     var has_skills = new Array();
     $('.skills-row').remove();
-    row1 = $('#skills-row');
     
     $('#skills-row').find('.skill-course').each(function(p,b){
+                id = $(b).data('id');
+                has_skills[id]=0;
+                $('.block select[data-id='+id+']').css('background-color', $('.skill-course[data-id='+id+']').css('background-color'));
+        });
     
-                has_skills[$(b).data('id')]=0;
-                setSelectColors(p,b);
-            }
-            );
+        $('#skills-row').css('display', 'none').width('100%').find('.skill-course').css('width','');;
+
         $('.block').each(function(pos, block) {
             
-            $('#skills-row').css('display', '');
+            row = $('<div>').addClass('skills-row');
+            $('#skills-table').append(row);
+            row.css({
+                'top': $(block).position().top-row.parent().position().top+'px',
+                'height': $(block).height()+'px',
+                'display': ''
+            });
             
-            row = $('#skills-row').clone();
-            row.removeAttr('id');
-            row.addClass('skills-row');
-            row.css('height', $(block).height()+'px');
-            row.css('position', 'absolute');
-            row.css('display', 'block');
-            row.width('100%');
-            $('#skills-table > tbody').append(row);
-            ///alert($(block).position().top+'|'+row.parent().parent().position().top);
-            row.css('top', $(block).position().top-row.parent().parent().position().top+'px');
-            row.find('.skill-course').css('display', 'none').css('width','1%');
-            $(block).find('.block-skills select').each(
+            $(block).children('.block-skills').children('table').children('tbody').children('tr').children('td').children('select').each(
                 function(p, b)
                 {
+                    id = $(b).data('id');
+                    block_id = $(block).data('id');
+                    has_skills[id]++;
                 
-                    has_skills[$(b).data('id')]++;
-                    $(row).find('[data-id='+$(b).data('id')+']').css('display','');
+                    skill = $('#skills-row div[data-id='+id+']').clone();
+                    skill.css('display','');
+                    skill.attr('data-block', block_id);
+                    skill.find('a.skill-remove-icon').attr('href', '/admin/groupofexercises/removeskillbygroup/id_group/'+block_id+'/id_skill/'+id);
+                    row.append(skill);
                 }
             );
             
-            $('#skills-row').css('display', 'none');
-           
-            
-                
-            
-            
+            row.find('.skill-course:visible').css('width',(100/row.find('.skill-course:visible').length)+'%');
         });
+            $('#skills-row').css('display', 'none');
+        setNewSkills(has_skills);
+        dropSkills();
+    }
+    function setNewSkills(has_skills)
+    {
         $('#newskills tr').remove(); //alert(has_skills);
-         $('#skills-row').children('.skill-course').each(function(p,b){
-
+        $('#skills-row').find('.skill-course').each(function(p,b){
                 if(has_skills[$(b).data('id')]==0)
                 {
                 sk = $(b).clone();
-//                sk.css('border', '1px solid'); alert(1);
-//                sk.css('border', '');
-                
-                sk.children('span').text(sk.children('span').attr('title'));
-                tr = $('<tr>'); 
+                    sk.width('100%');
+                    sk.find('a.skill-remove-icon').attr('href', '/admin/courseandskills/delete/id_skill/'+$(b).data('id')+'/id_course/'+'".$model->id."');
+                    tr = $('<div>'); 
                 tr.append(sk);
                 tr.addClass('skills-row');
                     $('#newskills').append(tr);
                     }
             }
             );
-            moveNewSkills();
-        dropSkills();
-        
     }
-    function moveNewSkills()
-    {
-       // $('#skills-table').css('height', $('#lessons-course').height());//.css('position', 'relative');
-        //$('#newskills').parent().css('min-height',  $('#newskills').parent().height()+$('.blocks-container').height()+'px');
-    }
+
 
     makeSkills();
     
     $('#searchSkill').keyup(function(e){
 
         if(e.keyCode==13){
-            current = $(this);
-            name = $.trim(current.val());
-            if(name) {
                 $.ajax({
-                    url:'".Yii::app()->createUrl('admin/skills/addcourseskill', array('id_course'=>$model->id))."',
+                    'url':'".Yii::app()->createUrl('/admin/skills/create')."',
+                    'type':'POST',
+                    'data': {'Skills':{'name':$(this).val(), 'type':2, 'fromcourse':1}}, //2=навык
+                    'success': function(result) { 
+                                    if(result!='')
+                                    {
+                                    $('#courseSkill .input-group-btn').removeClass('open');
+                                    $('#searchSkill').val('');
+                                        $.ajax({
+                                            url:'".Yii::app()->createUrl('admin/courseandskills/create')."',
                     type:'POST',
-                    data: current.serialize(),
+                                            data: { id_course:$model->id, id_skill:result, title: 1 },
                     dataType: 'json',
                     success: function(result) {
+                                            
                         if(result.success) {
                             skill_number++;
-                            $('#newskills').append('<tr>'+result.html+'</tr>');
-                            $('#skills-row td table tbody tr').append(result.html);
-                            $('#skills-row td table tbody tr').find('span').text('');
+                                                    //if(dataId) 
+                                                    //{
+                                                        $('#newskills').append('<div class=skills-row>'+result.html+'</div>');
+                                                        $('#skills-row').append(result.html);
+                                                        //$('#skills-row').find('span').text('');
                             dropSkills();
-                            $('#courseSkill .input-group-btn').removeClass('open');
-                            $('#searchSkill').val('');
-                        }
-                    }
-                });
+                                                    //}
+                                                    
             } else {
-                alert('Введите название умения');
-                current.focus();
+                                                    alert(result.html);
             }
-        }
-    });
+                                            } //success: function(result) {
+                                        }); //$.ajax({
+                                    } //if(result!='')
+                                    else if(result!='')
+                                        alert(result);
+                     } //'success': function(result) {
+                }); //$.ajax({
+//            } else {
+//                alert('Введите название умения');
+//                current.focus();
+//            }
+        } //if(e.keyCode==13){
+    }); //keyup
+
 ");
 ?>
 <div class="form">
@@ -594,9 +629,11 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
             <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите название курса')); ?>
             <?php echo $form->error($model,'name'); ?>
         </div>
+        <?php if($model->id) { ?>
         <div class="col-lg-2 col-md-2">
             <?php echo CHtml::link('Умения курса', array('/admin/skills/index', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
         </div>
+        <?php } ?>
     </div>
 </div>
 <?php $this->endWidget(); ?>
@@ -620,9 +657,8 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
         <tbody>
             <tr id="skills">
                 <td rowspan='1000' style="vertical-align: top;">
-                    <table id="skills-table">
-                        <tr id="skills-row" style="display:none;">
-                            <td><table style="width:164px;"><tr>
+                    <div id="skills-table">
+                        <div id="skills-row" style="display:none;">
                             <?php foreach($model->Skills as $nSkill => $courseSkill) : ?>
                             <?php
                                 Skills::$number[$courseSkill->id] = $nSkill;
@@ -631,10 +667,8 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
                                     echo $courseSkill->htmlForCourse($model->id, $nSkill);
                             ?>
                             <?php endforeach; ?>
-                            <script>skill_number='<?php echo $nSkill?>';</script>
-                            </tr></table></td>
-                        </tr>
-                    </table>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <?php foreach($model->LessonsGroups as $theme) : ?>
@@ -671,7 +705,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
         <tfoot>
              <tr>
                 <td>
-                    <table id="newskills">
+                    <div id="newskills">
                         <?php foreach($model->Skills as $nSkill => $courseSkill) : ?>
                             <?php
                                 //Skills::$number[$courseSkill->id] = $nSkill;
@@ -679,7 +713,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
                                     echo $courseSkill->htmlForCourse($model->id, $nSkill, true);
                             ?>
                             <?php endforeach; ?>
-                    </table>
+                    </div>
                 </td>
             </tr>
         </tfoot>
