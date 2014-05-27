@@ -110,7 +110,7 @@
     <div class="page-header clearfix">
         <h2 style="width: 60%; margin-right: 1%; border-bottom: none;">Настройки заданий</h2>
         <?php if($exercises) echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить задания', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'onclick'=>"$('#template-form').submit(); return false;", 'style'=>'float:right; margin-left: 1%; width: 14%;')); ?>
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-repeat"></i>Еще раз', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:right; margin-left: 1%; width: 11%;', 'onclick'=>'location.reload(); return false;')); ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-repeat"></i>Еще раз', array('/admin/generators/settings', 'id'=>$generator->id,'id_group'=>$group->id), array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:right; margin-left: 1%; width: 11%;', /*'onclick'=>'location.reload(); return false;'*/)); ?>
         <?php echo CHtml::link('<i class="glyphicon glyphicon-remove"></i>Отмена', array('/admin/groupofexercises/update', 'id'=>$group->id), array('class'=>'btn btn-danger btn-icon btn-sm', 'style'=>'float:right; width: 11%;')); ?>
     </div>
 
@@ -211,12 +211,11 @@
     <?php
         if($generator->Template->number_exercises != $count)
         {
-           echo "<div style='margin-top: 10px; text-align: center;'>
-                    <p><b>Не удается сгенерировать нужное кол-во заданий</b></p>
+           echo "<div class='alert alert-danger'>
+                    <p><b>Не удается сгенерировать нужное кол-во заданий. ПРОВЕРЬТЕ УСЛОВИЯ</b></p>
                     <p>Надо: {$generator->Template->number_exercises}</p>
-                    <p>сгенерировано: $count</p>
+                    <p>Сгенерировано: $count</p>
                     <p>Попыток: $attempts</p>
-                    Проверьте условия
                 </div>";
         }
     ?>

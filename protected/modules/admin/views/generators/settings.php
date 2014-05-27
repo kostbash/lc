@@ -42,7 +42,7 @@
         });
         
         $('.condition input[name*=condition]').live('change keyup input click', function() {
-            template = /[^x\+\-\*\d\/\(\)\s=mod]/gi;
+            template = /[^x\+\-\*\d\/\(\)\s=mod\<\>\&\|]/gi;
             if (this.value.match(template))
                 this.value = this.value.replace(template, '');
         });
@@ -161,7 +161,7 @@
         conditions = $('.condition input[name*=condition]');
         res = 1;
         template = /x\d+/ig;
-        msg = 'Несуществует переменных: ';
+        msg = 'Не существует переменных: ';
         notExist = [];
         conditions.each(function(n, condition)
         {
