@@ -37,117 +37,118 @@ class GeneratorsController extends Controller
             );
 	}
         
-        public function actionGeneration($id) {
-		$generator=$this->loadModel($id);
-                $id_group = (int) $_GET['id_group'];
-                $id_part = (int) $_GET['id_part'];
-                
-                if($id_group)
+        public function actionGeneration($id)
+        {
+            $generator=$this->loadModel($id);
+            $id_group = (int) $_GET['id_group'];
+            $id_part = (int) $_GET['id_part'];
+
+            if($id_group)
+            {
+                $group = GroupOfExercises::model()->findByPk($id_group);
+            }
+            elseif($id_part)
+            {
+                $part = PartsOfTest::model()->findByPk($id_part);
+                $group = $part->Group;
+            }
+
+            if(!$group)
+                $this->redirect('/');
+
+            error_reporting(E_ERROR); // максимальная ошибка, которая может быть Parse error. В случае шаблона или условия без оператора между двумя пременными - '5 + 5 x1 x2'
+
+            if($_POST['Exercises'])
+            {
+                if($group->type == 1) // если добавляем задания в блок
                 {
-                    $group = GroupOfExercises::model()->findByPk($id_group);
+                    $groupExercises = new GroupAndExercises;
+                    $redirect = array('/admin/groupofexercises/update', 'id'=>$id_group);
                 }
-                elseif($id_part)
+                elseif($group->type == 2) // если добавляем в часть теста
                 {
-                    $part = PartsOfTest::model()->findByPk($id_part);
-                    $group = $part->Group;
+                    if(!$part)
+                    {
+                        $part = new PartsOfTest;
+                        $part->id_group = $id_group;
+                        $part->order = PartsOfTest::maxValueOrder($id_group);
+                        $part->save();
+                    }
+                    $partExercises = new PartsOfTestAndExercises;
+                    $redirect = array('/admin/partsoftest/update', 'id'=>$part->id);
                 }
-                
-                if(!$group)
-                    $this->redirect('/');
-                
-                error_reporting(E_ERROR); // максимальная ошибка, которая может быть Parse error. В случае шаблона или условия без оператора между двумя пременными - '5 + 5 x1 x2'
-                
-                if($_POST['Exercises'])
+
+                $exerciseSkills = new ExerciseAndSkills;
+                foreach($_POST['Exercises'] as $attributes)
                 {
-                    if($group->type == 1) // если добавляем задания в блок
+                    $exercise = new Exercises;
+                    $exercise->attributes = $attributes;
+                    $exercise->course_creator_id = $group->id_course;
+                    if($exercise->save())
                     {
-                        $groupExercises = new GroupAndExercises;
-                        $redirect = array('/admin/groupofexercises/update', 'id'=>$id_group);
-                    }
-                    elseif($group->type == 2) // если добавляем в часть теста
-                    {
-                        if(!$part)
+                        if($attributes['SkillsIds'])
                         {
-                            $part = new PartsOfTest;
-                            $part->id_group = $id_group;
-                            $part->order = PartsOfTest::maxValueOrder($id_group);
-                            $part->save();
-                        }
-                        $partExercises = new PartsOfTestAndExercises;
-                        $redirect = array('/admin/partsoftest/update', 'id'=>$part->id);
-                    }
-                    
-                    $exerciseSkills = new ExerciseAndSkills;
-                    foreach($_POST['Exercises'] as $attributes)
-                    {
-                        $exercise = new Exercises;
-                        $exercise->attributes = $attributes;
-                        $exercise->course_creator_id = $group->id_course;
-                        if($exercise->save())
-                        {
-                            if($attributes['SkillsIds'])
+                            foreach($attributes['SkillsIds'] as $skill_id)
                             {
-                                foreach($attributes['SkillsIds'] as $skill_id)
-                                {
-                                    $exerciseSkills->id_exercise = $exercise->id;
-                                    $exerciseSkills->id_skill = $skill_id;
-                                    $exerciseSkills->save();
-                                    $exerciseSkills->id = false;
-                                    $exerciseSkills->isNewRecord = true;
-                                }
-                            }
-                            
-                            if($part) // если существует часть значит добавляем задания в нее
-                            {
-                                $partExercises->id_part = $part->id;
-                                $partExercises->id_exercise = $exercise->id;
-                                $partExercises->save();
-                                $partExercises->id = false;
-                                $partExercises->isNewRecord = true;
-                            }
-                            else // если части нет. Значит добавляем в группу
-                            { 
-                                $groupExercises->id_group = $id_group;
-                                $groupExercises->id_exercise = $exercise->id;
-                                $groupExercises->order = GroupAndExercises::maxValueOrder($id_group);
-                                $groupExercises->save();
-                                $groupExercises->id = false;
-                                $groupExercises->isNewRecord = true;
+                                $exerciseSkills->id_exercise = $exercise->id;
+                                $exerciseSkills->id_skill = $skill_id;
+                                $exerciseSkills->save();
+                                $exerciseSkills->id = false;
+                                $exerciseSkills->isNewRecord = true;
                             }
                         }
-                    }
-                    $this->redirect($redirect);
-                }
-                else
-                {
-                    $count=0; // количество успешных генераций
-                    $attempts = 0; // попытки сгенировать
-                    $exercises = array();
-                    while(($count < $generator->Template->number_exercises) && $attempts < 1000)
-                    {
-                        $forReplace = $generator->Template->ForPeplace;
-                        $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->template);
-                        $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->conditionsArray);
-                        if(GeneratorsTemplates::ConditionsMet($convertedConditions))
+
+                        if($part) // если существует часть значит добавляем задания в нее
                         {
-                            $exerciseModel = new Exercises;
-                            $exerciseModel->question = $convertedTemplate;
-                            $exerciseModel->correct_answer = Generators::executeCode($convertedTemplate);
-                            $exerciseModel->number = $count;
-                            $exercises[$count] = $exerciseModel;
-                            $count++;
+                            $partExercises->id_part = $part->id;
+                            $partExercises->id_exercise = $exercise->id;
+                            $partExercises->save();
+                            $partExercises->id = false;
+                            $partExercises->isNewRecord = true;
                         }
-                        $attempts++;
+                        else // если части нет. Значит добавляем в группу
+                        { 
+                            $groupExercises->id_group = $id_group;
+                            $groupExercises->id_exercise = $exercise->id;
+                            $groupExercises->order = GroupAndExercises::maxValueOrder($id_group);
+                            $groupExercises->save();
+                            $groupExercises->id = false;
+                            $groupExercises->isNewRecord = true;
+                        }
                     }
                 }
-                
-		$this->render('generation',array(
-			'generator'=>$generator,
-                        'group'=>$group,
-                        'exercises' => $exercises,
-                        'attempts' => $attempts,
-                        'count' => $count,
-		));
+                $this->redirect($redirect);
+            }
+            else
+            {
+                $count=0; // количество успешных генераций
+                $attempts = 0; // попытки сгенировать
+                $exercises = array();
+                while(($count < $generator->Template->number_exercises) && $attempts < 1000)
+                {
+                    $forReplace = $generator->Template->ForPeplace;
+                    $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->template);
+                    $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->conditionsArray);
+                    if(GeneratorsTemplates::ConditionsMet($convertedConditions))
+                    {
+                        $exerciseModel = new Exercises;
+                        $exerciseModel->condition = $convertedTemplate;
+                        $exerciseModel->correct_answers = Generators::executeCode($convertedTemplate);
+                        $exerciseModel->number = $count;
+                        $exercises[$count] = $exerciseModel;
+                        $count++;
+                    }
+                    $attempts++;
+                }
+            }
+
+            $this->render('generation',array(
+                    'generator'=>$generator,
+                    'group'=>$group,
+                    'exercises' => $exercises,
+                    'attempts' => $attempts,
+                    'count' => $count,
+            ));
         }
 
 	public function actionSettings($id)

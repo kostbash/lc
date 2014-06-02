@@ -5,8 +5,8 @@
  *
  * The followings are the available columns in table 'oed_exercises':
  * @property integer $id
- * @property string $question
- * @property string $correct_answer
+ * @property string $condition
+ * @property string $correct_answers
  * @property integer $difficulty
  */
 class Exercises extends CActiveRecord
@@ -40,11 +40,11 @@ class Exercises extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('question', 'required'),
+			array('condition', 'required'),
 			array('difficulty, limit, course_creator_id', 'numerical', 'integerOnly'=>true),
-                        array('correct_answer', 'safe'),
+                        array('correct_answers', 'safe'),
                         array('need_answer', 'boolean'),
-			array('id, question, limit, correct_answer, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
+			array('id, condition, limit, correct_answers, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,8 +67,8 @@ class Exercises extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'question' => 'Текст задания',
-			'correct_answer' => 'Правильный ответ',
+			'condition' => 'Условие',
+			'correct_answers' => 'Правильный ответ',
 			'difficulty' => 'Сложность',
                         'limit' => 'Число заданий',
                         'need_answer'=>'Треб. ответ',
@@ -96,8 +96,8 @@ class Exercises extends CActiveRecord
                 $criteria->compare('id',$this->id);
             else
                 $course_id = $this->course_creator_id ? $this->course_creator_id : 0;
-            $criteria->compare('question',$this->question,true);
-            $criteria->compare('correct_answer',$this->correct_answer,true);
+            $criteria->compare('condition',$this->condition,true);
+            $criteria->compare('correct_answers',$this->correct_answers,true);
             $criteria->compare('difficulty',$this->difficulty);
             $criteria->compare('need_answer',$this->need_answer);
             $criteria->compare('course_creator_id', $course_id);

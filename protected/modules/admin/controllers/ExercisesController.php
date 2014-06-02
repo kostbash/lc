@@ -27,17 +27,35 @@ class ExercisesController extends Controller
             );
 	}
 
-	public function actionCreate($id_course)
+	public function actionCreate($id_type, $id_visial=null, $id_course=null)
 	{
+            $model=new Exercises;
+            $model->id_type = $id_type;
+            $model->id_visual = $id_visial;
+            $model->course_creator_id=$id_course;
             if(isset($_POST['Exercises']) && isset($_POST['Exercises']['question']))
             {
                     $model=new Exercises;
                     $model->attributes=$_POST['Exercises'];
-                    $model->course_creator_id=$id_course;
                     if($model->save())
                             echo 1;
             }
+            
+            $this->render('create', array(
+                'model'=>$model,
+            ));
 	}
+//	public function actionCreate($id_course)
+//	{
+//            if(isset($_POST['Exercises']) && isset($_POST['Exercises']['question']))
+//            {
+//                    $model=new Exercises;
+//                    $model->attributes=$_POST['Exercises'];
+//                    $model->course_creator_id=$id_course;
+//                    if($model->save())
+//                            echo 1;
+//            }
+//	}
 
 	/**
 	 * Updates a particular model.

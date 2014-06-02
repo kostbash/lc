@@ -168,17 +168,17 @@
                     'htmlOptions'=>array('width'=>'10%'),
                 ),
                 array(
-                    'name' => 'question',
+                    'name' => 'condition',
                     'header'=>'Текст задания',
                     'type'=>'raw',
-                    'value'=>'$data->question . CHtml::hiddenField("Exercises[$data->number][question]", $data->question, array("id"=>false))',
+                    'value'=>'$data->condition . CHtml::hiddenField("Exercises[$data->number][condition]", $data->condition, array("id"=>false))',
                     'htmlOptions'=>array('width'=>'30%'),
                 ),
                 array(
-                    'name' => 'correct_answer',
+                    'name' => 'correct_answers',
                     'header'=>'Правильный ответ',
                     'type'=>'raw',
-                    'value'=>'$data->correct_answer . CHtml::hiddenField("Exercises[$data->number][correct_answer]", $data->correct_answer, array("id"=>false))',
+                    'value'=>'$data->correct_answers . CHtml::hiddenField("Exercises[$data->number][correct_answers]", $data->correct_answers, array("id"=>false))',
                     'htmlOptions'=>array('width'=>'25%'),
                 ),
                 array(
@@ -187,13 +187,6 @@
                     'type'=>'raw',
                     'value'=>'CHtml::dropDownList("Exercises[$data->number][difficulty]", $data->difficulty, Exercises::getDataDifficulty(), array("class"=>"form-control", "empty"=>"Выберите сложность"))',
                     'htmlOptions'=>array('width'=>'10%'),
-                ),
-                array(
-                    'name' => 'need_answer',
-                    'header'=>'Треб. ответ',
-                    'value'=>'CHtml::hiddenField("Exercises[$data->number][need_answer]", 0, array("id"=>false)) . CHtml::checkBox("Exercises[$data->number][need_answer]", $data->need_answer)',
-                    'type'=>'raw',
-                    'htmlOptions' => array('width' => '10%'),
                 ),
 
                 array(

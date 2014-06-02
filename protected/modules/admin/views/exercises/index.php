@@ -1,7 +1,6 @@
 <?php
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/ckeditor/ckeditor.js");
 Yii::app()->clientScript->registerScript('exercises', "
-    
     $('.zgrid .update-record').live('change', function(){
         current = $(this);
             
