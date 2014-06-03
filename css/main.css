@@ -1062,12 +1062,7 @@ h2{
     
 }
 
-#result-generation .skills
-{
-    
-}
-
-#result-generation .skills .skill
+.skills-mini .skills .skill
 {
     margin: 5px 0;
     color: #888;
@@ -1076,7 +1071,7 @@ h2{
     background: #d9edf7;
 }
 
-#result-generation .skills .skill .name {
+.skills-mini .skills .skill .name {
     text-align: left;
     width: 92%;
     font-size: 12px;
@@ -1086,7 +1081,7 @@ h2{
     float: left;
 }
 
-#result-generation .skills .skill .remove {
+.skills-mini .skills .skill .remove {
     float: left;
     cursor: pointer;
     width: 7%;
@@ -1100,7 +1095,7 @@ h2{
     opacity: .2;
 }
 
-#result-generation .skills .skill .remove:hover {
+.skills-mini .skills .skill .remove:hover {
     opacity: 0.5;
 }
 
@@ -1149,4 +1144,17 @@ z-index:10000000;
 .blocks-container
 {
     vertical-align:top;
+}
+
+#exercises-form .row {
+   margin: 10px -15px; 
+}
+
+#exercises-form label {
+    line-height: 34px;
+    margin-bottom: 0;
+}
+
+#exercises-form .for-editor-field {
+    min-height: 34px;
 }

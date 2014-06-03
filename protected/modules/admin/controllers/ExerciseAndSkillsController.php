@@ -28,7 +28,7 @@ class ExerciseAndSkillsController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','delete','create','update', 'skillsbyajax'),
+				'actions'=>array('index','delete','create','update'),
 				'users'=>Users::Admins(),
 			),
 			array('deny',  // deny all users

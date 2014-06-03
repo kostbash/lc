@@ -1,9 +1,9 @@
 <script type='text/javascript'>
     $(function(){
         $('#searchSkill').keyup(function(e){
-            e.preventDefault();
-            current = $(this);
-            if(e.keyCode==13){
+        e.preventDefault();
+        current = $(this);
+        if(e.keyCode==13){
             current = $(this);
             name = $.trim(current.val());
             if(name) {
@@ -192,7 +192,7 @@
                 array(
                     'header'=>'Требуемые умения',
                     'type'=>'raw',
-                    'value'=>'"<div class=\"skills\" data-id=\"$data->number\"></div>"',
+                    'value'=>'"<div class=\"skills-mini\"><div class=\"skills\" data-id=\"$data->number\"></div></div>"',
                     'htmlOptions'=>array('width'=>'15%'),
                 ),
             ),
@@ -217,7 +217,9 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="skills"></div>
+                    <div class="skills-mini">
+                        <div class="skills"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-2 col-md2">

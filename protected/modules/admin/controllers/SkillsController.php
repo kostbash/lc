@@ -28,7 +28,7 @@ class SkillsController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','delete','create','update', 'skillsbyidajax', 'addcourseskill'),
+				'actions'=>array('index','delete','create','update', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
 				'users'=>Users::Admins(),
 			),
 			array('deny',  // deny all users
@@ -52,6 +52,21 @@ class SkillsController extends Controller
                     }
 
 		}
+	}
+        
+	public function actionGetHtmlMini()
+	{
+            $id = (int) $_POST['id'];
+            $result = array();
+            if($id)
+            {
+		$model= $this->loadModel($id);
+                $result['success'] = 1;
+                $result['html'] = $this->renderPartial('_skill_mini', array('model'=>$model), true);
+            } else {
+                $result['success'] = 0;
+            }
+            echo CJSON::encode($result);
 	}
         
 	public function actionAddCourseSkill($id_course)

@@ -16,10 +16,10 @@ class Exercises extends CActiveRecord
         static $needAnswer = array('1'=>'Да', '0'=>'Нет');
         public $SkillsIds;
         public $limit;
+        public static $defaultType = 1;
         public $number;
         public $pageSize = 10;
         public static $pageSizes = array(
-            //'0' => 'Все',
             '5' => '5',
             '10' => '10',
             '25' => '25',
@@ -40,10 +40,9 @@ class Exercises extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('condition', 'required'),
-			array('difficulty, limit, course_creator_id', 'numerical', 'integerOnly'=>true),
+			array('condition, id_type, difficulty, course_creator_id', 'required'),
+			array('difficulty, limit, id_type, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
                         array('correct_answers', 'safe'),
-                        array('need_answer', 'boolean'),
 			array('id, condition, limit, correct_answers, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
 		);
 	}
@@ -73,6 +72,7 @@ class Exercises extends CActiveRecord
                         'limit' => 'Число заданий',
                         'need_answer'=>'Треб. ответ',
                         'pageSize'=>'Кол-во выводимых заданий',
+                        'id_visual'=>'Тип визуализации',
 		);
 	}
 
@@ -99,7 +99,7 @@ class Exercises extends CActiveRecord
             $criteria->compare('condition',$this->condition,true);
             $criteria->compare('correct_answers',$this->correct_answers,true);
             $criteria->compare('difficulty',$this->difficulty);
-            $criteria->compare('need_answer',$this->need_answer);
+            //$criteria->compare('need_answer',$this->need_answer);
             $criteria->compare('course_creator_id', $course_id);
             if($this->SkillsIds) {
                 $criteria->addCondition("EXISTS (SELECT * FROM `oed_exercise_and_skills` s WHERE s.id_exercise = t.id AND s.id_skill IN ('".implode("','", $this->SkillsIds)."'))");
@@ -139,7 +139,6 @@ class Exercises extends CActiveRecord
             }
             return $mass;
         }
-       
         
         public function canSaveFromLesson($id_lesson) {
             if($this->lesson_creator_id != $id_lesson)

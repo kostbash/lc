@@ -232,12 +232,12 @@ $this->widget('ZGridView', array(
         ),
         'id',
         array(
-            'name' => 'question',
+            'name' => 'condition',
             'type' => 'forEditor',
             'htmlOptions' => array('width' => '42%'),
         ),
         array(
-            'name' => 'correct_answer',
+            'name' => 'correct_answers',
             'type' => 'textArea',
             'htmlOptions' => array('width' => '14%'),
             'visibleCell' => '!$data->isNewRecord',
@@ -248,13 +248,7 @@ $this->widget('ZGridView', array(
             'value' => 'CHtml::dropDownList("Exercises[$data->id][difficulty]", $data->difficulty, Exercises::getDataDifficulty(), array("class"=>"form-control update-record", "empty"=>"Выберите сложность"))',
             'visibleCell' => '!$data->isNewRecord',
         ),
-        array(
-            'name' => 'need_answer',
-            'value'=>'CHtml::hiddenField("Exercises[$data->id][need_answer]", 0, array("id"=>false)) . CHtml::checkBox("Exercises[$data->id][need_answer]", $data->need_answer, array("class"=>"update-record"))',
-            'type'=>'raw',
-            'htmlOptions' => array('width' => '14%'),
-            'visibleCell' => '!$data->isNewRecord',
-        ),
+        
         array(
             'name' => 'Skills',
             'header' => 'Используемые умения',

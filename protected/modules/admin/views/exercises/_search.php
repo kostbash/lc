@@ -105,12 +105,12 @@
             <?php echo $form->dropDownList($model,'pageSize', Exercises::$pageSizes, array("class"=>"form-control input-sm")) ?>
 	</div>
     </div>
-    <div class="row" style="margin-bottom: 10px">
+<!--    <div class="row" style="margin-bottom: 10px">
        <div class="col-md-3">
-            <?php echo $form->label($model,'need_answer'); ?>
-            <?php echo $form->dropDownList($model,'need_answer', Exercises::$needAnswer, array("class"=>"form-control input-sm", "empty"=>"Все")) ?>
+            <?php //echo $form->label($model,'need_answer'); ?>
+            <?php //echo $form->dropDownList($model,'need_answer', Exercises::$needAnswer, array("class"=>"form-control input-sm", "empty"=>"Все")) ?>
 	</div>
-    </div>
+    </div>-->
 <?php $this->endWidget(); ?>
 
 </div><!-- search-form -->

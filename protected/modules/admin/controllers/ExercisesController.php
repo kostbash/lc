@@ -18,7 +18,7 @@ class ExercisesController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('create','update','delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete'),
+                            'actions'=>array('create','update','delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -27,24 +27,85 @@ class ExercisesController extends Controller
             );
 	}
 
-	public function actionCreate($id_type, $id_visial=null, $id_course=null)
+	public function actionCreate($id_type, $id_visual=null, $id_course=null)
 	{
             $model=new Exercises;
-            $model->id_type = $id_type;
-            $model->id_visual = $id_visial;
-            $model->course_creator_id=$id_course;
-            if(isset($_POST['Exercises']) && isset($_POST['Exercises']['question']))
+            $model->id_type = ExercisesTypes::model()->exists('id=:id', array('id'=>$id_type)) ? $id_type : Exercises::$defaultType;
+            $model->id_visual = ExercisesVisuals::model()->exists('id=:id AND id_type=:id_type', array('id'=>$id_visual, 'id_type'=>$model->id_type)) ? $id_visual : null;
+            $model->course_creator_id = Courses::model()->exists('id=:id', array('id'=>$id_course)) ? $id_course : 0;
+            if(isset($_POST['Exercises']))
             {
-                    $model=new Exercises;
-                    $model->attributes=$_POST['Exercises'];
-                    if($model->save())
-                            echo 1;
+                //CVarDumper::dump($_POST, 5, true); die;
+                $model->attributes = $_POST['Exercises'];
+                if($model->save())
+                {
+                    if($_POST['Skills']['ids'])
+                    {
+                        $exerciseSkills = new ExerciseAndSkills();
+                        foreach($_POST['Skills']['ids'] as $id_skill)
+                        {
+                            $exerciseSkills->id_exercise = $model->id;
+                            $exerciseSkills->id_skill = $id_skill;
+                            $exerciseSkills->save();
+                            $exerciseSkills->isNewRecord = true;
+                            $exerciseSkills->id = false;
+                        }
+                    }
+                    $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));
+                }
+                        
             }
             
             $this->render('create', array(
                 'model'=>$model,
             ));
 	}
+        
+	public function actionUpdate($id)
+	{
+            $model = $this->loadModel($id);
+            if(isset($_POST['Exercises']))
+            {
+                //CVarDumper::dump($_POST, 5, true); die;
+                $model->attributes = $_POST['Exercises'];
+                if($model->save())
+                {
+                    //print_r($_POST['Skills']['ids']); die;
+                    if($_POST['Skills']['ids'])
+                    {
+                        foreach($model->ExerciseAndSkills as $eSkill) $eSkill->delete();
+                        $exerciseSkills = new ExerciseAndSkills();
+                        foreach($_POST['Skills']['ids'] as $id_skill)
+                        {
+                            $exerciseSkills->id_exercise = $model->id;
+                            $exerciseSkills->id_skill = $id_skill;
+                            $exerciseSkills->save();
+                            $exerciseSkills->isNewRecord = true;
+                            $exerciseSkills->id = false;
+                        }
+                    }
+                }
+                        
+            }
+            
+            $this->render('update', array(
+                'model'=>$model,
+            ));
+	}
+        
+        public function actionGetHtmlVisual() {
+            $id_visual = (int) $_POST['id_visual'];
+            $result = array();
+            if($id_visual && ExercisesVisuals::model()->exists('id=:id', array('id'=>$id_visual)))
+            {
+                $result['success'] = 1;
+                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> new Exercises), true);
+            } else {
+                $result['success'] = 0;
+            }
+            echo CJSON::encode($result);
+        }
+        
 //	public function actionCreate($id_course)
 //	{
 //            if(isset($_POST['Exercises']) && isset($_POST['Exercises']['question']))
@@ -62,21 +123,22 @@ class ExercisesController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate()
-	{
-            if(isset($_POST['Exercises']))
-            {
-                foreach ($_POST['Exercises'] as $id => $attributes)
-                {
-                    $model = Exercises::model()->findByPk($id);
-                    if(!$model)
-                        die('Нет такого задания');
-                    $model->attributes=$attributes;
-                    if($model->save())
-                            echo 1;
-                }
-            }
-	}
+        
+//	public function actionUpdate()
+//	{
+//            if(isset($_POST['Exercises']))
+//            {
+//                foreach ($_POST['Exercises'] as $id => $attributes)
+//                {
+//                    $model = Exercises::model()->findByPk($id);
+//                    if(!$model)
+//                        die('Нет такого задания');
+//                    $model->attributes=$attributes;
+//                    if($model->save())
+//                            echo 1;
+//                }
+//            }
+//	}
 
 	public function actionDelete($id)
 	{
@@ -259,20 +321,14 @@ class ExercisesController extends Controller
 	{
             $criteria = new CDbCriteria;
 
-            if (isset($_POST['term']))// если переданы символы
+            if ($_POST['term'])
             {
                 $criteria->condition = '`name` LIKE :name';
                 $criteria->params['name'] = '%' . $_POST['term'] . '%';
             }
 
-            if($_POST['Exercises'])
-            {
-                foreach($_POST['Exercises'] as $id_exercise => $attributes)
-                {
-                    if($attributes['SkillsIds'])
-                        $criteria->addNotInCondition('id', $attributes['SkillsIds']);
-                }
-            }
+            if($_POST['skillsIds'])
+                $criteria->addNotInCondition('id', $_POST['skillsIds']);
             
             $criteria->limit = 10;
             $skills = Skills::model()->findAll($criteria);
