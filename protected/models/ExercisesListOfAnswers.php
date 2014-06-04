@@ -8,14 +8,14 @@
  * @property integer $id_exercise
  * @property string $answer
  */
-class ExercisesListOfAnwers extends CActiveRecord
+class ExercisesListOfAnswers extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'oed_exercises_list_of_anwers';
+		return 'oed_exercises_list_of_answers';
 	}
 
 	/**

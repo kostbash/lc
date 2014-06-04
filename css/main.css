@@ -1159,6 +1159,55 @@ z-index:10000000;
     min-height: 34px;
 }
 
-.dropdown-menu .type {
+#dropdown-types_of_exercises .dropdown-menu .type {
     background: #eee;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#dropdown-types_of_exercises {
+    width: 202px;
+    display:block;
+    position:relative;
+}
+
+#dropdown-types_of_exercises .dropdown-menu {
+    width: 100%;
+    position: relative;
+    top: 0;
+    text-align: center;
+    left: -1px;
+}
+
+#dropdown-types_of_exercises #types-link {
+    border-radius: 4px;
+    width: 202px;
+}
+
+#dropdown-types_of_exercises #types-link i {
+    float: left;
+    width: 10%;
+    text-align: left;
+}
+
+#dropdown-types_of_exercises #types-link p {
+    float: left;
+    width: 80%;
+    text-align: center;
+    margin: 0;
+}
+
+#dropdown-types_of_exercises #types-link .caret-cont {
+    float: right;
+    margin: 0;
+    width: 10%;
+    text-align: right;
+}
+
+#dropdown-types_of_exercises li {
+    width: 200px;
+}
+
+#dropdown-types_of_exercises li a {
+    font-size: 12px;
 }
