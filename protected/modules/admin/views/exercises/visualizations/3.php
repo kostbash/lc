@@ -5,10 +5,14 @@
     <div class="col-lg-5 col-md-5">
         <?php echo CHtml::dropDownList('Exercises[correct_answers]', $model->correct_answers, CHtml::listData($model->Answers, 'id', 'answer'), array('class'=>'form-control', 'placeholder'=>'Введите правильный ответ', 'size'=>2)); ?>
         <div class="errorMessage"></div>
-        <div id="hidden-options"></div>
+        <div id="hidden-options">
+            <?php foreach($model->Answers as $answer) : ?>
+                <input data-index="<?php echo $answer->id ?>" type="hidden" name="Exercises[answers][<?php echo $answer->id ?>]" value="<?php echo $answer->answer; ?>">
+            <?php endforeach; ?>
+        </div>
     </div>
     <div class="col-lg-2 col-md-2">
-        <?php echo CHtml::link('Удалить', '#', array('class'=>'btn btn-danger delete-option')); ?>
+        <?php echo CHtml::link('Удалить выделенный', '#', array('class'=>'btn btn-danger delete-option')); ?>
     </div>
 </div>
 <div class="row">

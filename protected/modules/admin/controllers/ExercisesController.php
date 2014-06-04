@@ -18,7 +18,7 @@ class ExercisesController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('create','update','delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual'),
+                            'actions'=>array('create','update','delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmleditorvariant'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -38,6 +38,7 @@ class ExercisesController extends Controller
             {
                 //CVarDumper::dump($_POST, 5, true); die;
                 $model->attributes = $_POST['Exercises'];
+                $model->correct_answers = null;
                 if($model->save())
                 {
                     if($_POST['Skills']['ids'])
@@ -61,11 +62,23 @@ class ExercisesController extends Controller
                             $exercisesAnwers ->id_exercise = $model->id;
                             $exercisesAnwers->answer = $answer;
                             $exercisesAnwers->save();
-                            if($model->correct_answers == $index)
+                            
+                            if(!empty($_POST['Exercises']['correct_answers']))
                             {
-                                $model->correct_answers = $exercisesAnwers->id;
-                                $model->save();
+                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
+                                {
+                                   $correctAnswers[] = $exercisesAnwers->id; 
+                                }
+                                elseif($_POST['Exercises']['correct_answers'] == $index)
+                                {
+                                    $correctAnswers = $exercisesAnwers->id;
+                                }
                             }
+                        }
+                        if(!empty($correctAnswers))
+                        {
+                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
+                            $model->save();
                         }
                     }
                     $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));
@@ -85,9 +98,9 @@ class ExercisesController extends Controller
             {
                 //CVarDumper::dump($_POST, 5, true); die;
                 $model->attributes = $_POST['Exercises'];
+                $model->correct_answers = null;
                 if($model->save())
                 {
-                    //print_r($_POST['Skills']['ids']); die;
                     if($_POST['Skills']['ids'])
                     {
                         foreach($model->ExerciseAndSkills as $eSkill) $eSkill->delete();
@@ -104,27 +117,47 @@ class ExercisesController extends Controller
                     
                     if($_POST['Exercises']['answers'])
                     {
+                        
+                        foreach($model->Answers as $eAnswer) $eAnswer->delete();
                         foreach($_POST['Exercises']['answers'] as $index => $answer)
                         {
                             $exercisesAnwers = new ExercisesListOfAnwers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
                             $exercisesAnwers ->id_exercise = $model->id;
                             $exercisesAnwers->answer = $answer;
                             $exercisesAnwers->save();
-                            if($model->correct_answers == $index)
+                            
+                            if(!empty($_POST['Exercises']['correct_answers']))
                             {
-                                $model->correct_answers = $exercisesAnwers->id;
-                                $model->save();
+                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
+                                {
+                                   $correctAnswers[] = $exercisesAnwers->id; 
+                                }
+                                elseif($_POST['Exercises']['correct_answers'] == $index)
+                                {
+                                    $correctAnswers = $exercisesAnwers->id;
+                                }
                             }
+                        }
+                        if(!empty($correctAnswers))
+                        {
+                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
+                            $model->save();
                         }
                     }
                 }
-                        
+                $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));   
             }
-            
             $this->render('update', array(
                 'model'=>$model,
             ));
 	}
+        
+        public function actionGetHtmlEditorVariant() {
+            $index = (int) $_POST['index'];
+            $result['success'] = 1;
+            $result['html'] = $this->renderPartial("visualizations/5_editor_variant", array('index'=> $index), true);
+            echo CJSON::encode($result);
+        }
         
         public function actionGetHtmlVisual() {
             $id_visual = (int) $_POST['id_visual'];

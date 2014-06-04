@@ -309,23 +309,20 @@ Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
 $this->endWidget();
 ?>
 
-<div id="dropdown-generators" style="width: 136px;">
+<div id="dropdown-types_of_exercises" style="width: 136px;">
     <div class="input-group-btn">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Новое задание <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
-            <?php foreach(ExercisesTypes::model()->findAll() as $type)
-            {
-                echo '<ul class="dropdown-menu" role="menu">';
-                    echo "<li class='type'>";
-                        echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id));
-                    echo "</li>";
-                    foreach($type->Visuals as $visual)
-                    {
-                        echo "<li class='visual'>";
-                            echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id));
-                        echo "</li>";
-                    }
-                echo "</ul>";
-            }
-            ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <ul class="dropdown-menu" role="menu">
+            <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
+                <li class='type'>
+                    <?php echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id)); ?>
+                </li>
+                <?php foreach($type->Visuals as $visual) : ?>
+                    <li class='visual'>
+                        <?php echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id)); ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </ul>
     </div>
 </div>

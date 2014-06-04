@@ -56,7 +56,7 @@ class Exercises extends CActiveRecord
                     'Skills' => array(self::MANY_MANY, 'Skills', 'oed_exercise_and_skills(id_exercise, id_skill)'),
                     'ExerciseAndSkills'=>array(self::HAS_MANY, 'ExerciseAndSkills', 'id_exercise'),
                     'ExercisesGroup' => array(self::MANY_MANY, 'GroupOfExercises', 'oed_group_and_exercises(id_exercise, id_group)'),
-                    'Answers'=>array(self::HAS_MANY, 'ExercisesListOfAnwers', 'id_exercise', 'order'=>'Answers.id ASC'),
+                    'Answers'=>array(self::HAS_MANY, 'ExercisesListOfAnswers', 'id_exercise', 'order'=>'Answers.id ASC'),
 		);
 	}
 

@@ -133,9 +133,40 @@
             if(confirm('Вы действительно хотите удалить вариант ответа ?'))
             {
                 selected = $('#Exercises_correct_answers option:selected');
-                $('#hidden-options input[data-index='+ selected.val() +']').remove();
+                selected.each(function(n, answer){
+                    $('#hidden-options input[data-index='+ $(answer).val() +']').remove();
+                });
                 selected.remove();
             }
+            return false;
+        });
+        
+        $('#add-editor-variant').click(function(){
+            current = $(this);
+            lastAnswer = $('.editor-variant-cond');
+            index = lastAnswer.length ? lastAnswer.data('index') : 1;
+            $.ajax({
+                url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmleditorvariant'); ?>',
+                data: { index: index },
+                type: 'POST',
+                dataType: 'json',
+                success: function(result) {
+                    if(result.success)
+                        current.closest('.row').before(result.html);
+                }
+            });
+            return false;
+        });
+        
+        $('.delete-editor-variant').live('click', function(){
+//            if(confirm('Вы действительно хотите удалить вариант ответа ?'))
+//            {
+//                selected = $('#Exercises_correct_answers option:selected');
+//                selected.each(function(n, answer){
+//                    $('#hidden-options input[data-index='+ $(answer).val() +']').remove();
+//                });
+//                selected.remove();
+//            }
             return false;
         });
         
@@ -150,7 +181,7 @@
                 difficulty.siblings('.errorMessage').html('');
             }
             visual = $('#Exercises_id_visual');
-            if(!visual.val())
+            if(visual.length && !visual.val())
             {
                 visual.siblings('.errorMessage').html('Выберите тип визуализации');
                 $return = false;
@@ -165,13 +196,13 @@
             } else {
                 condition.siblings('.errorMessage').html('');
             }
-            anwers = $('#Exercises_correct_answers');
-            if(!anwers.val())
+            answers = $('#Exercises_correct_answers');
+            if(answers.length && !answers.val())
             {
-                anwers.siblings('.errorMessage').html('Введите правильный ответ');
+                answers.siblings('.errorMessage').html('Введите правильный ответ');
                 $return = false;
             } else {
-                anwers.siblings('.errorMessage').html('');
+                answers.siblings('.errorMessage').html('');
             }
             return $return;
         });
