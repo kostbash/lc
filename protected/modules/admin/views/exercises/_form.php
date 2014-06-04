@@ -118,12 +118,62 @@
             option = $('#option-name');
             if(option.val())
             {
-                $('#Exercises_correct_answers').append('<option>'+ option.val() +'</option>');
+                lastOption = $('#Exercises_correct_answers option:last-child');
+                maxIndex = lastOption.length ? parseInt(lastOption.val())+1 : 0;
+                $('#Exercises_correct_answers').append('<option value='+maxIndex+'>'+ option.val() +'</option>');
+                $('#hidden-options').append('<input data-index="'+maxIndex+'" type="hidden" name="Exercises[answers][]" value="'+ option.val() +'" />');
                 option.val('');
             } else {
                 alert('Введите название нового варианта ответа');
             }
             return false;
+        });
+        
+        $('.delete-option').live('click', function(){
+            if(confirm('Вы действительно хотите удалить вариант ответа ?'))
+            {
+                selected = $('#Exercises_correct_answers option:selected');
+                $('#hidden-options input[data-index='+ selected.val() +']').remove();
+                selected.remove();
+            }
+            return false;
+        });
+        
+        $('#exercises-form').submit(function(){
+            $return = true;
+            difficulty = $('#Exercises_difficulty');
+            if(!difficulty.val())
+            {
+                difficulty.siblings('.errorMessage').html('Введите сложность задания');
+                $return = false;
+            } else {
+                difficulty.siblings('.errorMessage').html('');
+            }
+            visual = $('#Exercises_id_visual');
+            if(!visual.val())
+            {
+                visual.siblings('.errorMessage').html('Выберите тип визуализации');
+                $return = false;
+            } else {
+                visual.siblings('.errorMessage').html('');
+            }
+            condition = $('input[name*=condition]');
+            if(!condition.val())
+            {
+                condition.siblings('.errorMessage').html('Введите условие');
+                $return = false;
+            } else {
+                condition.siblings('.errorMessage').html('');
+            }
+            anwers = $('#Exercises_correct_answers');
+            if(!anwers.val())
+            {
+                anwers.siblings('.errorMessage').html('Введите правильный ответ');
+                $return = false;
+            } else {
+                anwers.siblings('.errorMessage').html('');
+            }
+            return $return;
         });
     });
 </script>
@@ -187,7 +237,7 @@
     
     <div class="col-lg-5 col-md-5">
         <?php echo $form->dropDownList($model, 'difficulty', Exercises::getDataDifficulty(), array('class'=>'form-control', 'empty'=>'Введите сложность')); ?>
-        <?php echo $form->error($model, 'difficulty'); ?>
+        <div class="errorMessage"></div>
     </div>
 </div>
 
@@ -199,7 +249,7 @@
 
         <div class="col-lg-5 col-md-5">
             <?php echo $form->dropDownList($model, 'id_visual', ExercisesVisuals::getDataVisuals($model->id_type), array('class'=>'form-control', 'empty'=>'Выберите тип визуализации')); ?>
-            <?php echo $form->error($model, 'id_visual'); ?>
+            <div class="errorMessage"></div>
         </div>
     </div>
 <?php endif; ?>  
@@ -215,7 +265,7 @@
         <div class='for-editor-field' title='Нажмите, чтобы открыть редактор'>
             <?php echo $model->condition ? $model->condition : 'Введите текст'; ?>
         </div>
-        <?php echo $form->error($model, 'condition'); ?>
+        <div class="errorMessage"></div>
     </div>
 </div>
     

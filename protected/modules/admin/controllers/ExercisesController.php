@@ -33,6 +33,7 @@ class ExercisesController extends Controller
             $model->id_type = ExercisesTypes::model()->exists('id=:id', array('id'=>$id_type)) ? $id_type : Exercises::$defaultType;
             $model->id_visual = ExercisesVisuals::model()->exists('id=:id AND id_type=:id_type', array('id'=>$id_visual, 'id_type'=>$model->id_type)) ? $id_visual : null;
             $model->course_creator_id = Courses::model()->exists('id=:id', array('id'=>$id_course)) ? $id_course : 0;
+            
             if(isset($_POST['Exercises']))
             {
                 //CVarDumper::dump($_POST, 5, true); die;
@@ -49,6 +50,22 @@ class ExercisesController extends Controller
                             $exerciseSkills->save();
                             $exerciseSkills->isNewRecord = true;
                             $exerciseSkills->id = false;
+                        }
+                    }
+                    
+                    if($_POST['Exercises']['answers'])
+                    {
+                        foreach($_POST['Exercises']['answers'] as $index => $answer)
+                        {
+                            $exercisesAnwers = new ExercisesListOfAnwers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnwers ->id_exercise = $model->id;
+                            $exercisesAnwers->answer = $answer;
+                            $exercisesAnwers->save();
+                            if($model->correct_answers == $index)
+                            {
+                                $model->correct_answers = $exercisesAnwers->id;
+                                $model->save();
+                            }
                         }
                     }
                     $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));
@@ -82,6 +99,22 @@ class ExercisesController extends Controller
                             $exerciseSkills->save();
                             $exerciseSkills->isNewRecord = true;
                             $exerciseSkills->id = false;
+                        }
+                    }
+                    
+                    if($_POST['Exercises']['answers'])
+                    {
+                        foreach($_POST['Exercises']['answers'] as $index => $answer)
+                        {
+                            $exercisesAnwers = new ExercisesListOfAnwers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnwers ->id_exercise = $model->id;
+                            $exercisesAnwers->answer = $answer;
+                            $exercisesAnwers->save();
+                            if($model->correct_answers == $index)
+                            {
+                                $model->correct_answers = $exercisesAnwers->id;
+                                $model->save();
+                            }
                         }
                     }
                 }
