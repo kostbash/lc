@@ -33,6 +33,9 @@ class ExercisesController extends Controller
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
             $id_visual = (int) $_GET['id_visual'];
+            // не даем возможность добавлять тесту тип контент т.к. у него нету ответа
+            if($id_type==4 && $id_part)
+                $this->redirect(array('/admin/exercises/index'));
             $model->id_type = ExercisesTypes::model()->exists('id=:id', array('id'=>$id_type)) ? $id_type : Exercises::$defaultType;
             $model->id_visual = ExercisesVisuals::model()->exists('id=:id AND id_type=:id_type', array('id'=>$id_visual, 'id_type'=>$model->id_type)) ? $id_visual : null;
             $model->course_creator_id = 0;
@@ -307,6 +310,18 @@ class ExercisesController extends Controller
                 $id_part = (int) $_GET['id_part'];
                 $local = (int) $_GET['local'];
                 
+                if($id_group)
+                {
+                    $groupExercise = GroupOfExercises::model()->findBypk($id_group);
+                    
+                } elseif($id_part)
+                {
+                    $part = PartsOfTest::model()->findByPk($id_part);
+                    $groupExercise = $part->Group;
+                }
+                
+                $model->course_creator_id = $local && $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
+                
 		if(isset($_POST['filter'])) {
                     $model->attributes=$_POST['Exercises'];
                     unset($_SESSION['Exercises']);
@@ -314,25 +329,6 @@ class ExercisesController extends Controller
                     $_GET['filter'] = 1;
                 } elseif($_GET['filter'] && $_SESSION['Exercises']) {
                     $model->attributes=$_SESSION['Exercises'];
-                }
-                
-                if($id_group)
-                {
-                    $groupExercise = GroupOfExercises::model()->findBypk($id_group);
-                    if($local)
-                    {
-                        $model->course_creator_id = $groupExercise->id_course;
-                        $course = Courses::model()->findByPk($groupExercise->id_course);
-                    }
-                } elseif($id_part)
-                {
-                    $part = PartsOfTest::model()->findByPk($id_part);
-                    $groupExercise = $part->Group;
-                    if($local)
-                    {
-                        $model->course_creator_id = $groupExercise->id_course;
-                        $course = Courses::model()->findByPk($groupExercise->id_course);
-                    }
                 }
 
                 if($groupExercise && $_POST['checked'])
@@ -390,14 +386,10 @@ class ExercisesController extends Controller
                         $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group));
                 }
                 
-                $id_course = $course ? $course->id : 0;
-                
 		$this->render('index',array(
 			'model'=>$model,
                         'course'=>$course,
-                        'id_course'=>$id_course,
                         'group' => $groupExercise,
-                        'id' => $id,
 		));
 	}
         
@@ -549,9 +541,10 @@ class ExercisesController extends Controller
                 $model= Exercises::model()->findByPk($id_exercise);
                 if(!$model)
                     die('Не существует такого задания !');
+                
+                $model->attributes = $attributes;
                 if($model->canSaveFromGroup($id_group))
                 {
-                    $model->attributes = $attributes;
                     if($model->save())
                     {
                         if($attributes['SkillsIds'])
@@ -585,7 +578,7 @@ class ExercisesController extends Controller
                     }
                 } else {
                     $newExercise = new Exercises();
-                    $newExercise->attributes = $attributes;
+                    $newExercise->attributes = $model->attributes;
                     $newExercise->course_creator_id = $group->id_course;
                     if($newExercise->save()) 
                     {

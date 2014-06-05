@@ -94,10 +94,7 @@ class Exercises extends CActiveRecord
 	{
             $criteria=new CDbCriteria;
             $params = array();
-            if($this->id)
-                $criteria->compare('id',$this->id);
-            else
-                $course_id = $this->course_creator_id ? $this->course_creator_id : 0;
+            $course_id = $this->course_creator_id ? $this->course_creator_id : 0;
             $criteria->compare('condition',$this->condition,true);
             $criteria->compare('correct_answers',$this->correct_answers,true);
             $criteria->compare('difficulty',$this->difficulty);
@@ -164,9 +161,21 @@ class Exercises extends CActiveRecord
             return $ids;
         }
         
+        public function afterDelete() {
+            ExercisesListOfAnswers::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
+            ExerciseAndSkills::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
+            parent::afterDelete();
+        }
+        
         public function getCanDelete() {
             if($this->ExercisesGroup)
                 return 0;
             return 1;
         }
+        
+        public static function rightAnswer($id_exercise, $answers) {
+            $answers = is_array($answers) ? implode(',', $answers) : trim($answers);
+            return Exercises::model()->exists('`id`=:id AND `correct_answers`=:answers', array('id'=>$id_exercise, 'answers'=>$answers));
+        }
+        
 }

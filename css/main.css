@@ -453,24 +453,32 @@ h2{
 
 .pass-lesson .question {
     margin-bottom: 5px;
-    float: left;
-    width: 60%;
+    border-bottom: 2px solid #eee;
 }
 
+.check .answer,
 .pass-lesson .answer {
-    width: 39%;
-    margin-left: 1%;
-    float: left;
+    margin: 10px auto;
+    width: 50%;
+    text-align: center;
 }
+
+.check .answer .result,
 .pass-lesson .answer .result {
-    float: left;
     line-height: 21px;
     margin-top: 5px;
+    text-align: center;
     vertical-align: middle;
 }
 
-.pass-lesson .answer input {
+.check .answer .for-editor-field,
+.pass-lesson .answer .for-editor-field {
+    margin-top: 10px;
+}
 
+.check .answer .for-editor-field:first-child,
+.pass-lesson .answer .for-editor-field:first-child {
+    margin-top: 0;
 }
 
 .pass-lesson .answer .form-control-feedback {
@@ -695,10 +703,6 @@ h2{
 #check .exercise h2 {
     margin-bottom: 10px;
     margin-top: 0;
-}
-
-#check .exercise .question {
-    margin-top: 10px;
 }
 
 #check .exercise .answer .form-control-feedback {
@@ -1212,4 +1216,12 @@ z-index:10000000;
 
 #dropdown-types_of_exercises li a {
     font-size: 12px;
+}
+
+.selected-answer {
+    border: 2px solid #aaa;
+}
+
+.no-selected-answer {
+    border: 2px solid #a11;
 }

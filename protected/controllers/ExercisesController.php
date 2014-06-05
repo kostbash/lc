@@ -29,7 +29,7 @@ class ExercisesController extends Controller
 	{
             if($_POST['Exercises']) {
                 $id = (int) key($_POST['Exercises']);
-                $answer = trim($_POST['Exercises'][$id]['answer']);
+                $answer = is_array($_POST['Exercises'][$id]['answers']) ? implode(',', $_POST['Exercises'][$id]['answers']) : trim($_POST['Exercises'][$id]['answers']);
                 $userExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$id_relation, 'id_exercise'=>$id));
                 if(!$userExercise)
                 {
@@ -37,10 +37,10 @@ class ExercisesController extends Controller
                     $userExercise->id_relation = $id_relation;
                     $userExercise->id_exercise = $id;
                 }
-                $userExercise->last_answer = $answer;
+                $userExercise->last_answer = 
                 $userExercise->save(false);
                 $exercise = Exercises::model()->findByPk($id);
-                $exercise->correct_answer == $answer ? die('1') : die('0');
+                echo Exercises::rightAnswer($id, $_POST['Exercises'][$id]['answers']);
             }
 	}
 

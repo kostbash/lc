@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(function(){
         <?php if($exerciseGroup->type != 2) : ?>
-            $('.exercise .answer input').change(function(){
+            $('input[name*=answers]').change(function(){
                 current = $(this);
                 if(current.val()=='')
                     current.siblings('.result').html('');
@@ -48,11 +48,19 @@
             
             $('#exercises-form input[type=submit]').click(function(){
                 can = true;
-                $('.exercise .answer input').each(function(){
-                   if(!$.trim($(this).val()))
+                $('input[name*=answers]:checked').each(function(){
+                    if(!$.trim($(this).val()))
                     {
                         can = false;
-                        $(this).closest('.answer').addClass('has-error has-feedback').append('<span class="glyphicon glyphicon-pencil form-control-feedback"></span>');
+                        $(this).closest('.answer').addClass('no-selected-answer');
+                    }
+                });
+                
+                $('input[name*=answers]').each(function(){
+                    if(!$.trim($(this).val()))
+                    {
+                        can = false;
+                        $(this).closest('.answer').addClass('no-selected-answer');
                     }
                 });
                 if(!can) {
@@ -61,6 +69,13 @@
                 }
             });
         <?php endif; ?>
+        $('.for-editor-field').click(function(){
+                answer = $(this);
+                key = answer.data('key');
+                $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
+                answer.addClass('selected-answer');
+                hiddenAnswer = $('.hidden-answer[data-key='+key+']').val(answer.data('val'));
+        });
         $('.exercise .answer input').keydown(function(e){
               if(e.keyCode==13){
                 nextTab = $('input[tabindex='+(parseInt($(this).attr('tabindex'))+1)+']');
@@ -113,62 +128,62 @@
              <div class="list-exercises">
                 <h2>Блоки урока</h2>
                 <ul>
-                <?php if($userLesson->Lesson->ExercisesGroups) : ?>
-                    <?php foreach($userLesson->Lesson->ExercisesGroups as $pos => $group) : ++$pos; ?>
-                        <?php if(UserAndExerciseGroups::ExistUserAndGroup($userLesson->id, $group->id)) : ?>
-                            <?php
-                                if($exerciseGroup->id == $group->id)
-                                {
-                                    $class = 'link current';
-                                    $currentPos = $pos;
-                                } else {
-                                    $class = 'link';
-                                }
-                            ?>
-                            <li><?php if($group->type==2) echo 'Тест: '; echo CHtml::link("$pos.$group->name", array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$group->id), array('class'=>$class)); ?></li>
-                        <?php else : ?>
-                                <li><?php if($group->type==2) echo 'Тест: '; echo "$pos.$group->name"; ?></li>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                <li>Нет блоков</li>
-                <?php endif; ?>
+                    <?php if($userLesson->Lesson->ExercisesGroups) : ?>
+                        <?php foreach($userLesson->Lesson->ExercisesGroups as $pos => $group) : ++$pos; ?>
+                            <?php if(UserAndExerciseGroups::ExistUserAndGroup($userLesson->id, $group->id)) : ?>
+                                <?php
+                                    if($exerciseGroup->id == $group->id)
+                                    {
+                                        $class = 'link current';
+                                        $currentPos = $pos;
+                                    } else {
+                                        $class = 'link';
+                                    }
+                                ?>
+                                <li><?php if($group->type==2) echo 'Тест: '; echo CHtml::link("$pos.$group->name", array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$group->id), array('class'=>$class)); ?></li>
+                            <?php else : ?>
+                                    <li><?php if($group->type==2) echo 'Тест: '; echo "$pos.$group->name"; ?></li>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <li>Нет блоков</li>
+                    <?php endif; ?>
                 </ul>
             </div>
                 
-            <?php if($exerciseGroup) : ?>
+        <?php if($exerciseGroup) : ?>
             <h2><?php echo "Блок $currentPos: $exerciseGroup->name"; ?></h2>
             <?php $form=$this->beginWidget('CActiveForm', array(
                 'id'=>'exercises-form',
                 'enableAjaxValidation'=>false,
             )); ?>
             <?php if($exerciseGroup->type != 2 && $exerciseGroup->Exercises) : $posTest = 1; ?>
-                <?php foreach($exerciseGroup->ExercisesRaw as $i => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; ?>
+                <?php foreach($exerciseGroup->Exercises as $i => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; ?>
                     <div class="exercise clearfix<?php echo $classExercise; ?>">
-                        <h2><?php if($exercise->need_answer) echo "Задание $posTest:"; else echo 'Теория:'; ?></h2>
-                        <?php if($exercise->need_answer) : ++$posTest; ?>
-                            <div class="question"><?php echo "$exercise->question"; ?></div>
-                            <div class="answer clearfix" style="display: inline-block;">
-                                    <?php echo CHtml::textField("Exercises[$exercise->id][answer]", '', array('placeholder'=>'Введите ответ', 'class'=>'form-control', 'tabindex'=>$posTest, 'autocomplete'=>'off')); ?>
+                        <h2><?php if($exercise->id_type!==4) echo "Задание $posTest:"; else echo 'Теория:'; ?></h2>
+                        <?php if($exercise->id_type!==4) : ++$posTest; ?>
+                            <div class="question"><?php echo "$exercise->condition"; ?></div>
+                            <div class="answer clearfix">
+                                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id)); ?>
                                     <div class="result"></div>
                                     <?php $userExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userAndExerciseGroup->id, 'id_exercise'=>$exercise->id));
                                         if($userExercise) echo "<span class='label label-info'>Последний ответ: $userExercise->last_answer</span>";
                                     ?>
                             </div>
                         <?php else : ?>
-                            <?php echo $exercise->question; ?>
+                            <?php echo $exercise->condition; ?>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
-            <?php elseif($exerciseGroup->type == 2 && $criteriaExercises) : $position=0; ?>
-                <?php foreach($criteriaExercises as $key => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; $position++; ?>
-                <div class="exercise clearfix<?php echo $classExercise; ?>">
-                    <h2><?php echo "Задание $position:"; ?></h2>
-                    <div class="question"><?php echo "$exercise->question"; ?></div>
-                    <div class="answer clearfix">
-                        <?php echo CHtml::textField("Exercises[$key][answer]", '', array('placeholder'=>'Введите ответ', 'class'=>'form-control', 'style'=>'width:100%', 'tabindex'=>$key, 'autocomplete'=>'off')); ?>
+            <?php elseif($exerciseGroup->type == 2 && $exercisesTest) : $position=0; ?>
+                <?php foreach($exercisesTest as $key => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; $position++; ?>
+                    <div class="exercise clearfix<?php echo $classExercise; ?>">
+                        <h2><?php echo "Задание $position:"; ?></h2>
+                        <div class="question"><?php echo "$exercise->condition"; ?></div>
+                        <div class="answer clearfix">
+                            <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key)); ?>
+                        </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
                 <div class='control-buttons'><?php echo CHtml::submitButton('Отправить результаты', array('class'=>'btn btn-success', 'style'=>'margin-top: 20px')); ?></div>
             <?php else : ?>
@@ -181,9 +196,9 @@
                     elseif($userLesson->Lesson->accessNextLesson($userLesson->id)) echo CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'btn btn-success btn-icon-right nextGroup', 'style'=>'margin-top: 20px', 'disabled'=>'disabled')); ?>
                 </div>
             <?php endif; ?>
-            <?php else : ?>
+        <?php else : ?>
             Нет группы заданий
-            <?php endif; ?>
+        <?php endif; ?>
             </div>
         </div>
 </div>

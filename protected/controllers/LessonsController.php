@@ -36,7 +36,7 @@ class LessonsController extends Controller
             {
                 $countRight = 0;
                 foreach($_POST['Exercises'] as $id_exercise => $attr)
-                    if(Exercises::model()->exists('`id`=:id AND `correct_answer`=:answer', array('id'=>$id_exercise, 'answer'=>trim($attr['answer']))))
+                    if(Exercises::model()->exists('`id`=:id AND `correct_answers`=:answer', array('id'=>$id_exercise, 'answer'=>trim($attr['answer']))))
                         ++$countRight;
                     
                 $userAndExerciseGroup->number_right = $countRight;
@@ -46,7 +46,8 @@ class LessonsController extends Controller
             }
         }
 
-        public function actionPass($id, $group=null) {
+        public function actionPass($id, $group=null)
+        {
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
             if(!$userAndLesson)
                 $this->redirect('/');
@@ -72,15 +73,15 @@ class LessonsController extends Controller
             if($userAndExerciseGroup)
             {
                 $currentExerciseGroup = GroupOfExercises::model()->findByPk($userAndExerciseGroup->id_exercise_group);
-                if($_POST['Exercises'] && $_SESSION['criteriaExercises']) 
+                if($_POST['Exercises'] && $_SESSION['exercisesTest']) 
                 {
                     $countRight = 0;
                     $numberAllSkills = array();
                     $numberRightAnswerSkills = array();
                     
-                    foreach($_SESSION['criteriaExercises'] as $key => $id_exercise)
+                    foreach($_SESSION['exercisesTest'] as $key => $id_exercise)
                     {
-                        $rightAnswer = Exercises::model()->exists('`id`=:id AND `correct_answer`=:answer', array('id'=>$id_exercise, 'answer'=>trim($_POST['Exercises'][$key]['answer'])));
+                        $rightAnswer = Exercises::rightAnswer($id_exercise, $_POST['Exercises'][$key]['answers']);
                         if($rightAnswer)
                             ++$countRight;
                         foreach($userAndLesson->Lesson->Skills as $skill)
@@ -98,7 +99,7 @@ class LessonsController extends Controller
                         }
                     }
                     $userAndExerciseGroup->number_right = $countRight;
-                    $userAndExerciseGroup->number_all = count($_POST['Exercises']);
+                    $userAndExerciseGroup->number_all = count($_SESSION['exercisesTest']);
                     
                     // если урок еще не пройденный, то делаем проверку
                     $testPassed = 1;
@@ -156,12 +157,12 @@ class LessonsController extends Controller
                     $render = false;
                 }
                 
-                $criteriaExercises = $currentExerciseGroup->ExercisesTest;
+                $exercisesTest = $currentExerciseGroup->ExercisesTest;
                 // т.к. задания выбираются постоянно новые, мы сохраняем этот набор, чтобы его потом проверить
-                unset($_SESSION['criteriaExercises']);
-                foreach($criteriaExercises as $keyMass => $criteriaExercise)
+                unset($_SESSION['exercisesTest']);
+                foreach($exercisesTest as $keyMass => $exerciseTest)
                 {
-                    $_SESSION['criteriaExercises'][$keyMass] = $criteriaExercise->id;
+                    $_SESSION['exercisesTest'][$keyMass] = $exerciseTest->id;
                 }
             }
             
@@ -183,12 +184,11 @@ class LessonsController extends Controller
 
             if(!$render)
                 die;
-            
             $this->render('pass',array(
                     'userLesson'=>$userAndLesson,
                     'userAndExerciseGroup'=>$userAndExerciseGroup,
                     'exerciseGroup'=>$currentExerciseGroup,
-                    'criteriaExercises' => $criteriaExercises,
+                    'exercisesTest' => $exercisesTest,
             ));
         }
         
@@ -255,7 +255,7 @@ class LessonsController extends Controller
                     $rightAnswers = 0;
                     foreach($userAnswers as $userAnswer)
                     {
-                        $rightAnswers += Exercises::model()->exists('`id`=:id AND `correct_answer`=:correct_answer', array('id'=>$userAnswer->id_exercise, 'correct_answer'=>$userAnswer->answer));
+                        $rightAnswers += Exercises::model()->exists('`id`=:id AND `correct_answers`=:correct_answers', array('id'=>$userAnswer->id_exercise, 'correct_answers'=>$userAnswer->answer));
                     }
                     
                     $result = Lessons::ResultCheck($rightAnswers,$numberAll);

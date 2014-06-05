@@ -279,9 +279,10 @@ $this->widget('ZGridView', array(
         <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
         <ul class="dropdown-menu" role="menu">
             <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
-                <li class='type'>
-                    <?php echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_part'=>$part->id)); ?>
-                </li>
+                <?php if($type->id == 4) continue; // убераем вывод типа контент т.к. он не имеет ответ ?>
+                    <li class='type'>
+                        <?php echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_part'=>$part->id)); ?>
+                    </li>
                 <?php foreach($type->Visuals as $visual) : ?>
                     <li class='visual'>
                         <?php echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_part'=>$part->id)); ?>
