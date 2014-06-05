@@ -118,7 +118,7 @@
             'id'=>'exercises-form',
             'enableAjaxValidation'=>false,
         )); ?>
-        <?php if($exerciseGroup->type != 2 && $exerciseGroup->ExercisesRaw) : ?>
+        <?php if($exerciseGroup->type != 2 && $exerciseGroup->Exercises) : ?>
         <?php foreach($exerciseGroup->ExercisesRaw as $posTest => $exercise) : ++$posTest; ?>
         <div class="exercise clearfix">
             <div class="question"><?php echo "$posTest: $exercise->question"; ?></div>

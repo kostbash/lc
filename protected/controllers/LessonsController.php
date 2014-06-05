@@ -200,7 +200,7 @@ class LessonsController extends Controller
             $currentGroup = $checkLesson->ExercisesGroups[$step-1];
             $nextGroup = $checkLesson->ExercisesGroups[$step] ? 1 : 0;
             if($currentGroup->type==1)
-                $exercises = $currentGroup->ExercisesRaw;
+                $exercises = $currentGroup->Exercises;
             elseif($currentGroup->type==2)
                 $exercises = $currentGroup->ExercisesByCriteria;
             if(!($currentGroup or $exercises))
@@ -211,7 +211,7 @@ class LessonsController extends Controller
             foreach($checkLesson->ExercisesGroups as $key => $exerciseGroup)
             {
                 if($exerciseGroup->type==1)
-                    $numberExercises = count($exerciseGroup->ExercisesRaw);
+                    $numberExercises = count($exerciseGroup->Exercises);
                 elseif($exerciseGroup->type==2)
                     $numberExercises = count($exerciseGroup->ExercisesByCriteria);
                 

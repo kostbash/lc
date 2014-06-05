@@ -18,7 +18,7 @@ class ExercisesController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('create','update','delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmleditorvariant'),
+                            'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmleditorvariant'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -27,18 +27,27 @@ class ExercisesController extends Controller
             );
 	}
 
-	public function actionCreate($id_type, $id_visual=null, $id_course=null)
+	public function actionCreate($id_type)
 	{
             $model=new Exercises;
+            $id_group = (int) $_GET['id_group'];
+            $id_part = (int) $_GET['id_part'];
+            $id_visual = (int) $_GET['id_visual'];
             $model->id_type = ExercisesTypes::model()->exists('id=:id', array('id'=>$id_type)) ? $id_type : Exercises::$defaultType;
             $model->id_visual = ExercisesVisuals::model()->exists('id=:id AND id_type=:id_type', array('id'=>$id_visual, 'id_type'=>$model->id_type)) ? $id_visual : null;
-            $model->course_creator_id = Courses::model()->exists('id=:id', array('id'=>$id_course)) ? $id_course : 0;
+            $model->course_creator_id = 0;
+            if($id_part) {
+                $part = PartsOfTest::model()->findByPk($id_part);
+                $groupExercise = $part->Group;
+            } elseif($id_group) {
+                $groupExercise = GroupOfExercises::model()->findBypk($id_group);
+            }
             
             if(isset($_POST['Exercises']))
             {
                 //CVarDumper::dump($_POST, 5, true); die;
                 $model->attributes = $_POST['Exercises'];
-                $model->correct_answers = null;
+                $model->course_creator_id = $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
                 if($model->save())
                 {
                     if($_POST['Skills']['ids'])
@@ -58,20 +67,20 @@ class ExercisesController extends Controller
                     {
                         foreach($_POST['Exercises']['answers'] as $index => $answer)
                         {
-                            $exercisesAnwers = new ExercisesListOfAnwers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
-                            $exercisesAnwers ->id_exercise = $model->id;
-                            $exercisesAnwers->answer = $answer;
-                            $exercisesAnwers->save();
+                            $exercisesAnswers = new ExercisesListOfAnswers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnswers ->id_exercise = $model->id;
+                            $exercisesAnswers->answer = $answer;
+                            $exercisesAnswers->save();
                             
                             if(!empty($_POST['Exercises']['correct_answers']))
                             {
                                 if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
                                 {
-                                   $correctAnswers[] = $exercisesAnwers->id; 
+                                   $correctAnswers[] = $exercisesAnswers->id; 
                                 }
                                 elseif($_POST['Exercises']['correct_answers'] == $index)
                                 {
-                                    $correctAnswers = $exercisesAnwers->id;
+                                    $correctAnswers = $exercisesAnswers->id;
                                 }
                             }
                         }
@@ -81,9 +90,28 @@ class ExercisesController extends Controller
                             $model->save();
                         }
                     }
-                    $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));
+                    // добавляем задание в группу
+                    if($id_part && $part)
+                    {
+                        $partExercises = new PartsOfTestAndExercises;
+                        $partExercises->id_part = $id_part;
+                        $partExercises->id_exercise = $model->id;
+                        $partExercises->save();
+                        $this->redirect(array('/admin/partsoftest/update', 'id'=>$id_part));
+                    }
+                    // добавляем задание в часть теста
+                    elseif($id_group && $groupExercise)
+                    {
+                        $groupAndExercise = new GroupAndExercises();
+                        $groupAndExercise->id_group = $id_group;
+                        $groupAndExercise->id_exercise = $model->id;
+                        $groupAndExercise->order = GroupAndExercises::maxValueOrder($id_group);
+                        $groupAndExercise->save();
+                        $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group));
+                    } else {
+                        $this->redirect(array('/admin/exercises/index'));
+                    }
                 }
-                        
             }
             
             $this->render('create', array(
@@ -94,11 +122,17 @@ class ExercisesController extends Controller
 	public function actionUpdate($id)
 	{
             $model = $this->loadModel($id);
+            $id_group = (int) $_GET['id_group'];
+            $id_part = (int) $_GET['id_part'];
+            if($id_part) {
+                $part = PartsOfTest::model()->findByPk($id_part);
+            } elseif($id_group) {
+                $groupExercise = GroupOfExercises::model()->findBypk($id_group);
+            }
             if(isset($_POST['Exercises']))
             {
                 //CVarDumper::dump($_POST, 5, true); die;
                 $model->attributes = $_POST['Exercises'];
-                $model->correct_answers = null;
                 if($model->save())
                 {
                     if($_POST['Skills']['ids'])
@@ -121,20 +155,20 @@ class ExercisesController extends Controller
                         foreach($model->Answers as $eAnswer) $eAnswer->delete();
                         foreach($_POST['Exercises']['answers'] as $index => $answer)
                         {
-                            $exercisesAnwers = new ExercisesListOfAnwers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
-                            $exercisesAnwers ->id_exercise = $model->id;
-                            $exercisesAnwers->answer = $answer;
-                            $exercisesAnwers->save();
+                            $exercisesAnswers = new ExercisesListOfAnswers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnswers ->id_exercise = $model->id;
+                            $exercisesAnswers->answer = $answer;
+                            $exercisesAnswers->save();
                             
                             if(!empty($_POST['Exercises']['correct_answers']))
                             {
                                 if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
                                 {
-                                   $correctAnswers[] = $exercisesAnwers->id; 
+                                   $correctAnswers[] = $exercisesAnswers->id; 
                                 }
                                 elseif($_POST['Exercises']['correct_answers'] == $index)
                                 {
-                                    $correctAnswers = $exercisesAnwers->id;
+                                    $correctAnswers = $exercisesAnswers->id;
                                 }
                             }
                         }
@@ -144,8 +178,20 @@ class ExercisesController extends Controller
                             $model->save();
                         }
                     }
+                    // добавляем задание в группу
+                    if($part)
+                    {
+                        $this->redirect(array('/admin/partsoftest/update', 'id'=>$id_part));
+                    }
+                    // добавляем задание в часть теста
+                    elseif($groupExercise)
+                    {
+                        $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group));
+                    } else {
+                        $this->redirect(array('/admin/exercises/index'));
+                    }
                 }
-                $this->redirect(array('/admin/exercises/update', 'id'=>$model->id));   
+                $this->redirect(Yii::app()->request->urlReferrer);   
             }
             $this->render('update', array(
                 'model'=>$model,
@@ -190,21 +236,21 @@ class ExercisesController extends Controller
 	 * @param integer $id the ID of the model to be updated
 	 */
         
-//	public function actionUpdate()
-//	{
-//            if(isset($_POST['Exercises']))
-//            {
-//                foreach ($_POST['Exercises'] as $id => $attributes)
-//                {
-//                    $model = Exercises::model()->findByPk($id);
-//                    if(!$model)
-//                        die('Нет такого задания');
-//                    $model->attributes=$attributes;
-//                    if($model->save())
-//                            echo 1;
-//                }
-//            }
-//	}
+	public function actionUpdateByAjax()
+	{
+            if(isset($_POST['Exercises']))
+            {
+                foreach ($_POST['Exercises'] as $id => $attributes)
+                {
+                    $model = Exercises::model()->findByPk($id);
+                    if(!$model)
+                        die('Нет такого задания');
+                    $model->attributes=$attributes;
+                    if($model->save())
+                            echo 1;
+                }
+            }
+	}
 
 	public function actionDelete($id)
 	{
@@ -238,7 +284,7 @@ class ExercisesController extends Controller
                         ExerciseAndSkills::model()->deleteAllByAttributes(array('id_exercise'=>$exercise->id));
                         $exercise->delete();
                     } else {
-                        $res .= "Задание '$exercise->question' используется в группах :\n";
+                        $res .= "Задание '$exercise->condition' используется в группах :\n";
                         foreach($exercise->ExercisesGroup as $exerciseGroup)
                         {
                                 $res .= "$exerciseGroup->name \n";
@@ -259,7 +305,6 @@ class ExercisesController extends Controller
                 
                 $id_group = (int) $_GET['id_group'];
                 $id_part = (int) $_GET['id_part'];
-                $id = (int) $_GET['id'];
                 $local = (int) $_GET['local'];
                 
 		if(isset($_POST['filter'])) {
@@ -270,8 +315,6 @@ class ExercisesController extends Controller
                 } elseif($_GET['filter'] && $_SESSION['Exercises']) {
                     $model->attributes=$_SESSION['Exercises'];
                 }
-                if($id)
-                    $model->id = $id;
                 
                 if($id_group)
                 {
@@ -331,7 +374,7 @@ class ExercisesController extends Controller
                                     continue;
                             }
                             // проверяем, что заданию нужен ответ
-                            if(Exercises::model()->exists('id=:id AND need_answer=1', array('id'=>$id_exercise)))
+                            if(Exercises::model()->exists('id=:id AND id_visual<>4', array('id'=>$id_exercise)))
                             {
                                 $partExercises->id_part = $part->id;
                                 $partExercises->id_exercise = $id_exercise;
@@ -344,7 +387,7 @@ class ExercisesController extends Controller
                     if($id_part)
                         $this->redirect(array('/admin/partsoftest/update', 'id'=>$id_part));
                     else
-                        $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group, 'id_course'=>$groupExercise->id_course));
+                        $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group));
                 }
                 
                 $id_course = $course ? $course->id : 0;
@@ -627,19 +670,19 @@ class ExercisesController extends Controller
                                 }
                                 else
                                 {
-                                    $question = iconv('cp1251', 'utf-8', $data[0]);
+                                    $condition = iconv('cp1251', 'utf-8', $data[0]);
                                     $answer = iconv('cp1251', 'utf-8', $data[1]);
                                     $difficulty = iconv('cp1251', 'utf-8', $data[2]);
                                     $skills = iconv('cp1251', 'utf-8', $data[3]);
                                     $need_answer = iconv('cp1251', 'utf-8', $data[4]);
                                     
-                                    if($question && $answer && $difficulty && $skills)
+                                    if($condition && $answer && $difficulty && $skills)
                                     {
                                         $x++;
                                         
                                         $exercise = new Exercises;
-                                        $exercise->question = $question;
-                                        $exercise->correct_answer = $answer;
+                                        $exercise->condition = $condition;
+                                        $exercise->correct_answers = $answer;
                                         $exercise->difficulty = $difficulty;
                                         $exercise->need_answer = $need_answer + 0;
                                         $exercise->course_creator_id = $id_course;

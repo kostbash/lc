@@ -141,10 +141,10 @@
             return false;
         });
         
-        $('#add-editor-variant').click(function(){
+        $('#add-editor-variant').live('click', function(){
             current = $(this);
-            lastAnswer = $('.editor-variant-cond');
-            index = lastAnswer.length ? lastAnswer.data('index') : 1;
+            lastAnswer = $('.editor-variant-cont:last');
+            index = lastAnswer.length ? lastAnswer.data('index')+1 : 1;
             $.ajax({
                 url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmleditorvariant'); ?>',
                 data: { index: index },
@@ -159,14 +159,10 @@
         });
         
         $('.delete-editor-variant').live('click', function(){
-//            if(confirm('Вы действительно хотите удалить вариант ответа ?'))
-//            {
-//                selected = $('#Exercises_correct_answers option:selected');
-//                selected.each(function(n, answer){
-//                    $('#hidden-options input[data-index='+ $(answer).val() +']').remove();
-//                });
-//                selected.remove();
-//            }
+            if(confirm('Вы действительно хотите удалить вариант ответа ?'))
+            {
+                $(this).closest('.row').remove();
+            }
             return false;
         });
         
@@ -196,13 +192,39 @@
             } else {
                 condition.siblings('.errorMessage').html('');
             }
-            answers = $('#Exercises_correct_answers');
-            if(answers.length && !answers.val())
+            correctAnswers = $('#Exercises_correct_answers');
+            if(correctAnswers.length && !correctAnswers.val())
             {
-                answers.siblings('.errorMessage').html('Введите правильный ответ');
+                correctAnswers.siblings('.errorMessage').html('Введите/выберите правильный ответ');
                 $return = false;
             } else {
-                answers.siblings('.errorMessage').html('');
+                correctAnswers.siblings('.errorMessage').html('');
+            }
+            
+            // если выбор блока
+            if($('#pick-blocks').length)
+            {
+                // для радио кнопок
+                correctAnswers = $('input[name*=correct_answers]:checked');
+                if(!(correctAnswers.length && correctAnswers.val()))
+                {
+                    $('#errorCorrectAnswer').html('Выберите правильный ответ');
+                    $return = false;
+                } else {
+                    $('#errorCorrectAnswer').html('');
+                }
+
+                answers = $('.hidden-answer');
+                answers.each(function(n, answer){
+                    answer = $(answer);
+                    if(!answer.val())
+                    {
+                        answer.siblings('.errorMessage').html('Введите текст ответа');
+                        $return = false;
+                    } else {
+                        answer.siblings('.errorMessage').html('');
+                    }
+                });
             }
             return $return;
         });

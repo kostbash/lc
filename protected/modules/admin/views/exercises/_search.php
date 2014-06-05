@@ -105,12 +105,20 @@
             <?php echo $form->dropDownList($model,'pageSize', Exercises::$pageSizes, array("class"=>"form-control input-sm")) ?>
 	</div>
     </div>
-<!--    <div class="row" style="margin-bottom: 10px">
+    
+    <div class="row" style="margin-bottom: 10px">
        <div class="col-md-3">
-            <?php //echo $form->label($model,'need_answer'); ?>
-            <?php //echo $form->dropDownList($model,'need_answer', Exercises::$needAnswer, array("class"=>"form-control input-sm", "empty"=>"Все")) ?>
+            <?php echo $form->label($model,'id_type'); ?>
+            <?php echo $form->dropDownList($model,'id_type', CHtml::listData(ExercisesTypes::model()->findAll(), 'id', 'name'), array("class"=>"form-control input-sm", 'empty'=>'Все')) ?>
 	</div>
-    </div>-->
+    </div>
+    
+    <div class="row" style="margin-bottom: 10px">
+       <div class="col-md-3">
+            <?php echo $form->label($model,'id_visual'); ?>
+            <?php echo $form->dropDownList($model,'id_visual', CHtml::listData(ExercisesVisuals::model()->findAll(), 'id', 'name'), array("class"=>"form-control input-sm", 'empty'=>'Все')) ?>
+	</div>
+    </div>
 <?php $this->endWidget(); ?>
 
 </div><!-- search-form -->

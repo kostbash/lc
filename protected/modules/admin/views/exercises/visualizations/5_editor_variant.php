@@ -1,12 +1,16 @@
 <div class="row editor-variant-cont" data-index='<?php echo $index; ?>'>
     <div class="col-lg-3 col-md-3">
-        <input type='radio' name='Exercises[correct_answers]' value='<?php echo $index; ?>' />
-        <?php echo CHtml::label("Варианты $index", ''); ?>
+        <?php 
+            if(isset($model) && isset($answer))
+                $checked = $model->correct_answers == $answer->id ? ' checked="checked" ' : '';
+        ?>
+        <input id="<?php echo "radio-variant-$index"; ?>" type='radio' name='Exercises[correct_answers]' <?php echo $checked; ?> value='<?php echo $index; ?>' />
+        <?php echo CHtml::label("Варианты $index", "radio-variant-$index"); ?>
     </div>
     <div class="col-lg-7 col-md-7">
-        <?php echo CHtml::hiddenField("Exercises[answers][$index]", ''); ?>
+        <?php echo CHtml::hiddenField("Exercises[answers][$index]", $answer->answer, array('id'=>false, 'class'=>'hidden-answer')); ?>
         <div class='for-editor-field' title='Нажмите, чтобы открыть редактор'>
-            Введите текст
+            <?php echo $answer->answer ? $answer->answer : 'Введите текст'; ?>
         </div>
         <div class="errorMessage"></div>
     </div>

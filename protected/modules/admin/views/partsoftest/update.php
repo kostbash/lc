@@ -209,44 +209,37 @@ $this->widget('ZGridView', array(
             'class' => 'CCheckBoxColumn',
             'id' => 'checked',
             'value' => '$data->id',
-            'disabled' => '$data->isNewRecord',
+            'htmlOptions'=>array('width'=>'2%'),
         ),
         array(
-            'name' => 'question',
+            'name' => 'condition',
             'header'=>'Текст задания',
             'type'=>'forEditor',
             'htmlOptions'=>array('width'=>'40%'),
-        ),
-        array(
-            'name' => 'correct_answer',
-            'header'=>'Правильный ответ',
-            'type'=>'textArea',
-            'htmlOptions'=>array('width'=>'14%'),
-            'visibleCell'=>'!$data->isNewRecord',
         ),
         array(
             'name' => 'difficulty',
             'header'=>'Сложность',
             'type'=>'raw',
             'value'=>'CHtml::dropDownList("Exercises[$data->id][difficulty]", $data->difficulty, Exercises::getDataDifficulty(), array("class"=>"form-control update-record", "empty"=>"Выберите сложность"))',
-            'htmlOptions'=>array('width'=>'9%'),
-            'visibleCell'=>'!$data->isNewRecord',
-        ),
-        array(
-            'name' => 'need_answer',
-            'header'=>'Треб. ответ',
-            'value'=>'CHtml::hiddenField("Exercises[$data->id][need_answer]", 0, array("id"=>false)) . CHtml::checkBox("Exercises[$data->id][need_answer]", $data->need_answer, array("class"=>"update-record"))',
-            'type'=>'raw',
-            'htmlOptions' => array('width' => '9%'),
-            'visibleCell' => '!$data->isNewRecord',
+            'htmlOptions'=>array('width'=>'10%'),
         ),
 
         array(
             'name'=>'Skills',
             'header'=>'Требуемые умения',
             'type'=>'SkillsWithHidden',
-            'htmlOptions'=>array('width'=>'15%'),
-            'visibleCell'=>'!$data->isNewRecord',
+            'htmlOptions'=>array('width'=>'20%'),
+        ),
+        array(
+            'name'=>'Type.name',
+            'header'=>'Тип',
+            'htmlOptions' => array('width' => '10%'),
+        ),
+        array(
+            'name'=>'Visual.name',
+            'header'=>'Визуалзация',
+            'htmlOptions' => array('width' => '12%'),
         ),
         array(
                 'class'=>'CButtonColumn',
@@ -254,20 +247,17 @@ $this->widget('ZGridView', array(
                 'buttons'=>array(
                     'delete'=>array(
                         'url' => 'Yii::app()->createUrl("/admin/partsoftest/deleteexercise", array("id_part"=>'.$part->id.', "id_exercise"=>$data->id))',
-                        'visible'=>'!$data->isNewRecord',
                     ),
                     'update'=>array(
-                        'url'=>'Yii::app()->createUrl("/admin/exercises/index", array("id"=>$data->id))',
-                        'visible'=>'!$data->isNewRecord',
+                        'url'=>'Yii::app()->createUrl("/admin/exercises/update", array("id"=>$data->id, "id_part"=>'.$part->id.'))',
                     ),
                     'save'=>array(
                         'label'=>'<i class="glyphicon glyphicon-floppy-disk"></i>',
                         'url'=>'Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>'.$part->Group->id.', "id_part"=>'.$part->id.'))',
                         'options'=>array('class'=>'save-row', 'title'=>'Сохранить изменения'),
-                        'visible'=>'!$data->isNewRecord',
                     ),
                 ),
-                'htmlOptions'=>array('style'=>'width: 7%'),
+                'htmlOptions'=>array('style'=>'width: 6%'),
         ),
     ),
 )); ?>
@@ -281,6 +271,23 @@ $this->widget('ZGridView', array(
         <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
         <ul class="dropdown-menu" role="menu">
             <?php echo Generators::ListGenerators($part->id, 'part'); ?>
+        </ul>
+    </div>
+</div>
+<div id="dropdown-types_of_exercises" style="width: 136px;">
+    <div class="input-group-btn">
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <ul class="dropdown-menu" role="menu">
+            <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
+                <li class='type'>
+                    <?php echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_part'=>$part->id)); ?>
+                </li>
+                <?php foreach($type->Visuals as $visual) : ?>
+                    <li class='visual'>
+                        <?php echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_part'=>$part->id)); ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
         </ul>
     </div>
 </div>

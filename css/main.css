@@ -1169,6 +1169,8 @@ z-index:10000000;
     width: 202px;
     display:block;
     position:relative;
+    float: left;
+    margin-left: 3px;
 }
 
 #dropdown-types_of_exercises .dropdown-menu {

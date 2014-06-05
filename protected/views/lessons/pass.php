@@ -142,7 +142,7 @@
                 'id'=>'exercises-form',
                 'enableAjaxValidation'=>false,
             )); ?>
-            <?php if($exerciseGroup->type != 2 && $exerciseGroup->ExercisesRaw) : $posTest = 1; ?>
+            <?php if($exerciseGroup->type != 2 && $exerciseGroup->Exercises) : $posTest = 1; ?>
                 <?php foreach($exerciseGroup->ExercisesRaw as $i => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; ?>
                     <div class="exercise clearfix<?php echo $classExercise; ?>">
                         <h2><?php if($exercise->need_answer) echo "Задание $posTest:"; else echo 'Теория:'; ?></h2>

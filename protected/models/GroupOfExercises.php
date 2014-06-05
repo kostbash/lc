@@ -46,7 +46,7 @@ class GroupOfExercises extends CActiveRecord
 	public function relations()
 	{
 		return array(
-                    'ExercisesRaw'=>array(self::MANY_MANY, 'Exercises', 'oed_group_and_exercises(id_group, id_exercise)', 'order'=>'ExercisesRaw_ExercisesRaw.order ASC'),
+                    'Exercises'=>array(self::MANY_MANY, 'Exercises', 'oed_group_and_exercises(id_group, id_exercise)', 'order'=>'Exercises_Exercises.order ASC'),
                     'PartsOfTest' => array(self::HAS_MANY, 'PartsOfTest', 'id_group', 'order'=>'PartsOfTest.order ASC'),
                     'Lessons' => array(self::MANY_MANY, 'Lessons', 'oed_lesson_and_exercise_group(id_group_exercises, id_lesson)'),
                     'GroupAndSkills'=>array(self::HAS_MANY, 'GroupExerciseAndSkills', 'id_group'),
@@ -103,13 +103,7 @@ class GroupOfExercises extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-        
-        public function getExercises() {
-            $mass = $this->ExercisesRaw;
-            $mass[] = new Exercises();
-            return $mass;
-        }
-        
+
         public function getCountExercises() {
             if($this->type == 1)
                 return GroupAndExercises::model()->countByAttributes(array('id_group'=>$this->id));

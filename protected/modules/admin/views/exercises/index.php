@@ -5,7 +5,7 @@ Yii::app()->clientScript->registerScript('exercises', "
         current = $(this);
             
         $.ajax({
-             url: '" . Yii::app()->createUrl('admin/exercises/update') . "',
+             url: '" . Yii::app()->createUrl('admin/exercises/updatebyajax') . "',
              type:'POST',
              data: current.closest('tr').find('input, textarea, select').serialize(),
              success: function(result) { 
@@ -151,7 +151,7 @@ Yii::app()->clientScript->registerScript('exercises', "
                 editing.val(data);
 
                 $.ajax({
-                     url: '" . Yii::app()->createUrl('admin/exercises/update') . "',
+                     url: '" . Yii::app()->createUrl('admin/exercises/updatebyajax') . "',
                      type:'POST',
                      data: editing.closest('tr').find('input, textarea').serialize(),
                      success: function(result) { 
@@ -228,43 +228,47 @@ $this->widget('ZGridView', array(
             'class' => 'CCheckBoxColumn',
             'id' => 'checked',
             'value' => '$data->id',
-            'disabled' => '$data->isNewRecord',
+            'htmlOptions' => array('width' => '2%'),
         ),
         'id',
         array(
             'name' => 'condition',
             'type' => 'forEditor',
-            'htmlOptions' => array('width' => '42%'),
+            'htmlOptions' => array('width' => '40%'),
         ),
-        array(
-            'name' => 'correct_answers',
-            'type' => 'textArea',
-            'htmlOptions' => array('width' => '14%'),
-            'visibleCell' => '!$data->isNewRecord',
-        ),
+        
         array(
             'name' => 'difficulty',
             'type' => 'raw',
             'value' => 'CHtml::dropDownList("Exercises[$data->id][difficulty]", $data->difficulty, Exercises::getDataDifficulty(), array("class"=>"form-control update-record", "empty"=>"Выберите сложность"))',
-            'visibleCell' => '!$data->isNewRecord',
+            'htmlOptions' => array('width' => '10%'),
         ),
         
         array(
             'name' => 'Skills',
             'header' => 'Используемые умения',
             'type' => 'labelCourseLessonSkill',
-            'htmlOptions' => array('width' => '16%'),
-            'visibleCell' => '!$data->isNewRecord',
+            'htmlOptions' => array('width' => '20%'),
+        ),
+        array(
+            'name'=>'Type.name',
+            'header'=>'Тип',
+            'htmlOptions' => array('width' => '10%'),
+        ),
+        array(
+            'name'=>'Visual.name',
+            'header'=>'Визуалзация',
+            'htmlOptions' => array('width' => '12%'),
         ),
         array(
             'class' => 'CButtonColumn',
-            'template' => '{delete}',
+            'template' => '{update}{delete}',
             'buttons' => array(
                 'delete' => array(
-                    'visible' => '!$data->isNewRecord',
                     'click' => 'false',
                 ),
             ),
+            'htmlOptions' => array('width' => '6%'),
         ),
     ),
 ));
@@ -311,7 +315,7 @@ $this->endWidget();
 
 <div id="dropdown-types_of_exercises" style="width: 136px;">
     <div class="input-group-btn">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
         <ul class="dropdown-menu" role="menu">
             <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
                 <li class='type'>

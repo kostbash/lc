@@ -13,7 +13,6 @@ class Exercises extends CActiveRecord
 {
 
         public $difficultyMass = array(0,1,2,3,4,5,6,7,8,9,10);
-        static $needAnswer = array('1'=>'Да', '0'=>'Нет');
         public $SkillsIds;
         public $limit;
         public static $defaultType = 1;
@@ -57,6 +56,8 @@ class Exercises extends CActiveRecord
                     'ExerciseAndSkills'=>array(self::HAS_MANY, 'ExerciseAndSkills', 'id_exercise'),
                     'ExercisesGroup' => array(self::MANY_MANY, 'GroupOfExercises', 'oed_group_and_exercises(id_exercise, id_group)'),
                     'Answers'=>array(self::HAS_MANY, 'ExercisesListOfAnswers', 'id_exercise', 'order'=>'Answers.id ASC'),
+                    'Type'=>array(self::BELONGS_TO, 'ExercisesTypes', 'id_type'),
+                    'Visual'=>array(self::BELONGS_TO, 'ExercisesVisuals', 'id_visual'),
 		);
 	}
 
@@ -71,9 +72,9 @@ class Exercises extends CActiveRecord
 			'correct_answers' => 'Правильный ответ',
 			'difficulty' => 'Сложность',
                         'limit' => 'Число заданий',
-                        'need_answer'=>'Треб. ответ',
                         'pageSize'=>'Кол-во выводимых заданий',
-                        'id_visual'=>'Тип визуализации',
+                        'id_type'=>'Тип',
+                        'id_visual'=>'Визуализация',
 		);
 	}
 
@@ -100,7 +101,8 @@ class Exercises extends CActiveRecord
             $criteria->compare('condition',$this->condition,true);
             $criteria->compare('correct_answers',$this->correct_answers,true);
             $criteria->compare('difficulty',$this->difficulty);
-            //$criteria->compare('need_answer',$this->need_answer);
+            $criteria->compare('id_type', $this->id_type);
+            $criteria->compare('id_visual', $this->id_visual);
             $criteria->compare('course_creator_id', $course_id);
             if($this->SkillsIds) {
                 $criteria->addCondition("EXISTS (SELECT * FROM `oed_exercise_and_skills` s WHERE s.id_exercise = t.id AND s.id_skill IN ('".implode("','", $this->SkillsIds)."'))");
@@ -114,19 +116,9 @@ class Exercises extends CActiveRecord
                 $params['pagination'] = false;
             
             $params['criteria']=$criteria;
-            $data = new CActiveDataProvider($this, $params);
-            $data2 = $data->getData();
-            $data2[] = new Exercises();
-            $data->setData($data2);
-            return $data;
+            return new CActiveDataProvider($this, $params);
 	}
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Exercises the static model class
-	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
