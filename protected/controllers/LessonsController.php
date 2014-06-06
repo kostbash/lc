@@ -36,7 +36,7 @@ class LessonsController extends Controller
             {
                 $countRight = 0;
                 foreach($_POST['Exercises'] as $id_exercise => $attr)
-                    if(Exercises::model()->exists('`id`=:id AND `correct_answers`=:answer', array('id'=>$id_exercise, 'answer'=>trim($attr['answer']))))
+                    if(Exercises::rightAnswer($id_exercise, $attr['answers']))
                         ++$countRight;
                     
                 $userAndExerciseGroup->number_right = $countRight;

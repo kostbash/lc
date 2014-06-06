@@ -1,1 +1,1 @@
-<?php echo CHtml::dropDownList("Exercises[$key][answers]", '', CHtml::listData($model->Answers, 'id', 'answer'), array('class'=>'form-control', 'empty'=>'Выберите правильный ответ')); ?>
+<?php echo CHtml::dropDownList("Exercises[$key][answers]", '', CHtml::listData($model->Answers, 'id', 'answer'), array('class'=>'form-control', 'empty'=>'Выберите правильный ответ', 'tabindex'=>$index)); ?>

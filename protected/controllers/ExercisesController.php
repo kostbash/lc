@@ -25,21 +25,10 @@ class ExercisesController extends Controller
 		);
 	}
 
-	public function actionRight($id_relation)
+	public function actionRight()
 	{
             if($_POST['Exercises']) {
                 $id = (int) key($_POST['Exercises']);
-                $answer = is_array($_POST['Exercises'][$id]['answers']) ? implode(',', $_POST['Exercises'][$id]['answers']) : trim($_POST['Exercises'][$id]['answers']);
-                $userExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$id_relation, 'id_exercise'=>$id));
-                if(!$userExercise)
-                {
-                    $userExercise = new UserAndExercises;
-                    $userExercise->id_relation = $id_relation;
-                    $userExercise->id_exercise = $id;
-                }
-                $userExercise->last_answer = 
-                $userExercise->save(false);
-                $exercise = Exercises::model()->findByPk($id);
                 echo Exercises::rightAnswer($id, $_POST['Exercises'][$id]['answers']);
             }
 	}

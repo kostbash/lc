@@ -463,8 +463,8 @@ h2{
     text-align: center;
 }
 
-.check .answer .result,
-.pass-lesson .answer .result {
+.check .result,
+.pass-lesson .result {
     line-height: 21px;
     margin-top: 5px;
     text-align: center;
@@ -1219,9 +1219,10 @@ z-index:10000000;
 }
 
 .selected-answer {
-    border: 2px solid #aaa;
+    border: 1px solid #555;
 }
 
 .no-selected-answer {
     border: 2px solid #a11;
+    border-radius: 5px;
 }

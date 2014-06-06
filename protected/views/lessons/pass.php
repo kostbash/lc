@@ -1,91 +1,156 @@
 <script type="text/javascript">
     $(function(){
         <?php if($exerciseGroup->type != 2) : ?>
-            $('input[name*=answers]').change(function(){
+            $('[name*=answers]').change(function(){
                 current = $(this);
+                resultAnswer = current.closest('.answer').siblings('.result');
                 if(current.val()=='')
-                    current.siblings('.result').html('');
+                    resultAnswer.html('');
                 else
                     $.ajax({
-                        url: '<?php echo $this->createUrl('/exercises/right', array('id_relation'=>$userAndExerciseGroup->id)); ?>',
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type:'POST',
-                        data: current.serialize(),
+                        data: current.closest('.answer').find('input,select').serialize(),
                         success: function(result) { 
-                                    if(result==1)
-                                        current.siblings('.result').removeClass('color-unright').addClass('color-right').html('Верно');
-                                    else if(result==0)
-                                        current.siblings('.result').removeClass('color-right').addClass('color-unright').html('Не верно');
+                            if(result==1)
+                                resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            else if(result==0)
+                                resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
                          }
                     });
             });
-            $('.exercise .answer input').keyup(function(){
-                showButton = true;
-                $('.exercise .answer input').each(function(){
-                   if(!$.trim($(this).val()))
-                       showButton = false;
+            
+            $('.nextGroup').click(function(){
+                result = true;
+                $('input[name*=answers][type=text], input[name*=answers][type=hidden], select[name*=answers]').each(function(n, answer){
+                    if(!checkInput(answer))
+                        result = false;
                 });
-                if(showButton) {
+                
+                $('.checkbox-answer , .radio-answer').each(function(n, answer){
+                    if(!checkRadioCheckBox(answer))
+                        result = false;
+                });
+                
+                if(result) {
                     $.ajax({
                         url: '<?php echo $this->createUrl('/lessons/saverightanswers', array('user_lesson'=>$userLesson->id, 'group'=>$userAndExerciseGroup->id_exercise_group)); ?>',
                         type:'POST',
-                        data: $('#exercises-form').serialize()
+                        data: $('#exercises-form').serialize(),
+                        success: function(r) { alert(r); }
                     });
-                    $('.nextGroup').removeAttr('disabled');
-                } else
-                    $('.nextGroup').attr('disabled', 'disabled');
-            });
-            
-        <?php else : ?>
-            $('.exercise .answer input').change(function(){
-                if($(this).val()) {
-                    $(this).closest('.answer').removeClass('has-error has-feedback');
-                    $(this).siblings('.form-control-feedback').remove();
                 }
-                else {
-                    $(this).closest('.answer').addClass('has-error has-feedback').append('<span class="glyphicon glyphicon-pencil form-control-feedback"></span>');
-                }
-            });
-            
-            $('#exercises-form input[type=submit]').click(function(){
-                can = true;
-                $('input[name*=answers]:checked').each(function(){
-                    if(!$.trim($(this).val()))
-                    {
-                        can = false;
-                        $(this).closest('.answer').addClass('no-selected-answer');
-                    }
-                });
-                
-                $('input[name*=answers]').each(function(){
-                    if(!$.trim($(this).val()))
-                    {
-                        can = false;
-                        $(this).closest('.answer').addClass('no-selected-answer');
-                    }
-                });
-                if(!can) {
+                if(!result)
                     alert('Не для всех заданий даны ответы');
-                    return false;
-                }
+                    return result;
             });
-        <?php endif; ?>
-        $('.for-editor-field').click(function(){
+            
+            $('.for-editor-field').click(function(){
                 answer = $(this);
                 key = answer.data('key');
                 $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
                 answer.addClass('selected-answer');
-                hiddenAnswer = $('.hidden-answer[data-key='+key+']').val(answer.data('val'));
+                hiddenAnswer = $('.hidden-answer[data-key='+key+']')
+                hiddenAnswer.val(answer.data('val'));
+
+                resultAnswer = answer.closest('.answer').siblings('.result');
+                $.ajax({
+                    url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                    type:'POST',
+                    data: hiddenAnswer.serialize(),
+                    success: function(result) { 
+                        if(result==1)
+                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                        else if(result==0)
+                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                    }
+                });
+                checkInput(hiddenAnswer);
+            });
+            
+        <?php else : ?>
+            $('#exercises-form input[type=submit]').click(function(){
+                result = true;
+                $('input[name*=answers][type=text], input[name*=answers][type=hidden], select[name*=answers]').each(function(n, answer){
+                    if(!checkInput(answer))
+                        result = false;
+                });
+                
+                $('.checkbox-answer , .radio-answer').each(function(n, answer){
+                    if(!checkRadioCheckBox(answer))
+                        result = false;
+                });
+                if(!result)
+                    alert('Не для всех заданий даны ответы');
+                return result;
+            });
+            
+            $('.for-editor-field').click(function(){
+                answer = $(this);
+                key = answer.data('key');
+                $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
+                answer.addClass('selected-answer');
+                hidden = $('.hidden-answer[data-key='+key+']');
+                hidden.val(answer.data('val'));
+                checkInput(hidden);
+            });
+        <?php endif; ?>
+            
+        $('[name*=answers]').keydown(function(e){
+            nextTab = null;
+            current = $(this);
+            if(e.keyCode==13){
+              $('[tabindex]').each(function(n, tabElement){
+                  tab = $(tabElement);
+                  //alert(parseInt(tab.attr('tabindex')) +' - '+ parseInt(current.attr('tabindex')));
+                  if( parseInt(tab.attr('tabindex')) > current.attr('tabindex') )
+                  {
+                      if(!nextTab)
+                          nextTab = tab;
+                  }   
+              });
+              if(nextTab)
+                  nextTab.focus();
+              return false;
+            }
         });
-        $('.exercise .answer input').keydown(function(e){
-              if(e.keyCode==13){
-                nextTab = $('input[tabindex='+(parseInt($(this).attr('tabindex'))+1)+']');
-                nextTab.focus();
-                return false;
-              }
-         });
-        
         $('#skills').popover();
+        
+        $('input[name*=answers][type=text], select[name*=answers]').change(function(){
+            checkInput(this);
+        });
+
+        $('.checkbox-answer , .radio-answer').change(function(){
+            checkRadioCheckBox(this);
+        });
     });
+    
+    function checkInput(input)
+    {
+        input = $(input);
+        if( !$.trim(input.val()) )
+        {
+            input.closest('.answer').addClass('no-selected-answer');
+            return false;
+        } else {
+            input.closest('.answer').removeClass('no-selected-answer');
+            return true;
+        }
+    }
+    
+    function checkRadioCheckBox(answer)
+    {
+        answer = $(answer);
+        checked = answer.find('input:checked');
+        if( !checked.length )
+        {
+            answer.closest('.answer').addClass('no-selected-answer');
+            return false;
+        } else {
+            answer.closest('.answer').removeClass('no-selected-answer');
+            return true;
+        }
+    }
 </script>
 <div class="pass-lesson">
 <div class="header-lesson clearfix">
@@ -164,12 +229,9 @@
                         <?php if($exercise->id_type!==4) : ++$posTest; ?>
                             <div class="question"><?php echo "$exercise->condition"; ?></div>
                             <div class="answer clearfix">
-                                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id)); ?>
-                                    <div class="result"></div>
-                                    <?php $userExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userAndExerciseGroup->id, 'id_exercise'=>$exercise->id));
-                                        if($userExercise) echo "<span class='label label-info'>Последний ответ: $userExercise->last_answer</span>";
-                                    ?>
+                                <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$i)); ?>
                             </div>
+                            <div class="result"></div>
                         <?php else : ?>
                             <?php echo $exercise->condition; ?>
                         <?php endif; ?>
@@ -181,7 +243,7 @@
                         <h2><?php echo "Задание $position:"; ?></h2>
                         <div class="question"><?php echo "$exercise->condition"; ?></div>
                         <div class="answer clearfix">
-                            <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key)); ?>
+                            <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key)); ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -192,8 +254,8 @@
             <?php $this->endWidget(); ?>
             <?php if($exerciseGroup->type != 2) : ?>
                 <div class='control-buttons'>
-                <?php if($userAndExerciseGroup->nextGroup) echo CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$userAndExerciseGroup->id), array('class'=>'btn btn-success btn-icon-right nextGroup', 'style'=>'margin-top: 20px', 'disabled'=>'disabled'));
-                    elseif($userLesson->Lesson->accessNextLesson($userLesson->id)) echo CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'btn btn-success btn-icon-right nextGroup', 'style'=>'margin-top: 20px', 'disabled'=>'disabled')); ?>
+                <?php if($userAndExerciseGroup->nextGroup) echo CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$userAndExerciseGroup->id), array('class'=>'btn btn-success btn-icon-right nextGroup', 'style'=>'margin-top: 20px'));
+                    elseif($userLesson->Lesson->accessNextLesson($userLesson->id)) echo CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'btn btn-success btn-icon-right nextGroup', 'style'=>'margin-top: 20px')); ?>
                 </div>
             <?php endif; ?>
         <?php else : ?>
