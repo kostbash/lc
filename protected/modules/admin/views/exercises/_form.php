@@ -78,7 +78,9 @@
             {
                 $('#editing').removeAttr('id');
                 hidden.attr('id', 'editing');
-                CKEDITOR.instances['editor-text'].setData(hidden.val());
+                editor = CKEDITOR.instances['editor-text'];
+                editor.setData(hidden.val());
+                //$('.cke_wysiwyg_frame body').focus();
             }
             $('#htmlEditor').modal('show');
         });
