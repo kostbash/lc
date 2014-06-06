@@ -679,6 +679,8 @@ class ExercisesController extends Controller
                                         $exercise->difficulty = $difficulty;
                                         $exercise->need_answer = $need_answer + 0;
                                         $exercise->course_creator_id = $id_course;
+                                        $exercise->id_type = 1;
+                                        $exercise->id_visual = 1;
                                         $exercise->save();
                                         
                                         foreach(explode(';', $skills) as $s)
