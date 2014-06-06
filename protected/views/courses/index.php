@@ -31,7 +31,7 @@
                             </thead>
                             <?php
                             foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson) :
-                                if($keyLesson == 0 && $pos==0)
+                                if($keyLesson == 0 && $pos==0 && Users::UserType()!=1)
                                 {
                                     ++$pos;
                                     continue;

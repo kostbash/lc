@@ -124,11 +124,13 @@ class GroupandexercisesController extends Controller
 		$model = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$id_exercise));
                 if($model) {
                     $model->delete();
-                    $userExercisesGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
-                    foreach($userExercisesGroups as $userExerciseGroup)
+                    if($userExercisesGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group)))
                     {
-                        $userAndExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userExerciseGroup->id, 'id_exercise'=>$id_exercise));
-                        $userAndExercise->delete();
+                        foreach($userExercisesGroups as $userExerciseGroup)
+                        {
+                            if($userAndExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userExerciseGroup->id, 'id_exercise'=>$id_exercise)))
+                                $userAndExercise->delete();
+                        }
                     }
                 }
 	}
