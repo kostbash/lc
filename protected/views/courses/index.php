@@ -30,12 +30,13 @@
                                 </tr>
                             </thead>
                             <?php
-                            foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson) :
-//                                if($keyLesson == 0 && $pos==0)
-//                                {
-//                                    ++$pos;
-//                                    continue;
-//                                }
+                            foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson)
+                            {
+                                if($keyLesson == 0 && $pos==1)
+                                {
+                                    continue;
+                                }
+                                
                                 $userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id);
                                 $popover_content = "<b>Умения:</b><br />";
 
@@ -85,7 +86,7 @@
                                     <tr><td><?php echo CHtml::tag('span', array()/*array('class' => $class . ' popover-element', 'data-placement' => "top", 'data-toggle' => "popover", 'data-trigger' => "hover", 'data-title' => "Урок", 'data-html' => 'true', 'data-content' => $popover_content)*/, "Урок $pos : $lesson->name") ; ?></td><td style="text-align: center;">0%</td></td>
                                 <?php endif; ?>
                             <?php  ++$pos; ?>
-                            <?php endforeach; ?>
+                            <?php } ?>
                         </table>
                     <?php else : ?>
                         <ul><li>Нет уроков</li></ul>

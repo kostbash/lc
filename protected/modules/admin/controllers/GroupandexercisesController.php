@@ -128,7 +128,8 @@ class GroupandexercisesController extends Controller
                     foreach($userExercisesGroups as $userExerciseGroup)
                     {
                         $userAndExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userExerciseGroup->id, 'id_exercise'=>$id_exercise));
-                        $userAndExercise->delete();
+                        if($userAndExercise)
+                            $userAndExercise->delete();
                     }
                 }
 	}
