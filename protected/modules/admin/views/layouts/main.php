@@ -27,7 +27,7 @@
                     $this->widget('zii.widgets.CMenu',array(
                             'items'=>array(
                                     array('label'=>'Курсы', 'url'=>array('/admin/courses/index')),
-                                    array('label'=>'Уроки', 'url'=>array('/admin/lessons/index')),
+                                    //array('label'=>'Уроки', 'url'=>array('/admin/lessons/index')),
                                     array('label'=>'Задания', 'url'=>array('/admin/exercises/index')),
                                     array('label'=>'Умения', 'url'=>array('/admin/skills/index')),
                                     array('label'=>'Пользователи', 'url'=>array('/admin/users/index')),
