@@ -28,7 +28,7 @@ class GeneratorsController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('settings', 'generation'),
+                            'actions'=>array('settings', 'generation', 'gethtmlvisual'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',
@@ -56,10 +56,10 @@ class GeneratorsController extends Controller
             if(!$group)
                 $this->redirect('/');
 
-            error_reporting(E_ERROR); // максимальная ошибка, которая может быть Parse error. В случае шаблона или условия без оператора между двумя пременными - '5 + 5 x1 x2'
-
-            if($_POST['Exercises'])
+            if($_POST['Exercises'] && $_POST['Template'])
             {
+//                CVarDumper::dump($_POST, 5, true);
+//                die;
                 if($group->type == 1) // если добавляем задания в блок
                 {
                     $groupExercises = new GroupAndExercises;
@@ -83,6 +83,8 @@ class GeneratorsController extends Controller
                 {
                     $exercise = new Exercises;
                     $exercise->attributes = $attributes;
+                    $exercise->id_type = $_POST['Template']['id_type'];
+                    $exercise->id_visual = $_POST['Template']['id_visual'];
                     $exercise->course_creator_id = $group->id_course;
                     if($exercise->save())
                     {
@@ -95,6 +97,32 @@ class GeneratorsController extends Controller
                                 $exerciseSkills->save();
                                 $exerciseSkills->id = false;
                                 $exerciseSkills->isNewRecord = true;
+                            }
+                        }
+                        
+                        // если тип выбор одного из списка
+                        if($exercise->id_type == 2)
+                        {
+                            // сохраняем правильный ответ
+                            $exercisesAnswers = new ExercisesListOfAnswers;
+                            $exercisesAnswers ->id_exercise = $exercise->id;
+                            $exercisesAnswers->answer = $exercise->correct_answers;
+                            if($exercisesAnswers->save())
+                            {
+                                $exercise->correct_answers = $exercisesAnswers->id;
+                                $exercise->save();
+                            }
+                            
+                            // сохраняем неправильные ответы задания
+                            if($attributes['answers'])
+                            {
+                                foreach($attributes['answers'] as $answer)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers ->id_exercise = $exercise->id;
+                                    $exercisesAnswers->answer = $answer;
+                                    $exercisesAnswers->save();
+                                }
                             }
                         }
 
@@ -124,18 +152,30 @@ class GeneratorsController extends Controller
                 $count=0; // количество успешных генераций
                 $attempts = 0; // попытки сгенировать
                 $exercises = array();
+                $wrongAnswers = array();
                 while(($count < $generator->Template->number_exercises) && $attempts < 1000)
                 {
                     $forReplace = $generator->Template->ForPeplace;
+                    $visual = ExercisesVisuals::model()->findByPk($generator->Template->id_visual);
                     $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->template);
+                    $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->correct_answers);
                     $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->conditionsArray);
+                    $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->WrongAnswersArray);
                     if(GeneratorsTemplates::ConditionsMet($convertedConditions))
                     {
                         $exerciseModel = new Exercises;
                         $exerciseModel->condition = $convertedTemplate;
-                        $exerciseModel->correct_answers = Generators::executeCode($convertedTemplate);
+                        $exerciseModel->correct_answers = Generators::executeCode($convertedCorrectAnswers);
                         $exerciseModel->number = $count;
                         $exercises[$count] = $exerciseModel;
+                        // получием список неправильных ответов задания
+                        if(!empty($convertedWrongAnswers))
+                        {
+                            foreach($convertedWrongAnswers as $convertedWrongAnswer)
+                            {
+                                $wrongAnswers[$count][] = Generators::executeCode($convertedWrongAnswer);
+                            }
+                        }
                         $count++;
                     }
                     $attempts++;
@@ -148,6 +188,8 @@ class GeneratorsController extends Controller
                     'exercises' => $exercises,
                     'attempts' => $attempts,
                     'count' => $count,
+                    'visual'=>$visual,
+                    'wrongAnswers' => $wrongAnswers,
             ));
         }
 
@@ -186,7 +228,17 @@ class GeneratorsController extends Controller
                     }
                     
                     $template->attributes = $_POST['GeneratorsTemplates'];
-                    
+                    if(!$template->correct_answers)
+                    {
+                        $template->correct_answers = $template->template;
+                    }
+                    if(!$template->id_visual)
+                    {
+                        $template->id_visual = Generators::DEFAULT_VISUAL;
+                    }
+//                    CVarDumper::dump($_POST, 5, true);
+//                    CVarDumper::dump($template->attributes, 5, true);
+//                    die;
                     if($template->save())
                     {
                         GeneratorsTemplatesVariables::model()->deleteAllByAttributes(array('id_template'=>$template->id));
@@ -206,6 +258,7 @@ class GeneratorsController extends Controller
                             }
                         }
                         
+                        // удаляем и добавляем условия
                         GeneratorsTemplatesConditions::model()->deleteAllByAttributes(array('id_template'=>$template->id));
                         if($_POST['GeneratorsTemplatesConditions'])
                         {
@@ -219,11 +272,27 @@ class GeneratorsController extends Controller
                                 $newCond->id = false;
                             }
                         }
+                        
+                        // удаляем и добавляем неправильные ответы
+                        GeneratorsTemplatesWrongAnswers::model()->deleteAllByAttributes(array('id_template'=>$template->id));
+                        if($_POST['WrongAnswers'])
+                        {
+                            $newWrongAnswer = new GeneratorsTemplatesWrongAnswers();
+                            foreach($_POST['WrongAnswers'] as $wrongAnswer)
+                            {
+                                $newWrongAnswer->wrong_answer = $wrongAnswer;
+                                $newWrongAnswer->id_template = $template->id;
+                                $newWrongAnswer->save();
+                                $newWrongAnswer->isNewRecord = true;
+                                $newWrongAnswer->id = false;
+                            }
+                        }
+                        
                         $this->redirect($redirect);
                     }
 		}
                 
-		$this->render('settings',array(
+		$this->render("settings_$generator->id",array(
 			'generator'=>$generator,
                         'group'=>$group,
 		));
@@ -236,6 +305,19 @@ class GeneratorsController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+        
+        public function actionGetHtmlVisual() {
+            $id_visual = (int) $_POST['id_visual'];
+            $result = array();
+            if($id_visual && ExercisesVisuals::model()->exists('id=:id', array('id'=>$id_visual)))
+            {
+                $result['success'] = 1;
+                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> new GeneratorsTemplates), true);
+            } else {
+                $result['success'] = 0;
+            }
+            echo CJSON::encode($result);
+        }
 
 	/**
 	 * Performs the AJAX validation.

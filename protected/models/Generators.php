@@ -9,9 +9,7 @@
  */
 class Generators extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
+        const DEFAULT_VISUAL = 1;
 	public function tableName()
 	{
 		return 'oed_generators';
@@ -112,12 +110,22 @@ class Generators extends CActiveRecord
             return $list;
         }
         
+        static function getVisualsForGenerator2() {
+            $visuals = ExercisesVisuals::model()->findAllByAttributes(array('id'=>array(1,2,3)));
+            $res = array();
+            foreach($visuals as $visual)
+            {
+                $res[$visual->id] = "{$visual->Type->name}: $visual->name";
+            }
+            return $res;
+        }
+        
         static function getConvertStrings(array $patterns, array $replacements, $strings) {
             return preg_replace($patterns, $replacements, $strings);
         }
         
         static function executeCode($str)
         {
-            return eval("return $str;");
+            return @eval("return $str;");
         }
 }

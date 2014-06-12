@@ -12,27 +12,20 @@
  */
 class GeneratorsTemplates extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
 	public function tableName()
 	{
 		return 'oed_generators_templates';
 	}
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
 	public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_user, id_generator, template, number_exercises', 'required'),
-                    	array('template', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
-			array('id_user, id_generator, number_exercises', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			array('id_user, id_generator, template, number_exercises, id_visual', 'required'),
+                    	array('correct_answers', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
+                        array('template', 'safe'),
+			array('id_user, id_generator, number_exercises, id_visual, separate_template_and_correct_answers', 'numerical', 'integerOnly'=>true),
 			array('id, id_user, id_generator, template, number_exercises', 'safe', 'on'=>'search'),
 		);
 	}
@@ -45,6 +38,7 @@ class GeneratorsTemplates extends CActiveRecord
 		return array(
                     'Variables' => array(self::HAS_MANY, 'GeneratorsTemplatesVariables', 'id_template', 'order'=>'Variables.name DESC'), // ордер деск нужен, чтобы в первую очередь заменялись x88, а не x8
                     'Conditions' => array(self::HAS_MANY, 'GeneratorsTemplatesConditions', 'id_template'),
+                    'WrongAnswers' => array(self::HAS_MANY, 'GeneratorsTemplatesWrongAnswers', 'id_template', 'order'=>'WrongAnswers.id ASC'),
 		);
 	}
 
@@ -106,12 +100,12 @@ class GeneratorsTemplates extends CActiveRecord
             $result = array();
             foreach($this->Variables as $variable)
             {
-                $result['patterns'][] = "#$variable->name#";
+                $result['patterns'][] = "#$variable->name#u";
                 $result['replacements'][] = $variable->randomNum;
             }
-            $result['patterns'][] = '#[^<>]=#'; // заменяем одинарное равно на двойное
+            $result['patterns'][] = '#[^<>]=#u'; // заменяем одинарное равно на двойное
             $result['replacements'][] = '==';
-            $result['patterns'][] = '#mod#'; // остаток от деления заменяем на php-ный
+            $result['patterns'][] = '#mod#u'; // остаток от деления заменяем на php-ный
             $result['replacements'][] = '%';
             return $result;
         }
@@ -121,6 +115,15 @@ class GeneratorsTemplates extends CActiveRecord
             foreach($this->Conditions as $condition)
             {
                 $strings[] = $condition->condition;
+            }
+            return $strings;
+        }
+        
+        public function getWrongAnswersArray() {
+            $strings = array();
+            foreach($this->WrongAnswers as $wrongAnswer)
+            {
+                $strings[] = $wrongAnswer->wrong_answer;
             }
             return $strings;
         }

@@ -39,7 +39,7 @@ class Exercises extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('condition, id_type, difficulty, course_creator_id', 'required'),
+			array('condition, id_type, course_creator_id', 'required'),
 			array('difficulty, limit, id_type, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
                         array('correct_answers', 'safe'),
 			array('id, condition, limit, correct_answers, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),

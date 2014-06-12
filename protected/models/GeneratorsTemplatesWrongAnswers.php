@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "oed_exercises_visuals".
+ * This is the model class for table "oed_generators_templates_wrong_answers".
  *
- * The followings are the available columns in table 'oed_exercises_visuals':
+ * The followings are the available columns in table 'oed_generators_templates_wrong_answers':
  * @property integer $id
- * @property integer $id_type
- * @property string $name
+ * @property integer $id_template
+ * @property string $wrong_answer
  */
-class ExercisesVisuals extends CActiveRecord
+class GeneratorsTemplatesWrongAnswers extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'oed_exercises_visuals';
+		return 'oed_generators_templates_wrong_answers';
 	}
 
 	/**
@@ -26,12 +26,11 @@ class ExercisesVisuals extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_type, name', 'required'),
-			array('id_type', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, id_type, name', 'safe', 'on'=>'search'),
+			array('id_template, wrong_answer', 'required'),
+			array('id_template', 'numerical', 'integerOnly'=>true),
+			array('wrong_answer', 'length', 'max'=>255),
+                        array('wrong_answer', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
+			array('id, id_template, wrong_answer', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,7 +42,6 @@ class ExercisesVisuals extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'Type'=> array(self::BELONGS_TO, 'ExercisesTypes', 'id_type'),
 		);
 	}
 
@@ -54,8 +52,8 @@ class ExercisesVisuals extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_type' => 'Id Type',
-			'name' => 'Name',
+			'id_template' => 'Id Template',
+			'wrong_answer' => 'Wrong Answer',
 		);
 	}
 
@@ -78,8 +76,8 @@ class ExercisesVisuals extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('id_type',$this->id_type);
-		$criteria->compare('name',$this->name,true);
+		$criteria->compare('id_template',$this->id_template);
+		$criteria->compare('wrong_answer',$this->wrong_answer,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -90,15 +88,10 @@ class ExercisesVisuals extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ExercisesVisuals the static model class
+	 * @return GeneratorsTemplatesWrongAnswers the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-        
-        public static function getDataVisuals($id_type) {
-            $visuals = ExercisesVisuals::model()->findAll('id_type=:id_type', array('id_type'=>$id_type));
-            return CHtml::listData($visuals, 'id', 'name');
-        }
 }

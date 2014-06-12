@@ -188,7 +188,7 @@
                     'value'=>'CHtml::dropDownList("Exercises[$data->number][difficulty]", $data->difficulty, Exercises::getDataDifficulty(), array("class"=>"form-control", "empty"=>"Выберите сложность"))',
                     'htmlOptions'=>array('width'=>'10%'),
                 ),
-
+                
                 array(
                     'header'=>'Требуемые умения',
                     'type'=>'raw',
@@ -238,6 +238,22 @@
             <div class="col-lg-2 col-md2">
                 <a id="insert-difficulty" href="#" class="btn btn-success btn-icon btn-sm"><i class="glyphicon glyphicon-plus"></i>Задать сложность</a>
             </div>
+        </div>
+        <?php 
+            echo CHtml::hiddenField('Template[id_type]', $visual->id_type);
+            echo CHtml::hiddenField('Template[id_visual]', $visual->id);
+        ?>
+        <div id="wrongAnswersHiddens">
+            <?php
+                if(!empty($wrongAnswers)) // выводим все сгенерированные неправильные ответы.
+                {
+                    foreach($wrongAnswers as $indexExercise => $answers)
+                    {
+                        foreach($answers as $indexAnswer => $answer)
+                            echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer]", $answer);
+                    }
+                }
+            ?>
         </div>
     </div>
     <?php endif; ?>
