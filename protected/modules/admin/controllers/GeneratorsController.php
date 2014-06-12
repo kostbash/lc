@@ -103,26 +103,28 @@ class GeneratorsController extends Controller
                         // если тип выбор одного из списка
                         if($exercise->id_type == 2)
                         {
-                            // сохраняем правильный ответ
-                            $exercisesAnswers = new ExercisesListOfAnswers;
-                            $exercisesAnswers ->id_exercise = $exercise->id;
-                            $exercisesAnswers->answer = $exercise->correct_answers;
-                            if($exercisesAnswers->save())
-                            {
-                                $exercise->correct_answers = $exercisesAnswers->id;
-                                $exercise->save();
-                            }
+                            $answers = array();
+                            $answers[] = $exercise->correct_answers;
                             
-                            // сохраняем неправильные ответы задания
+                            // добавляем в массив неправильные ответы
                             if($attributes['answers'])
                             {
-                                foreach($attributes['answers'] as $answer)
-                                {
-                                    $exercisesAnswers = new ExercisesListOfAnswers;
-                                    $exercisesAnswers ->id_exercise = $exercise->id;
-                                    $exercisesAnswers->answer = $answer;
-                                    $exercisesAnswers->save();
+                                $answers = array_merge($answers, $attributes['answers']);
+                            }
+                            
+                            while($answers)
+                            {
+                                $keys = array_keys($answers);
+                                $rand = mt_rand(min($keys), max($keys)); // случайное число от минимальнго индекса массива до числа оставшихся элментов.
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers ->id_exercise = $exercise->id;
+                                $exercisesAnswers->answer = $answers[$rand];
+                                $exercisesAnswers->save();
+                                if($rand == 0) {
+                                    $exercise->correct_answers = $exercisesAnswers->id;
+                                    $exercise->save();
                                 }
+                                unset($answers[$rand]);
                             }
                         }
 
