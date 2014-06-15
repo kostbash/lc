@@ -29,7 +29,7 @@ class ExercisesController extends Controller
 	{
             if($_POST['Exercises']) {
                 $id = (int) key($_POST['Exercises']);
-                echo Exercises::rightAnswer($id, $_POST['Exercises'][$id]['answers']);
+                echo Exercises::isRightAnswer($id, $_POST['Exercises'][$id]['answers']);
             }
 	}
 

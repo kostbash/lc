@@ -104,14 +104,17 @@
         $('#Exercises_id_visual').change(function(){
             vis = $('#visualization');
             vis.find('.row').remove();
+            idVisual = $(this).val();
             $.ajax({
                 url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmlvisual'); ?>',
-                data: { id_visual: $(this).val() },
+                data: { id_visual: idVisual },
                 type: 'POST',
                 dataType: 'json',
                 success: function(result) {
-                    if(result.success)
+                    if(result.success) {
                         vis.append(result.html).removeClass('hide');
+                        vis.attr('data-visual', idVisual);
+                    }
                 }
             });
         });
@@ -123,7 +126,7 @@
                 lastOption = $('#Exercises_correct_answers option:last-child');
                 maxIndex = lastOption.length ? parseInt(lastOption.val())+1 : 0;
                 $('#Exercises_correct_answers').append('<option value='+maxIndex+'>'+ option.val() +'</option>');
-                $('#hidden-options').append('<input data-index="'+maxIndex+'" type="hidden" name="Exercises[answers][]" value="'+ option.val() +'" />');
+                $('#hidden-options').append('<input data-index="'+maxIndex+'" type="hidden" name="Exercises[answers]['+maxIndex+'][answer]" value="'+ option.val() +'" />');
                 option.val('');
             } else {
                 alert('Введите название нового варианта ответа');
@@ -143,13 +146,13 @@
             return false;
         });
         
-        $('#add-editor-variant').live('click', function(){
+        $('#add-variant').live('click', function(){
             current = $(this);
-            lastAnswer = $('.editor-variant-cont:last');
+            lastAnswer = $('.variant:last');
             index = lastAnswer.length ? lastAnswer.data('index')+1 : 1;
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmleditorvariant'); ?>',
-                data: { index: index },
+                url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmlvariant'); ?>',
+                data: { index: index, id_visual: $('#visualization').data('visual') },
                 type: 'POST',
                 dataType: 'json',
                 success: function(result) {
@@ -160,12 +163,25 @@
             return false;
         });
         
-        $('.delete-editor-variant').live('click', function(){
+        $('.delete-variant').live('click', function(){
             if(confirm('Вы действительно хотите удалить вариант ответа ?'))
             {
                 $(this).closest('.row').remove();
             }
             return false;
+        });
+        
+        $('#Exercises_correct_answers').live('change', function(){
+            $('#hidden-options input[name*=is_right]').remove();
+            $(this).find('option:selected').each(function(n, option){
+                index = $(option).val();
+                $('#hidden-options').append('<input data-index="'+index+'" type="hidden" name="Exercises[answers]['+index+'][is_right]" value="1" />');
+            });
+        });
+        
+        $('input[type=radio][name*=correct_answer]').live('change', function(){
+            index = $(this).val();
+            $('#right_answer_hidden').attr('name', 'Exercises[answers]['+index+'][is_right]');
         });
         
         $('#exercises-form').submit(function(){
@@ -227,6 +243,30 @@
                         answer.siblings('.errorMessage').html('');
                     }
                 });
+            }
+            
+            // если выбор блока
+            if($('#exact-answers').length)
+            {
+                // для радио кнопок
+                correctAnswers = $('input[name*=answers][type=text]');
+                if(correctAnswers.length)
+                {
+                    correctAnswers.each(function(n, answer){
+                        answer = $(answer);
+                        if(!answer.val())
+                        {
+                            answer.siblings('.errorMessage').html('Введите текст ответа');
+                            $return = false;
+                        } else {
+                            answer.siblings('.errorMessage').html('');
+                        }
+                    });
+                    $('#errorCorrectAnswer').html('');
+                } else {
+                    $('#errorCorrectAnswer').html('Добавьте вариант ответа');
+                    $return = false;
+                }
             }
             return $return;
         });
@@ -324,7 +364,7 @@
     </div>
 </div>
     
-<div class="section<?php if(!$model->id_visual) echo ' hide'; ?>" id='visualization'>
+<div class="section<?php if(!$model->id_visual) echo ' hide'; ?>" id='visualization' data-visual="<?php echo $model->id_visual; ?>">
     <h2>Визуализация</h2>
     <?php if($model->id_visual) $this->renderPartial("visualizations/{$model->id_visual}", array('model'=>$model)); ?>
 </div>

@@ -346,6 +346,7 @@
                   <div class="errorMessage"></div>
               </div>
               <div class="col-lg-4 col-md-4">
+                  <?php echo CHtml::hiddenField("GeneratorsTemplates[separate_template_and_correct_answers]", 0, array('id'=>false)); ?>
                   <?php echo CHtml::checkBox("GeneratorsTemplates[separate_template_and_correct_answers]", $generator->Template->separate_template_and_correct_answers, array('style'=>'float: left; width: 5%;')); ?>
                   <?php echo CHtml::label("Раздельные шаблоны условия и правильнго ответа", 'GeneratorsTemplates_separate_template_and_correct_answers', array('style'=>'font-size: 14px; line-height: 14px; float: left; width: 93%; margin-left: 2%;')); ?>
               </div>

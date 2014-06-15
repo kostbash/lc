@@ -172,14 +172,7 @@
                     'header'=>'Текст задания',
                     'type'=>'raw',
                     'value'=>'$data->condition . CHtml::hiddenField("Exercises[$data->number][condition]", $data->condition, array("id"=>false))',
-                    'htmlOptions'=>array('width'=>'30%'),
-                ),
-                array(
-                    'name' => 'correct_answers',
-                    'header'=>'Правильный ответ',
-                    'type'=>'raw',
-                    'value'=>'$data->correct_answers . CHtml::hiddenField("Exercises[$data->number][correct_answers]", $data->correct_answers, array("id"=>false))',
-                    'htmlOptions'=>array('width'=>'25%'),
+                    'htmlOptions'=>array('width'=>'55%'),
                 ),
                 array(
                     'name' => 'difficulty',
@@ -243,14 +236,18 @@
             echo CHtml::hiddenField('Template[id_type]', $visual->id_type);
             echo CHtml::hiddenField('Template[id_visual]', $visual->id);
         ?>
-        <div id="wrongAnswersHiddens">
+        <div id="answersHiddens">
             <?php
-                if(!empty($wrongAnswers)) // выводим все сгенерированные неправильные ответы.
+                if(!empty($answers)) // выводим все сгенерированные неправильные ответы.
                 {
-                    foreach($wrongAnswers as $indexExercise => $answers)
+                    foreach($answers as $indexExercise => $answer)
                     {
-                        foreach($answers as $indexAnswer => $answer)
-                            echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer]", $answer);
+                        foreach($answer as $indexAnswer => $attrs)
+                        {
+                            echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer][answer]", $attrs['answer']);
+                            if($attrs['is_right'])
+                                echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer][is_right]", 1);
+                        }
                     }
                 }
             ?>

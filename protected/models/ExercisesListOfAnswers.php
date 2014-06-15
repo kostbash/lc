@@ -27,7 +27,7 @@ class ExercisesListOfAnswers extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_exercise, answer', 'required'),
-			array('id_exercise', 'numerical', 'integerOnly'=>true),
+			array('id_exercise, is_right, reg_exp', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, id_exercise, answer', 'safe', 'on'=>'search'),

@@ -3,11 +3,14 @@
         <?php echo CHtml::label('Варианты ответов', ''); ?>
     </div>
     <div class="col-lg-5 col-md-5">
-        <?php echo CHtml::dropDownList('Exercises[correct_answers]', explode(',', $model->correct_answers), CHtml::listData($model->Answers, 'id', 'answer'), array('class'=>'form-control', 'placeholder'=>'Введите правильный ответ', 'size'=>2, 'multiple'=>'multiple')); ?>
+        <?php echo CHtml::dropDownList('Exercises[correct_answers]', $model->idsRightAnswers, CHtml::listData($model->Answers, 'id', 'answer'), array('class'=>'form-control', 'placeholder'=>'Введите правильный ответ', 'size'=>2, 'multiple'=>'multiple')); ?>
         <div class="errorMessage"></div>
         <div id="hidden-options">
             <?php foreach($model->Answers as $answer) : ?>
-                <input data-index="<?php echo $answer->id ?>" type="hidden" name="Exercises[answers][<?php echo $answer->id ?>]" value="<?php echo $answer->answer; ?>">
+                <input data-index="<?php echo $answer->id ?>" type="hidden" name="Exercises[answers][<?php echo $answer->id ?>][answer]" value="<?php echo $answer->answer; ?>">
+                <?php if($answer->is_right) : ?>
+                <input data-index="<?php echo $answer->id ?>" type="hidden" name="Exercises[answers][<?php echo $answer->id ?>][is_right]" value="1">
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

@@ -1,10 +1,18 @@
-<div class="row">
-    <div class="col-lg-3 col-md-3">
-        <?php echo CHtml::label($model->getAttributeLabel('correct_answers'), ''); ?>
-    </div>
-    
-    <div class="col-lg-5 col-md-5">
-        <?php echo CHtml::textField('Exercises[correct_answers]', $model->correct_answers, array('class'=>'form-control', 'placeholder'=>'Введите правильный ответ')); ?>
-        <div class="errorMessage"></div>
+<?php
+
+if(!($model->isNewRecord && empty($model->Answers)))
+{
+    $n = 0;
+    foreach($model->Answers as $answer)
+    {
+        $this->renderPartial('visualizations/1_variant', array('model'=>$model, 'answer'=>$answer, 'index'=>++$n));
+    }
+}
+?>
+
+<div class="row" id="exact-answers">
+    <div class="col-lg-offset-3 col-md-offset-3 col-lg-2 col-md-2">
+        <div class="errorMessage" id="errorCorrectAnswer"></div>
+        <?php echo CHtml::link('Добавить вариант', '#', array('class'=>'btn btn-success', 'id'=>'add-variant')); ?>
     </div>
 </div>

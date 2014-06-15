@@ -58,8 +58,6 @@ class GeneratorsController extends Controller
 
             if($_POST['Exercises'] && $_POST['Template'])
             {
-//                CVarDumper::dump($_POST, 5, true);
-//                die;
                 if($group->type == 1) // если добавляем задания в блок
                 {
                     $groupExercises = new GroupAndExercises;
@@ -100,31 +98,16 @@ class GeneratorsController extends Controller
                             }
                         }
                         
-                        // если тип выбор одного из списка
-                        if($exercise->id_type == 2)
+                        if($attributes['answers'])
                         {
-                            $answers = array();
-                            $answers[] = $exercise->correct_answers;
-                            
-                            // добавляем в массив неправильные ответы
-                            if($attributes['answers'])
+                            while($attributes['answers'])
                             {
-                                $answers = array_merge($answers, $attributes['answers']);
-                            }
-                            
-                            while($answers)
-                            {
-                                $keys = array_keys($answers);
-                                $rand = mt_rand(min($keys), max($keys)); // случайное число от минимальнго индекса массива до числа оставшихся элментов.
+                                $rand = array_rand($attributes['answers']);
                                 $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $attributes['answers'][$rand];
                                 $exercisesAnswers ->id_exercise = $exercise->id;
-                                $exercisesAnswers->answer = $answers[$rand];
                                 $exercisesAnswers->save();
-                                if($rand == 0) {
-                                    $exercise->correct_answers = $exercisesAnswers->id;
-                                    $exercise->save();
-                                }
-                                unset($answers[$rand]);
+                                unset($attributes['answers'][$rand]);
                             }
                         }
 
@@ -154,7 +137,7 @@ class GeneratorsController extends Controller
                 $count=0; // количество успешных генераций
                 $attempts = 0; // попытки сгенировать
                 $exercises = array();
-                $wrongAnswers = array();
+                $answers = array();
                 while(($count < $generator->Template->number_exercises) && $attempts < 1000)
                 {
                     $forReplace = $generator->Template->ForPeplace;
@@ -167,17 +150,23 @@ class GeneratorsController extends Controller
                     {
                         $exerciseModel = new Exercises;
                         $exerciseModel->condition = $convertedTemplate;
-                        $exerciseModel->correct_answers = Generators::executeCode($convertedCorrectAnswers);
                         $exerciseModel->number = $count;
                         $exercises[$count] = $exerciseModel;
+                        
                         // получием список неправильных ответов задания
                         if(!empty($convertedWrongAnswers))
                         {
-                            foreach($convertedWrongAnswers as $convertedWrongAnswer)
+                            foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
                             {
-                                $wrongAnswers[$count][] = Generators::executeCode($convertedWrongAnswer);
+                                $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
                             }
                         }
+                        
+                        // сохраняем правильный ответ
+                        $index++;
+                        $answers[$count][$index]['answer'] = Generators::executeCode($convertedCorrectAnswers);
+                        $answers[$count][$index]['is_right'] = 1;
+                        unset($index);
                         $count++;
                     }
                     $attempts++;
@@ -191,7 +180,7 @@ class GeneratorsController extends Controller
                     'attempts' => $attempts,
                     'count' => $count,
                     'visual'=>$visual,
-                    'wrongAnswers' => $wrongAnswers,
+                    'answers' => $answers,
             ));
         }
 
@@ -230,7 +219,10 @@ class GeneratorsController extends Controller
                     }
                     
                     $template->attributes = $_POST['GeneratorsTemplates'];
-                    if(!$template->correct_answers)
+                    if(!$template->separate_template_and_correct_answers)
+                    {
+                        $template->correct_answers = "";
+                    } elseif(!$template->correct_answers)
                     {
                         $template->correct_answers = $template->template;
                     }

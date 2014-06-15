@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'oed_exercises':
  * @property integer $id
  * @property string $condition
- * @property string $correct_answers
  * @property integer $difficulty
  */
 class Exercises extends CActiveRecord
@@ -41,8 +40,7 @@ class Exercises extends CActiveRecord
 		return array(
 			array('condition, id_type, course_creator_id', 'required'),
 			array('difficulty, limit, id_type, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
-                        array('correct_answers', 'safe'),
-			array('id, condition, limit, correct_answers, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
+			array('id, condition, limit, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,7 +94,6 @@ class Exercises extends CActiveRecord
             $params = array();
             $course_id = $this->course_creator_id ? $this->course_creator_id : 0;
             $criteria->compare('condition',$this->condition,true);
-            $criteria->compare('correct_answers',$this->correct_answers,true);
             $criteria->compare('difficulty',$this->difficulty);
             $criteria->compare('id_type', $this->id_type);
             $criteria->compare('id_visual', $this->id_visual);
@@ -173,9 +170,74 @@ class Exercises extends CActiveRecord
             return 1;
         }
         
-        public static function rightAnswer($id_exercise, $answers) {
-            $answers = is_array($answers) ? implode(',', $answers) : trim($answers);
-            return Exercises::model()->exists('`id`=:id AND `correct_answers`=:answers', array('id'=>$id_exercise, 'answers'=>$answers));
+        public static function isRightAnswer($id_exercise, $answers) {
+            $exercise = Exercises::model()->findByPk($id_exercise);
+            if($exercise)
+            {
+                $rightAnswers = $exercise->rightAnswers;
+                if($rightAnswers)
+                {
+                    if($exercise->id_type==1) // точный ответ
+                    {
+                        foreach($rightAnswers as $rightAnswer)
+                        {
+                            if($rightAnswer->reg_exp)
+                            {
+                                if(@preg_match($rightAnswer->answer, $answers))
+                                {
+                                    return true;
+                                }
+                            } else {
+                                if($rightAnswer->answer == $answers)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    elseif($exercise->id_type==2) // выбор одного из списка
+                    {
+                        if($rightAnswers[0]->id == $answers)
+                        {
+                            return true;
+                        }
+                    }
+                    elseif($exercise->id_type==3) // выбор нескольких
+                    {
+                        $answers = is_array($answers) ? $answers : array(trim($answers));
+                        if(count($rightAnswers) == count($answers))
+                        {
+                            $idsRight = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $idsRight[] = $rightAnswer->id;
+                            }
+                            
+                            if(!array_diff($idsRight, $answers))  // если есть все правильные ответы
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                } 
+            }
+            return false;
         }
         
+        public function getRightAnswers() {
+            $criteria = new CDbCriteria;
+            $criteria->compare('id_exercise', $this->id);
+            $criteria->compare('is_right', 1);
+            $criteria->order = 'reg_exp ASC';
+            return ExercisesListOfAnswers::model()->findAll($criteria);
+        }
+        
+        public function getIdsRightAnswers() {
+            $res = array();
+            foreach($this->rightAnswers as $rightAnswer)
+            {
+                $res[] = $rightAnswer->id;
+            }
+            return $res;
+        }
 }

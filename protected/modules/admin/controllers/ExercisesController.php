@@ -18,7 +18,7 @@ class ExercisesController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmleditorvariant'),
+                            'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmlvariant'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -68,30 +68,30 @@ class ExercisesController extends Controller
                     
                     if($_POST['Exercises']['answers'])
                     {
-                        foreach($_POST['Exercises']['answers'] as $index => $answer)
+                        foreach($_POST['Exercises']['answers'] as $answerAttr)
                         {
-                            $exercisesAnswers = new ExercisesListOfAnswers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnswers = new ExercisesListOfAnswers;
+                            $exercisesAnswers->attributes = $answerAttr;
                             $exercisesAnswers ->id_exercise = $model->id;
-                            $exercisesAnswers->answer = $answer;
                             $exercisesAnswers->save();
                             
-                            if(!empty($_POST['Exercises']['correct_answers']))
-                            {
-                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
-                                {
-                                   $correctAnswers[] = $exercisesAnswers->id; 
-                                }
-                                elseif($_POST['Exercises']['correct_answers'] == $index)
-                                {
-                                    $correctAnswers = $exercisesAnswers->id;
-                                }
-                            }
+//                            if(!empty($_POST['Exercises']['correct_answers']))
+//                            {
+//                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
+//                                {
+//                                   $correctAnswers[] = $exercisesAnswers->id; 
+//                                }
+//                                elseif($_POST['Exercises']['correct_answers'] == $index)
+//                                {
+//                                    $correctAnswers = $exercisesAnswers->id;
+//                                }
+//                            }
                         }
-                        if(!empty($correctAnswers))
-                        {
-                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
-                            $model->save();
-                        }
+//                        if(!empty($correctAnswers))
+//                        {
+//                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
+//                            $model->save();
+//                        }
                     }
                     // добавляем задание в группу
                     if($id_part && $part)
@@ -156,29 +156,12 @@ class ExercisesController extends Controller
                     {
                         
                         foreach($model->Answers as $eAnswer) $eAnswer->delete();
-                        foreach($_POST['Exercises']['answers'] as $index => $answer)
+                        foreach($_POST['Exercises']['answers'] as $answerAttr)
                         {
-                            $exercisesAnswers = new ExercisesListOfAnswers; // приходиться создавать каждый раз новую модель, так как нам нужен будет id, а при одной моделе id не получишь
+                            $exercisesAnswers = new ExercisesListOfAnswers;
+                            $exercisesAnswers->attributes = $answerAttr;
                             $exercisesAnswers ->id_exercise = $model->id;
-                            $exercisesAnswers->answer = $answer;
                             $exercisesAnswers->save();
-                            
-                            if(!empty($_POST['Exercises']['correct_answers']))
-                            {
-                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
-                                {
-                                   $correctAnswers[] = $exercisesAnswers->id; 
-                                }
-                                elseif($_POST['Exercises']['correct_answers'] == $index)
-                                {
-                                    $correctAnswers = $exercisesAnswers->id;
-                                }
-                            }
-                        }
-                        if(!empty($correctAnswers))
-                        {
-                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
-                            $model->save();
                         }
                     }
                     // добавляем задание в группу
@@ -201,10 +184,11 @@ class ExercisesController extends Controller
             ));
 	}
         
-        public function actionGetHtmlEditorVariant() {
+        public function actionGetHtmlVariant() {
             $index = (int) $_POST['index'];
+            $id_visual = (int) $_POST['id_visual'];
             $result['success'] = 1;
-            $result['html'] = $this->renderPartial("visualizations/5_editor_variant", array('index'=> $index), true);
+            $result['html'] = @$this->renderPartial("visualizations/{$id_visual}_variant", array('index'=> $index), true);
             echo CJSON::encode($result);
         }
         

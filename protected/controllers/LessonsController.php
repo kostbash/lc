@@ -36,7 +36,7 @@ class LessonsController extends Controller
             {
                 $countRight = 0;
                 foreach($_POST['Exercises'] as $id_exercise => $attr)
-                    if(Exercises::rightAnswer($id_exercise, $attr['answers']))
+                    if(Exercises::isRightAnswer($id_exercise, $attr['answers']))
                         ++$countRight;
                     
                 $userAndExerciseGroup->number_right = $countRight;
@@ -81,7 +81,7 @@ class LessonsController extends Controller
                     
                     foreach($_SESSION['exercisesTest'] as $key => $id_exercise)
                     {
-                        $rightAnswer = Exercises::rightAnswer($id_exercise, $_POST['Exercises'][$key]['answers']);
+                        $rightAnswer = Exercises::isRightAnswer($id_exercise, $_POST['Exercises'][$key]['answers']);
                         if($rightAnswer)
                             ++$countRight;
                         foreach($userAndLesson->Lesson->Skills as $skill)
