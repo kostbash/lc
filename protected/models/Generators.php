@@ -10,7 +10,22 @@
 class Generators extends CActiveRecord
 {
         const DEFAULT_VISUAL = 1;
-	public function tableName()
+        
+        public static $typiesBuilding = array(
+            1=>'Точный ответ: картинка-слово',
+            2=>'Точный ответ: перевод-слово',
+            3=>'Точный ответ: слово-перевод',
+            4=>'Выбор из списка: картинка-слово',
+            5=>'Выбор из списка: перевод-слово',
+            6=>'Выбор из списка: слово-перевод',
+            7=>'Выбор из списка: слово-тег',
+            8=>'Сопоставление: картинка-слово',
+            9=>'Сопоставление: перевод-слово',
+            10=>'Сопоставление: слово-тег',
+        );
+
+
+        public function tableName()
 	{
 		return 'oed_generators';
 	}
@@ -92,7 +107,93 @@ class Generators extends CActiveRecord
         
         function getTemplate()
         {
-            return GeneratorsTemplates::model()->findByAttributes(array('id_generator'=>$this->id, 'id_user'=>Yii::app()->user->id));
+            $template = GeneratorsTemplates::model()->findByAttributes(array('id_generator'=>$this->id, 'id_user'=>Yii::app()->user->id));
+            if(!$template)
+            {
+                $template = new GeneratorsTemplates;
+                $template->id_user = Yii::app()->user->id;
+                $template->id_generator = $this->id;
+                $template->save(false);
+            }
+            return $template;
+        }
+        
+        function saveVariables($variables=array())
+        {
+            $template = $this->template;
+            GeneratorsTemplatesVariables::model()->deleteAllByAttributes(array('id_template'=>$template->id));
+            if($variables)
+            {
+                $newVar = new GeneratorsTemplatesVariables;
+                foreach($variables as $attributes)
+                {
+                    if($attributes['value_max'] > $attributes['value_min'])
+                    {
+                        $newVar->attributes = $attributes;
+                        $newVar->id_template = $template->id;
+                        $newVar->save();
+                        $newVar->isNewRecord = true;
+                        $newVar->id = false;
+                    }
+                }
+            }
+        }
+        
+        function saveConditions($conditions=array())
+        {
+            $template = $this->template;
+            GeneratorsTemplatesConditions::model()->deleteAllByAttributes(array('id_template'=>$template->id));
+            
+            if($conditions)
+            {
+                $newCond = new GeneratorsTemplatesConditions;
+                foreach($conditions as $attributes)
+                {
+                        $newCond->attributes = $attributes;
+                        $newCond->id_template = $template->id;
+                        $newCond->save();
+                        $newCond->isNewRecord = true;
+                        $newCond->id = false;
+                }
+            }
+        }
+        
+        function saveWrongAnswers($wrongAnswers=array())
+        {
+            $template = $this->template;
+            GeneratorsTemplatesWrongAnswers::model()->deleteAllByAttributes(array('id_template'=>$template->id));
+            if($wrongAnswers)
+            {
+                $newWrongAnswer = new GeneratorsTemplatesWrongAnswers();
+                foreach($wrongAnswers as $wrongAnswer)
+                {
+                    $newWrongAnswer->wrong_answer = $wrongAnswer;
+                    $newWrongAnswer->id_template = $template->id;
+                    $newWrongAnswer->save();
+                    $newWrongAnswer->isNewRecord = true;
+                    $newWrongAnswer->id = false;
+                }
+            }
+        }
+        
+        function addSelectedWords($words)
+        {
+            $template = $this->template;
+            if($words)
+            {
+                $selectedWord = new GeneratorsTemplatesSelectedWords();
+                foreach($words as $id_word)
+                {
+                    if(!GeneratorsTemplatesSelectedWords::model()->exists('id_template=:id_template AND id_word=:id_word', array('id_template'=>$template->id, 'id_word'=>$id_word)))
+                    {
+                        $selectedWord->id_template = $template->id;
+                        $selectedWord->id_word = $id_word;
+                        $selectedWord->save();
+                        $selectedWord->isNewRecord = true;
+                        $selectedWord->id = false;
+                    }
+                }
+            }
         }
         
         static function ListGenerators($id, $type='group') {
@@ -128,4 +229,5 @@ class Generators extends CActiveRecord
         {
             return @eval("return $str;");
         }
+        
 }

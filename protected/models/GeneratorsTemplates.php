@@ -22,10 +22,10 @@ class GeneratorsTemplates extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_user, id_generator, template, number_exercises, id_visual', 'required'),
+			array('id_user, id_generator', 'required'),
                     	array('correct_answers', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
                         array('template', 'safe'),
-			array('id_user, id_generator, number_exercises, id_visual, separate_template_and_correct_answers', 'numerical', 'integerOnly'=>true),
+			array('id_user, id_generator, number_exercises, number_words, type_of_building, id_visual, separate_template_and_correct_answers', 'numerical', 'integerOnly'=>true),
 			array('id, id_user, id_generator, template, number_exercises', 'safe', 'on'=>'search'),
 		);
 	}
@@ -39,6 +39,7 @@ class GeneratorsTemplates extends CActiveRecord
                     'Variables' => array(self::HAS_MANY, 'GeneratorsTemplatesVariables', 'id_template', 'order'=>'Variables.name DESC'), // ордер деск нужен, чтобы в первую очередь заменялись x88, а не x8
                     'Conditions' => array(self::HAS_MANY, 'GeneratorsTemplatesConditions', 'id_template'),
                     'WrongAnswers' => array(self::HAS_MANY, 'GeneratorsTemplatesWrongAnswers', 'id_template', 'order'=>'WrongAnswers.id ASC'),
+                    'Words' => array(self::MANY_MANY, 'GeneratorsWords', 'oed_generators_templates_selected_words(id_template, id_word)'),
 		);
 	}
 

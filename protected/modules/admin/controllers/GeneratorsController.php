@@ -28,7 +28,7 @@ class GeneratorsController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('settings', 'generation', 'gethtmlvisual'),
+                            'actions'=>array('settings', 'generation', 'gethtmlvisual', 'dictionaries', 'adddictionary', 'editdictionary', 'deletedictionary'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',
@@ -134,53 +134,19 @@ class GeneratorsController extends Controller
             }
             else
             {
-                $count=0; // количество успешных генераций
-                $attempts = 0; // попытки сгенировать
-                $exercises = array();
-                $answers = array();
-                while(($count < $generator->Template->number_exercises) && $attempts < 1000)
-                {
-                    $forReplace = $generator->Template->ForPeplace;
-                    $visual = ExercisesVisuals::model()->findByPk($generator->Template->id_visual);
-                    $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->template);
-                    $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->correct_answers);
-                    $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->conditionsArray);
-                    $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $generator->Template->WrongAnswersArray);
-                    if(GeneratorsTemplates::ConditionsMet($convertedConditions))
-                    {
-                        $exerciseModel = new Exercises;
-                        $exerciseModel->condition = $convertedTemplate;
-                        $exerciseModel->number = $count;
-                        $exercises[$count] = $exerciseModel;
-                        
-                        // получием список неправильных ответов задания
-                        if(!empty($convertedWrongAnswers))
-                        {
-                            foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
-                            {
-                                $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
-                            }
-                        }
-                        
-                        // сохраняем правильный ответ
-                        $index++;
-                        $answers[$count][$index]['answer'] = Generators::executeCode($convertedCorrectAnswers);
-                        $answers[$count][$index]['is_right'] = 1;
-                        unset($index);
-                        $count++;
-                    }
-                    $attempts++;
-                }
+                $visual = ExercisesVisuals::model()->findByPk($generator->template->id_visual);
+                $generatorFactory = new GeneratorsFactory($generator->id);
+                $resultGeneration = $generatorFactory->generateExercises();
             }
 
             $this->render('generation',array(
                     'generator'=>$generator,
                     'group'=>$group,
-                    'exercises' => $exercises,
-                    'attempts' => $attempts,
-                    'count' => $count,
                     'visual'=>$visual,
-                    'answers' => $answers,
+                    'exercises' => $resultGeneration['exercises'],
+                    'attempts' => $resultGeneration['attempts'],
+                    'count' => $resultGeneration['count'],
+                    'answers' => $resultGeneration['answers'],
             ));
         }
 
@@ -189,6 +155,10 @@ class GeneratorsController extends Controller
 		$generator=$this->loadModel($id);
                 $id_group = (int) $_GET['id_group'];
                 $id_part = (int) $_GET['id_part'];
+                
+                $words = new GeneratorsWords('search');
+                $words->unsetAttributes();
+                $words->attributes = $_POST['Words'];
                 
                 if($id_group)
                 {
@@ -207,81 +177,9 @@ class GeneratorsController extends Controller
                 
 		if(isset($_POST['GeneratorsTemplates']))
 		{
-                    if($generator->Template)
+                    $generatorFactory = new GeneratorsFactory($generator->id, $_POST);
+                    if($generatorFactory->saveSettings())
                     {
-                        $template = $generator->Template;
-                    }
-                    else
-                    {
-                        $template = new GeneratorsTemplates;
-                        $template->id_user = Yii::app()->user->id;
-                        $template->id_generator = $generator->id;
-                    }
-                    
-                    $template->attributes = $_POST['GeneratorsTemplates'];
-                    if(!$template->separate_template_and_correct_answers)
-                    {
-                        $template->correct_answers = "";
-                    } elseif(!$template->correct_answers)
-                    {
-                        $template->correct_answers = $template->template;
-                    }
-                    if(!$template->id_visual)
-                    {
-                        $template->id_visual = Generators::DEFAULT_VISUAL;
-                    }
-//                    CVarDumper::dump($_POST, 5, true);
-//                    CVarDumper::dump($template->attributes, 5, true);
-//                    die;
-                    if($template->save())
-                    {
-                        GeneratorsTemplatesVariables::model()->deleteAllByAttributes(array('id_template'=>$template->id));
-                        if($_POST['GeneratorsTemplatesVariables'])
-                        {
-                            $newVar = new GeneratorsTemplatesVariables;
-                            foreach($_POST['GeneratorsTemplatesVariables'] as $attributesVar)
-                            {
-                                if($attributesVar['value_max'] > $attributesVar['value_min'])
-                                {
-                                    $newVar->attributes = $attributesVar;
-                                    $newVar->id_template = $template->id;
-                                    $newVar->save();
-                                    $newVar->isNewRecord = true;
-                                    $newVar->id = false;
-                                }
-                            }
-                        }
-                        
-                        // удаляем и добавляем условия
-                        GeneratorsTemplatesConditions::model()->deleteAllByAttributes(array('id_template'=>$template->id));
-                        if($_POST['GeneratorsTemplatesConditions'])
-                        {
-                            $newCond = new GeneratorsTemplatesConditions;
-                            foreach($_POST['GeneratorsTemplatesConditions'] as $attributesCond)
-                            {
-                                $newCond->attributes = $attributesCond;
-                                $newCond->id_template = $template->id;
-                                $newCond->save();
-                                $newCond->isNewRecord = true;
-                                $newCond->id = false;
-                            }
-                        }
-                        
-                        // удаляем и добавляем неправильные ответы
-                        GeneratorsTemplatesWrongAnswers::model()->deleteAllByAttributes(array('id_template'=>$template->id));
-                        if($_POST['WrongAnswers'])
-                        {
-                            $newWrongAnswer = new GeneratorsTemplatesWrongAnswers();
-                            foreach($_POST['WrongAnswers'] as $wrongAnswer)
-                            {
-                                $newWrongAnswer->wrong_answer = $wrongAnswer;
-                                $newWrongAnswer->id_template = $template->id;
-                                $newWrongAnswer->save();
-                                $newWrongAnswer->isNewRecord = true;
-                                $newWrongAnswer->id = false;
-                            }
-                        }
-                        
                         $this->redirect($redirect);
                     }
 		}
@@ -289,8 +187,81 @@ class GeneratorsController extends Controller
 		$this->render("settings_$generator->id",array(
 			'generator'=>$generator,
                         'group'=>$group,
+                        'words'=>$words,
 		));
 	}
+        
+        public function actionDictionaries($id_gen) {
+            $generator = Generators::model()->findByPk($id_gen);
+            if(!$generator)
+                $this->redirect('/');
+            
+            $words = new GeneratorsWords('search');
+            $words->unsetAttributes();
+            $words->attributes = $_POST['Words'];
+            if(isset($_POST['checked']))
+            {
+                if(!empty($_POST['checked']))
+                {
+                    $generator->addSelectedWords($_POST['checked']);
+                }
+                
+                $this->redirect($_SESSION['returnUrl']);
+            } else {
+                $_SESSION['returnUrl'] = Yii::app()->request->urlReferrer;
+            }
+            
+            $this->render("dictionaries", array(
+                'generator'=>$generator,
+                'words'=>$words,
+            ));
+        }
+        
+        public function actionAddDictionary($id_gen)
+        {
+            $name = $_POST['name'];
+            $result = array();
+            $model = new GeneratorsDictionaries;
+            $model->name = $name;
+            $model->id_generator = $id_gen;
+            if($model->save())
+            {
+                $result['success'] = 1;
+                $result['id'] = $model->id;
+                $result['name'] = $model->name;
+            } else {
+                $result['success'] = 0;
+            }
+            echo CJSON::encode($result);
+        }
+        
+        public function actionDeleteDictionary()
+        {
+            $result = array('success'=>0);
+            $id_dict = (int) $_POST['id_dict'];
+            $dict = GeneratorsDictionaries::model()->findByPk($id_dict);
+            if($dict)
+            {
+                $dict->delete();
+                $result['success'] = 1;
+            }
+            echo CJSON::encode($result);
+        }
+        
+        public function actionEditDictionary()
+        {
+            $id = (int) $_POST['id'];
+            $result = array('success'=>0);
+            $model = GeneratorsDictionaries::model()->findByPk($id);
+            $model->attributes = $_POST['attributes'];
+            if($model->save())
+            {
+                $result['name'] = $model->name;
+                $result['success'] = 1;
+            }
+            
+            echo CJSON::encode($result);
+        }
         
 	public function loadModel($id)
 	{

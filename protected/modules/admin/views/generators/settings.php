@@ -36,15 +36,6 @@
         });
         
         $('#GeneratorsTemplates_template').live('change keyup input click', function() {
-            if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
-            {
-                template = /[^x\+\-\*\d\/\(\)\s]/gi;
-                if (this.value.match(template))
-                    this.value = this.value.replace(template, '');
-            }
-        });
-        
-        $('#GeneratorsTemplates_correct_answers, #option-name').live('change keyup input click', function() {
             template = /[^x\+\-\*\d\/\(\)\s]/gi;
             if (this.value.match(template))
                 this.value = this.value.replace(template, '');
@@ -88,99 +79,15 @@
         $('#GeneratorsTemplates_number_exercises').change(function(){
             checkNumberExercises();
         });
-        
         $('#GeneratorsTemplates_template').change(function(){
             checkTemplate();
         });
         
-        $('#GeneratorsTemplates_correct_answers').change(function(){
-            checkCorrectAnswers()
-        });
-        
         $('#generate').click(function(){
             checkTemplate();
-            if(checkTemplate() & checkCorrectAnswers() & checkNumberExercises() & checkVariables() & checkConditions())
+            if(checkTemplate() & checkNumberExercises() & checkVariables() & checkConditions())
             {
                 $('#template-form').submit();
-            }
-            return false;
-        });
-        
-        $('#GeneratorsTemplates_separate_template_and_correct_answers').change(function(){
-           current = $(this);
-           if(current.is(':checked'))
-           {
-               $('#correct-answers-cont').show();
-               $('#correct-answers-cont input').attr('name', 'GeneratorsTemplates[correct_answers]');
-           } else {
-               $('#correct-answers-cont').hide();
-               $('#correct-answers-cont input').attr('name', '');
-           }
-        });
-        
-        $('#GeneratorsTemplates_id_visual').change(function(){
-            vis = $('#visualization');
-            current = $(this);
-            vis.find('.row').remove();
-            if(current.val()==2 || current.val()==3)
-            {
-                $.ajax({
-                    url: '<?php echo Yii::app()->createUrl('admin/generators/gethtmlvisual'); ?>',
-                    data: { id_visual: $(this).val() },
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function(result) {
-                        if(result.success)
-                            vis.append(result.html).removeClass('hide');
-                    }
-                });
-            }
-        });
-        
-        $('.add-option').live('click', function(){
-            option = $('#option-name');
-            val = option.val();
-            error = option.siblings('.errorMessage');
-            if(val)
-            {
-                template = /x\d+/ig;
-                msg = 'Не существует переменных: ';
-                notExist = [];
-                i = 0;
-                while ( (value = template.exec(val)) != null )
-                {
-                  variable = $('.variable .name[data-name='+value[0]+']');
-                  if(!variable.length)
-                  {
-                      notExist[i++] = value[0];
-                  }
-                }
-                notExist = $.unique(notExist);
-                if(notExist.length)
-                    error.html(msg + notExist.join(', '));
-                else
-                {
-                    lastOption = $('#WrongAnswers option:last-child');
-                    maxIndex = lastOption.length ? parseInt(lastOption.val())+1 : 0;
-                    $('#WrongAnswers').append('<option value='+maxIndex+'>'+ option.val() +'</option>');
-                    $('#hidden-options').append('<input data-index="'+maxIndex+'" type="hidden" name="WrongAnswers[]" value="'+ option.val() +'" />');
-                    option.val('');
-                    error.html('');
-                }
-            } else {
-                error.html('Введите шаблон нового варианта');
-            }
-            return false;
-        });
-        
-        $('.delete-option').live('click', function(){
-            if(confirm('Вы действительно хотите удалить вариант ответа ?'))
-            {
-                selected = $('#WrongAnswers option:selected');
-                selected.each(function(n, answer){
-                    $('#hidden-options input[data-index='+ $(answer).val() +']').remove();
-                });
-                selected.remove();
             }
             return false;
         });
@@ -207,43 +114,7 @@
             errors.html('Введите шаблон');
             return false;
         } else {
-            if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
-            {
-                templateExp = /^[x\+\-\*\d\/\(\)\s]+$/i;
-                if (!templateExp.test(template.val()))
-                {
-                    errors.html('Шаблон может содержать только числа, мат.операции, пробел и букву x');
-                    return false;
-                } else {
-                    errors.html('');
-                }
-                    
-            } else {
-                errors.html('');
-            }
-        }
-        return true;
-    }
-    
-    function checkCorrectAnswers() {
-        if($('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
-        {
-            template = $('#GeneratorsTemplates_correct_answers');
-            errors = template.siblings('.errorMessage');
-            if(!template.val())
-            {
-                errors.html('Введите шаблон');
-                return false;
-            } else {
-                templateExp = /^[x\+\-\*\d\/\(\)\s]+$/i;
-                if (!templateExp.test(template.val()))
-                {
-                    errors.html('Шаблон может содержать только числа, мат.операции, пробел и букву x');
-                    return false;
-                } else {
-                    errors.html('');
-                }
-            } 
+            errors.html('');
         }
         return true;
     }
@@ -345,36 +216,13 @@
                   <?php echo CHtml::textField("GeneratorsTemplates[number_exercises]", $generator->Template->number_exercises, array('maxlength'=>11, 'class'=>'form-control only-number', 'placeholder' => 'Введите число заданий')); ?>
                   <div class="errorMessage"></div>
               </div>
-              <div class="col-lg-4 col-md-4">
-                  <?php echo CHtml::hiddenField("GeneratorsTemplates[separate_template_and_correct_answers]", 0, array('id'=>false)); ?>
-                  <?php echo CHtml::checkBox("GeneratorsTemplates[separate_template_and_correct_answers]", $generator->Template->separate_template_and_correct_answers, array('style'=>'float: left; width: 5%;')); ?>
-                  <?php echo CHtml::label("Раздельные шаблоны условия и правильнго ответа", 'GeneratorsTemplates_separate_template_and_correct_answers', array('style'=>'font-size: 14px; line-height: 14px; float: left; width: 93%; margin-left: 2%;')); ?>
-              </div>
             </div>
           <div class="row">
               <div class="col-lg-2 col-md-2">
-                  <?php echo CHtml::label('Шаблон условия', 'GeneratorsTemplates_template'); ?>
+                  <?php echo CHtml::label('Шаблон выражения', 'GeneratorsTemplates_template'); ?>
               </div>
               <div class="col-lg-6 col-md-6">
-                  <?php echo CHtml::textArea("GeneratorsTemplates[template]", $generator->Template->template, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение')); ?>
-                  <div class="errorMessage"></div>
-              </div>
-          </div>
-          <div class="row" id="correct-answers-cont" <?php if(!$generator->Template->separate_template_and_correct_answers) echo 'style="display: none"'; ?>>
-              <div class="col-lg-2 col-md-2">
-                  <?php echo CHtml::label('Правильный ответ', 'GeneratorsTemplates_correct_answers'); ?>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                  <?php echo CHtml::textField($generator->Template->separate_template_and_correct_answers ? "GeneratorsTemplates[correct_answers]" : "", $generator->Template->correct_answers, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение', 'id'=>'GeneratorsTemplates_correct_answers')); ?>
-                  <div class="errorMessage"></div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-2 col-md-2">
-                  <?php echo CHtml::label('Тип задания', 'GeneratorsTemplates_id_visual'); ?>
-              </div>
-              <div class="col-lg-6 col-md-6">
-                  <?php echo CHtml::dropDownList("GeneratorsTemplates[id_visual]", $generator->Template->id_visual, Generators::getVisualsForGenerator2(), array('class'=>'form-control')); ?>
+                  <?php echo CHtml::textField("GeneratorsTemplates[template]", $generator->Template->template, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение')); ?>
                   <div class="errorMessage"></div>
               </div>
           </div>
@@ -405,9 +253,5 @@
       ?>
     </div>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить условие', '#', array('class'=>'btn btn-success btn-icon', 'id'=>'add-condition')); ?>
-    <div class="section<?php if(!$generator->Template->id_visual || $generator->Template->id_visual==1) echo ' hide'; ?>" id='visualization'>
-        <h3 class="head">Шаблоны неправильных ответов</h3>
-        <?php if($generator->Template->id_visual && $generator->Template->id_visual!=1) $this->renderPartial("visualizations/{$generator->Template->id_visual}", array('model'=>$generator->Template)); ?>
-    </div>
 </div>
 <?php $this->endWidget(); ?>

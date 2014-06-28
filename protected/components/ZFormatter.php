@@ -122,6 +122,33 @@ class ZFormatter extends CFormatter
             return $output;
 	}
         
+	public function formatTags($value, $data, $name)
+	{
+            $output = '<div class="skills-mini">';
+            $output .= '<div class="skills">';
+                foreach($value as $key => $item)
+                {
+                    $output .= "<div class='skill clearfix' data-id='$item->id'>";
+                    $output .= '<p class="name">'.$item->name.'</p>';
+                    $output .= '<p class="remove">&times;</p>';
+                    $output .= CHtml::hiddenField(get_class($data)."[$data->id][TagsIds][]", $item->id);
+                    $output .= '</div>';
+                }
+            $output .= '</div>';
+                  $output .= '<div class="input-group mydrop">';
+                    $output .= CHtml::textField("term", '', array('placeholder'=>'Введите название', 'class'=>'form-control', 'id'=>false, 'autocomplete'=>'off', 'data-id'=>$data->id));
+                    $output .= '<div class="input-group-btn">';
+                      $output .= '<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" tabindex="-1">';
+                        $output .= '<span class="caret"></span>';
+                      $output .= '</button>';
+                      $output .= '<ul class="dropdown-menu" role="menu">';
+                      $output .= '</ul>';
+                    $output .= '</div>';
+                  $output .= '</div>';
+            $output .= '</div>';
+            return $output;
+	}
+        
         // выводит умения на странице уроков
 	public function formatDropSkillsLesson($value, $data, $name)
 	{
