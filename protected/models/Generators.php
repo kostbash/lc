@@ -10,6 +10,8 @@
 class Generators extends CActiveRecord
 {
         const DEFAULT_VISUAL = 1;
+        const DEFAULT_NUMBER_EXERCISES = 10;
+        const DEFAULT_NUMBER_WORDS = 10;
         
         public static $typiesBuilding = array(
             1=>'Точный ответ: картинка-слово',
@@ -113,6 +115,8 @@ class Generators extends CActiveRecord
                 $template = new GeneratorsTemplates;
                 $template->id_user = Yii::app()->user->id;
                 $template->id_generator = $this->id;
+                $template->number_exercises = self::DEFAULT_NUMBER_EXERCISES;
+                $template->number_words = self::DEFAULT_NUMBER_WORDS;
                 $template->save(false);
             }
             return $template;

@@ -240,7 +240,7 @@
         });
         
             
-        $('#words-grid tbody tr textarea, input[type=text]:not([name=term]), select').live('change', function(){
+        $('#words-grid tbody tr textarea, input[type=text]:not([name=term]), input[type=file], select').live('change', function(){
             $(this).closest('tr').find('.save-row').show();
         });
         
@@ -445,7 +445,9 @@
                     'htmlOptions' => array('width' => '20%'),
                 ),
                 array(
-                    'name'=>'image',
+                    'name'=>'imageLink',
+                    'type'=>'raw',
+                    'value'=>'$data->imageLink . "<input type=\"file\" name=\"GeneratorsWords[$data->id][image]\">"',
                     'htmlOptions' => array('width' => '10%'),
                 ),
                 array(

@@ -74,25 +74,31 @@ class ExercisesController extends Controller
                             $exercisesAnswers->attributes = $answerAttr;
                             $exercisesAnswers ->id_exercise = $model->id;
                             $exercisesAnswers->save();
-                            
-//                            if(!empty($_POST['Exercises']['correct_answers']))
-//                            {
-//                                if(is_array($_POST['Exercises']['correct_answers']) && in_array($index, $_POST['Exercises']['correct_answers']))
-//                                {
-//                                   $correctAnswers[] = $exercisesAnswers->id; 
-//                                }
-//                                elseif($_POST['Exercises']['correct_answers'] == $index)
-//                                {
-//                                    $correctAnswers = $exercisesAnswers->id;
-//                                }
-//                            }
                         }
-//                        if(!empty($correctAnswers))
-//                        {
-//                            $model->correct_answers = is_array($correctAnswers) ? implode($correctAnswers, ',') : $correctAnswers;
-//                            $model->save();
-//                        }
                     }
+                    
+                    if($_POST['Exercises']['Comparisons'])
+                    {
+                        foreach($_POST['Exercises']['Comparisons'] as $comparison)
+                        {
+                            $comparisonAttr = array();
+                            foreach($comparison as $nameAttr => $answerAttr)
+                            {
+                                $exercisesAnswer = new ExercisesListOfAnswers;
+                                $exercisesAnswer->attributes = $answerAttr;
+                                $exercisesAnswer->is_right = 1;
+                                $exercisesAnswer ->id_exercise = $model->id;
+                                $exercisesAnswer->save();
+                                $comparisonAttr[$nameAttr] = $exercisesAnswer->id;
+                            }
+                            $newComparison = new ExercisesComparisons;
+                            $newComparison->attributes = $comparisonAttr;
+                            $newComparison->id_exercise = $model->id;
+                            $newComparison->save();
+                            unset($comparisonAttr);
+                        }
+                    }
+                    
                     // добавляем задание в группу
                     if($id_part && $part)
                     {
@@ -134,7 +140,7 @@ class ExercisesController extends Controller
             }
             if(isset($_POST['Exercises']))
             {
-                //CVarDumper::dump($_POST, 5, true); die;
+                //CVarDumper::dump($_POST, 7, true); die;
                 $model->attributes = $_POST['Exercises'];
                 if($model->save())
                 {
@@ -164,6 +170,30 @@ class ExercisesController extends Controller
                             $exercisesAnswers->save();
                         }
                     }
+                    
+                    if($_POST['Exercises']['Comparisons'])
+                    {
+                        foreach($model->Comparisons as $eComparison) $eComparison->delete();
+                        foreach($_POST['Exercises']['Comparisons'] as $comparison)
+                        {
+                            $comparisonAttr = array();
+                            foreach($comparison as $nameAttr => $answerAttr)
+                            {
+                                $exercisesAnswer = new ExercisesListOfAnswers;
+                                $exercisesAnswer->attributes = $answerAttr;
+                                $exercisesAnswer->is_right = 1;
+                                $exercisesAnswer ->id_exercise = $model->id;
+                                $exercisesAnswer->save();
+                                $comparisonAttr[$nameAttr] = $exercisesAnswer->id;
+                            }
+                            $newComparison = new ExercisesComparisons;
+                            $newComparison->attributes = $comparisonAttr;
+                            $newComparison->id_exercise = $model->id;
+                            $newComparison->save();
+                            unset($comparisonAttr);
+                        }
+                    }
+                    
                     // добавляем задание в группу
                     if($part)
                     {

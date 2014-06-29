@@ -91,5 +91,6 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
                 'beginSalt' => '409jdf1',
                 'endSalt' => 'bsl@swa',
+                'WordsImagesPath' => 'images/lessons',
 	),
 );

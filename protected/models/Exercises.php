@@ -56,6 +56,7 @@ class Exercises extends CActiveRecord
                     'Answers'=>array(self::HAS_MANY, 'ExercisesListOfAnswers', 'id_exercise', 'order'=>'Answers.id ASC'),
                     'Type'=>array(self::BELONGS_TO, 'ExercisesTypes', 'id_type'),
                     'Visual'=>array(self::BELONGS_TO, 'ExercisesVisuals', 'id_visual'),
+                    'Comparisons'=>array(self::HAS_MANY, 'ExercisesComparisons', 'id_exercise'),
 		);
 	}
 
@@ -218,6 +219,31 @@ class Exercises extends CActiveRecord
                                 return true;
                             }
                         }
+                    }
+                    elseif($exercise->id_type==5) // сопоставление
+                    {
+                        if(is_array($answers))
+                        {
+                            $countComparisons = ExercisesComparisons::model()->countByAttributes(array('id_exercise'=>$exercise->id));
+                            if($countComparisons==count($answers[1]) && $countComparisons==count($answers[2]))
+                            {
+                                $i = 0;
+                                $attrs = array();
+                                $attrs['id_exercise'] = $exercise->id;
+                                while($countComparisons > $i)
+                                {
+                                    $attrs['answer_one'] = $answers[1][$i];
+                                    $attrs['answer_two'] = $answers[2][$i];
+                                    if(!ExercisesComparisons::model()->exists('id_exercise=:id_exercise AND answer_one=:answer_one AND answer_two=:answer_two', $attrs))
+                                    {
+                                        return false;
+                                    }
+                                    $i++;
+                                }
+                                return true;
+                            }
+                        }
+                        
                     }
                 } 
             }

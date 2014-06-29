@@ -252,6 +252,24 @@
                 }
             ?>
         </div>
+        
+        <div id="comparisonsHiddens">
+            <?php
+                if(!empty($comparisons)) // выводим все сопоставления
+                {
+                    foreach($comparisons as $indexExercise => $comparison)
+                    {
+                        foreach($comparison as $indexComparison => $attrs)
+                        {
+                            foreach($attrs as $attrName => $attr)
+                            {
+                                echo CHtml::hiddenField("Exercises[$indexExercise][comparisons][$indexComparison][$attrName]", $attr);
+                            }
+                        }
+                    }
+                }
+            ?>
+        </div>
     </div>
     <?php endif; ?>
     <?php

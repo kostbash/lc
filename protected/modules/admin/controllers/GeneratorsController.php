@@ -58,6 +58,8 @@ class GeneratorsController extends Controller
 
             if($_POST['Exercises'] && $_POST['Template'])
             {
+//                CVarDumper::dump($_POST, 10, true);
+//                die;
                 if($group->type == 1) // если добавляем задания в блок
                 {
                     $groupExercises = new GroupAndExercises;
@@ -76,7 +78,7 @@ class GeneratorsController extends Controller
                     $redirect = array('/admin/partsoftest/update', 'id'=>$part->id);
                 }
 
-                $exerciseSkills = new ExerciseAndSkills;
+                $exerciseSkills = new ExerciseAndSkills; // нужен для поиска, поэтому тут
                 foreach($_POST['Exercises'] as $attributes)
                 {
                     $exercise = new Exercises;
@@ -100,14 +102,32 @@ class GeneratorsController extends Controller
                         
                         if($attributes['answers'])
                         {
+                            $idsExercises = array();
                             while($attributes['answers'])
                             {
                                 $rand = array_rand($attributes['answers']);
                                 $exercisesAnswers = new ExercisesListOfAnswers;
                                 $exercisesAnswers->attributes = $attributes['answers'][$rand];
                                 $exercisesAnswers ->id_exercise = $exercise->id;
-                                $exercisesAnswers->save();
+                                if($exercisesAnswers->save())
+                                {
+                                    $idsExercises[$rand] = $exercisesAnswers->id;
+                                }
                                 unset($attributes['answers'][$rand]);
+                            }
+                        }
+                        
+                        if($attributes['comparisons'])
+                        {
+                            $comparison = new ExercisesComparisons;
+                            foreach($attributes['comparisons'] as $attrs)
+                            {
+                                $comparison->answer_one = $idsExercises[$attrs['answer_one']];
+                                $comparison->answer_two = $idsExercises[$attrs['answer_two']];
+                                $comparison->id_exercise = $exercise->id;
+                                $comparison->save();
+                                $comparison->id = false;
+                                $comparison->isNewRecord = true;
                             }
                         }
 
@@ -147,6 +167,7 @@ class GeneratorsController extends Controller
                     'attempts' => $resultGeneration['attempts'],
                     'count' => $resultGeneration['count'],
                     'answers' => $resultGeneration['answers'],
+                    'comparisons' => $resultGeneration['comparisons'],
             ));
         }
 

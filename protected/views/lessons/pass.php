@@ -1,3 +1,4 @@
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <script type="text/javascript">
     $(function(){
         <?php if($exerciseGroup->type != 2) : ?>
@@ -68,6 +69,52 @@
                 checkInput(hiddenAnswer);
             });
             
+            $('.comparisons .list-one').sortable({
+                axis: 'y',
+                cancel: null,
+                cursor: 'move',
+                items: '> .comparison',
+                update: function(event, ui) {
+                    current = $(this);
+                    resultAnswer = current.closest('.exercise').find('> .result');
+                    hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            else if(result==0)
+                                resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                        }
+                    });
+                }
+            });
+
+            $('.comparisons .list-two').sortable({
+                axis: 'y',
+                cancel: null,
+                cursor: 'move',
+                items: '> .comparison',
+                update: function(event, ui) {
+                    current = $(this);
+                    resultAnswer = current.closest('.exercise').find('> .result');
+                    hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            else if(result==0)
+                                resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                        }
+                    });
+                }
+            });
+            
         <?php else : ?>
             $('#exercises-form input[type=submit]').click(function(){
                 result = true;
@@ -93,6 +140,20 @@
                 hidden = $('.hidden-answer[data-key='+key+']');
                 hidden.val(answer.data('val'));
                 checkInput(hidden);
+            });
+            
+            $('.comparisons .list-one').sortable({
+                axis: 'y',
+                cancel: null,
+                cursor: 'move',
+                items: '> .comparison'
+            });
+
+            $('.comparisons .list-two').sortable({
+                axis: 'y',
+                cancel: null,
+                cursor: 'move',
+                items: '> .comparison'
             });
         <?php endif; ?>
             
@@ -152,6 +213,7 @@
         }
     }
 </script>
+
 <div class="pass-lesson">
 <div class="header-lesson clearfix">
     <div class="row lesson-header">

@@ -61,7 +61,7 @@ class GeneratorsWords extends CActiveRecord
 			'word' => 'Слово',
 			'translate' => 'Перевод',
 			'description' => 'Описание',
-			'image' => 'Картинка',
+			'imageLink' => 'Картинка',
 		);
 	}
 
@@ -127,6 +127,27 @@ class GeneratorsWords extends CActiveRecord
                 {
                     $res .= $tag->name;
                 }
+            } else {
+                $res = 'Нет';
+            }
+            return $res;
+        }
+        
+        public function getExistIdsTags()
+        {
+            $res = array();
+            foreach($this->Tags as $tag)
+            {
+                $res[] = $tag->id;
+            }
+            return $res;
+        }
+        
+        public function getImageLink()
+        {
+            if($this->image)
+            {
+                $res = CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image);
             } else {
                 $res = 'Нет';
             }

@@ -29,11 +29,20 @@
             $('#words-grid').yiiGridView('update', { data: attrWords.serialize() });
         });
         
+        $('#GeneratorsTemplates_type_of_building').change(function(){
+            current = $(this);
+            if(current.val()==8 || current.val()==9 || current.val()==10)
+            {
+                $('.more-attrs').removeClass('hide');
+            } else {
+                $('.more-attrs').addClass('hide');
+            }
+        });
+        
         $('#generate').click(function(){
             $('#template-form').submit();
             return false;
         });
-        
     });
     
     function getTags(id, name, id_word)
@@ -90,7 +99,26 @@
                   <div class="errorMessage"></div>
               </div>
           </div>
+          <div class="row more-attrs<?php if($generator->Template->id_visual!=6) echo ' hide';  ?>">
+              <div class="col-lg-2 col-md-2">
+                  <?php echo CHtml::label('Кол-во заданий', 'GeneratorsTemplates_number_exercises'); ?>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                  <?php echo CHtml::textField('GeneratorsTemplates[number_exercises]', $generator->Template->number_exercises, array('class'=>'form-control', 'placeholder'=>'Введите кол-во заданий')); ?>
+                  <div class="errorMessage"></div>
+              </div>
+          </div>
+          <div class="row more-attrs<?php if($generator->Template->id_visual!=6) echo ' hide';  ?>">
+              <div class="col-lg-2 col-md-2">
+                  <?php echo CHtml::label('Кол-во слов в задании', 'GeneratorsTemplates_number_words'); ?>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                  <?php echo CHtml::textField('GeneratorsTemplates[number_words]', $generator->Template->number_words, array('class'=>'form-control', 'placeholder'=>'Введите кол-во слов в задании')); ?>
+                  <div class="errorMessage"></div>
+              </div>
+          </div>
     </div>
+    
     <div class="section" id='words'>
         <h3 class="head">Выбранные слова</h3>
         <div class="row">
@@ -136,7 +164,8 @@
                     'htmlOptions' => array('width' => '20%'),
                 ),
                 array(
-                    'name'=>'image',
+                    'name'=>'imageLink',
+                    'type'=>'html',
                     'htmlOptions' => array('width' => '10%'),
                 ),
                 array(

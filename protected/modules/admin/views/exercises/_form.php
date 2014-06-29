@@ -245,6 +245,22 @@
                 });
             }
             
+            // если сопоставление
+            if($('#comparisons').length)
+            {
+                answers = $('.hidden-answer');
+                answers.each(function(n, answer){
+                    answer = $(answer);
+                    if(!answer.val())
+                    {
+                        answer.siblings('.errorMessage').html('Введите текст варианта сопоставления');
+                        $return = false;
+                    } else {
+                        answer.siblings('.errorMessage').html('');
+                    }
+                });
+            }
+            
             // если выбор блока
             if($('#exact-answers').length)
             {
