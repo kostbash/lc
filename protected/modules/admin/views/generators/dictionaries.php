@@ -341,7 +341,11 @@
         'id'=>'paramsSearch',
 	'method'=>'POST',
 )); ?>
-
+<script type="text/javascript" src="/js/swfupload/swfupload.queue.js"></script>
+<script type="text/javascript" src="/js/swfupload/fileprogress.js"></script>
+<script type="text/javascript" src="/js/swfupload/handlers.js"></script>
+<script type="text/javascript" src="/js/uploader.js"></script>
+<script src="/js/jquery.html5_upload.js" type="text/javascript"></script>
 <div id="dictionary-page">
     <div class="modal fade" id="htmlEditor" tabindex="-1" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -447,7 +451,7 @@
                 array(
                     'name'=>'imageLink',
                     'type'=>'raw',
-                    'value'=>'$data->imageLink . "<input type=\"file\" name=\"GeneratorsWords[$data->id][image]\">"',
+                    //'value'=>'$data->imageLink',
                     'htmlOptions' => array('width' => '10%'),
                 ),
                 array(
@@ -504,4 +508,21 @@
         </div>
     </div>
 </div>
-<?php $this->endWidget(); ?>
+<?php // Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
+//                        function uploadHandle()
+//                        {
+//                            var f = $(".upload-image"),
+//			    up = new uploader(f.get(0), {
+//				prefix:"ImportFile",
+//				url:"' . Yii::app()->createUrl("/admin/exercises/SWFUpload", array('id_course'=>$id_course)) . '",
+//				autoUpload:true,
+//				error:function(ev){ console.log("error"); remove_veil(); $("#import-button").show();$("#import-input").hide();},
+//				success:function(data){$(document.body).after(data);remove_veil();$("#import-button").show();$("#import-input").hide();}
+//			    });
+//                             
+//                        }
+//			$(function(){
+//                            	uploadHandle();
+//			});
+//		    ');
+$this->endWidget(); ?>

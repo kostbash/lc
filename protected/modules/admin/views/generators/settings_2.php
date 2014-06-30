@@ -174,7 +174,7 @@
                     'htmlOptions' => array('width' => '8%'),
                     'buttons'=>array(
                         'delete'=>array(
-                            'url' => 'Yii::app()->createUrl("/admin/generatorstemplates/deleteselectedword", array("id_word"=>$data->id, id_template=>"'. $generator->Template->id .'"))',
+                            'url' => 'Yii::app()->createUrl("/admin/generatorsTemplates/deleteselectedword", array("id_word"=>$data->id, id_template=>"'. $generator->Template->id .'"))',
                             'click'=>'deleteWord',
                         ),
                     ),

@@ -191,7 +191,7 @@ class GeneratorsController extends Controller
                     $group = $part->Group;
                 }
                 
-                $redirect = $part ? array('/admin/generators/generation', 'id'=>$id, 'id_part'=>$id_part) : array('/admin/generators/generation', 'id'=>$id, 'id_group'=>$id_group);
+                $redirect = isset($part) ? array('/admin/generators/generation', 'id'=>$id, 'id_part'=>$id_part) : array('/admin/generators/generation', 'id'=>$id, 'id_group'=>$id_group);
                 
                 if(!$group)
                     $this->redirect('/');

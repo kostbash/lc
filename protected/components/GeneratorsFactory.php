@@ -1,6 +1,6 @@
 <?php
-require_once '/generators/examplesAndTasks.php';
-require_once '/generators/ListOfWords.php';
+require_once 'generators/ExamplesAndTasks.php';
+require_once 'generators/ListOfWords.php';
 
 class GeneratorsFactory {
     private $generator;

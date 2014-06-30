@@ -23,7 +23,7 @@ class GeneratorswordsController extends Controller
 	{
             return array(
                     array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                            'actions'=>array('create','delete', 'updatebyajax', 'createbyajax'),
+                            'actions'=>array('create','delete', 'updatebyajax', 'createbyajax', 'SWFupload', 'removeImage'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -229,4 +229,34 @@ class GeneratorswordsController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
+        public function actionSWFUpload($id_word)
+        {
+            if ($_FILES['ImportFile'])
+            {
+
+                if ($file = CUploadedFile::getInstanceByName("ImportFile"))
+                { 
+                    $fname = substr(md5($file->name.time()),0,10);
+                    $file->saveAs(Yii::app()->params['WordsImagesPath']."/".$fname.'.'.$file->extensionName);
+                    if($word = GeneratorsWords::model()->findByPk($id_word))
+                    {
+                        $word->image = $fname.'.'.$file->extensionName;
+                        $word->save(false);
+                        
+                        echo $this->processOutput($word->imageLink);
+                    }
+                }
+            }
+        }
+        
+        public function actionRemoveImage($id_word)
+        {
+            if($word = GeneratorsWords::model()->findByPk($id_word))
+                    {
+                        $word->image = null;
+                        $word->save(false);
+                        echo $word->imageLink;
+                    }
+        }
 }
