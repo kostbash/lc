@@ -1274,3 +1274,33 @@ z-index:10000000;
     margin: 4px 0 8px;
     cursor: pointer;
 }
+
+.text-with-space .text {
+    margin-bottom: 10px;
+}
+
+.text-with-space .answer-droppable {
+    min-width: 50px;
+    display: inline-block;
+    border-bottom: 3px solid #69c;
+    padding-bottom: 1px;
+    min-height: 26px;
+    margin: 0 4px;
+}
+
+.text-with-space .words .word {
+    margin: 2px;
+}
+
+.text-with-space .word {
+    min-width: 50px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 1px 0;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 2px 2px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}

@@ -35,6 +35,11 @@
                         result = false;
                 });
                 
+                $('.text-with-space').each(function(n, withSpace){
+                    if(!checkTextWithSpaces(withSpace))
+                        result = false;
+                });
+                
                 if(result) {
                     $.ajax({
                         url: '<?php echo $this->createUrl('/lessons/saverightanswers', array('user_lesson'=>$userLesson->id, 'group'=>$userAndExerciseGroup->id_exercise_group)); ?>',
@@ -140,6 +145,39 @@
                 }
             });
             
+            $('.text-with-space .word').draggable({cursor: 'move', revert:true});
+            $('.text-with-space .answer-droppable').droppable({
+                accept:'.text-with-space .word',
+                tolerance:'pointer',
+                drop: function(event,info)
+                {
+                    answer = $(info.draggable);
+                    cont = $(this);
+                    words = cont.closest('.text').siblings('.words');
+                    existWord = cont.find('.word');
+                    if(existWord.length)
+                    {
+                        words.append(existWord);
+                    }
+                    cont.append(answer);
+                    resultAnswer = cont.closest('.exercise').find('> .result');
+                    hiddenAnswer = cont.closest('.text').find('.hidden-answer');
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            else if(result==0)
+                                resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            else
+                                alert(result);
+                        }
+                    });
+                }
+            });
+            
         <?php else : ?>
             $('#exercises-form input[type=submit]').click(function(){
                 result = true;
@@ -150,6 +188,10 @@
                 
                 $('.checkbox-answer , .radio-answer').each(function(n, answer){
                     if(!checkRadioCheckBox(answer))
+                        result = false;
+                });
+                $('.text-with-space').each(function(n, withSpace){
+                    if(!checkTextWithSpaces(withSpace))
                         result = false;
                 });
                 if(!result)
@@ -186,6 +228,23 @@
                 cursor: 'move',
                 items: '> .word',
                 containment: 'parent'
+            });
+            $('.text-with-space .word').draggable({cursor: 'move', revert:true});
+            $('.text-with-space .answer-droppable').droppable({
+                accept:'.text-with-space .word',
+                tolerance:'pointer',
+                drop: function(event,info)
+                {
+                    answer = $(info.draggable);
+                    cont = $(this);
+                    words = cont.closest('.text').siblings('.words');
+                    existWord = cont.find('.word');
+                    if(existWord.length)
+                    {
+                        words.append(existWord);
+                    }
+                    cont.append(answer);
+                }
             });
         <?php endif; ?>
             
@@ -229,6 +288,25 @@
             input.closest('.answer').removeClass('no-selected-answer');
             return true;
         }
+    }
+    
+    function checkTextWithSpaces(withSpaces)
+    {
+        withSpaces = $(withSpaces);
+        drops = withSpaces.find('.text .answer-droppable');
+        res = true;
+        drops.each(function(n, space) {
+            space = $(space);
+            if(!space.find('.word').length)
+            {
+                withSpaces.closest('.answer').addClass('no-selected-answer');
+                res = false;
+                return false;
+            }
+        });
+        if(res)
+            withSpaces.closest('.answer').removeClass('no-selected-answer');
+        return res;
     }
     
     function checkRadioCheckBox(answer)

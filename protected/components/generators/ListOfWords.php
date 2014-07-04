@@ -21,7 +21,7 @@ class ListOfWords
                 
             $this->template->id_visual = $this->getVisual();
             
-            if($this->template->id_visual != 6) // сопоставление
+            if(!($this->template->type_of_building==8 or $this->template->type_of_building==9 or $this->template->type_of_building==10 or $this->template->type_of_building==11)) // сопоставление
             {
                 $this->template->number_exercises = GeneratorsTemplatesSelectedWords::model()->countByAttributes(array('id_template'=>$this->template->id));
             }
@@ -58,9 +58,10 @@ class ListOfWords
             case  5: return 3;
             case  6: return 3;
             case  7: return 3;
-            case  8: return 6;
+            case  8: return 3;
             case  9: return 6;
             case 10: return 6;
+            case 11: return 6;
             default : return Generators::DEFAULT_VISUAL;
         }
     }
@@ -72,25 +73,51 @@ class ListOfWords
         $exercises = array();
         $answers = array();
         $comparisons = array(); // сопоставления
+        $allTags = $this->AllWordsTags();
         while(($count < $this->template->number_exercises) && $attempts < 1000)
         {
-            if($this->template->id_visual!=6)
-                $word = $this->template->Words[$count];
-            
-            $attributes = $this->exercisesAttributes($word);
-            $exerciseModel = new Exercises;
-            $exerciseModel->condition = $attributes['condition'];
-            $exerciseModel->number = $count;
-            $exercises[$count] = $exerciseModel;
-
-            foreach($attributes['answers'] as $index => $answer)
+            if($this->template->type_of_building==8)
             {
-                $answers[$count][$index] = $answer;
+                $tagIndex = array_rand($allTags);
+                $tag = $allTags[$tagIndex];
+                if($tag)
+                {
+                    //print_r($attributes);die;
+                    $attributes = $this->exercisesAttributes(null, $tag);
+                    if($attributes['answers'])
+                    {
+                        $exerciseModel = new Exercises;
+                        $exerciseModel->condition = $attributes['condition'];
+                        $exerciseModel->number = $count;
+                        $exercises[$count] = $exerciseModel;
+
+                        foreach($attributes['answers'] as $index => $answer)
+                        {
+                            $answers[$count][$index] = $answer;
+                        }
+                        $count++;
+                        unset($allTags[$tagIndex]);
+                    }
+                }
             }
-            
-            $comparisons[$count] = $attributes['comparisons'];
-            
-            $count++;
+            else
+            {
+                if($this->template->id_visual!=6)
+                    $word = $this->template->Words[$count];
+
+                $attributes = $this->exercisesAttributes($word);
+                $exerciseModel = new Exercises;
+                $exerciseModel->condition = $attributes['condition'];
+                $exerciseModel->number = $count;
+                $exercises[$count] = $exerciseModel;
+
+                foreach($attributes['answers'] as $index => $answer)
+                {
+                    $answers[$count][$index] = $answer;
+                }
+                $comparisons[$count] = $attributes['comparisons'];
+                $count++;
+            }
             $attempts++;
         }
         
@@ -103,7 +130,7 @@ class ListOfWords
         );
     }
     
-    function exercisesAttributes(GeneratorsWords $word=null)
+    function exercisesAttributes(GeneratorsWords $word=null, GeneratorsTags $tag=null)
     {
         $result = array();
         switch($this->template->type_of_building)
@@ -161,7 +188,39 @@ class ListOfWords
                     $result['answers'][] = array('answer'=>$anotherTag->name);
                 }
                 break;
-            case  8: // Сопоставление: картинка-слово
+            case  8: // Выбор из списка: исключи лишнее
+                $result['condition'] = "Укажи лишнее слово";
+                $words = $tag->Words;
+                if(count($words) >= $this->template->number_words)
+                {
+                    $wordsIndexs = array_rand($words, $this->template->number_words);
+                    foreach($wordsIndexs as $wordIndex)
+                    {
+                        $result['answers'][] = array('answer'=>$words[$wordIndex]->word);
+                    }
+                    $anotherTag = $tag->anotherTag;
+                    if($anotherTag)
+                    {
+                        $anotherWords = $anotherTag->Words;
+                        $index = array_rand($anotherWords);
+                        if(is_int($index))
+                        {
+                            // проверяем что другое слово не имеет наш тэг.
+                            if(!in_array($tag->id, $anotherWords[$index]->existIdsTags))
+                            {
+                                $result['answers'][] = array('answer'=>$anotherWords[$index]->word, 'is_right'=>1);
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+                break;
+            case  9: // Сопоставление: картинка-слово
                 $wordsIndexes = array_rand($this->template->Words, $this->template->number_words);
                 $index = 0;
                 $result['condition'] = "Поставьте соответствие между словами и картинками";
@@ -175,7 +234,7 @@ class ListOfWords
                     $result['comparisons'][] = array('answer_one'=>$index-2, 'answer_two'=>$index-1);
                 }
                 break;
-            case  9: // Сопоставление: перевод-слово
+            case  10: // Сопоставление: перевод-слово
                 $wordsIndexes = array_rand($this->template->Words, $this->template->number_words);
                 $index = 0;
                 $result['condition'] = "Поставьте соответствие между словами и их переводом";
@@ -189,7 +248,7 @@ class ListOfWords
                     $result['comparisons'][] = array('answer_one'=>$index-2, 'answer_two'=>$index-1);
                 }
                 break;
-            case 10: // Сопоставление: слово-тег
+            case 11: // Сопоставление: слово-тег
                 $wordsIndexes = array_rand($this->template->Words, $this->template->number_words);
                 $index = 0;
                 $result['condition'] = "Поставьте соответствие между словами и их тегами";
@@ -228,5 +287,20 @@ class ListOfWords
         $criteria->order = 'RAND()';
         $criteria->limit = 5;
         return GeneratorsTags::model()->findAll($criteria);
+    }
+    
+    function AllWordsTags() {
+        $tags = array();
+        foreach($this->template->Words as $word)
+        {
+            foreach($word->Tags as $tag)
+            {
+                if(!$tags[$tag->id])
+                {
+                    $tags[$tag->id] = $tag;
+                }
+            }
+        }
+        return $tags;
     }
 }

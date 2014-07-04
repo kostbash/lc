@@ -99,7 +99,7 @@
                   <div class="errorMessage"></div>
               </div>
           </div>
-          <div class="row more-attrs<?php if($generator->Template->id_visual!=6) echo ' hide';  ?>">
+          <div class="row more-attrs<?php if(!($generator->Template->type_of_building==8 or $generator->Template->type_of_building==9 or $generator->Template->type_of_building==10 or $generator->Template->type_of_building==11)) echo ' hide';  ?>">
               <div class="col-lg-2 col-md-2">
                   <?php echo CHtml::label('Кол-во заданий', 'GeneratorsTemplates_number_exercises'); ?>
               </div>
@@ -108,7 +108,7 @@
                   <div class="errorMessage"></div>
               </div>
           </div>
-          <div class="row more-attrs<?php if($generator->Template->id_visual!=6) echo ' hide';  ?>">
+          <div class="row more-attrs<?php if(!($generator->Template->type_of_building==8 or $generator->Template->type_of_building==9 or $generator->Template->type_of_building==10 or $generator->Template->type_of_building==11)) echo ' hide';  ?>">
               <div class="col-lg-2 col-md-2">
                   <?php echo CHtml::label('Кол-во слов в задании', 'GeneratorsTemplates_number_words'); ?>
               </div>

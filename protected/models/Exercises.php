@@ -260,19 +260,23 @@ class Exercises extends CActiveRecord
                     }
                     elseif($exercise->id_visual==8) // Tекст с пробелами
                     {
-                        if(is_array($answers))
+                        $countSpaces = count($exercise->spaces);
+                        if($countSpaces == count($answers['number_spaces']) && $countSpaces == count($answers['answer']))
                         {
-                            $answers = implode(' ', $answers);
-                            if($answers == $rightAnswers[0]->answer)
+                            foreach($answers['number_spaces'] as $index => $space)
                             {
-                                return true;
+                                $attrs = array('id_exercise'=>$exercise->id, 'id'=>$answers['answer'][$index], 'space'=>(int)$space);
+                                if(!ExercisesListOfAnswers::model()->exists('id_exercise=:id_exercise AND id=:id AND number_space=:space AND is_right=1', $attrs))
+                                {
+                                    return false;
+                                }
                             }
+                            return true;
                         }
                         
                     }
                     elseif($exercise->id_visual==9) // Tекст с пробелами с ограничением
                     {
-                        //print_r($answers);
                         if(count($answers) == count($exercise->spaces))
                         {
                             foreach($answers as $space => $answer)
@@ -324,11 +328,12 @@ class Exercises extends CActiveRecord
             return $res;
         }
         
-        public function getSpaces() {
+        public function getSpaces($order='ASC') {
+            $order = $order == 'DESC' ? 'DESC' : 'ASC';
             $res = array();
             if($this->id)
             {
-                $query = "SELECT DISTINCT `number_space` FROM `oed_exercises_list_of_answers` WHERE `id_exercise`={$this->id} ORDER BY `number_space` ASC";
+                $query = "SELECT DISTINCT `number_space` FROM `oed_exercises_list_of_answers` WHERE `id_exercise`={$this->id} ORDER BY `number_space` $order";
                 $dirties = Yii::app()->db->createCommand($query)->queryAll();
                 foreach($dirties as $dirty)
                 {

@@ -120,13 +120,14 @@ class GeneratorsWords extends CActiveRecord
 	}
         
         public function getTagsString() {
-            $res = '';
+            $res = array();
             if($this->Tags)
             {
                 foreach($this->Tags as $tag)
                 {
-                    $res .= $tag->name;
+                    $res[] = $tag->name;
                 }
+                $res = implode(', ', $res);
             } else {
                 $res = 'Нет';
             }

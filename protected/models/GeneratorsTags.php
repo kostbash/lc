@@ -43,6 +43,7 @@ class GeneratorsTags extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Words' => array(self::MANY_MANY, 'GeneratorsWords', 'oed_generators_words_tags(id_tag, id_word)'),
 		);
 	}
 
@@ -98,5 +99,13 @@ class GeneratorsTags extends CActiveRecord
         
         public function getAsOption() {
             return "<option value='$this->id'>$this->name</option>";
+        }
+        
+        public function getAnotherTag()
+        {
+            $criteria = new CDbCriteria();
+            $criteria->addNotInCondition('id', array($this->id), 'AND');
+            $criteria->order = 'RAND()';
+            return GeneratorsTags::model()->find($criteria);
         }
 }
