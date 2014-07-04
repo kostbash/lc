@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "oed_exercises_list_of_anwers".
+ * This is the model class for table "oed_exercises_questions".
  *
- * The followings are the available columns in table 'oed_exercises_list_of_anwers':
+ * The followings are the available columns in table 'oed_exercises_questions':
  * @property integer $id
  * @property integer $id_exercise
- * @property string $answer
+ * @property string $text
  */
-class ExercisesListOfAnswers extends CActiveRecord
+class ExercisesQuestions extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'oed_exercises_list_of_answers';
+		return 'oed_exercises_questions';
 	}
 
 	/**
@@ -26,11 +26,11 @@ class ExercisesListOfAnswers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_exercise, answer', 'required'),
-			array('id_exercise, is_right, reg_exp, number_space, id_question', 'numerical', 'integerOnly'=>true),
+			array('id_exercise, text', 'required'),
+			array('id_exercise', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_exercise, answer', 'safe', 'on'=>'search'),
+			array('id, id_exercise, text', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +53,7 @@ class ExercisesListOfAnswers extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'id_exercise' => 'Id Exercise',
-			'answer' => 'Answer',
+			'text' => 'Text',
 		);
 	}
 
@@ -77,7 +77,7 @@ class ExercisesListOfAnswers extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('id_exercise',$this->id_exercise);
-		$criteria->compare('answer',$this->answer,true);
+		$criteria->compare('text',$this->text,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -88,7 +88,7 @@ class ExercisesListOfAnswers extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ExercisesListOfAnwers the static model class
+	 * @return ExercisesQuestions the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

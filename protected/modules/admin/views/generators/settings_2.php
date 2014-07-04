@@ -31,7 +31,7 @@
         
         $('#GeneratorsTemplates_type_of_building').change(function(){
             current = $(this);
-            if(current.val()==8 || current.val()==9 || current.val()==10)
+            if(current.val()==8 || current.val()==9 || current.val()==10 || current.val()==11)
             {
                 $('.more-attrs').removeClass('hide');
             } else {

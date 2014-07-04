@@ -261,7 +261,6 @@
                 });
             }
             
-            // если выбор блока
             if($('#exact-answers').length)
             {
                 // для радио кнопок
@@ -284,9 +283,243 @@
                     $return = false;
                 }
             }
+            
+            if($('#sentences').length)
+            {
+                sentences = $('textarea[name*=answers]');
+                if(sentences.length)
+                {
+                    sentences.each(function(n, answer){
+                        answer = $(answer);
+                        if(!answer.val())
+                        {
+                            answer.siblings('.errorMessage').html('Введите предложение');
+                            $return = false;
+                        } else {
+                            answer.siblings('.errorMessage').html('');
+                        }
+                    });
+                } else {
+                    $return = false;
+                }
+            }
+            
+            if($('#sentences').length)
+            {
+                sentences = $('textarea[name*=answers]');
+                if(sentences.length)
+                {
+                    sentences.each(function(n, answer){
+                        answer = $(answer);
+                        if(!answer.val())
+                        {
+                            answer.siblings('.errorMessage').html('Введите предложение');
+                            $return = false;
+                        } else {
+                            answer.siblings('.errorMessage').html('');
+                        }
+                    });
+                } else {
+                    $return = false;
+                }
+            }
+            
+            if($('.question-text').length)
+            {
+                error = $('.question-text').siblings('.errorMessage');
+                if(!$('.question-text').val())
+                {
+                    error.html('Введите текст');
+                    $return = false;
+                } else {
+                    error.html('');
+                }
+            }
+            
+            if($('#space-text-limits').length)
+            {
+                spacesCont = $('.spaces');
+                spaces = spacesCont.find('option');
+                errorsDiv = spacesCont.siblings('.errorMessage'); 
+                if(spaces.length)
+                {
+                    errors = '';
+                    spaces.each(function(n, space){
+                        space = $(space);
+                        if(space.val())
+                        {
+                            right = $('#hidden-options input[data-space='+space.val()+'][name*=is_right]');
+                            if(!right.length)
+                            {
+                                errors += 'Для пробела'+space.val()+' не выбран правильный ответ<br/>';
+                                $return = false;
+                            }
+                        }
+                    });
+                    if(errors)
+                    {
+                        errorsDiv.html(errors);
+                        $return = false;
+                    } else {
+                        errorsDiv.html('');
+                    }
+                } else {
+                    errorsDiv.html('Не создано ни одного пробела');
+                    $return = false;
+                }
+            }
+            
+            if($('#space-text').length)
+            {
+                spacesCont = $('.spaces');
+                spaces = spacesCont.find('option');
+                errorsDiv = spacesCont.siblings('.errorMessage'); 
+                if(spaces.length)
+                {
+                    if(spaces.length != $('.answers').find('option').length)
+                    {
+                        errorsDiv.html('Кол-во пробелов должно быть равно кол-ву ответов');
+                        $return = false;
+                    } else {
+                        errorsDiv.html('');
+                    }
+                } else {
+                    errorsDiv.html('Не создано ни одного пробела');
+                    $return = false;
+                }
+            }
+            
             return $return;
         });
+        
+        $('.question-text').live('change', function() {
+            question = $(this);
+            val = question.val();
+            template = /sp(\d+)/ig;
+            data = new Array();
+            i = 0;
+            
+            while ( (res = template.exec(val)) != null )
+            {
+              variable = $('.spaces option[value='+res[0]+']');
+              if(variable.length)
+                  variable.addClass('dont-remove');
+              else {
+                data[res[1]] = res[0];
+              }
+            }
+            
+            $('.spaces option:not(.dont-remove)').remove();
+            
+            if(data.length)
+            {
+                for(var space in data)
+                {
+                    $('.spaces').append('<option value='+space+'>Пробел '+space+'</option>');
+                }
+            }
+            return false;
+        });
+        
+        $('.spaces').live('change', function(){
+            if($('#space-text-limits').length)
+            {
+                current = $(this);
+                number = current.val();
+                options = '';
+                hiddens = $('#hidden-options input[name*=number_space][value='+number+']');
+                hiddens.each(function(n, field)
+                {
+                    field = $(field);
+                    answer = $('#hidden-options input[name$="[answer]"][data-index='+field.data('index')+']');
+                    right = $('#hidden-options input[name$="[is_right]"][data-index='+field.data('index')+']');
+                    if(answer.length)
+                    {
+                        if(right.length)
+                        {
+                            options += '<option data-space='+number+' selected=selected value='+answer.data('index')+'>'+answer.val()+'</option>';
+                        } else {
+                            options += '<option data-space='+number+' value='+answer.data('index')+'>'+answer.val()+'</option>';
+                        }
+                    }
+                });
+                $('.answers').html(options);
+            }
+        });
+        
+        $('.answers').live('change', function(){
+            if($('#space-text-limits').length)
+            {
+                current = $(this);
+                selected = current.find(':selected');
+                space = selected.data('space');
+                hiddens = $('#hidden-options input[name*=is_right][data-space='+space+']');
+                hiddens.remove();
+                $('#hidden-options').append('<input data-space='+space+' data-index="'+current.val()+'" type="hidden" name="Exercises[answers]['+current.val()+'][is_right]" value="1" />');
+            }
+        });
+        
+        $('.add-answer').live('click', function(){
+            current = $(this);
+            space = $('.spaces');
+            answer = $('.new-answer');
+            lastHidden = $('#hidden-options input:last');
+            index = lastHidden.length ? lastHidden.data('index')+1 : 0;
+            hiddens = '';
+            option = '';
+            if($('#space-text-limits').length)
+            {
+                if(space.val())
+                {
+                    if(answer.val())
+                    {
+                        hiddens += '<input data-space='+space.val()+' data-index="'+index+'" type="hidden" name="Exercises[answers]['+index+'][answer]" value="'+answer.val()+'" />';
+                        hiddens += '<input data-space='+space.val()+' data-index="'+index+'" type="hidden" name="Exercises[answers]['+index+'][number_space]" value="'+space.val()+'" />';
+                        option += '<option data-space='+space.val()+' value='+index+'>'+answer.val()+'</option>';
+                        $('.answers').append(option);
+                        $('#hidden-options').append(hiddens);
+                        answer.val('');
+                    } else {
+                        alert('Введите вариант ответа');
+                        answer.focus();
+                    }  
+                } else {
+                    alert('Выберите пробел');
+                }
+            } else {
+                if(space.find('option').length > $('.answers').find('option').length)
+                {
+                    if(answer.val())
+                    {
+                        hiddens += '<input data-index="'+index+'" type="hidden" name="Exercises[answers]['+index+'][answer]" value="'+answer.val()+'" />';
+                        option += '<option value='+index+'>'+answer.val()+'</option>';
+                        $('.answers').append(option);
+                        $('#hidden-options').append(hiddens);
+                        answer.val('');
+                    } else {
+                        alert('Введите вариант ответа');
+                        answer.focus();
+                    }
+                } else {
+                    alert('Количество ответов не может превышать кол-во пробелов');
+                }
+            }
+            return false;
+        });
+        
+        $('.delete-answer').live('click', function(){
+            current = $(this);
+            selected = $('.answers :selected');
+            if(selected.length)
+            {
+                hiddens = $('#hidden-options input[data-index='+selected.val()+']');
+                hiddens.remove();
+                selected.remove();
+            }
+            return false;
+        });
     });
+
 </script>
 
 <div class="modal fade" id="htmlEditor" tabindex="-1" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">

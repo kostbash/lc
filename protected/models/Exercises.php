@@ -57,6 +57,7 @@ class Exercises extends CActiveRecord
                     'Type'=>array(self::BELONGS_TO, 'ExercisesTypes', 'id_type'),
                     'Visual'=>array(self::BELONGS_TO, 'ExercisesVisuals', 'id_visual'),
                     'Comparisons'=>array(self::HAS_MANY, 'ExercisesComparisons', 'id_exercise'),
+                    'Questions'=>array(self::HAS_MANY, 'ExercisesQuestions', 'id_exercise'),
 		);
 	}
 
@@ -220,7 +221,7 @@ class Exercises extends CActiveRecord
                             }
                         }
                     }
-                    elseif($exercise->id_type==5) // сопоставление
+                    elseif($exercise->id_visual==6) // сопоставление
                     {
                         if(is_array($answers))
                         {
@@ -245,17 +246,73 @@ class Exercises extends CActiveRecord
                         }
                         
                     }
+                    elseif($exercise->id_type==6) // упорядочивание
+                    {
+                        if(is_array($answers))
+                        {
+                            $answers = implode(' ', $answers);
+                            if($answers == $rightAnswers[0]->answer)
+                            {
+                                return true;
+                            }
+                        }
+                        
+                    }
+                    elseif($exercise->id_visual==8) // Tекст с пробелами
+                    {
+                        if(is_array($answers))
+                        {
+                            $answers = implode(' ', $answers);
+                            if($answers == $rightAnswers[0]->answer)
+                            {
+                                return true;
+                            }
+                        }
+                        
+                    }
+                    elseif($exercise->id_visual==9) // Tекст с пробелами с ограничением
+                    {
+                        //print_r($answers);
+                        if(count($answers) == count($exercise->spaces))
+                        {
+                            foreach($answers as $space => $answer)
+                            {
+                                $attrs = array('id_exercise'=>$exercise->id, 'id'=>$answer, 'space'=>$space);
+                                if(!ExercisesListOfAnswers::model()->exists('id_exercise=:id_exercise AND id=:id AND number_space=:space AND is_right=1', $attrs))
+                                {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    }
                 } 
             }
             return false;
         }
         
         public function getRightAnswers() {
-            $criteria = new CDbCriteria;
-            $criteria->compare('id_exercise', $this->id);
-            $criteria->compare('is_right', 1);
-            $criteria->order = 'reg_exp ASC';
-            return ExercisesListOfAnswers::model()->findAll($criteria);
+            if($this->id)
+            {
+                $criteria = new CDbCriteria;
+                $criteria->compare('id_exercise', $this->id);
+                $criteria->compare('is_right', 1);
+                $criteria->order = 'reg_exp ASC';
+                return ExercisesListOfAnswers::model()->findAll($criteria);
+            }
+            return array();
+        }
+        
+        public function getRightAnswersOrderSpace() {
+            if($this->id)
+            {
+                $criteria = new CDbCriteria;
+                $criteria->compare('id_exercise', $this->id);
+                $criteria->compare('is_right', 1);
+                $criteria->order = 'number_space ASC';
+                return ExercisesListOfAnswers::model()->findAll($criteria);
+            }
+            return array();
         }
         
         public function getIdsRightAnswers() {
@@ -265,5 +322,42 @@ class Exercises extends CActiveRecord
                 $res[] = $rightAnswer->id;
             }
             return $res;
+        }
+        
+        public function getSpaces() {
+            $res = array();
+            if($this->id)
+            {
+                $query = "SELECT DISTINCT `number_space` FROM `oed_exercises_list_of_answers` WHERE `id_exercise`={$this->id} ORDER BY `number_space` ASC";
+                $dirties = Yii::app()->db->createCommand($query)->queryAll();
+                foreach($dirties as $dirty)
+                {
+                    $res[] = $dirty['number_space'];
+                }
+            }
+            return $res;
+        }
+        
+        public function getDataSpaces() {
+            $res = array();
+            foreach($this->spaces as $space)
+            {
+                $res[$space] = "Пробел $space";
+            }
+            return $res;
+        }
+        
+        public function AnswersBySpace($space) {
+            $answers = array();
+            $space = (int) $space;
+            if($space > 0 && $this->id)
+            {
+                $criteria=new CDbCriteria;
+                $criteria->compare('id_exercise',$this->id);
+                $criteria->compare('number_space', $space);
+                $criteria->order = 'RAND()';
+                 return ExercisesListOfAnswers::model()->findAll($criteria);
+            }
+            return array();
         }
 }

@@ -202,7 +202,7 @@ class LessonsController extends Controller
             if($currentGroup->type==1)
                 $exercises = $currentGroup->Exercises;
             elseif($currentGroup->type==2)
-                $exercises = $currentGroup->ExercisesByCriteria;
+                $exercises = $currentGroup->ExercisesTest;
             if(!($currentGroup or $exercises))
                 $this->redirect('/');
             $leftStep = count($checkLesson->ExercisesGroups) - $step;
@@ -213,7 +213,7 @@ class LessonsController extends Controller
                 if($exerciseGroup->type==1)
                     $numberExercises = count($exerciseGroup->Exercises);
                 elseif($exerciseGroup->type==2)
-                    $numberExercises = count($exerciseGroup->ExercisesByCriteria);
+                    $numberExercises = count($exerciseGroup->ExercisesTest);
                 
                 if($key != $step-1)
                 {
@@ -255,10 +255,11 @@ class LessonsController extends Controller
                     $rightAnswers = 0;
                     foreach($userAnswers as $userAnswer)
                     {
-                        $rightAnswers += Exercises::model()->exists('`id`=:id AND `correct_answers`=:correct_answers', array('id'=>$userAnswer->id_exercise, 'correct_answers'=>$userAnswer->answer));
+                        if(Exercises::isRightAnswer($userAnswer->id_exercise, $userAnswer->answer))
+                            $rightAnswers++;
                     }
                     
-                    $result = Lessons::ResultCheck($rightAnswers,$numberAll);
+                    $result = Lessons::ResultCheck($rightAnswers, $numberAll);
                     
                     $this->render('successcheck',array(
                             'rightAnswers'=>$rightAnswers,

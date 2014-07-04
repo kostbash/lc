@@ -5,6 +5,7 @@ class ExampleAndTasks
     private $model; // модель генератора
     private $template;
     private $attributes = array();
+    private $useReplacements = array();
     
     function __construct($model, $attributes)
     {
@@ -66,32 +67,36 @@ class ExampleAndTasks
         while(($count < $this->template->number_exercises) && $attempts < 1000)
         {
             $forReplace = $this->template->ForPeplace;
-            $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->template);
-            $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
-            $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->conditionsArray);
-            $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->WrongAnswersArray);
-            if(GeneratorsTemplates::ConditionsMet($convertedConditions))
+            if($this->notExistsReplacements($forReplace['replacements']))
             {
-                $exerciseModel = new Exercises;
-                $exerciseModel->condition = $convertedTemplate;
-                $exerciseModel->number = $count;
-                $exercises[$count] = $exerciseModel;
-
-                // получием список неправильных ответов задания
-                if(!empty($convertedWrongAnswers))
+                $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->template);
+                $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
+                $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->conditionsArray);
+                $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->WrongAnswersArray);
+                if(GeneratorsTemplates::ConditionsMet($convertedConditions))
                 {
-                    foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
-                    {
-                        $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
-                    }
-                }
+                    $exerciseModel = new Exercises;
+                    $exerciseModel->condition = $convertedTemplate;
+                    $exerciseModel->number = $count;
+                    $exercises[$count] = $exerciseModel;
 
-                // сохраняем правильный ответ
-                $index++;
-                $answers[$count][$index]['answer'] = Generators::executeCode($convertedCorrectAnswers);
-                $answers[$count][$index]['is_right'] = 1;
-                unset($index);
-                $count++;
+                    // получием список неправильных ответов задания
+                    if(!empty($convertedWrongAnswers))
+                    {
+                        foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
+                        {
+                            $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
+                        }
+                    }
+
+                    // сохраняем правильный ответ
+                    $index++;
+                    $answers[$count][$index]['answer'] = Generators::executeCode($convertedCorrectAnswers);
+                    $answers[$count][$index]['is_right'] = 1;
+                    unset($index);
+                    $count++;
+                    $this->useReplacements[] = $forReplace['replacements'];
+                }
             }
             $attempts++;
         }
@@ -102,5 +107,20 @@ class ExampleAndTasks
             'exercises'=>$exercises,
             'answers'=>$answers,
         );
+    }
+    
+    // проверяем существуют ли такие значения переменных, тем самым исключаем одиннаковые задания
+    function notExistsReplacements(array $replacements)
+    {
+        foreach($this->useReplacements as $useReps)
+        {
+            sort($useReps);
+            sort($replacements);
+            if($useReps==$replacements)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

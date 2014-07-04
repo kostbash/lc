@@ -54,7 +54,7 @@
             <h2>Вопрос <?php echo ++$number; ?></h2>
             <div class="row">
                 <div class="question col-lg-3 col-md-3">
-                    <?php echo $exercise->question; ?>
+                    <?php echo $exercise->condition; ?>
                 </div>
                 <div class="answer col-lg-2 col-md-2 clearfix">
                     <?php echo CHtml::textField("Exercises[$exercise->id][answer]", '', array('class'=>'form-control', 'placeholder'=>'Введите ответ', 'tabindex'=>$index, 'autocomplete'=>'off')); ?>

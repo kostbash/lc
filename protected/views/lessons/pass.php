@@ -17,6 +17,8 @@
                                 resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
                             else if(result==0)
                                 resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            else
+                                alert(result);
                          }
                     });
             });
@@ -115,6 +117,29 @@
                 }
             });
             
+            $('.orderings ul').sortable({
+                cancel: null,
+                cursor: 'move',
+                items: '> .word',
+                containment: 'parent',
+                update: function(event, ui) {
+                    current = $(this);
+                    resultAnswer = current.closest('.exercise').find('> .result');
+                    hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            else if(result==0)
+                                resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                        }
+                    });
+                }
+            });
+            
         <?php else : ?>
             $('#exercises-form input[type=submit]').click(function(){
                 result = true;
@@ -154,6 +179,13 @@
                 cancel: null,
                 cursor: 'move',
                 items: '> .comparison'
+            });
+            
+            $('.orderings ul').sortable({
+                cancel: null,
+                cursor: 'move',
+                items: '> .word',
+                containment: 'parent'
             });
         <?php endif; ?>
             

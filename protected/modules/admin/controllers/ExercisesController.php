@@ -66,14 +66,71 @@ class ExercisesController extends Controller
                         }
                     }
                     
-                    if($_POST['Exercises']['answers'])
+                    if($id_visual==9)
                     {
-                        foreach($_POST['Exercises']['answers'] as $answerAttr)
+                        $question = new ExercisesQuestions;
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        $question->id_exercise = $model->id;
+                        if($question->save())
                         {
-                            $exercisesAnswers = new ExercisesListOfAnswers;
-                            $exercisesAnswers->attributes = $answerAttr;
-                            $exercisesAnswers ->id_exercise = $model->id;
-                            $exercisesAnswers->save();
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = array_unique($matches[1]);
+                            if($_POST['Exercises']['answers'])
+                            {
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    // проверяем что пробел действительно существует
+                                    if(in_array($answerAttr['number_space'], $numberSpaces))
+                                    {
+                                        $exercisesAnswers = new ExercisesListOfAnswers;
+                                        $exercisesAnswers->attributes = $answerAttr;
+                                        $exercisesAnswers ->id_exercise = $model->id;
+                                        $exercisesAnswers ->id_question = $question->id;
+                                        $exercisesAnswers->save();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    elseif($id_visual==8)
+                    {
+                        $question = new ExercisesQuestions;
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        $question->id_exercise = $model->id;
+                        if($question->save())
+                        {
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = array_unique($matches[1]);
+                            
+                            if($_POST['Exercises']['answers'])
+                            {
+                                $i = 0;
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    if(!$numberSpaces[$i])
+                                        break;
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttr;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers ->id_question = $question->id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->number_space = $numberSpaces[$i++];
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                            }
                         }
                     }
                     
@@ -158,16 +215,72 @@ class ExercisesController extends Controller
                         }
                     }
                     
-                    if($_POST['Exercises']['answers'])
+                    if($model->id_visual==9)
                     {
-                        
-                        foreach($model->Answers as $eAnswer) $eAnswer->delete();
-                        foreach($_POST['Exercises']['answers'] as $answerAttr)
+                        $question = $model->Questions[0];
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        if($question->save())
                         {
-                            $exercisesAnswers = new ExercisesListOfAnswers;
-                            $exercisesAnswers->attributes = $answerAttr;
-                            $exercisesAnswers ->id_exercise = $model->id;
-                            $exercisesAnswers->save();
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = $matches[1];
+                            if($_POST['Exercises']['answers'])
+                            {
+                                foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    // проверяем что пробел действительно существует
+                                    if(in_array($answerAttr['number_space'], $numberSpaces))
+                                    {
+                                        $exercisesAnswers = new ExercisesListOfAnswers;
+                                        $exercisesAnswers->attributes = $answerAttr;
+                                        $exercisesAnswers ->id_exercise = $model->id;
+                                        $exercisesAnswers ->id_question = $question->id;
+                                        $exercisesAnswers->save();
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                    elseif($model->id_visual==8)
+                    {
+                        $question = $model->Questions[0];
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        if($question->save())
+                        {
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = array_unique($matches[1]);
+                            if($_POST['Exercises']['answers'])
+                            {
+                                $i = 0;
+                                foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    if(!$numberSpaces[$i])
+                                        break;
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttr;
+                                    $exercisesAnswers->id_exercise = $model->id;
+                                    $exercisesAnswers->id_question = $question->id;
+                                    $exercisesAnswers->is_right = 1;
+                                    $exercisesAnswers->number_space = $numberSpaces[$i++];
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                            }
                         }
                     }
                     
