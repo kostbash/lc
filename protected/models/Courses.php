@@ -204,8 +204,10 @@ class Courses extends CActiveRecord
                     if($lesson)
                         $lastLesson = $lesson;
                     else
-                        return $lastLesson;
+                        break 2;
                 }
+            if($lastLesson)
+                return $lastLesson;
             return null;
         }
                  
