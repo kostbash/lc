@@ -57,7 +57,7 @@ class LessonsController extends Controller
             else {
                 $userAndExerciseGroup = UserAndExerciseGroups::model()->find("`id_user_and_lesson`=$id AND id_user_and_lesson=$userAndLesson->id ORDER BY `id` DESC");
                 // если не сущесвует связи
-                if(!$userAndExerciseGroup && $userAndExerciseGroup->Group)
+                if(!$userAndExerciseGroup)
                 {
                     if($userAndLesson->Lesson->ExercisesGroups[0])
                     {
