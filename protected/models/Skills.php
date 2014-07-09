@@ -182,4 +182,10 @@ class Skills extends CActiveRecord
             return 1;//CoursesAndGroupExercise::model()->count($criteria);
         }
         
+        public function afterDelete() {
+            RelationSkills::model()->deleteAll('id_main_skill=:id or id_skill=:id', array('id'=>$this->id));
+            UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_skill'=>$this->id));
+            parent::afterDelete();
+        }
+        
 }

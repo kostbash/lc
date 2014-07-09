@@ -333,4 +333,18 @@ class Lessons extends CActiveRecord
             }
             return $skills;
         }
+        
+        public function afterDelete() {
+            foreach($this->ExercisesGroups as $group)
+            {
+                $group->delete();
+            }
+            
+            CoursesAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            GroupAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            UserAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            
+            parent::afterDelete();
+        }
 }

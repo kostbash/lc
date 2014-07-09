@@ -65,19 +65,6 @@ class CoursesController extends Controller
 	{
 		$model=$this->loadModel($id);
                 
-                // если нету групп уроков. Добавляем пустую группу
-                if(!$model->LessonsGroups)
-//                {
-//                    $newLessonGroup = new GroupOfLessons();
-//                    $newLessonGroup->save();
-//                    $courseLesson  = new CourseAndLessonGroup();
-//                    $courseLesson->id_course = $model->id;
-//                    $courseLesson->id_group_lesson = $newLessonGroup->id;
-//                    $courseLesson->order = CourseAndLessonGroup::maxValueOrder($model->id);
-//                    $courseLesson->save();
-//                    $model->LessonsGroups = array($newLessonGroup);
-//                }
-                
 		if(isset($_POST['Courses']))
 		{
                     $lessonValid = true;
@@ -110,29 +97,6 @@ class CoursesController extends Controller
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id);
-                foreach($model->LessonsGroups as $lessonGroup) {
-                    GroupAndLessons::model()->deleteAllByAttributes(array('id_group'=>$lessonGroup->id));
-                    $lessonGroup->delete();
-                }
-                $usersLesson = UserAndLessons::model()->findAllByAttributes(array('id_course'=>$id));
-                if($usersLesson)
-                {
-                    foreach($usersLesson as $userLesson) {
-                        $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
-                        if($usersExerciseGroups)
-                        {
-                            foreach($usersExerciseGroups as $usersExerciseGroup)
-                            {
-                                UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
-                                $usersExerciseGroup->delete();
-                            }
-                        }
-                        UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
-                        $userLesson->delete();
-                    }
-                }
-                CoursesAndUsers::model()->deleteAllByAttributes(array('id_course'=>$id));
-                CourseAndLessonGroup::model()->deleteAllByAttributes(array('id_course'=>$model->id));
                 $model->delete();
 	}
 

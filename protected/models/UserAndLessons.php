@@ -118,4 +118,16 @@ class UserAndLessons extends CActiveRecord
             }
             return $count;
         }
+        
+        public function afterDelete() {
+            $userExercisesGroup = UserAndExerciseGroups::model()->findAllByAttributes(array('id_user_and_lesson'=>$this->id));
+            if($userExercisesGroup)
+            {
+                foreach($userExercisesGroup as $group)
+                {
+                    $group->delete();
+                }
+            }
+            parent::afterDelete();
+        }
 }

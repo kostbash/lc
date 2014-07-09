@@ -175,22 +175,24 @@ class Courses extends CActiveRecord
         }
 
         public function stateButton() {
-           $lastLesson = $this->lastUserLesson;
-           $number = $lastLesson->position;
-           $exerciseGroup = UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND passed=:passed', array('id_user_and_lesson'=>$lastLesson->id, 'passed'=>1));
-           if($exerciseGroup)
-           {
-               $text = "Продолжить урок $number";
-           }
-           else
-           {
-             $key = Users::UserType() == 1 ? 0 : 1;
-             if($lastLesson->id_lesson == $this->LessonsGroups[0]->LessonsRaw[$key]->id)
-               $text = 'Начать первый урок';
-             else
-               $text = "Начать урок $number";
-           }
-           return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'btn btn-success btn-sm'));
+            $lastLesson = $this->lastUserLesson;
+            $number = $lastLesson->position;
+            $exerciseGroup = UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND passed=:passed', array('id_user_and_lesson'=>$lastLesson->id, 'passed'=>1));
+            if($exerciseGroup)
+            {
+                $text = "Продолжить урок $number";
+            }
+            else
+            {
+                $key = Users::UserType() == 1 ? 0 : 1;
+                if($lastLesson->id_lesson == $this->LessonsGroups[0]->LessonsRaw[$key]->id)
+                  $text = 'Начать первый урок';
+                else
+                  $text = "Начать урок $number";
+            }
+            if($lastLesson)
+                return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'btn btn-success btn-sm'));
+            return false;
         }
         
         // последний урок, до которого дошел пользователь
@@ -209,6 +211,41 @@ class Courses extends CActiveRecord
             if($lastLesson)
                 return $lastLesson;
             return null;
+        }
+        
+        public function afterDelete() {
+            
+            $courseSkills = Skills::model()->findAllByAttributes(array('id_course'=>$this->id));
+            foreach($courseSkills as $skill)
+            {
+                $skill->delete();
+            }
+            CourseAndSkills::model()->deleteAllByAttributes(array('id_course'=>$this->id));
+            
+            foreach($this->Blocks as $block)
+            {
+                $block->delete();
+            }
+            CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_course'=>$this->id));
+            
+            foreach($this->Lessons as $lesson)
+            {
+                $lesson->delete();
+            }
+            
+            foreach($this->LessonsGroups as $lessonGroup)
+            {
+                foreach($lessonGroup->LessonsRaw as $lesson)
+                {
+                    $lesson->delete();
+                }
+                $lessonGroup->delete();
+            }
+            CourseAndLessonGroup::model()->deleteAllByAttributes(array('id_course'=>$this->id));
+            
+            CoursesAndUsers::model()->deleteAllByAttributes(array('id_course'=>$this->id));
+            
+            parent::afterDelete();
         }
                  
 }

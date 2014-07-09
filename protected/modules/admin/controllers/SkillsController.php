@@ -176,7 +176,6 @@ class SkillsController extends Controller
             if($delete)
             {
                 $model->delete();
-                RelationSkills::model()->deleteAll('id_main_skill=:id or id_skill=:id', array('id'=>$id));
                 echo 1;
             } else {
                 echo $msg;

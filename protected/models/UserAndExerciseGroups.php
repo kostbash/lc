@@ -106,4 +106,10 @@ class UserAndExerciseGroups extends CActiveRecord
             $lessonExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$this->UserAndLesson->id_lesson, 'id_group_exercises'=>$this->id_exercise_group));
             return LessonAndExerciseGroup::model()->find('`order` > :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonExerciseGroup->order, 'id_lesson'=>$lessonExerciseGroup->id_lesson));
         }
+        
+        public function afterDelete() {
+            UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$this->id));
+            UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$this->id_exercise_group));
+            parent::afterDelete();
+        }
 }

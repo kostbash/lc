@@ -174,13 +174,23 @@ class GroupOfExercises extends CActiveRecord
         }
         
         public function afterDelete() {
-            if($this->GroupAndSkills)
-                {
-                    foreach($this->GroupAndSkills as $groupSkills)
-                    {
-                        $groupSkills->delete();
-                    }
-                }
+            
+            $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$this->id));
+            foreach($usersExerciseGroups as $usersExerciseGroup)
+            {
+                $usersExerciseGroup->delete();
+            }
+            
+            foreach($this->PartsOfTest as $part)
+            {
+                $part->delete();
+            }
+            
+            GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$this->id));
+            GroupExerciseAndSkills::model()->deleteAllByAttributes(array('id_group'=>$this->id));
+            LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_group_exercises'=>$this->id));
+            CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_group'=>$this->id));
+            
             parent::afterDelete();
         }
         

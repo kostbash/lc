@@ -122,23 +122,12 @@ class GroupoflessonsController extends Controller
                 foreach($lesson->ExercisesGroups as $group)
                 {
                     $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$group->id));
-
-                    if($group->type == 1) {
-                        foreach($usersExerciseGroups as $usersExerciseGroup)
-                        {
-                            UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
-                            $usersExerciseGroup->delete();
-                        }
-
-                    } elseif ($group->type == 2) {
-
-                        foreach($usersExerciseGroups as $usersExerciseGroup)
-                        {
-                            UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
-                            $usersExerciseGroup->delete();
-                        }
+                    foreach($usersExerciseGroups as $usersExerciseGroup)
+                    {
+                        $usersExerciseGroup->delete();
                     }
                 }
+                
                 $courseLesson = new CoursesAndLessons;
                 $courseLesson->id_course = $id_course;
                 $courseLesson->id_lesson = $lesson->id;
@@ -235,6 +224,15 @@ class GroupoflessonsController extends Controller
                             $groupAndLessons->order = $key+1;
                             $groupAndLessons->save();
                         }
+                        $usersLessons = UserAndLessons::model()->findAllByAttributes(array('id_lesson'=>$id_lesson));
+                        foreach($usersLessons as $usersLesson)
+                        {
+                            if($usersLesson->id_group != $id_theme)
+                            {
+                                $usersLesson->id_group = $id_theme;
+                                $usersLesson->save();
+                            }
+                        }
                     }
                 } else {
                     GroupAndLessons::model()->deleteAllByAttributes(array('id_group'=>$id_theme));
@@ -260,6 +258,11 @@ class GroupoflessonsController extends Controller
                             $coursesAndLessons->id_lesson = $id_lesson;
                             $coursesAndLessons->order = $key+1;
                             $coursesAndLessons->save();
+                        }
+                        $usersLessons = UserAndLessons::model()->findAllByAttributes(array('id_lesson'=>$id_lesson));
+                        foreach($usersLessons as $usersLesson)
+                        {
+                            $usersLesson->delete();
                         }
                     }
                 } else {

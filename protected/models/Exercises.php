@@ -163,6 +163,9 @@ class Exercises extends CActiveRecord
         public function afterDelete() {
             ExercisesListOfAnswers::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
             ExerciseAndSkills::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
+            UserAndExercises::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
+            ExercisesComparisons::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
+            ExercisesQuestions::model()->deleteAllByAttributes(array('id_exercise'=>$this->id));
             parent::afterDelete();
         }
         

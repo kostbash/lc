@@ -17,7 +17,6 @@
             </div>
         </div>
         <div class="lessons">
-            <!--h2>Уроки курса</h2-->
             <?php if ($course->LessonsGroups) : ?>
                 <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
                     <h3><?php echo "Тема $groupNum: $lessonGroup->name"; ?></h3>
@@ -32,7 +31,7 @@
                             <?php
                             foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson)
                             {
-                                if($keyLesson == 0 && $pos==1)
+                                if($groupNum==0 && $keyLesson == 0 && $pos==1)
                                 {
                                     continue;
                                 }

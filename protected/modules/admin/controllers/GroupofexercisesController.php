@@ -63,32 +63,6 @@ class GroupOfExercisesController extends Controller
 	public function actionDelete($id)
 	{
             $model = $this->loadModel($id);
-            $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id));
-            
-            if($model->type == 1) {
-                GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$id));
-                foreach($usersExerciseGroups as $usersExerciseGroup)
-                {
-                    UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
-                    $usersExerciseGroup->delete();
-                }
-
-            } elseif ($model->type == 2) {
-                foreach($model->PartsOfTest as $part)
-                {
-                    PartsOfTestAndExercises::model()->deleteAllByAttributes(array('id_part'=>$part->id));
-                    $part->delete();
-                }
-
-                foreach($usersExerciseGroups as $usersExerciseGroup)
-                {
-                    UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
-                    $usersExerciseGroup->delete();
-                }
-            }
-            LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_group_exercises'=>$id));
-            CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_group'=>$id));
-            GroupExerciseAndSkills::model()->deleteAllByAttributes(array('id_group'=>$id));
             if($model->delete())
                 echo 1;
 	}
@@ -113,30 +87,29 @@ class GroupOfExercisesController extends Controller
                     if($attributes['type'])
                     {
                         $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
-                        if($model->type == 1) {
-                            GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$id_group));
-                            foreach($usersExerciseGroups as $usersExerciseGroup)
+                        foreach($usersExerciseGroups as $usersExerciseGroup)
+                        {
+                            if($model->type==1)
                             {
                                 UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
-                                $usersExerciseGroup->number_right = NULL;
-                                $usersExerciseGroup->number_all = NULL;
-                                $usersExerciseGroup->save();
+                            } else {
+                                UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
                             }
-
-                        } elseif ($model->type == 2) {
+                            $usersExerciseGroup->number_right = NULL;
+                            $usersExerciseGroup->number_all = NULL;
+                            $usersExerciseGroup->save();
+                        }
+                        
+                        if($model->PartsOfTest)
+                        {
                             foreach($model->PartsOfTest as $partsOfTest)
                             {
                                 $partsOfTest->delete();
                             }
-                            
-                            foreach($usersExerciseGroups as $usersExerciseGroup)
-                            {
-                                UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
-                                $usersExerciseGroup->number_right = NULL;
-                                $usersExerciseGroup->number_all = NULL;
-                                $usersExerciseGroup->save();
-                            }
                         }
+                        
+                        GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$id_group));
+                        
                         $model->type = $attributes['type'];
                         $res['needUpdate'] = 1;
                     }
@@ -144,7 +117,7 @@ class GroupOfExercisesController extends Controller
                     if($attributes['Skills'])
                     {
                         foreach($attributes['Skills'] as $id_skill => $attrSkill)
-                            $skill = GroupExerciseAndSkills::model()->findByAttributes (array('id_group'=>$id_group, 'id_skill'=>$id_skill));
+                            $skill = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$id_group, 'id_skill'=>$id_skill));
                             if($skill)
                             {
                                 $skill->pass_percent = $attrSkill['pass_percent'];

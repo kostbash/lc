@@ -387,7 +387,6 @@ class ExercisesController extends Controller
 		$model = $this->loadModel($id);
                 if($model->canDelete)
                 {
-                    ExerciseAndSkills::model()->deleteAllByAttributes(array('id_exercise'=>$model->id));
                     if($model->delete())
                         echo 1;
                 } else {
@@ -411,7 +410,6 @@ class ExercisesController extends Controller
                     $exercise = $this->loadModel($id);
                     if($exercise->canDelete)
                     {
-                        ExerciseAndSkills::model()->deleteAllByAttributes(array('id_exercise'=>$exercise->id));
                         $exercise->delete();
                     } else {
                         $res .= "Задание '$exercise->condition' используется в группах :\n";
