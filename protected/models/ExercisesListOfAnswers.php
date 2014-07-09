@@ -26,7 +26,8 @@ class ExercisesListOfAnswers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_exercise, answer', 'required'),
+			array('id_exercise', 'required'),
+			array('answer', 'requiredSpacePass'),
 			array('id_exercise, is_right, reg_exp, number_space, id_question', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -34,9 +35,6 @@ class ExercisesListOfAnswers extends CActiveRecord
 		);
 	}
 
-	/**
-	 * @return array relational rules.
-	 */
 	public function relations()
 	{
 		// NOTE: you may need to adjust the relation name and the related
@@ -57,18 +55,12 @@ class ExercisesListOfAnswers extends CActiveRecord
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
+        public function RequiredSpacePass($attribute, $params)
+        {
+            if(!$this->$attribute)
+              $this->addError($attribute, "Необходимо заполнить поле $attribute");
+        }
+
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
