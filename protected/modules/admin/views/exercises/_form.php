@@ -545,6 +545,17 @@
 	'enableAjaxValidation'=>false,
 )); ?>
     
+<?php if(!$model->isNewRecord) : ?>
+    <div class="row">
+        <div class="col-lg-3 col-md-3">
+            <?php echo CHtml::label('Тип', ''); ?>
+        </div>
+        <div class="col-lg-5 col-md-5">
+            <?php echo $model->Type->name.', '.$model->Visual->name;  ?>
+        </div>
+    </div>
+<?php endif; ?>
+    
 <div class="row">
     <div class="col-lg-3 col-md-3">
         <?php echo CHtml::label('Умения', ''); ?>
