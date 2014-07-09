@@ -206,20 +206,22 @@ class Lessons extends CActiveRecord
             {
                 if(!$userLesson->Course->nextLesson($userLesson->id_group, $userLesson->id_lesson))
                     return false;
-                if($userLesson->Lesson->ExercisesGroups) {
-                     $countTest = 0;
-                     foreach($userLesson->Lesson->ExercisesGroups as $exerciseGroup) {
-                         if($exerciseGroup->type==2)
-                             ++$countTest;
-                     }
-                     if(!$countTest) {
-                        if(!$userLesson->passed)
-                        {
-                            $userLesson->passed = 1;
-                            $userLesson->save(false);
-                        }
-                        return true;
-                     }
+                if($userLesson->Lesson->ExercisesGroups)
+                {
+                    $countTest = 0;
+                    foreach($userLesson->Lesson->ExercisesGroups as $exerciseGroup)
+                    {
+                        if($exerciseGroup->type==2)
+                            ++$countTest;
+                    }
+                    if(!$countTest) {
+                       if(!$userLesson->passed)
+                       {
+                           $userLesson->passed = 1;
+                           $userLesson->save(false);
+                       }
+                       return true;
+                    }
                 } else {
                     if(!$userLesson->passed)
                     {

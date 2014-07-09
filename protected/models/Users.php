@@ -43,7 +43,7 @@ class Users extends CActiveRecord
 			array('email', 'email', 'message'=>'Проверьте правильность введения адреса почты'),
                         array('sendOnMail, rememberMe', 'boolean'),
 			array('password', 'length', 'max'=>32),
-			array('progress_key', 'length', 'max'=>20),
+			array('progress_key', 'length', 'max'=>25),
                     	array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
                         array('checkPassword', 'compare', 'compareAttribute'=>'password'),
 			array('id, email, password, type', 'safe', 'on'=>'search'),

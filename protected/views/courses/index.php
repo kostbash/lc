@@ -31,7 +31,7 @@
                             <?php
                             foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson)
                             {
-                                if($groupNum==0 && $keyLesson == 0 && $pos==1)
+                                if($groupNum==1 && $keyLesson == 0 && $pos==1)
                                 {
                                     continue;
                                 }

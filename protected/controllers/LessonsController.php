@@ -32,12 +32,17 @@ class LessonsController extends Controller
         
         public function actionSaveRightAnswers($user_lesson, $group) {
             $userAndExerciseGroup = UserAndExerciseGroups::model()->findByAttributes(array('id_exercise_group'=>$group, 'id_user_and_lesson'=>$user_lesson));
-            if($userAndExerciseGroup && $_POST['Exercises']) 
+            if($userAndExerciseGroup) 
             {
                 $countRight = 0;
-                foreach($_POST['Exercises'] as $id_exercise => $attr)
-                    if(Exercises::isRightAnswer($id_exercise, $attr['answers']))
-                        ++$countRight;
+                if($_POST['Exercises'])
+                {
+                    foreach($_POST['Exercises'] as $id_exercise => $attr)
+                    {
+                        if(Exercises::isRightAnswer($id_exercise, $attr['answers']))
+                            ++$countRight;
+                    }
+                }
                     
                 $userAndExerciseGroup->number_right = $countRight;
                 $userAndExerciseGroup->passed = 1;
@@ -53,9 +58,12 @@ class LessonsController extends Controller
                 $this->redirect('/');
             
             if($group)
+            {
                 $userAndExerciseGroup = UserAndExerciseGroups::model()->findByAttributes(array('id_exercise_group'=>$group, 'id_user_and_lesson'=>$id));
-            else {
-                $userAndExerciseGroup = UserAndExerciseGroups::model()->find("`id_user_and_lesson`=$id AND id_user_and_lesson=$userAndLesson->id ORDER BY `id` DESC");
+            }
+            else
+            {
+                $userAndExerciseGroup = UserAndExerciseGroups::model()->find("`id_user_and_lesson`=:id AND id_user_and_lesson=:user_lesson ORDER BY `id` DESC", array('id'=>$id, 'user_lesson'=>$userAndLesson->id));
                 // если не сущесвует связи
                 if(!$userAndExerciseGroup)
                 {
@@ -70,6 +78,7 @@ class LessonsController extends Controller
             }
             
             $render = true;
+            
             if($userAndExerciseGroup)
             {
                 $currentExerciseGroup = GroupOfExercises::model()->findByPk($userAndExerciseGroup->id_exercise_group);

@@ -42,7 +42,7 @@
             <td class="value"><?php echo $user->wisdom; ?></td>
             <td class="place">
                 <?php echo $placeWisdom = $user->placeByAttribute('wisdom');?> место
-                <?php if(Users::$placeImage[$placeExp]) : ?>
+                <?php if(Users::$placeImage[$placeWisdom]) : ?>
                     <div class="medal"><img src="/images/<?php echo Users::$placeImage[$placeWisdom]?>" /></div>
                 <?php endif; ?>
             </td>
