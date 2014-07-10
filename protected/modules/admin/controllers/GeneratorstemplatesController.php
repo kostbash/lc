@@ -1,6 +1,6 @@
 <?php
 
-class GeneratorsTemplatesConditionsController extends Controller
+class GeneratorstemplatesController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -19,28 +19,19 @@ class GeneratorsTemplatesConditionsController extends Controller
 		);
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
 	public function accessRules()
 	{
             return array(
-                    array('allow',
-                            'actions'=>array('gethtmlcondition'),
+                    array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                            'actions'=>array('deleteselectedword', 'massdeletewords'),
                             'users'=>Users::Admins(),
                     ),
-                    array('deny',
+                    array('deny',  // deny all users
                             'users'=>array('*'),
                     ),
             );
 	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+        
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -48,25 +39,42 @@ class GeneratorsTemplatesConditionsController extends Controller
 		));
 	}
 
-        public function actionGetHtmlCondition() {
-            $lastNum = (int) $_POST['lastNum'];
-            $result = array();
-            $generatorCondition = new GeneratorsTemplatesConditions;
-            $result['html'] = $generatorCondition->getHtml(++$lastNum);
-            $result['success'] = 1;
+        
+	public function actionDeleteSelectedWord($id_template, $id_word)
+	{
+            $dictWord = GeneratorsTemplatesSelectedWords::model()->findByAttributes(array('id_template'=>$id_template, 'id_word'=>$id_word));
+            if($dictWord)
+		$dictWord->delete();
+	}
+        
+	public function actionMassDeleteWords($id_template)
+	{
+            $id_template = (int) $id_template;
+            $idsWords = $_POST['checked'];
+            $result = array('success'=>0);
+            if($id_template && $idsWords && is_array($idsWords))
+            {
+                foreach($idsWords as $id_word)
+                {
+                    $dictWord = GeneratorsTemplatesSelectedWords::model()->findByAttributes(array('id_template'=>$id_template, 'id_word'=>$id_word));
+                    if($dictWord)
+                        $dictWord->delete();
+                }
+                $result['success'] = 1;
+            }
             echo CJSON::encode($result);
-        }
+	}
         
 	public function actionCreate()
 	{
-		$model=new GeneratorsTemplatesConditions;
+		$model=new GeneratorsTemplates;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['GeneratorsTemplatesConditions']))
+		if(isset($_POST['GeneratorsTemplates']))
 		{
-			$model->attributes=$_POST['GeneratorsTemplatesConditions'];
+			$model->attributes=$_POST['GeneratorsTemplates'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -88,9 +96,9 @@ class GeneratorsTemplatesConditionsController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['GeneratorsTemplatesConditions']))
+		if(isset($_POST['GeneratorsTemplates']))
 		{
-			$model->attributes=$_POST['GeneratorsTemplatesConditions'];
+			$model->attributes=$_POST['GeneratorsTemplates'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -119,7 +127,7 @@ class GeneratorsTemplatesConditionsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('GeneratorsTemplatesConditions');
+		$dataProvider=new CActiveDataProvider('GeneratorsTemplates');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -130,10 +138,10 @@ class GeneratorsTemplatesConditionsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new GeneratorsTemplatesConditions('search');
+		$model=new GeneratorsTemplates('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['GeneratorsTemplatesConditions']))
-			$model->attributes=$_GET['GeneratorsTemplatesConditions'];
+		if(isset($_GET['GeneratorsTemplates']))
+			$model->attributes=$_GET['GeneratorsTemplates'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -144,12 +152,12 @@ class GeneratorsTemplatesConditionsController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return GeneratorsTemplatesConditions the loaded model
+	 * @return GeneratorsTemplates the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=GeneratorsTemplatesConditions::model()->findByPk($id);
+		$model=GeneratorsTemplates::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -157,11 +165,11 @@ class GeneratorsTemplatesConditionsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param GeneratorsTemplatesConditions $model the model to be validated
+	 * @param GeneratorsTemplates $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='generators-templates-conditions-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='generators-templates-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -1,6 +1,6 @@
 <?php
 
-class GroupOfExercisesController extends Controller
+class GroupofexercisesController extends Controller
 {
 	public $layout='/layouts/column2';
 

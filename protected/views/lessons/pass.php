@@ -49,17 +49,16 @@
                         success: function(res) {
                             if(res.success)
                             {
-                                result = true;
+                                return true;
                             } else {
-                                result = false;
+                                return false;
                             }
                         }
                     });
                 } else {
                     alert('Не для всех заданий даны ответы');
+                    return false;
                 }
-                
-                return result;
             });
             
             $('.for-editor-field').click(function(){
