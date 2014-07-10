@@ -43,6 +43,27 @@
             $('#template-form').submit();
             return false;
         });
+        
+        $('#mass-delete').click(function(){
+            checked = $('.select-on-check:checked');
+            if(checked.length)
+            {
+                $.ajax({
+                     url: '<?php echo Yii::app()->createUrl('admin/generatorstemplates/massdeletewords', array('id_template'=>$generator->Template->id)); ?>',
+                     type:'POST',
+                     dataType: 'json',
+                     data: checked.serialize(),
+                     success: function(result) { 
+                         if(result.success) {
+                            checked.closest('tr').remove();
+                         }
+                     }
+                });
+            } else {
+                alert("Не отмечено ни одного слова");
+            }
+            return false;
+        });
     });
     
     function getTags(id, name, id_word)
@@ -128,7 +149,8 @@
             <div class="col-lg-3 col-md-3">
                   <?php echo CHtml::dropDownList('Words[idsTags]', '', array(), array('empty'=>'Показать все теги', 'class'=>'form-control input-sm', 'id'=>'tags')); ?>
             </div>
-            <div class="col-lg-offset-4 col-md-offset-4 col-lg-2 col-md-2" style="text-align: right">
+            <div class="col-lg-offset-2 col-md-offset-2 col-lg-4 col-md-4" style="text-align: right">
+                <?php echo CHtml::link('<i class="glyphicon glyphicon-remove"></i>Удалить отмеченные', '#', array('class'=>'btn btn-danger btn-sm btn-icon', 'id'=>'mass-delete')); ?>
                 <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить слова', array('/admin/generators/dictionaries', 'id_gen'=>$generator->id), array('class'=>'btn btn-success btn-sm btn-icon')); ?>
             </div>
         </div>
@@ -136,10 +158,17 @@
         $this->widget('ZGridView', array(
             'id' => 'words-grid',
             'ajaxType'=>'POST',
+            'selectableRows' => 2,
             'summaryText'=>'<p style="margin-top: 5px; text-align: right;">Слов для генерации: {count}</p>',
             'enableSorting' => false,
             'dataProvider' => $words->search($generator->Template->id),
             'columns' => array(
+                array(
+                    'class' => 'CCheckBoxColumn',
+                    'id' => 'checked',
+                    'value' => '$data->id',
+                    'htmlOptions' => array('width' => '2%'),
+                ),
                 array(
                     'name' => 'word',
                     'htmlOptions' => array('width' => '20%'),

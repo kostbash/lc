@@ -214,7 +214,7 @@ class GeneratorsController extends Controller
         
         public function actionDictionaries($id_gen) {
             $generator = Generators::model()->findByPk($id_gen);
-            if(!$generator)
+            if(!($generator && $id_gen==2))
                 $this->redirect('/');
             
             $words = new GeneratorsWords('search');
@@ -229,9 +229,11 @@ class GeneratorsController extends Controller
                 
                 $this->redirect($_SESSION['returnUrl']);
             } else {
-                $_SESSION['returnUrl'] = Yii::app()->request->urlReferrer;
+                if(Yii::app()->request->urlReferrer && Yii::app()->request->urlReferrer != Yii::app()->request->requestUri)
+                {
+                    $_SESSION['returnUrl'] = Yii::app()->request->urlReferrer;
+                }
             }
-            
             $this->render("dictionaries", array(
                 'generator'=>$generator,
                 'words'=>$words,

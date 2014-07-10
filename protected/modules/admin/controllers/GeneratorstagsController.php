@@ -105,11 +105,10 @@ class GeneratorstagsController extends Controller
         public function actionTagsOfDictionary()
         {
             $id_dict = (int) $_POST['id_dict'];
-            $result = array('success'=>0);
+            $result = array('success'=>1);
             if($id_dict)
             {
                 $result['html'] = "";
-                $result['success'] = 1;
                 $criteria = new CDbCriteria;
                 if($_POST['term']) // если переданы символы
                 {
@@ -128,6 +127,8 @@ class GeneratorstagsController extends Controller
                 } else {
                     $result['html'] = '<li><a href="#">Результатов нет</a></li>';
                 }
+            } else {
+                $result['html'] = '<li><a href="#">Результатов нет</a></li>';
             }
             echo CJSON::encode($result);
         }

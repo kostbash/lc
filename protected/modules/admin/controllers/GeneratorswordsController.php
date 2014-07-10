@@ -112,13 +112,17 @@ class GeneratorswordsController extends Controller
                                 // добавляем теги
                                 foreach($attributes['TagsIds'] as $id_tag)
                                 {
-                                    if(!GeneratorsWordsTags::model()->exists("id_word=:id_word AND id_tag=:id_tag", array('id_word'=>$id_word, 'id_tag'=>$id_tag)))
+                                    // проверяем принадлежит ли тег тому же словарю что и слово
+                                    if(GeneratorsTags::model()->exists("id=:id_tag AND id_dictionary=:id_dictionary", array('id_tag'=>$id_tag, 'id_dictionary'=>$model->id_dictionary)))
                                     {
-                                        $wordsTags->id_word = $id_word;
-                                        $wordsTags->id_tag = $id_tag;  
-                                        $wordsTags->save();
-                                        $wordsTags->id = false;
-                                        $wordsTags->isNewRecord = true;
+                                        if(!GeneratorsWordsTags::model()->exists("id_word=:id_word AND id_tag=:id_tag", array('id_word'=>$id_word, 'id_tag'=>$id_tag)))
+                                        {
+                                            $wordsTags->id_word = $id_word;
+                                            $wordsTags->id_tag = $id_tag;  
+                                            $wordsTags->save();
+                                            $wordsTags->id = false;
+                                            $wordsTags->isNewRecord = true;
+                                        }
                                     }
                                 }
                             } else {

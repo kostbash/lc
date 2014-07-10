@@ -23,7 +23,7 @@ class GeneratorsTemplatesController extends Controller
 	{
             return array(
                     array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                            'actions'=>array('deleteselectedword'),
+                            'actions'=>array('deleteselectedword', 'massdeletewords'),
                             'users'=>Users::Admins(),
                     ),
                     array('deny',  // deny all users
@@ -45,6 +45,24 @@ class GeneratorsTemplatesController extends Controller
             $dictWord = GeneratorsTemplatesSelectedWords::model()->findByAttributes(array('id_template'=>$id_template, 'id_word'=>$id_word));
             if($dictWord)
 		$dictWord->delete();
+	}
+        
+	public function actionMassDeleteWords($id_template)
+	{
+            $id_template = (int) $id_template;
+            $idsWords = $_POST['checked'];
+            $result = array('success'=>0);
+            if($id_template && $idsWords && is_array($idsWords))
+            {
+                foreach($idsWords as $id_word)
+                {
+                    $dictWord = GeneratorsTemplatesSelectedWords::model()->findByAttributes(array('id_template'=>$id_template, 'id_word'=>$id_word));
+                    if($dictWord)
+                        $dictWord->delete();
+                }
+                $result['success'] = 1;
+            }
+            echo CJSON::encode($result);
 	}
         
 	public function actionCreate()

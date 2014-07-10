@@ -124,6 +124,8 @@
             } else {
                 edit.val('');
             }
+            $('#new-word-tags').html('');
+            $('#selected-mass-tags').html('');
         });
         
         $('#edit-dictionary').change(function(){
@@ -304,6 +306,43 @@
             $('#htmlEditor').modal('hide');
         });
         
+        $('#add-mass-tags').click(function(){
+            checked = $('input[type=checkbox][name="checked[]"]:checked');
+            tags = $('#selected-mass-tags .skill');
+            if(checked.length && tags.length)
+            {
+                checked.each(function(n, check)
+                {
+                    check = $(check);
+                    tagsContainer = check.closest('tr').find('.skills');
+                    tags.each(function(k, tag)
+                    {
+                        tag = $(tag);
+                        tag_id = tag.data('id');
+                        tag_name = tag.find('.name').html();
+                        tagExist = tagsContainer.find('.skill[data-id='+tag_id+']');
+                        if(!tagExist.length)
+                        {
+                            tagsContainer.append(getTags(tag_id, tag_name, check.val()));
+                            check.closest('tr').find('.save-row').show();
+                        }
+                    });
+                });
+            }
+            return false;
+        });
+        
+        $('#add-selected-words').click(function(){
+            checked = $('input[type=checkbox][name="checked[]"]:checked');
+            if(checked.length)
+            {
+                $("#paramsSearch").submit();
+            } else {
+                alert('Не отмечено ни одно слово для добавления');
+            }
+            return false;
+        });
+        
     });
     
     function getTags(id, name, id_word)
@@ -365,8 +404,9 @@
     </div>
     
     <div class="page-header clearfix">
-        <h2 style="width: 87%; margin: 0 1% 0 0; border-bottom: none;">Добавление слов в набор</h2>
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить', '#', array('onclick'=>'$("#paramsSearch").submit(); return false;', 'class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:left; width: 12%;')); ?>
+        <h2 style="width: 74%; border-bottom: none;">Добавление слов в набор</h2>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>Отмена', $_SESSION['returnUrl'], array('class'=>'btn btn-danger btn-icon btn-sm', 'style'=>'margin-left: 1%; float:left; width: 12%;')); ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить', '#', array('id'=>'add-selected-words', 'class'=>'btn btn-success btn-icon btn-sm', 'style'=>'margin-left: 1%; float:left; width: 12%;')); ?>
     </div>
 
     <div class="section">
@@ -405,8 +445,23 @@
             <div class="col-lg-3 col-md-3">
                 <?php echo CHtml::textField("Words[word]", "", array('maxlength'=>255, 'class'=>'form-control input-sm', 'placeholder' => 'Введите первые буквы слова')); ?>
             </div>
-            <div class="col-lg-2 col-md-2"  style="text-align: right;">
+            <div class="col-lg-3 col-md-3"  style="text-align: right;">
                   <?php echo CHtml::dropDownList('Words[idsTags]', '', array(), array('empty'=>'Показать все теги', 'class'=>'form-control input-sm', 'id'=>'wordsTags')); ?>
+            </div>
+            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3"  style="text-align: right;">
+                <div class="skills-mini">
+                    <div class="skills" id="selected-mass-tags"></div>
+                    <div class="input-group mydrop">
+                        <input placeholder="Введите название" class="form-control input-sm" autocomplete="off" data-id="1" type="text" value="" name="term">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1"><span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2"  style="text-align: right;">
+                <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить отмеченным', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'id'=>'add-mass-tags')); ?>
             </div>
         </div>
         <input type="hidden" name="checked" />
@@ -451,7 +506,6 @@
                 array(
                     'name'=>'imageLink',
                     'type'=>'raw',
-                    //'value'=>'$data->imageLink',
                     'htmlOptions' => array('width' => '10%'),
                 ),
                 array(
