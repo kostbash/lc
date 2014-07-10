@@ -45,12 +45,21 @@
                         url: '<?php echo $this->createUrl('/lessons/saverightanswers', array('user_lesson'=>$userLesson->id, 'group'=>$userAndExerciseGroup->id_exercise_group)); ?>',
                         type:'POST',
                         data: $('#exercises-form').serialize(),
-                        success: function(r) { alert(r); }
+                        dataType: 'json',
+                        success: function(res) {
+                            if(res.success)
+                            {
+                                result = true;
+                            } else {
+                                result = false;
+                            }
+                        }
                     });
-                }
-                if(!result)
+                } else {
                     alert('Не для всех заданий даны ответы');
-                    return result;
+                }
+                
+                return result;
             });
             
             $('.for-editor-field').click(function(){

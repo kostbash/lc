@@ -32,6 +32,7 @@ class LessonsController extends Controller
         
         public function actionSaveRightAnswers($user_lesson, $group) {
             $userAndExerciseGroup = UserAndExerciseGroups::model()->findByAttributes(array('id_exercise_group'=>$group, 'id_user_and_lesson'=>$user_lesson));
+            $result = array('success'=>0);
             if($userAndExerciseGroup) 
             {
                 $countRight = 0;
@@ -47,8 +48,13 @@ class LessonsController extends Controller
                 $userAndExerciseGroup->number_right = $countRight;
                 $userAndExerciseGroup->passed = 1;
                 $userAndExerciseGroup->number_all = count($_POST['Exercises']);
-                $userAndExerciseGroup->save(false);
+                if($userAndExerciseGroup->save())
+                {
+                    $result['success'] = 1;
+                }
+                
             }
+            echo CJSON::encode($result);
         }
 
         public function actionPass($id, $group=null)
