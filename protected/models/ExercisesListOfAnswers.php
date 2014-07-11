@@ -57,7 +57,7 @@ class ExercisesListOfAnswers extends CActiveRecord
 
         public function RequiredSpacePass($attribute, $params)
         {
-            if(!$this->$attribute)
+            if($this->$attribute == '')
               $this->addError($attribute, "Необходимо заполнить поле $attribute");
         }
 
