@@ -20,13 +20,18 @@ class ExampleAndTasks
         {
             $this->template->attributes = $this->attributes['GeneratorsTemplates'];
 
-            if(!$this->template->separate_template_and_correct_answers)
+            if($this->template->separate_template_and_correct_answers)
             {
-                $this->template->correct_answers = "";
-            } elseif(!$this->template->correct_answers)
+                if(!$this->template->correct_answers)
+                {
+                    return false;
+                }
+            }
+            else
             {
                 $this->template->correct_answers = $this->template->template;
             }
+            
             if(!$this->template->id_visual)
             {
                 $this->template->id_visual = Generators::DEFAULT_VISUAL;
