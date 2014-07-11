@@ -97,6 +97,121 @@ class UserAndExerciseGroups extends CActiveRecord
 		return parent::model($className);
 	}
         
+        // сохраняем ответы для блока
+        public function saveResultBlock($answers=null)
+        {
+            echo 5;
+            $countRight = 0;
+            if($answers && is_array($answers))
+            {
+                foreach($answers as $id_exercise => $attr)
+                {
+                    if(Exercises::isRightAnswer($id_exercise, $attr['answers']))
+                        ++$countRight;
+                }
+            }
+
+            $this->number_right = $countRight;
+            $this->passed = 1;
+            $this->number_all = count($answers);
+            if($this->save())
+            {
+                echo 1;
+            }
+            else
+            {
+                print_r($this->errors);
+                echo 2;
+                die;
+            }
+        }
+        
+        // сохраняем ответы для теста
+        public function saveResultTest(array $answers, $exercises=null)
+        {
+            $result = array();
+            if($exercises && is_array($exercises))
+            {
+                $countRight = 0;
+                $numberAllSkills = array();
+                $numberRightAnswerSkills = array();
+
+                foreach($exercises as $key => $id_exercise)
+                {
+                    $rightAnswer = Exercises::isRightAnswer($id_exercise, $answers[$key]['answers']);
+                    if($rightAnswer)
+                        ++$countRight;
+                    
+                    foreach($this->Group->Skills as $skill)
+                    {
+                        $exerciseHasSkill = ExerciseAndSkills::model()->exists('id_exercise=:id_exercise AND id_skill=:id_skill', array('id_exercise'=>$id_exercise,'id_skill'=>$skill->id));
+
+                        // общее кол-во заданий имеющий данный скилл
+                        $numberAllSkills[$skill->id] += (int) $exerciseHasSkill;
+                        
+                        // кол-во правильных ответов заданий по скиллам
+                        if($exerciseHasSkill && $rightAnswer)
+                        {
+                            $numberRightAnswerSkills[$skill->id] += (int) $rightAnswer;
+                        }
+                    }
+                }
+                
+                $this->number_right = $countRight;
+                $this->number_all = count($exercises);
+
+                $testPassed = 1;
+                $resultTest = array();
+                
+                foreach($numberAllSkills as $id_skill => $numberSkill)
+                {
+                    $skill = Skills::model()->findByPk($id_skill);
+                    $resultTest[$id_skill]['achieved'] = $numberSkill ? round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN) : 0;
+                    $resultTest[$id_skill]['need']= $this->Group->percentBySkill($id_skill) * 100;
+                    $resultTest[$id_skill]['skill'] = $skill;
+                    if($resultTest[$id_skill]['need'] > $resultTest[$id_skill]['achieved'])
+                    {
+                        $testPassed = 0;
+                    }
+                }
+
+                if(!$this->passed)
+                {
+                    $this->passed = $testPassed;
+                }
+                
+                $this->save(false);
+                
+                foreach($numberRightAnswerSkills as $skill_id => $numberRight)
+                {
+                    $userGroupSkills = UserExerciseGroupSkills::model()->findByAttributes(array('id_user_and_lesson'=>$this->UserAndLesson->id, 'id_test_group'=>$this->id_exercise_group, 'id_skill'=>$skill_id));
+                    if(!$userGroupSkills)
+                    {
+                        $userGroupSkills = new UserExerciseGroupSkills;
+                        $userGroupSkills->id_user_and_lesson = $this->UserAndLesson->id;
+                        $userGroupSkills->id_test_group = $this->id_exercise_group;
+                        $userGroupSkills->id_skill = $skill_id;
+                        $userGroupSkills->number_all = $numberAllSkills[$skill_id];
+                        $userGroupSkills->right_answers = $numberRight;
+
+                    } else {
+                        
+                        if($numberAllSkills[$skill_id] && $userGroupSkills->number_all && $numberRight/$numberAllSkills[$skill_id] > $userGroupSkills->right_answers/$userGroupSkills->number_all)
+                        {
+                            $userGroupSkills->number_all = $numberAllSkills[$skill_id];
+                            $userGroupSkills->right_answers = $numberRightAnswerSkills[$skill_id];
+                        }
+                    }
+                    $userGroupSkills->save(false);
+                }
+                
+                $result['resultTest'] = $resultTest;
+                
+                Users::saveAchievements();
+            }
+            return $result;
+        }
+        
         public static function ExistUserAndGroup($id_user_and_lesson, $id_group)
         {
             return UserAndExerciseGroups::model()->exists('`id_user_and_lesson`=:id_user_and_lesson AND `id_exercise_group`=:id_group', array('id_user_and_lesson'=>$id_user_and_lesson, 'id_group'=>$id_group));
@@ -111,5 +226,34 @@ class UserAndExerciseGroups extends CActiveRecord
             UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$this->id));
             UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$this->id_exercise_group));
             parent::afterDelete();
+        }
+        
+        public function getNextButton()
+        {
+            if($this->nextGroup)
+            {
+                return CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$this->id), array('class'=>'btn btn-success btn-icon-right nextGroup'));
+            }
+            elseif($this->UserAndLesson->Lesson->accessNextLesson($this->id_user_and_lesson)) 
+            {
+                return CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), array('class'=>'btn btn-success btn-icon-right nextGroup'));
+            } else {
+                return CHtml::link('Завершить курс<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), array('class'=>'btn btn-success btn-icon-right nextGroup'));
+            }
+        }
+        
+        public function getNextLink()
+        {
+            if($this->nextGroup)
+            {
+                $link = array('lessons/nextgroup', 'id'=>$this->id);
+            }
+            elseif($this->UserAndLesson->Course->nextLesson($this->UserAndLesson->id_group, $this->UserAndLesson->id_lesson)) 
+            {
+                $link = array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson);
+            } else {
+                $link = '/';
+            }
+            return $link;
         }
 }

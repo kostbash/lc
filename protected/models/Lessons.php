@@ -179,18 +179,6 @@ class Lessons extends CActiveRecord
             return round($sumRight/$numberExercisesSkill * 100);
         }
         
-//        public static function ProgressSkill($id_user_and_lesson, $id_skill) {
-//            $exerciseGroupSkills = UserExerciseGroupSkills::model()->findAllByAttributes(array('id_user_and_lesson'=>$id_user_and_lesson,'id_skill'=>$id_skill));
-//            $userAndLesson = UserAndLessons::model()->findByPk($id_user_and_lesson);
-//            $sumRight = 0;
-//            foreach($exerciseGroupSkills as $exerciseGroupSkill)
-//                $sumRight +=$exerciseGroupSkill->right_answers;
-//            $numberExercisesSkill = $userAndLesson->Lesson->numberExercisesCriteria[$id_skill];
-//            if(!$numberExercisesSkill)
-//                return 0;
-//            return round($sumRight/$numberExercisesSkill * 100);
-//        }
-        
         public static function PercentNeedBySkill($id_lesson, $id_skill)
         {
             $model = Lessons::model()->findByPk($id_lesson);
@@ -208,20 +196,20 @@ class Lessons extends CActiveRecord
                     return false;
                 if($userLesson->Lesson->ExercisesGroups)
                 {
-                    $countTest = 0;
+                    $pass = true;
                     foreach($userLesson->Lesson->ExercisesGroups as $exerciseGroup)
                     {
-                        if($exerciseGroup->type==2)
-                            ++$countTest;
+                        if(!UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND id_exercise_group=:id_group AND passed=1', array('id_user_and_lesson'=>$userLesson->id, 'id_group'=>$exerciseGroup->id)))
+                        {
+                            $pass = false;
+                            break;
+                        }
                     }
-                    if(!$countTest) {
-                       if(!$userLesson->passed)
-                       {
-                           $userLesson->passed = 1;
-                           $userLesson->save(false);
-                       }
-                       return true;
-                    }
+                    
+                    $userLesson->passed = $pass;
+                    $userLesson->save(false);
+                    return $pass;
+                    
                 } else {
                     if(!$userLesson->passed)
                     {
@@ -230,18 +218,7 @@ class Lessons extends CActiveRecord
                     }
                     return true;
                 }
-                foreach($this->Skills as $skill)
-                {
-                    if(Lessons::PercentNeedBySkill($userLesson->id_lesson, $skill->id) > $this->ProgressSkill($id_user_and_lesson, $skill->id)) {
-                        if($userLesson->passed == 1)
-                        {
-                            $userLesson->passed = 0;
-                            $userLesson->save(false);
-                        }
-                        return false;
-                    }
-                            
-                }
+                
                 if(!$userLesson->passed)
                 {
                     $userLesson->passed = 1;
@@ -314,10 +291,13 @@ class Lessons extends CActiveRecord
             $skills = array();
             foreach($this->ExercisesGroups as $exerciseGroup)
             {
-                foreach($exerciseGroup->Skills as $skill)
+                if($exerciseGroup->type==2)
                 {
-                    if(!$skills[$skill->id])
-                        $skills[$skill->id] = $skill;
+                    foreach($exerciseGroup->Skills as $skill)
+                    {
+                        if(!$skills[$skill->id])
+                            $skills[$skill->id] = $skill;
+                    }
                 }
             }
             return $skills;
@@ -327,10 +307,13 @@ class Lessons extends CActiveRecord
             $skills = array();
             foreach($this->ExercisesGroups as $exerciseGroup)
             {
-                foreach($exerciseGroup->GroupAndSkills as $groupSkill)
+                if($exerciseGroup->type==2)
                 {
-                    if(!$skills[$groupSkill->id_skill] or $groupSkill->pass_percent > $skills[$groupSkill->id_skill]->pass_percent)
-                        $skills[$groupSkill->id_skill] = $groupSkill;
+                    foreach($exerciseGroup->GroupAndSkills as $groupSkill)
+                    {
+                        if(!$skills[$groupSkill->id_skill] or $groupSkill->pass_percent < $skills[$groupSkill->id_skill]->pass_percent)
+                            $skills[$groupSkill->id_skill] = $groupSkill;
+                    }
                 }
             }
             return $skills;

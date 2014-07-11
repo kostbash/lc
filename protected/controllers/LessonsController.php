@@ -88,96 +88,39 @@ class LessonsController extends Controller
             if($userAndExerciseGroup)
             {
                 $currentExerciseGroup = GroupOfExercises::model()->findByPk($userAndExerciseGroup->id_exercise_group);
-                if($_POST['Exercises'] && $_SESSION['exercisesTest']) 
-                {
-                    $countRight = 0;
-                    $numberAllSkills = array();
-                    $numberRightAnswerSkills = array();
-                    
-                    foreach($_SESSION['exercisesTest'] as $key => $id_exercise)
-                    {
-                        $rightAnswer = Exercises::isRightAnswer($id_exercise, $_POST['Exercises'][$key]['answers']);
-                        if($rightAnswer)
-                            ++$countRight;
-                        foreach($userAndLesson->Lesson->Skills as $skill)
-                        {
-                            $exerciseHasSkill = ExerciseAndSkills::model()->exists('id_exercise=:id_exercise AND id_skill=:id_skill', array('id_exercise'=>$id_exercise,'id_skill'=>$skill->id));
-                           
-                            if($exerciseHasSkill)
-                            {
-                                // общее кол-во заданий имеющий данный скилл урока
-                                $numberAllSkills[$skill->id] += 1;
-                                // кол-во правильных ответов заданий по скиллам урока
-                                if($rightAnswer)
-                                    $numberRightAnswerSkills[$skill->id] += $rightAnswer;
-                            }
-                        }
-                    }
-                    $userAndExerciseGroup->number_right = $countRight;
-                    $userAndExerciseGroup->number_all = count($_SESSION['exercisesTest']);
-                    
-                    // если урок еще не пройденный, то делаем проверку
-                    $testPassed = 1;
-                    $resultTest = array();
-                    foreach($numberAllSkills as $id_skill => $numberSkill)
-                    {
-                        $skill = Skills::model()->findByPk($id_skill);
-                        $resultTest[$id_skill]['achieved'] = round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN);
-                        $resultTest[$id_skill]['need']= Lessons::PercentNeedBySkill($userAndLesson->id_lesson, $id_skill);
-                        $resultTest[$id_skill]['skill'] = $skill;
-                        if($resultTest[$id_skill]['need'] > $resultTest[$id_skill]['achieved']) {
-                            $testPassed = 0;
-                        }
-                    }
-
-                    if(!$userAndExerciseGroup->passed)
-                        $userAndExerciseGroup->passed = $testPassed;
-                    $userAndExerciseGroup->save(false);
-                    foreach($numberRightAnswerSkills as $skill_id => $numberRight)
-                    {
-                        $userGroupSkills = UserExerciseGroupSkills::model()->findByAttributes(array('id_user_and_lesson'=>$userAndLesson->id, 'id_test_group'=>$userAndExerciseGroup->id_exercise_group, 'id_skill'=>$skill_id));
-                        if(!$userGroupSkills)
-                        {
-                            $userGroupSkills = new UserExerciseGroupSkills;
-                            $userGroupSkills->id_user_and_lesson = $userAndLesson->id;
-                            $userGroupSkills->id_test_group = $userAndExerciseGroup->id_exercise_group;
-                            $userGroupSkills->id_skill = $skill_id;
-                            $userGroupSkills->number_all = $numberAllSkills[$skill_id];
-                            $userGroupSkills->right_answers = $numberRight;
-                            
-                        } else {
-                            if($numberAllSkills[$skill_id] && $userGroupSkills->number_all && $numberRight/$numberAllSkills[$skill_id] > $userGroupSkills->right_answers/$userGroupSkills->number_all)
-                            {
-                                $userGroupSkills->number_all = $numberAllSkills[$skill_id];
-                                $userGroupSkills->right_answers = $numberRightAnswerSkills[$skill_id];
-                            }
-                        }
-                        $userGroupSkills->save(false);
-                    }
-                    
-                    // сохраняем достижения пользователя
-                    $user = Users::model()->findByAttributes(array('id'=>Yii::app()->user->id));
-                    $user->experience = $user->CountPassTest;
-                    $user->accuracy = $user->AveragePoint;
-                    $user->wisdom = $user->hasSkills;
-                    $user->save(false);
-                    
-                    $this->render('successtest',array(
-                        'userLesson'=>$userAndLesson,
-                        'userAndExerciseGroup'=>$userAndExerciseGroup,
-                        'exerciseGroup'=>$currentExerciseGroup,
-                        'testPassed' => $testPassed,
-                        'resultTest' => $resultTest,
-                    ));
-                    $render = false;
-                }
                 
-                $exercisesTest = $currentExerciseGroup->ExercisesTest;
-                // т.к. задания выбираются постоянно новые, мы сохраняем этот набор, чтобы его потом проверить
-                unset($_SESSION['exercisesTest']);
-                foreach($exercisesTest as $keyMass => $exerciseTest)
+                if(isset($_POST['Exercises'])) 
                 {
-                    $_SESSION['exercisesTest'][$keyMass] = $exerciseTest->id;
+                    if($currentExerciseGroup->type==1)
+                    {
+                        $userAndExerciseGroup->saveResultBlock($_POST['Exercises']);
+                    }
+                    elseif($currentExerciseGroup->type==2)
+                    {
+                        $result = $userAndExerciseGroup->saveResultTest($_POST['Exercises'], $_SESSION['exercisesTest']);
+
+                        $this->render('successtest',array(
+                            'userLesson'=>$userAndLesson,
+                            'userAndExerciseGroup'=>$userAndExerciseGroup,
+                            'exerciseGroup'=>$currentExerciseGroup,
+                            'resultTest' => $result['resultTest'],
+                        ));
+                        $render = false;
+                    }
+                    
+                }
+                else
+                {
+                    if($currentExerciseGroup->type==2)
+                    {
+                        $exercisesTest = $currentExerciseGroup->ExercisesTest;
+                        // т.к. задания выбираются постоянно новые для теста, мы сохраняем этот набор, чтобы его потом проверить
+                        unset($_SESSION['exercisesTest']);
+                        foreach($exercisesTest as $keyMass => $exerciseTest)
+                        {
+                            $_SESSION['exercisesTest'][$keyMass] = $exerciseTest->id;
+                        }
+                    }
                 }
             }
             
@@ -197,8 +140,18 @@ class LessonsController extends Controller
                 }
             }
 
-            if(!$render)
-                die;
+            if(isset($_POST['Exercises'])) 
+            {
+                if($currentExerciseGroup->type==1)
+                {
+                    $this->redirect($userAndExerciseGroup->nextLink);
+                }
+                elseif($currentExerciseGroup->type==2)
+                {
+                    die; // не рендерим дальше
+                }
+            }
+            
             $this->render('pass',array(
                     'userLesson'=>$userAndLesson,
                     'userAndExerciseGroup'=>$userAndExerciseGroup,

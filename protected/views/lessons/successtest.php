@@ -41,7 +41,7 @@
 <div class="row" style="position: relative">
     <div class="col-lg-7 col-md-7 exercises">
         <div class="widget">
-        <?php $resultText = $testPassed ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?>
+        <?php $resultText = $userAndExerciseGroup->passed ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?>
         <h2><?php echo $resultText; ?>. Результаты теста:</h2>
 
         <div class="skills ">
@@ -70,8 +70,7 @@
         <div style="text-align: center">
             <?php echo CHtml::link('Пройти еще раз<i class="glyphicon glyphicon-repeat"></i>', array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$userAndExerciseGroup->id_exercise_group), array('class'=>'btn btn-primary btn-icon-right')); ?>
             <?php if($userAndExerciseGroup->passed) : ?>
-                <?php if($userAndExerciseGroup->nextGroup) echo CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$userAndExerciseGroup->id), array('class'=>'btn btn-success btn-icon-right'));
-                    elseif($userLesson->Lesson->accessNextLesson($userLesson->id)) echo CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'btn btn-success btn-icon-right')); ?>
+                <?php echo $userAndExerciseGroup->nextButton; ?>
             <?php endif; ?>
         </div>
         </div>

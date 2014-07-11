@@ -202,4 +202,14 @@ class GroupOfExercises extends CActiveRecord
             }
             return $ids;
         }
+        
+        public function percentBySkill($id_skill)
+        {
+            $model = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$this->id, 'id_skill'=>$id_skill));
+            if($model)
+            {
+                return $model->pass_percent;
+            }
+            return false;
+        }
 }

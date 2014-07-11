@@ -165,11 +165,11 @@ class Users extends CActiveRecord
             $all = 0;
             foreach($userLessons as $userLesson)
             {
-                $exerciseGroups = UserExerciseGroupSkills::model()->findAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
-                foreach($exerciseGroups as $exerciseGroup)
+                $userSkills = UserExerciseGroupSkills::model()->findAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
+                foreach($userSkills as $userSkill)
                 {
-                    $right += $exerciseGroup->right_answers;
-                    $all += $exerciseGroup->number_all;
+                    $right += $userSkill->right_answers;
+                    $all += $userSkill->number_all;
                 }
             }
             if($all==0)
@@ -212,5 +212,18 @@ class Users extends CActiveRecord
             $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->email.Yii::app()->params['endSalt']), 0, 25);
             $this->save(false);
             return $this->progress_key;
+        }
+        
+        // сохраняем достижения пользователя
+        public static function saveAchievements()
+        {
+            $user = Users::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+            if($user)
+            {
+                $user->experience = $user->CountPassTest;
+                $user->accuracy = $user->AveragePoint;
+                $user->wisdom = $user->hasSkills;
+                $user->save(false);
+            }
         }
 }
