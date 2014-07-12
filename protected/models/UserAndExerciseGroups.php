@@ -240,7 +240,7 @@ class UserAndExerciseGroups extends CActiveRecord
             {
                 return CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$this->id), $attrs);
             }
-            elseif($this->UserAndLesson->Lesson->accessNextLesson($this->id_user_and_lesson)) 
+            elseif($this->UserAndLesson->Course->nextLesson($this->UserAndLesson->id_group, $this->UserAndLesson->id_lesson)) 
             {
                 return CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
             } else {
