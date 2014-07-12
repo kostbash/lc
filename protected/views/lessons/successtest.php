@@ -70,7 +70,7 @@
         <div style="text-align: center">
             <?php echo CHtml::link('Пройти еще раз<i class="glyphicon glyphicon-repeat"></i>', array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$userAndExerciseGroup->id_exercise_group), array('class'=>'btn btn-primary btn-icon-right')); ?>
             <?php if($userAndExerciseGroup->passed) : ?>
-                <?php echo $userAndExerciseGroup->nextButton; ?>
+                <?php echo $userAndExerciseGroup->getNextButton(); ?>
             <?php endif; ?>
         </div>
         </div>

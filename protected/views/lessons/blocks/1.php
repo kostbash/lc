@@ -267,6 +267,6 @@
 <?php endif; ?>
 <div class='control-buttons'>
     <?php
-        echo $userAndExerciseGroup->nextButton;
+        echo $userAndExerciseGroup->getNextButton(++$i);
     ?>
 </div>

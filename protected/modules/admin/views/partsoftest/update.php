@@ -226,6 +226,7 @@ $this->widget('ZGridView', array(
     'id'=>"part-grid",
     'htmlOptions' => array('class'=>'clearfix zgrid type-exercise'),
     'selectableRows' => 2,
+    'enableSorting'=>false,
     'summaryText' => "Всего {count} заданий <div class='pull-right'>".CHtml::link('<i class="glyphicon glyphicon-remove"></i>Удалить выделенные', '#', array('class'=>'btn btn-danger btn-icon exercises-remove', 'style'=>'float:left;'))." <button onclick='$(this).hide();$(\"#import-input\").show();return false;' id='import-button' class='btn btn-success' style='margin-left:10px;'>Импорт</button><div id='import-input' style='display:none;float:left; line-height:35px; margin-left:10px;'>$file</div></div>",
     'dataProvider'=>new CArrayDataProvider($part->getExercises(false, false), array('pagination'=>false)),
     'rowHtmlOptionsExpression' => 'array("data-cansave"=>$data->canSaveFromGroup('.$part->Group->id.'), "data-id"=>$data->id)',

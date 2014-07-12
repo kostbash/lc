@@ -151,11 +151,11 @@
             <h2><?php echo "Задание $position:"; ?></h2>
             <div class="question"><?php echo "$exercise->condition"; ?></div>
             <div class="answer clearfix">
-                <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key)); ?>
+                <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key+1)); ?>
             </div>
         </div>
     <?php endforeach; ?>
-    <div class='control-buttons'><?php echo CHtml::submitButton('Отправить результаты', array('class'=>'btn btn-success', 'style'=>'margin-top: 20px')); ?></div>
+    <div class='control-buttons'><?php echo CHtml::submitButton('Отправить результаты', array('class'=>'btn btn-success', 'style'=>'margin-top: 20px', 'tabindex'=>$key+2)); ?></div>
 <?php else : ?>
     Нет заданий
 <?php endif; ?>
