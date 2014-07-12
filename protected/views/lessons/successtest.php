@@ -93,9 +93,9 @@
                                     $class = 'link';
                                 }
                             ?>
-                            <li><?php if($group->type==2) echo 'Тест: '; echo CHtml::link("$pos.$group->name", array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$group->id), array('class'=>$class)); ?></li>
+                            <li><?php if($group->type==2) echo 'Тест: '; echo CHtml::link("$pos. $group->name", array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$group->id), array('class'=>$class)); ?></li>
                         <?php else : ?>
-                                <li><?php if($group->type==2) echo 'Тест: '; echo "$pos.$group->name"; ?></li>
+                                <li><?php if($group->type==2) echo 'Тест: '; echo "$pos. $group->name"; ?></li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php else : ?>

@@ -433,6 +433,7 @@ class ExercisesController extends Controller
                 
                 $id_group = (int) $_GET['id_group'];
                 $id_part = (int) $_GET['id_part'];
+                $id_course = (int) $_GET['id_course'];
                 $local = (int) $_GET['local'];
                 
                 if($id_group)
@@ -444,8 +445,10 @@ class ExercisesController extends Controller
                     $part = PartsOfTest::model()->findByPk($id_part);
                     $groupExercise = $part->Group;
                 }
-                
-                $model->course_creator_id = $local && $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
+                if($id_course)
+                    $model->course_creator_id = $id_course;
+                else
+                    $model->course_creator_id = $local && $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
                 
 		if(isset($_POST['filter'])) {
                     $model->attributes=$_POST['Exercises'];

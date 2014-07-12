@@ -23,15 +23,15 @@
             <?php echo CHtml::link(Yii::app()->name, array('/courses/index','id'=>Courses::$defaultCourse), array('class'=>'navbar-brand')); ?>
         </div>
         <div class="collapse navbar-collapse">
-            <?php 
+            <?php
+                $this->menu[] = array('label'=>'Курсы', 'url'=>array('/admin/courses/index'));
+                $this->menu[] = array('label'=>'Задания', 'url'=>array('/admin/exercises/index'));
+                $this->menu[] = array('label'=>'Умения', 'url'=>array('/admin/skills/index'));
+                $this->menu[] = array('label'=>'Пользователи', 'url'=>array('/admin/users/index'));
+                //$this->menu[] = array('label'=>'Уроки', 'url'=>array('/admin/lessons/index'));
+                
                     $this->widget('zii.widgets.CMenu',array(
-                            'items'=>array(
-                                    array('label'=>'Курсы', 'url'=>array('/admin/courses/index')),
-                                    //array('label'=>'Уроки', 'url'=>array('/admin/lessons/index')),
-                                    array('label'=>'Задания', 'url'=>array('/admin/exercises/index')),
-                                    array('label'=>'Умения', 'url'=>array('/admin/skills/index')),
-                                    array('label'=>'Пользователи', 'url'=>array('/admin/users/index')),
-                            ),
+                            'items'=>$this->menu,
                             'htmlOptions'=>array('class'=>'nav navbar-nav'),
                     ));
             ?>

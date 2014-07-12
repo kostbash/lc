@@ -65,6 +65,8 @@ class CoursesController extends Controller
 	{
 		$model=$this->loadModel($id);
                 
+                $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));
+                
 		if(isset($_POST['Courses']))
 		{
                     $lessonValid = true;

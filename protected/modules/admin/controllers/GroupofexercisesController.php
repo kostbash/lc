@@ -53,6 +53,8 @@ class GroupofexercisesController extends Controller
 		$model=$this->loadModel($id);
                 $skills = new GroupExerciseAndSkills('search');
                 $skills->id_group = $model->id;
+                
+                $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$model->id_course));
 
 		$this->render('update',array(
 			'exerciseGroup'=>$model,

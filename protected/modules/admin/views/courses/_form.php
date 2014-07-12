@@ -617,7 +617,8 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
 ?>
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php 
+$form=$this->beginWidget('CActiveForm', array(
 	'id'=>'courses-form',
 	'enableAjaxValidation'=>false,
 )); ?>

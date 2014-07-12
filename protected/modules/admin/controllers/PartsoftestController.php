@@ -104,6 +104,7 @@ class PartsoftestController extends Controller
         public function actionUpdate($id)
 	{
             $part = $this->loadModel($id);
+            $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$part->Group->id_course));
 
             $this->render('update',array(
                     'part'=>$part,
