@@ -62,21 +62,10 @@ class GeneratorsWords extends CActiveRecord
 			'translate' => 'Перевод',
 			'description' => 'Описание',
 			'imageLink' => 'Картинка',
+			'imageLinkWithUpload' => 'Картинка',
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
 	public function search($id_template = null)
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
@@ -145,6 +134,17 @@ class GeneratorsWords extends CActiveRecord
         }
         
         public function getImageLink()
+        {
+            if($this->image)
+            {
+                $res = CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'));
+            } else {
+                $res = 'Нет';
+            }
+            return $res;
+        }
+
+        public function getImageLinkWithUpload()
         {
             $res = '<div class="word-image-container'.$this->id.'">';
             if($this->image)

@@ -194,7 +194,7 @@
                 ),
                 array(
                     'name'=>'imageLink',
-                    'type'=>'html',
+                    'type'=>'raw',
                     'htmlOptions' => array('width' => '10%'),
                 ),
                 array(
