@@ -342,7 +342,6 @@
             }
             return false;
         });
-        
     });
     
     function getTags(id, name, id_word)
@@ -504,7 +503,7 @@
                     'htmlOptions' => array('width' => '20%'),
                 ),
                 array(
-                    'name'=>'imageLink',
+                    'name'=>'imageLinkWithUpload',
                     'type'=>'raw',
                     'htmlOptions' => array('width' => '10%'),
                 ),

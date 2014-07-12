@@ -14,7 +14,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 });
             });
             
-            $('.type-exercise tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
+            $('.type-exercise tbody tr textarea, input[type!=checkbox]:not([name=term]), select').live('change', function(){
                 $(this).closest('tr').find('.save-row').show();
             });
             
@@ -111,8 +111,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                  });
             });
             
-
-            $('.type-test tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
+            $('.type-test tbody tr textarea, input[type!=checkbox]:not([name=term]), select').live('change', function(){
                 $(this).closest('tr').find('.save-row').show();
             });
             
@@ -157,6 +156,32 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 if(editing.val()!=data)
                     editing.val(data).siblings('.for-editor-field').html(data).closest('tr').find('.save-row').show();
                 $('#htmlEditor').modal('hide');
+            });
+            
+            $('.exercises-remove').live('click', function(){
+                checked = $('input[name*=checked]:checked');
+                if(checked.length)
+                {
+                    if(confirm('Вы действительно хотите удалить отмеченные задания ?'))
+                    {
+                         $.ajax({
+                            url: '".Yii::app()->createUrl('admin/partsoftest/massdeleteexercises', array('id_part'=>$part->id))."',
+                            type:'POST',
+                            data: checked.serialize(),
+                            dataType: 'json',
+                            success: function(result)
+                            { 
+                                if(result.success)
+                                {
+                                    $('#part-grid').yiiGridView('update');
+                                }
+                            }
+                         });
+                    }
+                } else {
+                    alert('Не выбраны задания для удаления');
+                }
+                return false;
             });
             
         });"
@@ -306,21 +331,6 @@ Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
 				error:function(ev){ console.log("error"); remove_veil(); $("#import-button").show();$("#import-input").hide();},
 				success:function(data){$(document.body).after(data);remove_veil();$("#import-button").show();$("#import-input").hide();}
 			    });
-                             $(".exercises-remove").click(function(){
-                                if(confirm("Вы действительно хотите удалить отмеченные задания ?")) {
-                                     $.ajax({
-                                         url: "'.Yii::app()->createUrl('admin/partsoftest/massdeleteexercises', array('id_part'=>$part->id)).'",
-                                         type:"POST",
-                                         data: $("input[name*=checked]:checked").serialize(),
-                                         success: function(result) { 
-                                                         $("#part-grid").yiiGridView("update");
-                                                         if(result!=1)
-                                                             alert(result);
-                                          }
-                                     });
-                                }
-                                return false;
-                            });
                         }
 			$(function(){
                             	uploadHandle();

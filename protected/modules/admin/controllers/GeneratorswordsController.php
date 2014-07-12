@@ -257,10 +257,10 @@ class GeneratorswordsController extends Controller
         public function actionRemoveImage($id_word)
         {
             if($word = GeneratorsWords::model()->findByPk($id_word))
-                    {
-                        $word->image = null;
-                        $word->save(false);
-                        echo $word->imageLink;
-                    }
+            {
+                $word->image = null;
+                $word->save(false);
+                echo $word->imageLink;
+            }
         }
 }

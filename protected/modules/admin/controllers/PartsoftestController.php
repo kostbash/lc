@@ -61,14 +61,16 @@ class PartsoftestController extends Controller
         
 	public function actionMassDeleteExercises($id_part)
 	{
+            $result = array('success'=>0);
             if($_POST['checked'] && PartsOfTest::model()->exists('id=:id', array('id'=>$id_part)))
             {
                 $criteria = new CDbCriteria;
                 $criteria->addInCondition('id_exercise', $_POST['checked']);
                 $criteria->compare('id_part', $id_part);
                 PartsOfTestAndExercises::model()->deleteAll($criteria);
-                echo 1;
+                $result['success'] = 1;
             }
+            echo CJSON::encode($result);
 	}
         
 	public function actionDeleteExercise($id_part, $id_exercise)
