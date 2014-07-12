@@ -150,6 +150,11 @@ class GroupofexercisesController extends Controller
                     $model->id_skill = $id_skill;
                     $model->pass_percent = 0;
                     if($model->save()) {
+                        $model = new CourseAndSkills;
+                        $model->id_course = GroupOfExercises::model()->findByAttributes(array('id'=>$id_group))->id_course;
+                        $model->id_skill = $id_skill;
+                        $model->save();
+                        
                         $res['success'] = 1;
                         $res['html'] = $group->htmlForCourse;
                     } else {
