@@ -322,10 +322,10 @@ Yii::app()->clientScript->registerScript('#courses', "
             blocks = lesson.closest('.lessons-container').siblings('.blocks-container').find('.blocks[data-id='+lesson.data('id')+'] > tbody');
             lesson.css('height', '');
             blocks.css('height', '');
-            //alert(blocks.height() +' - '+ lesson.height());
+            //alert(blocks.outerHeight() +' - '+ lesson.height());
             if(blocks.height() > lesson.height())
             {
-                height = blocks.outerHeight()+2;
+                height = pos==0 ? blocks.outerHeight()-1 : blocks.outerHeight();
                 lesson.height(height);
             }
         }
