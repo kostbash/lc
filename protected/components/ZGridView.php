@@ -18,7 +18,7 @@ class ZGridView extends CGridView
 	'hiddenPageCssClass' => 'disabled'
     );
     
-    public $pagerCssClass = "pull-right";
+    public $pagerCssClass = "pull-right pagination-container";
     public $htmlOptions = array('class' => 'clearfix zgrid');
     public $cssFile = false;
     public $summaryText = false;

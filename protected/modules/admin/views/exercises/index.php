@@ -10,7 +10,7 @@ Yii::app()->clientScript->registerScript('exercises', "
              data: current.closest('tr').find('input, textarea, select').serialize(),
              success: function(result) { 
                 if(result==1)
-                    current.closest('.zgrid').yiiGridView('update');
+                    UpdateGrid();
                 else if(result!='')
                     alert(result);
               }
@@ -25,7 +25,7 @@ Yii::app()->clientScript->registerScript('exercises', "
              data: current.serialize(),
              success: function(result) { 
                 if(result==1)
-                    current.closest('.zgrid').yiiGridView('update');
+                    UpdateGrid();
                 else if(result!='')
                     alert(result);
               }
@@ -70,7 +70,7 @@ Yii::app()->clientScript->registerScript('exercises', "
                 'data':{ 'id_skill': current.data('id') },
                 'success': function(result) { 
                     if(result==1) {
-                        $(current).parents('.zgrid').yiiGridView('update');
+                        UpdateGrid();
                     }
                     else if(result!='')
                         alert(result);
@@ -92,7 +92,7 @@ Yii::app()->clientScript->registerScript('exercises', "
                 'data':{ id_skill: id_skill, id_exercise: id_exercise },
                 'success': function(result) { 
                     if(result==1) {
-                        $(current).parents('.zgrid').yiiGridView('update');
+                        UpdateGrid();
                     }
                     else if(result!='')
                         alert(result);
@@ -111,9 +111,9 @@ Yii::app()->clientScript->registerScript('exercises', "
                      'type':'POST',
                      'success': function(result) { 
                                      if(result==1)
-                                         current.parents('.zgrid').yiiGridView('update');
+                                        UpdateGrid();
                                      else if(result!=='')
-                                         alert(result);
+                                        alert(result);
                       }
                  }); 
             return false;
@@ -156,14 +156,35 @@ Yii::app()->clientScript->registerScript('exercises', "
                      data: editing.closest('tr').find('input, textarea').serialize(),
                      success: function(result) { 
                         if(result==1)
-                            current.closest('.zgrid').yiiGridView('update');
+                            UpdateGrid();
                         else if(result!='')
                             alert(result);
                       }
                  });
             }
-            $('#htmlEditor').modal('hide');
+            $('#htmlEditor').modal('hide');             
         });
+        
+        $('.exercises-remove').live('click', function(){
+           if(confirm('Вы действительно хотите удалить отмеченные задания ?')) {
+                $.ajax({
+                    url: '".Yii::app()->createUrl('admin/exercises/massdelete')."',
+                    type:'POST',
+                    data: $('input[name*=checked]:checked').serialize(),
+                    success: function(result) { 
+                                    UpdateGrid();
+                                    if(result!=1)
+                                        alert(result);
+                     }
+                });
+           }
+           return false;
+        });
+        
+        function UpdateGrid()
+        {
+            $('#exercises-grid').yiiGridView('update', { data: $('.search-form form').serialize()+'&filter=1' });
+        }
         
     ");
 ?>
@@ -288,23 +309,6 @@ Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
 				error:function(ev){ console.log("error"); remove_veil(); $("#import-button").show();$("#import-input").hide();},
 				success:function(data){$(document.body).after(data);remove_veil();$("#import-button").show();$("#import-input").hide();}
 			    });
-                             $(".exercises-remove").click(function(){
-                                if(confirm("Вы действительно хотите удалить отмеченные задания ?")) {
-                                     $.ajax({
-                                         url: "'.Yii::app()->createUrl('admin/exercises/massdelete').'",
-                                         type:"POST",
-                                         data: $("input[name*=checked]:checked").serialize(),
-                                         success: function(result) { 
-                                                         $("#exercises-grid").yiiGridView("update");
-                                                         if(result!=1)
-                                                             alert(result);
-                                          }
-                                     });
-                                }
-                                return false;
-                            });
-                            
-                            $(".new-record").closest("tr").find(".checkbox-column input").remove();
                         }
 			$(function(){
                             	uploadHandle();
