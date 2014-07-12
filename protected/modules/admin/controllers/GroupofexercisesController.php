@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax'),
+				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
 				'users'=>Users::Admins(),
 			),
 			array('deny',  // deny all users
@@ -226,4 +226,25 @@ class GroupofexercisesController extends Controller
                 }
             }
 	}
+        
+        
+        public function actionRemoveSkillByGroup($id_group, $id_skill)
+        {
+            if($gof = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$id_group, 'id_skill'=>$id_skill)))
+            {
+                if($gof->delete()) {
+                        $res['success'] = 1;
+                        $res['html'] = '';
+                    } else {
+                        $res['success'] = 0;
+                        $res['message'] = 'Удаление не произошло';
+                    }
+            }
+            else
+            {
+                $res['success'] = 0;
+                $res['message'] = 'Удаление не произошло: такого умения нет в блоке';
+            }
+            echo CJSON::encode($res);
+        }
 }
