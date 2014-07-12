@@ -470,6 +470,7 @@
             'id' => 'words-grid',
             'selectableRows' => null,
             'ajaxType'=>'POST',
+            'afterAjaxUpdate'=>'function() {updateSWFUpload()}',
             'enableSorting' => false,
             'rowHtmlOptionsExpression' => 'array("data-id"=>"$data->id")',
             'dataProvider' => $words->search(),
@@ -580,3 +581,21 @@
 //			});
 //		    ');
 $this->endWidget(); ?>
+<script>
+    function updateSWFUpload()
+    {
+        $('[class^="upload-image"]').each(function(i,e){
+            var id = $(e).data('id'); 
+            var f = $('.upload-image'+id),
+                up = new uploader(f.get(0), {
+                    prefix:'ImportFile',
+                    url:'<?php echo Yii::app()->createUrl("/admin/generatorswords/SWFUpload/id_word/") ?>/'+id,
+                    autoUpload:true,
+                    error:function(ev){console.log('error'); remove_veil(); $('#import-button'+id).show();$('#import-input'+id).hide();},
+                    success:function(data){$('.word-image-container'+id).html(data);remove_veil();}
+                });
+        });
+        
+    }
+    updateSWFUpload();
+</script>

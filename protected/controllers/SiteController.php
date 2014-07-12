@@ -140,4 +140,48 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+        
+        public function actionMoveAnswers()
+        {
+            $exercises = Exercises::model()->findAll();
+            foreach($exercises as $exercise)
+            {
+            if($exercise->id_type==1)
+            {
+            $answer = new ExercisesListOfAnswers;
+            $answer->id_exercise = $exercise->id;
+            $answer->answer = $exercise->correct_answers;
+            $answer->is_right = 1;
+            $answer->save(false);
+            } elseif($exercise->id_type==2)
+            {
+            $answer = ExercisesListOfAnswers::model()->findByPk((int)$exercise->correct_answers);
+            if($answer)
+            {
+            $answer->is_right = 1;
+            $answer->save(false);
+            }
+            } elseif($exercise->id_type==3)
+            {
+            $idsRightAnswer = explode(',', $exercise->correct_answers);
+            if(is_array($idsRightAnswer))
+            {
+            foreach($idsRightAnswer as $id)
+            {
+            $answer = ExercisesListOfAnswers::model()->findByPk((int) $id);
+            if($answer)
+            {
+            $answer->is_right = 1;
+            $answer->save(false);
+            }
+            unset($answer);
+            }
+            }
+            } else {
+            echo 'тип контент';
+            }
+            if($answer)
+            unset($answer);
+            }
+        }
 }

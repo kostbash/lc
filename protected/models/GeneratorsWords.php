@@ -149,18 +149,10 @@ class GeneratorsWords extends CActiveRecord
             $res = '<div class="word-image-container'.$this->id.'">';
             if($this->image)
             {
-                $res .= CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'))." ".CHtml::ajaxLink('<i class="glyphicon glyphicon-remove"></i>', '/admin/generatorswords/removeImage/id_word/'.$this->id, array('success'=>'function(data){$(\'.word-image-container'.$this->id.'\').html(data);}')/*, array('onclick'=>'return confirm("Вы уверены?");',)*/);
+                $res .= CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'))." ".CHtml::ajaxLink('<i class="glyphicon glyphicon-remove"></i>', '/admin/generatorswords/removeImage/id_word/'.$this->id, array('success'=>'function(data){$(\'.word-image-container'.$this->id.'\').html(data);updateSWFUpload();}')/*, array('onclick'=>'return confirm("Вы уверены?");',)*/);
             } else {
-                $file = CHtml::fileField('ImportFile', '', array('onchange' => '$(this).hide();', 'style' => 'width:100%;', 'class'=>'upload-image'.$this->id));
+                $file = CHtml::fileField('ImportFile', '', array('onchange' => '$(this).hide();', 'style' => 'width:100%;', 'class'=>'upload-image'.$this->id, 'data-id'=>$this->id));
                 $res .= " <a href='javascript:;' onclick='$(this).hide();$(this).next().show();return false;' id='import-button{$this->id}' style='margin-left:10px;'>Нет</a><div id='import-input{$this->id}' style='display:none;float:left; line-height:35px; margin-left:10px;'>$file</div></div>"; //"<input type=\"file\" name=\"GeneratorsWords[$data->id][image]\">"
-                $res .= "<script>var f = $('.upload-image{$this->id}'),
-			    up = new uploader(f.get(0), {
-				prefix:'ImportFile',
-				url:'" . Yii::app()->createUrl("/admin/generatorswords/SWFUpload", array('id_word'=>$this->id)) . "',
-				autoUpload:true,
-				error:function(ev){ console.log('error'); remove_veil(); $('#import-button{$this->id}').show();$('#import-input{$this->id}').hide();},
-				success:function(data){\$('.word-image-container{$this->id}').html(data);remove_veil();}
-			    });</script>";
             }
             $res .= "</div>";
             return $res;
