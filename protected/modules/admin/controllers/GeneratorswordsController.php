@@ -248,7 +248,7 @@ class GeneratorswordsController extends Controller
                         $word->image = $fname.'.'.$file->extensionName;
                         $word->save(false);
                         
-                        echo $this->processOutput($word->imageLink);
+                        echo $this->processOutput($word->imageLinkWithUpload);
                     }
                 }
             }
@@ -260,7 +260,7 @@ class GeneratorswordsController extends Controller
             {
                 $word->image = null;
                 $word->save(false);
-                echo $word->imageLink;
+                echo $word->imageLinkWithUpload;
             }
         }
 }
