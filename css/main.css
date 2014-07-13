@@ -823,13 +823,13 @@ h2{
     border-collapse: separate;
     border-spacing: 10px 0;
     width: 100%;
+    heigth: 100%;
+    table-layout: fixed;
 }
 
 #course-themes table {
     width: 100%;
-}
-
-#course-themes td {
+    table-layout: fixed;
 }
 
 #course-themes thead th {
@@ -842,9 +842,14 @@ h2{
 
 }
 
+#course-themes .theme {
+    height: 100%;
+}
+
 #course-themes .theme-name {
     border-bottom: 2px solid #006699;
     padding: 5px;
+    height: 100%;
     text-align: center;
 }
 
@@ -862,13 +867,15 @@ h2{
 }
 
 #course-themes .lesson {
-    height: 78px;
+    height: 84px;
     border-bottom: 2px solid #ff6600;
 }
 
 #course-themes .lesson-name {
     text-align: center;
-    padding: 5px;
+    padding: 3px;
+    height: 100%;
+    display: inline-block;
 }
 
 #course-themes .lesson-name textarea {
@@ -892,11 +899,38 @@ h2{
     text-align: center;
 }
 
-#course-themes .blocks > tbody, .lessons-container > table > tbody {
+#course-themes .blocks > tbody
+{
     display: inline-block;
     width: 100%;
     height: 100%;
-    min-height: 76px;
+    padding: 0;
+    min-height: 82px;
+}
+
+#course-themes .blocks:first-child > tbody
+{
+    min-height: 83px;
+}
+
+.lessons-container > table > tbody
+{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    min-height: 84px;
+}
+
+.lessons-container
+{
+    height: 100%;
+}
+
+.lessons-container > table
+{
+    height: 100%;
+    display: inline-block;
 }
 
 #course-themes #blocks-course .blocks > tbody {
@@ -907,9 +941,10 @@ h2{
     border-bottom: none;
 }
 
-#course-themes .block > td {
+#course-themes .block td {
     padding: 3px 0;
 }
+
 
 #course-themes .blocks .block .block-name {
     width: 40%;
@@ -1191,6 +1226,8 @@ z-index:10000000;
 .blocks-container
 {
     vertical-align:top;
+    height: 100%;
+    display: inline-block;
 }
 
 #exercises-form .row {

@@ -319,13 +319,22 @@ Yii::app()->clientScript->registerScript('#courses', "
     function calcLessonsHeight(pos, lessonItem)
         {
             lesson = $(lessonItem);
-            blocks = lesson.closest('.lessons-container').siblings('.blocks-container').find('.blocks[data-id='+lesson.data('id')+'] > tbody');
+            blocks = lesson.closest('.lessons-container').siblings('.blocks-container').find('.blocks[data-id='+lesson.data('id')+']');
             lesson.css('height', '');
             blocks.css('height', '');
-            //alert(blocks.outerHeight() +' - '+ lesson.height());
-            if(blocks.height() > lesson.height())
+            //alert(blocks.outerHeight() +' - '+ lesson.outerHeight());
+            //alert(blocks.height() +' - '+ lesson.height());
+            if(blocks.outerHeight() > lesson.outerHeight()+1)
             {
-                height = pos==0 ? blocks.outerHeight()-1 : blocks.outerHeight();
+                if($.browser.mozilla)
+                {
+                    height = pos==0 || pos==1 ? blocks.height() : blocks.height()+1;
+                }
+                else
+                {
+                    height = pos==0 || pos==1 ? blocks.height()-1 : blocks.height();
+                }
+                
                 lesson.height(height);
             }
         }
