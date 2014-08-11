@@ -29,7 +29,7 @@ class RelationskillsController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array('delete','create'),
-				'users'=>Users::Admins(),
+				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

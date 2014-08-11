@@ -16,8 +16,8 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('create','update','delete','index', 'changeorderlessongroup', 'changepositions'),
-				'users'=>Users::Admins(),
+				'actions'=>array('create','update','delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax'),
+				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -47,6 +47,7 @@ class CoursesController extends Controller
 		if(isset($_POST['Courses']))
 		{
 			$model->attributes=$_POST['Courses'];
+			$model->id_editor=Yii::app()->user->id;
 			if($model->save())
 				$this->redirect(array('update','id'=>$model->id));
 		}
@@ -105,7 +106,8 @@ class CoursesController extends Controller
 	public function actionIndex()
 	{
 		$model=new Courses('search');
-		$model->unsetAttributes();  // clear any default values
+
+		$model->unsetAttributes();
 		if(isset($_GET['Courses']))
 			$model->attributes=$_GET['Courses'];
 
@@ -170,5 +172,26 @@ class CoursesController extends Controller
             }
             echo CJSON::encode($res);
         }
+        
+	public function actionCoursesByAjax()
+	{
+            $criteria = new CDbCriteria;
+            if(isset($_POST['term']))
+            {
+                $criteria->condition = '`name` LIKE :name';
+                $criteria->params['name'] = '%' . $_POST['term'] . '%';
+            }
+            
+            $criteria->limit = 10;
+            $res = '';
+            $courses = Courses::model()->findAll($criteria);
+            foreach ($courses  as $course)
+            {
+                $res .= "<li data-id='$course->id'><a href='#'>$course->name</a></li>";
+            }
+            if($res=='')
+                $res = '<li><a href="#">Результатов нет</a></li>';
+            echo $res;
+	}
         
 }

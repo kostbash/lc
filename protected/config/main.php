@@ -34,23 +34,31 @@ return array(
 	// application components
 	'components'=>array(
 		'user'=>array(
-			// enable cookie-based authentication
-			'allowAutoLogin'=>true,
-                        'loginUrl'=>array('site/index'),
+                    'class' => 'WebUser',
+                    // enable cookie-based authentication
+                    'allowAutoLogin'=>true,
+                    'loginUrl'=>array('site/index'),
 		),
+            
+                'authManager' => array(
+                    // Будем использовать свой менеджер авторизации
+                    'class' => 'PhpAuthManager',
+                    // Роль по умолчанию.
+                    'defaultRoles' => array('guest'),
+                ),
+            
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
 			'urlFormat'=>'path',
                         'baseUrl' => 'http://education.loc',
                         'showScriptName' => false,
+                        'caseSensitive'=>false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
                                 'admin/relationskills/<action:\w+>'=>'admin/relationSkills/<action>',
                                 'admin/relationskills'=>'admin/relationSkills',
-//                                'admin/exerciseandskills/<action:\w+>'=>'admin/exerciseAndSkills/<action>',
-//                                'admin/exerciseandskills'=>'admin/exerciseAndSkills',
 			),
 		),
                 'format' => array(

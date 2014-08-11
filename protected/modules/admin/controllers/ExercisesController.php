@@ -19,7 +19,7 @@ class ExercisesController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmlvariant'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',  // deny all users
                             'users'=>array('*'),
@@ -347,24 +347,6 @@ class ExercisesController extends Controller
             }
             echo CJSON::encode($result);
         }
-        
-//	public function actionCreate($id_course)
-//	{
-//            if(isset($_POST['Exercises']) && isset($_POST['Exercises']['question']))
-//            {
-//                    $model=new Exercises;
-//                    $model->attributes=$_POST['Exercises'];
-//                    $model->course_creator_id=$id_course;
-//                    if($model->save())
-//                            echo 1;
-//            }
-//	}
-
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
         
 	public function actionUpdateByAjax()
 	{

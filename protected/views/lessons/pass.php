@@ -1,3 +1,24 @@
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
+<script type="text/javascript">
+    
+    seconds = 0;
+    
+    function setDuration(exerciseItem)
+    {
+        exercise = $(exerciseItem).closest('.exercise');
+        duration = exercise.find('.duration');
+        newVal = parseInt(seconds, 10) + parseInt(duration.val(), 10);
+        duration.val(newVal);
+        seconds=0;
+    }
+    
+    function countTime()
+    {
+        ++seconds;
+    }
+    setInterval('countTime()', 1000);
+    
+</script>
 <div class="pass-lesson">
 <div class="header-lesson clearfix">
     <div class="row lesson-header">

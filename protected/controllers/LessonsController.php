@@ -15,19 +15,19 @@ class LessonsController extends Controller
 
 	public function accessRules()
 	{
-		return array(
-			array('allow',
-				'actions'=>array('check'),
-				'users'=>array('?'),
-			),
-			array('allow',
-				'actions'=>array('pass', 'nextgroup', 'saverightanswers'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+            return array(
+                    array('allow',
+                            'actions'=>array('check'),
+                            'users'=>array('?'),
+                    ),
+                    array('allow',
+                            'actions'=>array('pass', 'nextgroup', 'saverightanswers'),
+                            'roles'=>array('student'),
+                    ),
+                    array('deny',  // deny all users
+                            'users'=>array('*'),
+                    ),
+            );
 	}
         
         public function actionSaveRightAnswers($user_lesson, $group) {
@@ -97,13 +97,13 @@ class LessonsController extends Controller
                     }
                     elseif($currentExerciseGroup->type==2)
                     {
-                        $result = $userAndExerciseGroup->saveResultTest($_POST['Exercises'], $_SESSION['exercisesTest']);
+                        $resultTest = $userAndExerciseGroup->saveResultTest($_POST['Exercises'], $_SESSION['exercisesTest']);
 
                         $this->render('successtest',array(
                             'userLesson'=>$userAndLesson,
                             'userAndExerciseGroup'=>$userAndExerciseGroup,
                             'exerciseGroup'=>$currentExerciseGroup,
-                            'resultTest' => $result['resultTest'],
+                            'resultTest' => $resultTest,
                         ));
                         $render = false;
                     }

@@ -29,7 +29,7 @@ class GeneratorsTemplatesVariablesController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('gethtmlvars'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',
                             'users'=>array('*'),

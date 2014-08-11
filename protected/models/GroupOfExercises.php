@@ -19,7 +19,7 @@ class GroupOfExercises extends CActiveRecord
 	}
         
         public static $typeGroup = array(
-            '1' => 'Блок',
+            '1' => 'Упражнение',
             '2' => 'Тест',
         );
 
@@ -61,7 +61,7 @@ class GroupOfExercises extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Название группы',
+			'nameType' => 'Тип блока',
 			'type' => 'Тип',
 		);
 	}

@@ -41,7 +41,7 @@
 <div class="row" style="position: relative">
     <div class="col-lg-7 col-md-7 exercises">
         <div class="widget">
-        <?php $resultText = $userAndExerciseGroup->passed ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?>
+        <?php $resultText = $resultTest['passed'] ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?>
         <h2><?php echo $resultText; ?>. Результаты теста:</h2>
 
         <div class="skills ">
@@ -54,8 +54,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($resultTest) : ?>
-                        <?php foreach($resultTest as $id_skill => $skillMass) : ?>
+                    <?php if($resultTest['skills']) : ?>
+                        <?php foreach($resultTest['skills'] as $id_skill => $skillMass) : ?>
                             <tr>
                                 <td><?php echo $skillMass[skill]->name ?></td>
                                 <td><?php echo MyWidgets::ProgressBarWithLimiter($skillMass['need'], $skillMass['achieved']); ?></td>

@@ -100,36 +100,39 @@ class UserAndExerciseGroups extends CActiveRecord
         // сохраняем ответы для блока
         public function saveResultBlock($answers=null)
         {
-            echo 5;
             $countRight = 0;
+            $attrForBlockLog = array();
+            $attrForBlockLog['duration'] = 0;
             if($answers && is_array($answers))
             {
                 foreach($answers as $id_exercise => $attr)
                 {
-                    if(Exercises::isRightAnswer($id_exercise, $attr['answers']))
+                    $attrForExerciseLog = array();
+                    $isRight = Exercises::isRightAnswer($id_exercise, $attr['answers']);
+                    if($isRight)
                         ++$countRight;
+                    
+                    $attrForExerciseLog['id_exercise'] = $id_exercise;
+                    $attrForBlockLog['duration'] += $attrForExerciseLog['duration'] = (int) $attr['duration'];
+                    $attrForExerciseLog['right'] = (int) $isRight;
+                    $this->saveExerciseLog($attrForExerciseLog, $attr['answers']);
                 }
             }
-
+            $attrForBlockLog['passed'] =  $this->passed = 1;;
             $this->number_right = $countRight;
-            $this->passed = 1;
             $this->number_all = count($answers);
-            if($this->save())
-            {
-                echo 1;
-            }
-            else
-            {
-                print_r($this->errors);
-                echo 2;
-                die;
-            }
+            $this->save();
+            $this->saveBlockLog($attrForBlockLog);
         }
         
         // сохраняем ответы для теста
         public function saveResultTest(array $answers, $exercises=null)
         {
             $result = array();
+            $attrForBlockLog = array();
+            $attrForBlockLog['duration'] = 0;
+            //CVarDumper::dump($answers, 10, true);
+            //CVarDumper::dump($exercises, 10, true); die;
             if($exercises && is_array($exercises))
             {
                 $countRight = 0;
@@ -138,9 +141,15 @@ class UserAndExerciseGroups extends CActiveRecord
 
                 foreach($exercises as $key => $id_exercise)
                 {
+                    $attributesForLogs = array();
                     $rightAnswer = Exercises::isRightAnswer($id_exercise, $answers[$key]['answers']);
                     if($rightAnswer)
                         ++$countRight;
+                    
+                    $attributesForLogs['id_exercise'] = $id_exercise;
+                    $attrForBlockLog['duration'] += $attributesForLogs['duration'] = (int) $answers[$key]['duration'];
+                    $attributesForLogs['right'] = (int) $rightAnswer;
+                    $this->saveExerciseLog($attributesForLogs, $answers[$key]['answers']);
                     
                     foreach($this->Group->Skills as $skill)
                     {
@@ -161,19 +170,21 @@ class UserAndExerciseGroups extends CActiveRecord
                 $this->number_all = count($exercises);
 
                 $testPassed = 1;
-                $resultTest = array();
+                $resultSkills = array();
                 
                 foreach($numberAllSkills as $id_skill => $numberSkill)
                 {
                     $skill = Skills::model()->findByPk($id_skill);
-                    $resultTest[$id_skill]['achieved'] = $numberSkill ? round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN) : 0;
-                    $resultTest[$id_skill]['need']= $this->Group->percentBySkill($id_skill) * 100;
-                    $resultTest[$id_skill]['skill'] = $skill;
-                    if($resultTest[$id_skill]['need'] > $resultTest[$id_skill]['achieved'])
+                    $resultSkills[$id_skill]['achieved'] = $numberSkill ? round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN) : 0;
+                    $resultSkills[$id_skill]['need']= $this->Group->percentBySkill($id_skill) * 100;
+                    $resultSkills[$id_skill]['skill'] = $skill;
+                    if($resultSkills[$id_skill]['need'] > $resultSkills[$id_skill]['achieved'])
                     {
                         $testPassed = 0;
                     }
                 }
+                
+                $attrForBlockLog['passed'] = $result['passed'] = $testPassed;
 
                 if(!$this->passed)
                 {
@@ -181,6 +192,8 @@ class UserAndExerciseGroups extends CActiveRecord
                 }
                 
                 $this->save(false);
+                $id_log = $this->saveBlockLog($attrForBlockLog);
+                $this->saveBlockLogSkills($id_log, $resultSkills);
                 
                 foreach($numberRightAnswerSkills as $skill_id => $numberRight)
                 {
@@ -195,7 +208,6 @@ class UserAndExerciseGroups extends CActiveRecord
                         $userGroupSkills->right_answers = $numberRight;
 
                     } else {
-                        
                         if($numberAllSkills[$skill_id] && $userGroupSkills->number_all && $numberRight/$numberAllSkills[$skill_id] > $userGroupSkills->right_answers/$userGroupSkills->number_all)
                         {
                             $userGroupSkills->number_all = $numberAllSkills[$skill_id];
@@ -205,11 +217,146 @@ class UserAndExerciseGroups extends CActiveRecord
                     $userGroupSkills->save(false);
                 }
                 
-                $result['resultTest'] = $resultTest;
-                
+                $result['skills'] = $resultSkills;
+                $this->saveNotificationPassedTest($result);
                 Users::saveAchievements();
             }
             return $result;
+        }
+        
+        public function saveExerciseLog($attributes, $answer)
+        {
+            $exerciseLog = new UserExercisesLogs;
+            $exerciseLog->attributes = $attributes;
+            $exerciseLog->id_user = Yii::app()->user->id;
+            $exerciseLog->id_course = $this->UserAndLesson->id_course;
+            $exerciseLog->id_theme = $this->UserAndLesson->id_group;
+            $exerciseLog->id_lesson = $this->UserAndLesson->id_lesson;
+            $exerciseLog->id_block = $this->id_exercise_group;
+            $exerciseLog->date = date('Y-m-d');
+            $exerciseLog->time = date('H:i:s');
+            $exerciseLog->answer = serialize($answer);
+            if($exerciseLog->save())
+            {
+                $this->saveExerciseLogForParent($exerciseLog->id);
+                $this->saveExerciseLogForTeachers($exerciseLog->id);
+            }
+        }
+        
+       
+        public function saveExerciseLogForParent($id_log)
+        {
+            $parent = $this->UserAndLesson->User->parentRelation;
+            if($parent)
+            {
+                $exerciseLogTeacher = new UserExercisesLogsAndTeacher;
+                $exerciseLogTeacher->id_log = $id_log;
+                $exerciseLogTeacher->id_teacher = $parent->id_parent;
+                $exerciseLogTeacher->id_student = $parent->id_child;
+                $exerciseLogTeacher->new = 1;
+                $exerciseLogTeacher->save();
+            }
+        }
+        
+        public function saveExerciseLogForTeachers($id_log)
+        {
+            $teachers = $this->UserAndLesson->User->teachersRelations;
+            if($teachers)
+            {
+                foreach($teachers as $teacher)
+                {
+                    $exerciseLogTeacher = new UserExercisesLogsAndTeacher;
+                    $exerciseLogTeacher->id_log = $id_log;
+                    $exerciseLogTeacher->id_teacher = $teacher->id_teacher;
+                    $exerciseLogTeacher->id_student = $teacher->id_student;
+                    $exerciseLogTeacher->new = 1;
+                    $exerciseLogTeacher->save();
+                }
+            }
+        }
+        
+        public function saveBlockLogSkills($id_log, array $resultBySkills)
+        {
+            foreach($resultBySkills as $id_skill => $resultBySkill)
+            {
+                $blockLogSkill = new UserBlocksLogsSkills;
+                $blockLogSkill->id_log = $id_log;
+                $blockLogSkill->id_skill = $id_skill;
+                $blockLogSkill->achieved_percent = $resultBySkill['achieved'];
+                $blockLogSkill->need_percent = $resultBySkill['need'];
+                $blockLogSkill->save();
+            }
+        }
+        
+        public function saveBlockLog($attributes)
+        {
+            $blockLog = new UserBlocksLogs;
+            $blockLog->attributes = $attributes;
+            $blockLog->id_user = Yii::app()->user->id;
+            $blockLog->id_course = $this->UserAndLesson->id_course;
+            $blockLog->id_theme = $this->UserAndLesson->id_group;
+            $blockLog->id_lesson = $this->UserAndLesson->id_lesson;
+            $blockLog->id_block = $this->id_exercise_group;
+            $blockLog->date = date('Y-m-d');
+            $blockLog->time = date('H:i:s');
+            if($blockLog->save())
+            {
+                return $blockLog->id;
+            }
+        }
+        
+        public function saveNotificationPassedTest(array $resultTest)
+        {
+            $notification = new StudentNotifications;
+            $notification->id_user = Yii::app()->user->id;
+            $notification->id_type = $resultTest['passed'] ? 4 : 3;
+            $notification->date = date('Y-m-d');
+            $notification->time = date('H:i:s');
+            $text .= "<b>Блок: </b>".$this->Group->name.", ";
+            $text .= "<b>Урок: </b>".$this->UserAndLesson->Lesson->name.", ";
+            $text .= "<b>Курс: </b>".$this->UserAndLesson->Course->name."<br />";
+            $text .= "<b>Умения: </b><br />";
+            foreach($resultTest['skills'] as $resultSkill)
+            {
+                $text .= "<i><b>".$resultSkill['skill']->name.": </i></b>".$resultSkill['achieved']."% (".$resultSkill['need']."%)<br />";
+            }
+            $notification->text = $text;
+            if($notification->save())
+            {
+                $this->saveNotificationPassedTestForParent($notification->id);
+                $this->saveNotificationPassedTestForTeachers($notification->id);
+            }
+        }
+        
+        public function saveNotificationPassedTestForParent($id_notification)
+        {
+            $parent = $this->UserAndLesson->User->parentRelation;
+            if($parent)
+            {
+                $notificationTeacher = new StudentNotificationsAndTeacher;
+                $notificationTeacher->id_notification = $id_notification;
+                $notificationTeacher->id_teacher = $parent->id_parent;
+                $notificationTeacher->id_student = $parent->id_child;
+                $notificationTeacher->new = 1;
+                $notificationTeacher->save();
+            }
+        }
+        
+        public function saveNotificationPassedTestForTeachers($id_notification)
+        {
+            $teachers = $this->UserAndLesson->User->teachersRelations;
+            if($teachers)
+            {
+                foreach($teachers as $teacher)
+                {
+                    $notificationTeacher = new StudentNotificationsAndTeacher;
+                    $notificationTeacher->id_notification = $id_notification;
+                    $notificationTeacher->id_teacher = $teacher->id_teacher;
+                    $notificationTeacher->id_student = $teacher->id_student;
+                    $notificationTeacher->new = 1;
+                    $notificationTeacher->save();
+                }
+            }
         }
         
         public static function ExistUserAndGroup($id_user_and_lesson, $id_group)

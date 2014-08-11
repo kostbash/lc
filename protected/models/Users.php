@@ -7,14 +7,19 @@
  * @property integer $id
  * @property string $email
  * @property string $password
- * @property integer $type
+ * @property integer $role
  */
 class Users extends CActiveRecord
-{
-	/**
-	 * @return string the associated database table name
-	 */
-    
+{ 
+        private $rolesNames = array(
+            '1' => 'admin',
+            '2' => 'student',
+            '3' => 'teacher',
+            '4' => 'parent',
+        );
+        
+        public $temporary_password;
+        
         public $checkPassword;
         public $sendOnMail;
         public $rememberMe;
@@ -23,6 +28,7 @@ class Users extends CActiveRecord
             2 => 'second-place.png',
             3 => 'three-place.png',
         );
+        
     
 	public function tableName()
 	{
@@ -37,16 +43,17 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, password, checkPassword, type', 'required'),
-			array('type', 'numerical', 'integerOnly'=>true),
+			array('email, password, checkPassword, role', 'required'),
+			array('role', 'numerical', 'integerOnly'=>true),
 			array('email', 'length', 'max'=>100),
+			array('role', 'in', 'range'=>array(1,2,3,4)),
 			array('email', 'email', 'message'=>'Проверьте правильность введения адреса почты'),
-                        array('sendOnMail, rememberMe', 'boolean'),
-			array('password', 'length', 'max'=>32),
+                        array('sendOnMail, rememberMe, send_notifications', 'boolean'),
+			array('password, temporary_password', 'length', 'max'=>32),
 			array('progress_key', 'length', 'max'=>25),
                     	array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
                         array('checkPassword', 'compare', 'compareAttribute'=>'password'),
-			array('id, email, password, type', 'safe', 'on'=>'search'),
+			array('id, email, password, role', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,15 +74,16 @@ class Users extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'email' => 'Ваш e-mail',
+			'email' => 'E-mail',
 			'password' => 'Пароль',
 			'checkPassword' => 'Повторите пароль',
                         'registration_day' => 'Дата регистрации',
                         'last_activity' => 'Последняя активность',
                         'sendOnMail' => 'Отправить новый пароль на e-mail',
-			'type' => 'Type',
+			'role' => 'Роль',
                         'countPassLessons' => 'Число пройденных уроков',
                         'rememberMe' => 'Узнавать меня на этом устройстве',
+                        'send_notifications'=>'Отправлять на e-mail оповещения учеников',
 		);
 	}
 
@@ -100,7 +108,7 @@ class Users extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
-		$criteria->compare('type',2);
+		$criteria->compare('role',2);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -120,7 +128,7 @@ class Users extends CActiveRecord
         
         public static function Admins()
         {
-            $admins = Users::model()->findAllByAttributes(array('type'=>1));
+            $admins = Users::model()->findAllByAttributes(array('role'=>1));
             $mass = array();
             foreach($admins as $admin) {
                 $mass[] = $admin->email;
@@ -133,7 +141,7 @@ class Users extends CActiveRecord
             if(!Yii::app()->user->isGuest) {
                 $user = Users::model()->findByPk(Yii::app()->user->id);
                 if($user)
-                    return $user->type;
+                    return $user->role;
             }
             return false;
         }
@@ -225,5 +233,101 @@ class Users extends CActiveRecord
                 $user->wisdom = $user->hasSkills;
                 $user->save(false);
             }
+        }
+        
+        public function getRoleName()
+        {
+            if($this->rolesNames[$this->role])
+                return $this->rolesNames[$this->role];
+        }
+        
+        public function getParentRelation()
+        {
+            return ChildrenOfParent::model()->findByAttributes(array('id_child'=>$this->id, 'status'=>1));
+        }
+        
+        public function getTeachersRelations()
+        {
+            return StudentsOfTeacher::model()->findAllByAttributes(array('id_student'=>$this->id, 'status'=>1));
+        }
+        
+        public function registration($attributes)
+        {
+            $this->attributes = $attributes;
+            $this->temporary_password = substr(md5('lol'.uniqid().'azaza'), 0, 10);
+            $this->password = $this->temporary_password;
+            $this->checkPassword = $this->temporary_password;
+            $validate = $this->validate();
+            if($validate)
+            {
+                $this->password = md5(Yii::app()->params['beginSalt'].$this->password.Yii::app()->params['endSalt']);
+                $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->email.Yii::app()->params['endSalt']), 0, 25);
+                //$user->confirm_key = md5(Yii::app()->params['beginSalt'].uniqid().Yii::app()->params['endSalt']);
+                $this->registration_day = date('Y-m-d');
+                $this->save(false);
+
+                CMailer::send(
+                    array(
+                        'email' => $this->email,
+                        'name' => $this->email,
+                    ),
+                    array(
+                        'email' => 'registration@cursys.ru',
+                        'name' => 'Cursys.ru'
+                    ),
+                    Yii::app()->name,
+                    array(
+                        'template' => 'member_register',
+                        'vars' => array(
+                            'activate_link' => CHtml::link('Подтвердите профиль и перейдите к курсу', array('users/activate', 'key' => $this->confirm_key)),
+                            'temporary_password' => $this->temporary_password,
+                            'site_name'=>Yii::app()->name,
+                        ),
+                    )
+                );
+            }
+            return $validate;
+        }
+        
+        public static function Students()
+        {
+            $childs=Yii::app()->db->createCommand("SELECT DISTINCT `id_child` FROM `oed_children_of_parent`")->queryAll();
+            $students=Yii::app()->db->createCommand("SELECT DISTINCT `id_student` FROM `oed_students_of_teacher`")->queryAll();
+            $allStudents = array();
+            foreach($childs as $child)
+            {
+                $id_child = $child['id_child'];
+                if(!$allStudents[$id_child])
+                    $allStudents[$id_child] = $id_child;
+            }
+            foreach($students as $student)
+            {
+                $id_student = $student['id_student'];
+                if(!$allStudents[$id_student])
+                    $allStudents[$id_student] = $id_student;
+            }
+            
+            return $allStudents;
+        }
+        
+        public static function StudentTeachers($id_student)
+        {
+            $id_student = (int) $id_student;
+            $parents=Yii::app()->db->createCommand("SELECT DISTINCT `id_parent` FROM `oed_children_of_parent` WHERE id_child='$id_student'")->queryAll();
+            $teachers=Yii::app()->db->createCommand("SELECT DISTINCT `id_teacher` FROM `oed_students_of_teacher` WHERE id_student='$id_student'")->queryAll();
+            $allTeachers = array();
+            foreach($parents as $parent)
+            {
+                $id_parent = $parent['id_parent'];
+                if(!$allTeachers[$id_parent])
+                    $allTeachers[$id_parent] = $id_parent;
+            }
+            foreach($teachers as $teacher)
+            {
+                $id_teacher = $teacher['id_teacher'];
+                if(!$allTeachers[$id_teacher])
+                    !$allTeachers[$id_teacher] = $id_teacher;
+            }
+            return $allTeachers;
         }
 }

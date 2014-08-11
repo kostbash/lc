@@ -17,7 +17,7 @@ class GroupofexercisesController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
-				'users'=>Users::Admins(),
+				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

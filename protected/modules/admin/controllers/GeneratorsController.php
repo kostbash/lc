@@ -29,7 +29,7 @@ class GeneratorsController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('settings', 'generation', 'gethtmlvisual', 'dictionaries', 'adddictionary', 'editdictionary', 'deletedictionary'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',
                             'users'=>array('*'),

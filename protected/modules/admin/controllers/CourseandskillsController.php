@@ -29,7 +29,7 @@ class CourseandskillsController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('skillsbyajax', 'create', 'update', 'delete'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',  // deny all users
                             'users'=>array('*'),

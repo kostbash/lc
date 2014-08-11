@@ -29,8 +29,12 @@ class UsersController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('delete','index', 'massdelete', 'update'),
-                            'users'=>Users::Admins(),
+                            'actions'=>array('update'),
+                            'roles'=>array('student'),
+                    ),
+                    array('allow',
+                            'actions'=>array('delete','index', 'massdelete'),
+                            'roles'=>array('admin'),
                     ),
                     array('deny',  // deny all users
                             'users'=>array('*'),
@@ -59,12 +63,11 @@ class UsersController extends Controller
 		$model=$this->loadModel(Yii::app()->user->id);
                 // вторая модель нужна для вывода username. Так как после присвоения
                 // модели емейл присваивается, и выводится не сохраненный новый мейл
-		$user=$this->loadModel(Yii::app()->user->id);
+		$user=clone $model;
 		if(isset($_POST['Users']))
 		{
-                //print_r($_POST['Users']); die;
                      $model->attributes=$_POST['Users'];
-                     if($_POST['Users']['email'])
+                     if($_POST['Users']['email'] or isset($_POST['Users']['send_notifications']))
                          $model->checkPassword = $model->password;
                      if($model->validate())
                      {
@@ -113,7 +116,8 @@ class UsersController extends Controller
 	public function actionDelete($id)
 	{
 		$user = $this->loadModel($id);
-                if($user->type != 1)
+                // не даем удалять других админов
+                if($user->role != 1)
                     $user->delete();
 	}
 
@@ -124,7 +128,8 @@ class UsersController extends Controller
                 foreach($_POST['checked'] as $id_user) 
                 {
                     $user = Users::model()->findByPk($id_user);
-                    if($user->type != 1)
+                    // не даем удалять других админов
+                    if($user->role != 1)
                         $user->delete();
                 }
             }

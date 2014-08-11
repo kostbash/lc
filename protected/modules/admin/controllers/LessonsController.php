@@ -29,7 +29,7 @@ class LessonsController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array('index','delete','create','update', 'skillsbyajax','skillsbyidsajax', 'savechange', 'createfromcourse', 'changename', 'createincourse', 'addexercisegroup', 'changepositions'),
-				'users'=>Users::Admins(),
+				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

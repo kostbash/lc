@@ -24,7 +24,7 @@ class GeneratorstagsController extends Controller
             return array(
                     array('allow', // allow admin user to perform 'admin' and 'delete' actions
                             'actions'=>array('create','delete', 'listdatabydictionary', 'tagsofdictionary', 'createbyajax'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',  // deny all users
                             'users'=>array('*'),

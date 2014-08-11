@@ -18,7 +18,7 @@ class CoursesController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array('list','index', 'add', 'mylist', 'view', 'nextlesson'),
-				'users'=>array('@'),
+				'roles'=>array('student'),
 			),
 			array('deny',
 				'users'=>array('*'),
@@ -66,7 +66,7 @@ class CoursesController extends Controller
                     $courseUser->save();
                 }
                 
-                $index = $user->type==1 ? 0 : 1;
+                $index = $user->role==1 ? 0 : 1;
                     
                 if($lesson)
                     $userAndLesson = UserAndLessons::model()->findByPk($lesson);

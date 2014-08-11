@@ -17,6 +17,23 @@ $this->pageTitle=Yii::app()->name;
     });
 </script>
 <?php endif; ?>
+
+<script type="text/javascript">
+    $(function(){
+        $('#student').click(function(){
+            $('#role').val(2);
+        });
+        
+        $('#teacher').click(function(){
+            $('#role').val(3);
+        });
+        
+        $('#parent').click(function(){
+            $('#role').val(4);
+        });
+    });
+</script>
+
 <div id="first-page" class="clearfix">
     <div class="clearfix">
         <div id="header" class="pull-left">
@@ -50,9 +67,11 @@ $this->pageTitle=Yii::app()->name;
         <div class="col-lg-5 col-md-5">
             <div style="text-align: center; margin-top: 58px">
                 <?php $this->renderPartial('registration', array('model'=>$user)); ?>
-                <?php echo CHtml::button('Начните обучение', array('class'=>'btn btn-info btn-lg', 'data-toggle'=>"modal", 'data-target'=>"#regModel")); ?>
+                <?php echo CHtml::button('Начните обучение', array('class'=>'btn btn-info btn-lg', 'data-toggle'=>"modal", 'data-target'=>"#regModel", 'id'=>'student')); ?>
                 <div style="font-size: 20px; color: #666; margin: 13px 0;">ИЛИ</div>
                 <?php echo CHtml::link('Проверьте знания ребенка', array('lessons/check'), array('class'=>'btn btn-success btn-lg')); ?>
+                <?php echo CHtml::link('Зарегистрироваться как <b>Педагог</b>', '#', array('class'=>'btn btn-link', 'data-toggle'=>"modal", 'data-target'=>"#regModel", 'id'=>'teacher')); ?>
+                <?php echo CHtml::link('Зарегистрироваться как <b>Родитель</b>', '#', array('class'=>'btn btn-link', 'data-toggle'=>"modal", 'data-target'=>"#regModel", 'id'=>'parent')); ?>
             </div>
         </div>
     </div>

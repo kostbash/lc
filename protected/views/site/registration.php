@@ -24,6 +24,7 @@
 		<?php echo $form->error($model,'email'); ?>
             </div>
 	</div>
+        <input id="role" type="hidden" name="Users[role]" value="2" />
 	<div class="row rememberMe">
             <?php echo $form->label($model,'rememberMe'); ?>
             <?php echo $form->checkBox($model,'rememberMe'); ?>

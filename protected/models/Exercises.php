@@ -75,6 +75,7 @@ class Exercises extends CActiveRecord
                         'pageSize'=>'Кол-во выводимых заданий',
                         'id_type'=>'Тип',
                         'id_visual'=>'Визуализация',
+                        'skillsText' => 'Умения',
 		);
 	}
 
@@ -367,5 +368,20 @@ class Exercises extends CActiveRecord
                  return ExercisesListOfAnswers::model()->findAll($criteria);
             }
             return array();
+        }
+        
+        public function getSkillsText()
+        {
+            $skillsNames = array();
+            if($this->Skills)
+            {
+                foreach($this->Skills as $skill)
+                {
+                    $skillsNames[] = $skill->name;
+                }
+                return implode(', ', $skillsNames);
+            } else {
+                return 'Нет';
+            }
         }
 }

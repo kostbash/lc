@@ -1,4 +1,3 @@
-<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <script type="text/javascript">
     $(function(){
         $('[name*=answers]').change(function(){
@@ -49,6 +48,7 @@
 
         $('.for-editor-field').click(function(){
             answer = $(this);
+            setDuration(answer);
             key = answer.data('key');
             $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
             answer.addClass('selected-answer');
@@ -77,6 +77,7 @@
             items: '> .comparison',
             update: function(event, ui) {
                 current = $(this);
+                setDuration(current);
                 resultAnswer = current.closest('.exercise').find('> .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
@@ -100,6 +101,7 @@
             items: '> .comparison',
             update: function(event, ui) {
                 current = $(this);
+                setDuration(current);
                 resultAnswer = current.closest('.exercise').find('> .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
@@ -123,6 +125,7 @@
             containment: 'parent',
             update: function(event, ui) {
                 current = $(this);
+                setDuration(current);
                 resultAnswer = current.closest('.exercise').find('> .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
@@ -147,6 +150,7 @@
             {
                 answer = $(info.draggable);
                 cont = $(this);
+                setDuration(cont);
                 words = cont.closest('.text').siblings('.words');
                 existWord = cont.find('.word');
                 if(existWord.length)
@@ -192,10 +196,12 @@
         $('#skills').popover();
         
         $('input[name*=answers][type=text], select[name*=answers]').change(function(){
+            setDuration(this);
             checkInput(this);
         });
 
         $('.checkbox-answer , .radio-answer').change(function(){
+            setDuration(this);
             checkRadioCheckBox(this);
         });
     });
@@ -260,6 +266,7 @@
             <?php else : ?>
                 <?php echo $exercise->condition; ?>
             <?php endif; ?>
+            <input class="duration" type="hidden" name="Exercises[<?php echo $exercise->id; ?>][duration]" value="0" />
         </div>
     <?php endforeach; ?>
 <?php else : ?>

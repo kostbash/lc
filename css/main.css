@@ -1341,3 +1341,37 @@ z-index:10000000;
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
+.form-field {
+    margin: 10px -15px;
+}
+
+.pagination .selected a
+{
+    background: #eee;
+}
+
+.new-log
+{
+    background: #ffffcc;
+}
+
+.new-log:hover td
+{
+    background: #ffff99 !important;
+}
+
+.deal
+{
+    text-align: center;
+    margin: 10px auto;
+    background-color: #fcf8e3;
+    border-radius: 10px;
+    width: 50%;
+    padding: 14px;
+}
+
+.deal .confirmation
+{
+    margin-top: 7px;
+}

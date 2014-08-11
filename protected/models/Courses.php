@@ -43,8 +43,7 @@ class Courses extends CActiveRecord
 			array('name', 'required'),
 			array('name', 'length', 'max'=>255),
 			array('description', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+                        array('id_editor', 'numerical', 'on'=>'create'),
 			array('id, name, description', 'safe', 'on'=>'search'),
 		);
 	}
@@ -89,8 +88,11 @@ class Courses extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('description',$this->description,true);
-
+		$criteria->compare('description',$this->description, true);
+                if(!Yii::app()->user->checkAccess('admin'))
+                {
+                    $criteria->compare('id_editor', Yii::app()->user->id);
+                }
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

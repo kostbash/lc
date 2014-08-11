@@ -21,7 +21,7 @@
     <div class="container">
         <div class="navbar-header">
             <?php 
-                if(Users::UserType() == 1)
+                if(Yii::app()->user->checkAccess('editor'))
                     echo CHtml::link(Yii::app()->name, array('admin/courses/index'), array('class'=>'navbar-brand', 'id'=>'menu-logo'));
                 else
                     echo CHtml::link(Yii::app()->name, array('/courses/index','id'=>Courses::$defaultCourse), array('class'=>'navbar-brand', 'id'=>'menu-logo'));
@@ -41,10 +41,23 @@
                     $user = Users::model()->findByPk(Yii::app()->user->id);
                 }
             ?>
+            
+            <?php 
+                if(!Yii::app()->user->isGuest)
+                {
+                    $countDeal = StudentsOfTeacher::countNewTeachers()+ChildrenOfParent::countNewParents();
+                    if($countDeal)
+                    {
+                        $htmlCountDeal = "<span class='label label-danger' style='margin: 0 4px;'>$countDeal</span>";
+                    }
+                }
+            ?>
+            
             <?php $this->widget('zii.widgets.CMenu',array(
                     'items'=>array(
                             array('label'=>"Выносливость: $user->stamina дней<br>Опыт: $user->experience тестов<br>Точность: $user->accuracy%", 'itemOptions'=>array('id'=>'myprogress'), 'url'=>array('/users/progress'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>'Профиль', 'url'=>array('/users/update'), 'visible'=>!Yii::app()->user->isGuest), //Yii::app()->user->name
+                            array('label'=>'Профиль', 'url'=>array('/users/update'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>'Предложения'.$htmlCountDeal, 'url'=>array('/deals/index'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'Обратная связь', 'url'=>array('/site/contact'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'О системе', 'url'=>array('/site/page', 'view'=>'about'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'Выход', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)

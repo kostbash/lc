@@ -17,7 +17,7 @@ class ExercisesController extends Controller
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('right'),
-				'users'=>array('@'),
+				'roles'=>array('student'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

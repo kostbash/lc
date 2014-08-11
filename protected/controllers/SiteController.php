@@ -36,41 +36,10 @@ class SiteController extends Controller
             // регистрация
             if(isset($_POST['Users']))
             {
-                $user->attributes = $_POST['Users'];
-                $temporary_password = substr(md5('lol'.uniqid().'azaza'), 0, 10);
-                $user->password = $temporary_password;
-                $user->checkPassword = $temporary_password;
-                $user->type = 2;
-                if($user->validate())
+                if($user->registration($_POST['Users']))
                 {
-                    $user->password = md5(Yii::app()->params['beginSalt'].$user->password.Yii::app()->params['endSalt']);
-                    $user->progress_key = substr(md5(Yii::app()->params['beginSalt'].$user->email.Yii::app()->params['endSalt']), 0, 25);
-                    //$user->confirm_key = md5(Yii::app()->params['beginSalt'].uniqid().Yii::app()->params['endSalt']);
-                    $user->registration_day = date('Y-m-d');
-                    $user->save(false);
-
-                    CMailer::send(
-                        array(
-                            'email' => $user->email,
-                            'name' => $user->email,
-                        ),
-                        array(
-                            'email' => 'registration@cursys.ru',
-                            'name' => 'Cursys.ru'
-                        ),
-                        Yii::app()->name,
-                        array(
-                            'template' => 'member_register',
-                            'vars' => array(
-                                'activate_link' => CHtml::link('Подтвердите профиль и перейдите к курсу', array('users/activate', 'key' => $user->confirm_key)),
-                                'temporary_password' => $temporary_password,
-                                'site_name'=>Yii::app()->name,
-                            ),
-                        )
-                    );
-                    
                     $loginForm->username = $user->email;
-                    $loginForm->password = $temporary_password;
+                    $loginForm->password = $user->temporary_password;
                     $loginForm->rememberMe = $user->rememberMe;
                     $loginForm->login();
                     $this->redirect(array('courses/index','id'=>Courses::$defaultCourse));
@@ -85,9 +54,9 @@ class SiteController extends Controller
                     $loginForm->attributes=$_POST['LoginForm'];
                     if($loginForm->validate() && $loginForm->login()) {
                         $loggedUser = Users::model()->findByPk(Yii::app()->user->id);
-                        if($loggedUser->type == 2)
+                        if($loggedUser->role == 2)
                             $this->redirect(array('courses/mylist'));
-                        if($loggedUser->type == 1)
+                        if($loggedUser->role == 1)
                             $this->redirect(array('admin/courses/index'));
                     } else
                         $showLoginModal = true;

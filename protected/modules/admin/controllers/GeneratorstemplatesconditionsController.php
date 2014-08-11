@@ -29,7 +29,7 @@ class GeneratorstemplatesconditionsController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('gethtmlcondition'),
-                            'users'=>Users::Admins(),
+                            'roles'=>array('editor'),
                     ),
                     array('deny',
                             'users'=>array('*'),

@@ -34,7 +34,7 @@ class UsersController extends Controller
 			),
 			array('allow',
 				'actions'=>array('update'),
-				'users'=>array('@'),
+				'roles'=>array('student'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -47,11 +47,11 @@ class UsersController extends Controller
 		$model=$this->loadModel(Yii::app()->user->id);
                 // вторая модель нужна для вывода username. Так как после присвоения
                 // модели емейл присваивается, и выводится не сохраненный новый мейл
-		$user=$this->loadModel(Yii::app()->user->id);
+		$user=clone $model;
 		if(isset($_POST['Users']))
 		{
-                     $model->attributes=$_POST['Users'];
-                     if($_POST['Users']['email'])
+                     $model->attributes=$_POST['Users'];;
+                     if($_POST['Users']['email'] or isset($_POST['Users']['send_notifications']))
                          $model->checkPassword = $model->password;
                      if($model->validate())
                      {
@@ -90,7 +90,6 @@ class UsersController extends Controller
                          $this->redirect('/users/update');
                      }
 		}
-
 		$this->render('update',array(
 			'model'=>$model,
                         'user'=>$user,

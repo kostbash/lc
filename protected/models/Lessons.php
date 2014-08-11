@@ -192,11 +192,19 @@ class Lessons extends CActiveRecord
             $userLesson = UserAndLessons::model()->findByPk($id_user_and_lesson);
             if($userLesson)
             {
+                $access = $this->saveLessonPassed($userLesson);
                 if(!$userLesson->Course->nextLesson($userLesson->id_group, $userLesson->id_lesson))
-                    return false;
+                    $access=false;
+                
+                return $access;
+            }
+        }
+        
+        public function saveLessonPassed(UserAndLessons $userLesson)
+        {
+                $pass = true;
                 if($userLesson->Lesson->ExercisesGroups)
                 {
-                    $pass = true;
                     foreach($userLesson->Lesson->ExercisesGroups as $exerciseGroup)
                     {
                         if(!UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND id_exercise_group=:id_group AND passed=1', array('id_user_and_lesson'=>$userLesson->id, 'id_group'=>$exerciseGroup->id)))
@@ -205,27 +213,60 @@ class Lessons extends CActiveRecord
                             break;
                         }
                     }
-                    
-                    $userLesson->passed = $pass;
-                    $userLesson->save(false);
-                    return $pass;
-                    
-                } else {
-                    if(!$userLesson->passed)
-                    {
-                        $userLesson->passed = 1;
-                        $userLesson->save(false);
-                    }
-                    return true;
                 }
                 
-                if(!$userLesson->passed)
+                if($pass && !$userLesson->passed)
                 {
                     $userLesson->passed = 1;
                     $userLesson->save(false);
+                    $this->saveLessonLog($userLesson);
                 }
-                return true;
+                return $pass;
+        }
+        
+        public function saveLessonLog(UserAndLessons $userLesson)
+        {
+            $lessonLog = new UserLessonsLogs;
+            $lessonLog->id_user = Yii::app()->user->id;
+            $lessonLog->id_course = $userLesson->id_course;
+            $lessonLog->id_theme = $userLesson->id_group;
+            $lessonLog->id_lesson = $userLesson->id_lesson;
+            $lessonLog->date = date('Y-m-d');
+            $lessonLog->time = date('H:i:s');
+            $lessonLog->duration = $this->userDuration($userLesson);
+            $lessonLog->save();
+        }
+        
+        public function userDuration(UserAndLessons $userLesson)
+        {
+            $blocksLogs = array();
+            $duration = 0;
+            $criteria=new CDbCriteria;
+            $criteria->compare('id_user', Yii::app()->user->id);
+            $criteria->compare('id_course', $userLesson->id_course);
+            $criteria->compare('id_theme', $userLesson->id_group);
+            $criteria->compare('id_lesson', $userLesson->id_lesson);
+            $criteria->compare('passed', 1);
+            $blocksLogsRaw = UserBlocksLogs::model()->findAll($criteria);
+            foreach($blocksLogsRaw as $blockLogRaw)
+            {
+                if(!$blocksLogs[$blockLogRaw->id_block])
+                {
+                    $blocksLogs[$blockLogRaw->id_block] = $blockLogRaw;
+                } else {
+                    if($blockLogRaw->date > $blocksLogs[$blockLogRaw->id_block]->date && $blockLogRaw->time > $blocksLogs[$blockLogRaw->id_block]->time)
+                    {
+                        $blocksLogs[$blockLogRaw->id_block] = $blockLogRaw;
+                    }
+                }
+                
             }
+
+            foreach($blocksLogs as $blockLog)
+            {
+                $duration += $blockLog->duration;
+            }
+            return $duration;
         }
         
         public static function PercentRightTests($id_course, $id_group, $id_lesson) {

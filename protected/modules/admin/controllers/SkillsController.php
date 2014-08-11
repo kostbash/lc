@@ -28,8 +28,8 @@ class SkillsController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','delete','create','update', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
-				'users'=>Users::Admins(),
+				'actions'=>array('index','delete','create','update', 'skillsbyajax', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
+				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -126,6 +126,27 @@ class SkillsController extends Controller
                     echo $res;
                 }
             }
+	}
+        
+	public function actionSkillsByAjax()
+	{
+            $criteria = new CDbCriteria;
+            if(isset($_POST['term']))
+            {
+                $criteria->condition = '`name` LIKE :name';
+                $criteria->params['name'] = '%' . $_POST['term'] . '%';
+            }
+            
+            $criteria->limit = 10;
+            $skills = Skills::model()->findAll($criteria);
+            $res = '';
+            foreach ($skills  as $skill)
+            {
+                $res .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
+            }
+            if($res=='')
+                $res = '<li><a href="#">Результатов нет</a></li>';
+            echo $res;
 	}
 
 	public function actionUpdate()

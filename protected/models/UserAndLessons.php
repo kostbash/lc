@@ -40,6 +40,7 @@ class UserAndLessons extends CActiveRecord
                     'Course' => array(self::BELONGS_TO, 'Courses', 'id_course'),
                     'LessonGroup' => array(self::BELONGS_TO, 'GroupOfLessons', 'id_group'),
                     'Lesson' => array(self::BELONGS_TO, 'Lessons', 'id_lesson'),
+                    'User'=> array(self::BELONGS_TO, 'Users', 'id_user'),
 		);
 	}
 
@@ -105,7 +106,7 @@ class UserAndLessons extends CActiveRecord
         public function getPosition() {
             $courseGroups = CourseAndLessonGroup::model()->findAll("`id_course`=$this->id_course ORDER BY `order` ASC");
             $user = Users::model()->findByPk(Yii::app()->user->id);
-            $count = $user->type==1 ? 0 : 1;
+            $count = $user->role==1 ? 0 : 1;
             foreach($courseGroups as $courseGroup) {
                 foreach($courseGroup->GroupAndLessons as $key => $lessonGroup)
                 {

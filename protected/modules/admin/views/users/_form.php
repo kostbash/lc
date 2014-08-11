@@ -66,5 +66,25 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+<?php if(Yii::app()->user->checkAccess('teacher') or Yii::app()->user->checkAccess('parent')) : ?>
+    <h4>Управление уведомлениями</h4>
+    <?php $form3=$this->beginWidget('CActiveForm', array(
+            'id'=>'users-form3',
+            'enableAjaxValidation'=>false,
+    )); ?>
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <?php echo $form3->checkBox($model,'send_notifications', array('style'=>'vertical-align:middle; margin: 0 0 2px')); ?>
+                    <?php echo $form3->labelEx($model, 'send_notifications'); ?>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <?php echo CHtml::submitButton('Применить', array('class'=>'btn btn-primary btn-sm')); ?>
+                </div>
+            </div>
+
+    <?php $this->endWidget(); ?>
+<?php endif; ?>
 </div><!-- form -->
