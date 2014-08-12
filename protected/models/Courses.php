@@ -43,6 +43,7 @@ class Courses extends CActiveRecord
 			array('name', 'required'),
 			array('name', 'length', 'max'=>255),
 			array('description', 'safe'),
+                        array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
                         array('id_editor', 'numerical', 'on'=>'create'),
 			array('id, name, description', 'safe', 'on'=>'search'),
 		);
@@ -248,6 +249,12 @@ class Courses extends CActiveRecord
             CoursesAndUsers::model()->deleteAllByAttributes(array('id_course'=>$this->id));
             
             parent::afterDelete();
+        }
+        
+        public function changeDate()
+        {
+            $this->change_date = date('Y-m-d H:i:s');
+            $this->save(false);
         }
                  
 }

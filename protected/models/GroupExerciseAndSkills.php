@@ -97,4 +97,14 @@ class GroupExerciseAndSkills extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        protected function afterDelete() {
+            $group = GroupOfExercises::model()->findByPk($this->id_group);
+            if($group)
+            {
+                $group->change_date = date('Y-m-d H:i:s');
+                $group->save(false);
+            }
+            parent::afterDelete();
+        }
 }

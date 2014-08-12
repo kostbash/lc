@@ -31,8 +31,7 @@ class Lessons extends CActiveRecord
 			array('name', 'length', 'max'=>255),
                         array('course_creator_id', 'numerical', 'integerOnly'=>true),
 			array('description, theory', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+                        array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
 			array('id, name, description, theory', 'safe', 'on'=>'search'),
 		);
 	}
@@ -45,6 +44,7 @@ class Lessons extends CActiveRecord
 		return array(
                     //"Skills" => array(self::MANY_MANY, "Skills", 'oed_lesson_and_skills(id_lesson, id_skill)'),
                     //'LessonAndSkills' => array(self::HAS_MANY, 'LessonAndSkills', 'id_lesson'),
+                    'CourseCreator'=>array(self::BELONGS_TO, 'Courses', 'course_creator_id'),
                     "Groups" => array(self::MANY_MANY, "GroupOfLessons", 'oed_group_and_lessons(id_lesson, id_group)'),
                     "ExercisesGroups" => array(self::MANY_MANY, 'GroupOfExercises', 'oed_lesson_and_exercise_group(id_lesson, id_group_exercises)', 'order'=>'ExercisesGroups_ExercisesGroups.order ASC'),
 		);
@@ -372,5 +372,19 @@ class Lessons extends CActiveRecord
             UserAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
             
             parent::afterDelete();
+        }
+        
+        public function changeDate()
+        {
+            $this->change_date = date('Y-m-d H:i:s');
+            $this->save(false);
+        }
+        
+        protected function afterSave() {
+            if($course = $this->CourseCreator)
+            {
+                $course->changeDate();
+            }
+            parent::afterSave();
         }
 }

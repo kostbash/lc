@@ -59,6 +59,12 @@ return array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
                                 'admin/relationskills/<action:\w+>'=>'admin/relationSkills/<action>',
                                 'admin/relationskills'=>'admin/relationSkills',
+                                'admin/childrenofparent/<action:\w+>'=>'admin/childrenOfParent/<action>',
+                                'admin/childrenofparent'=>'admin/childrenOfParent',
+                                'admin/exerciseslogs/<action:\w+>'=>'admin/exercisesLogs/<action>',
+                                'admin/exerciseslogs'=>'admin/exercisesLogs',
+                                'admin/studentsofteacher/<action:\w+>'=>'admin/studentsOfTeacher/<action>',
+                                'admin/studentsofteacher'=>'admin/studentsOfTeacher',
 			),
 		),
                 'format' => array(

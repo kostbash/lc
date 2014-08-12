@@ -36,22 +36,7 @@ class ExerciseandskillsController extends Controller
 			),
 		);
 	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+        
 	public function actionCreate($id_exercise)
 	{
                 $exercise = Exercises::model()->findByPk($id_exercise);
@@ -68,83 +53,31 @@ class ExerciseandskillsController extends Controller
                     $model->id_exercise = $exercise->id;
                     $model->id_skill = $skill->id;
                     if($model->save())
-                            echo 1;
+                    {
+                        $exercise->change_date = date('Y-m-d H:i:s');
+                        $exercise->save();
+                        echo 1;
+                    }
 		}
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['ExerciseAndSkills']))
-		{
-			$model->attributes=$_POST['ExerciseAndSkills'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
 	public function actionDelete()
 	{
             if($_POST['id_exercise'] && $_POST['id_skill']) {
 		$model = ExerciseAndSkills::model()->findByAttributes(array('id_exercise'=>$_POST['id_exercise'], 'id_skill'=>$_POST['id_skill']));
-                if($model) {
+                if($model)
+                {
                     $model->delete();
-                    echo 1;
+                    if($exercise=$model->Exercise)
+                    {
+                        $exercise->change_date = date('Y-m-d H:i:s');
+                        $exercise->save();
+                        echo 1;
+                    }
                 }
             }
 	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('ExerciseAndSkills');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
-		$model=new ExerciseAndSkills('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['ExerciseAndSkills']))
-			$model->attributes=$_GET['ExerciseAndSkills'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return ExerciseAndSkills the loaded model
-	 * @throws CHttpException
-	 */
+        
 	public function loadModel($id)
 	{
 		$model=ExerciseAndSkills::model()->findByPk($id);

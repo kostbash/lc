@@ -51,6 +51,7 @@ class ExercisesController extends Controller
                 //CVarDumper::dump($_POST, 5, true); die;
                 $model->attributes = $_POST['Exercises'];
                 $model->course_creator_id = $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
+                $model->change_date = date('Y-m-d H:i:s');
                 if($model->save())
                 {
                     if($_POST['Skills']['ids'])
@@ -156,6 +157,12 @@ class ExercisesController extends Controller
                         }
                     }
                     
+                    if($groupExercise)
+                    {
+                        $groupExercise->change_date = date('Y-m-d H:i:s');
+                        $groupExercise->save(false);
+                    }
+                    
                     // добавляем задание в группу
                     if($id_part && $part)
                     {
@@ -199,6 +206,7 @@ class ExercisesController extends Controller
             {
                 //CVarDumper::dump($_POST, 7, true); die;
                 $model->attributes = $_POST['Exercises'];
+                $model->change_date = date('Y-m-d H:i:s');
                 if($model->save())
                 {
                     if($_POST['Skills']['ids'])
@@ -320,8 +328,10 @@ class ExercisesController extends Controller
                         $this->redirect(array('/admin/exercises/index'));
                     }
                 }
+                print_r($model->errors);die;
                 $this->redirect(Yii::app()->request->urlReferrer);   
             }
+            
             $this->render('update', array(
                 'model'=>$model,
             ));
@@ -358,6 +368,7 @@ class ExercisesController extends Controller
                     if(!$model)
                         die('Нет такого задания');
                     $model->attributes=$attributes;
+                    $model->change_date = date('Y-m-d H:i:s');
                     if($model->save())
                             echo 1;
                 }
@@ -490,6 +501,8 @@ class ExercisesController extends Controller
                             }
                         }
                     }
+                    $groupExercise->change_date = date('Y-m-d H:i:s');
+                    $groupExercise->save(false);
                     if($id_part)
                         $this->redirect(array('/admin/partsoftest/update', 'id'=>$id_part));
                     else
@@ -605,6 +618,7 @@ class ExercisesController extends Controller
 		if(isset($_POST['Exercises']))
 		{
 			$model->attributes=$_POST['Exercises'];
+                        $model->change_date = date('Y-m-d H:i:s');
                         if($model->save())
                         {
                             $exerciseAndGroup = new GroupAndExercises();
@@ -628,6 +642,7 @@ class ExercisesController extends Controller
 		{
 			$model->attributes=$_POST['Exercises'];
                         $model->course_creator_id = $exerciseGroup->id_course;
+                        $model->change_date = date('Y-m-d H:i:s');
                         if($model->save())
                         {
                             $exerciseAndGroup = new GroupAndExercises();
@@ -653,6 +668,7 @@ class ExercisesController extends Controller
                     die('Не существует такого задания !');
                 
                 $model->attributes = $attributes;
+                $model->change_date = date('Y-m-d H:i:s');
                 if($model->canSaveFromGroup($id_group))
                 {
                     if($model->save())
@@ -722,6 +738,9 @@ class ExercisesController extends Controller
                             $partExercise->id_exercise = $newExercise->id;
                             $partExercise->save();
                         }
+                        
+                        $group->change_date = date('Y-m-d H:i:s');
+                        $group->save(false);
 
                         echo 1;
                     } else {
@@ -789,6 +808,7 @@ class ExercisesController extends Controller
                                         $exercise->difficulty = $difficulty;
                                         $exercise->need_answer = $need_answer + 0;
                                         $exercise->course_creator_id = $id_course;
+                                        $exercise->change_date = date('Y-m-d H:i:s');
                                         $exercise->id_type = 1;
                                         $exercise->id_visual = 1;
                                         $exercise->save();

@@ -37,6 +37,7 @@ class GroupofexercisesController extends Controller
                         die('Нет такого урока');
                     $model=new GroupOfExercises;
                     $model->attributes=$_POST['GroupOfExercises'];
+                    $model->change_date = date('Y-m-d H:i:s');
                     if($model->save()) {
                         $lessonAndExerciseGroup = new LessonAndExerciseGroup();
                         $lessonAndExerciseGroup->id_group_exercises = $model->id;
@@ -126,6 +127,7 @@ class GroupofexercisesController extends Controller
                                 $skill->save();
                             }
                     }
+                    $model->change_date = date('Y-m-d H:i:s');
                     if($model->save()) {
                         $res['success'] = 1;
                     } else {
@@ -154,7 +156,8 @@ class GroupofexercisesController extends Controller
                         $model->id_course = GroupOfExercises::model()->findByAttributes(array('id'=>$id_group))->id_course;
                         $model->id_skill = $id_skill;
                         $model->save();
-                        
+                        $group->change_date = date('Y-m-d H:i:s');
+                        $group->save(false);
                         $res['success'] = 1;
                         $res['html'] = $group->htmlForCourse;
                     } else {
@@ -218,6 +221,7 @@ class GroupofexercisesController extends Controller
                 $model->name = $name;
                 $model->type = $type;
                 $model->id_course = $id_course;
+                $model->change_date = date('Y-m-d H:i:s');
                 if($model->save())
                 {
                     $courseAndGroupExercise = new CoursesAndGroupExercise;

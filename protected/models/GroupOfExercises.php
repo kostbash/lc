@@ -34,8 +34,7 @@ class GroupOfExercises extends CActiveRecord
 			array('type', 'required'),
 			array('type, id_course', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+                        array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
 			array('id, name, type', 'safe', 'on'=>'search'),
 		);
 	}
@@ -186,12 +185,25 @@ class GroupOfExercises extends CActiveRecord
                 $part->delete();
             }
             
+            foreach($this->Lessons as $lesson)
+            {
+                $lesson->changeDate();
+            }
+            
             GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$this->id));
             GroupExerciseAndSkills::model()->deleteAllByAttributes(array('id_group'=>$this->id));
             LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_group_exercises'=>$this->id));
             CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_group'=>$this->id));
             
             parent::afterDelete();
+        }
+        
+        protected function afterSave() {
+            foreach($this->Lessons as $lesson)
+            {
+                $lesson->changeDate();
+            }
+            parent::afterSave();
         }
         
         public function getIdsUsedSkills() {
@@ -211,5 +223,11 @@ class GroupOfExercises extends CActiveRecord
                 return $model->pass_percent;
             }
             return false;
+        }
+        
+        public function changeDate()
+        {
+            $this->change_date = date('Y-m-d H:i:s');
+            $this->save(false);
         }
 }

@@ -186,7 +186,7 @@
                         'name'=>'Exercise.Type.name',
                         'header'=>'Тип задания',
                     ),
-                    'linkExerciseView',
+                    'exerciseName:raw',
                     'rightText',
                     'Exercise.skillsText',
                     array(

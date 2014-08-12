@@ -150,6 +150,11 @@ class GeneratorsController extends Controller
                         }
                     }
                 }
+                if($group)
+                {
+                    $group->change_date = date('Y-m-d H:i:s');
+                    $group->save(false);
+                }
                 $this->redirect($redirect);
             }
             else

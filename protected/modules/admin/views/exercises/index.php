@@ -101,7 +101,7 @@ Yii::app()->clientScript->registerScript('exercises', "
             return false;
         });
         
-        $('.zgrid .button-column .delete').live('click', function(){
+        $('.zgrid .delete').live('click', function(){
             current = $(this);
             if(current.closest('tr').data('candelete')==1)
                 if(!confirm('Вы действительно хотите удалить данное задание ?'))

@@ -40,11 +40,14 @@ class PartsoftestController extends Controller
                 $sibling = PartsOfTest::model()->findByAttributes(array('id_group'=>$id_group, 'id'=>$_POST['id_sibling_criteria']));
                 if($current && $sibling)
                 {
-                        $var = $current->order;
-                        $current->order = $sibling->order;
-                        $sibling->order = $var;
-                        if($current->save() && $sibling->save())
-                            echo 1;
+                    $var = $current->order;
+                    $current->order = $sibling->order;
+                    $sibling->order = $var;
+                    if($current->save() && $sibling->save())
+                    {
+                        GroupOfExercises::model()->findByPk($id_group)->changeDate();
+                        echo 1;
+                    }
                 }
             }
         }
@@ -62,12 +65,14 @@ class PartsoftestController extends Controller
 	public function actionMassDeleteExercises($id_part)
 	{
             $result = array('success'=>0);
-            if($_POST['checked'] && PartsOfTest::model()->exists('id=:id', array('id'=>$id_part)))
+            $part = PartsOfTest::model()->findByPk($id_part);
+            if($_POST['checked'] && $part)
             {
                 $criteria = new CDbCriteria;
                 $criteria->addInCondition('id_exercise', $_POST['checked']);
                 $criteria->compare('id_part', $id_part);
                 PartsOfTestAndExercises::model()->deleteAll($criteria);
+                $part->Group->changeDate();
                 $result['success'] = 1;
             }
             echo CJSON::encode($result);
@@ -76,9 +81,11 @@ class PartsoftestController extends Controller
 	public function actionDeleteExercise($id_part, $id_exercise)
 	{
 		$model = PartsOfTestAndExercises::model()->findByAttributes(array('id_part'=>$id_part, 'id_exercise'=>$id_exercise));
-                if($model)
+                $part = PartsOfTest::model()->findByPk($id_part);
+                if($model && $part)
                 {
                     $model->delete();
+                    $part->Group->changeDate();
                 }
                     
 	}
@@ -95,6 +102,7 @@ class PartsoftestController extends Controller
                     $model->attributes = $attributes;
                     if($model->save())
                     {
+                        $model->Group->changeDate();
                         echo 1;
                     }
                 }

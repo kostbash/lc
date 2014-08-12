@@ -80,6 +80,7 @@ class LessonsController extends Controller
 		if(isset($_POST['Lessons']))
 		{
 			$model->attributes=$_POST['Lessons'];
+                        $model->change_date = date('Y-m-d H:i:s');
                         if($model->save())
                         {
                             $lessonAndGroup = new GroupAndLessons();
@@ -212,6 +213,7 @@ class LessonsController extends Controller
 		if(isset($_POST['Lessons']))
 		{
                     $model->attributes=$_POST['Lessons'];
+                    $model->change_date = date('Y-m-d H:i:s');
                     foreach($model->ExercisesGroups as $groupMassKey => $exerciseGroup) {
                         $exerciseGroup->attributes = $_POST['GroupOfExercises'][$groupMassKey];
                         $exerciseGroup->save();
@@ -275,7 +277,7 @@ class LessonsController extends Controller
             GroupAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
             LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
             UserAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
-            
+            $course->changeDate();
             // удаляем так, чтобы не сработал afterdelete, который удалит все группы
             if(Lessons::model()->deleteByPk($id_lesson))
                 echo 1;
@@ -395,6 +397,7 @@ class LessonsController extends Controller
                 {
                     $model=$this->loadModel($id_lesson);
                     $model->name = trim($attr['name']);
+                    $model->change_date = date('Y-m-d H:i:s');
                     $model->save(false);
                 }
             }
@@ -407,6 +410,8 @@ class LessonsController extends Controller
             {
                 $model=new Lessons;
                 $model->name = $name;
+                $model->change_date = date('Y-m-d H:i:s');
+                $model->course_creator_id = $id_course;
                 if($model->save())
                 {
                     $courseAndLesson = new CoursesAndLessons;
@@ -429,6 +434,8 @@ class LessonsController extends Controller
             
             if($id_course && $id_group && $id_lesson)
             {
+                $lesson = $this->loadModel($id_lesson);
+                $lesson->changeDate();
                 CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_course'=>$id_course, 'id_group'=>$id_group));
                 $lessonExerciseGroup = new LessonAndExerciseGroup;
                 $lessonExerciseGroup->id_group_exercises = $id_group;
@@ -447,6 +454,7 @@ class LessonsController extends Controller
             $id_course = (int) $_POST['id_course'];
             if($id_lesson)
             {
+                $lesson = $this->loadModel($id_lesson);
                 if($_POST['positions'])
                 {
                     foreach($_POST['positions'] as $key => $id_group)
@@ -477,6 +485,7 @@ class LessonsController extends Controller
                 } else {
                     LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$id_lesson));
                 }
+                $lesson->changeDate();
                 $res['success'] = 1;
             } elseif($id_course) {
                 if($_POST['positions'])

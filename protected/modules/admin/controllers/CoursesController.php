@@ -48,6 +48,7 @@ class CoursesController extends Controller
 		{
 			$model->attributes=$_POST['Courses'];
 			$model->id_editor=Yii::app()->user->id;
+                        $model->change_date = date('Y-m-d H:i:s');
 			if($model->save())
 				$this->redirect(array('update','id'=>$model->id));
 		}
@@ -80,6 +81,7 @@ class CoursesController extends Controller
 			$model->attributes=$_POST['Courses'];
 			if($model->validate() && $lessonValid)
                         {
+                            $model->change_date = date('Y-m-d H:i:s');
                             $model->save(false);
                             foreach($lessonsGroups as $lessonGroup)
                                 $lessonGroup->save(false);
@@ -120,6 +122,7 @@ class CoursesController extends Controller
         public function actionChangeOrderLessonGroup($id_course) {
             if($_POST['id_group'] && $_POST['id_sibling_group'])
             {
+                $model = $this->loadModel($id_course);
                 $current = CourseAndLessonGroup::model()->findByAttributes(array('id_course'=>$id_course, 'id_group_lesson'=>$_POST['id_group']));
                 $sibling = CourseAndLessonGroup::model()->findByAttributes(array('id_course'=>$id_course, 'id_group_lesson'=>$_POST['id_sibling_group']));
                 if($current && $sibling)
@@ -127,6 +130,7 @@ class CoursesController extends Controller
                         $var = $current->order;
                         $current->order = $sibling->order;
                         $sibling->order = $var;
+                        $model->changeDate();
                         if($current->save() && $sibling->save())
                             echo 1;
                 }
@@ -157,6 +161,7 @@ class CoursesController extends Controller
         public function actionChangePositions($id_course) {
             if($id_course && $_POST['positions'])
             {
+                $model = $this->loadModel($id_course);
                 foreach($_POST['positions'] as $key => $id_group)
                 {
                     $courseAndLessonGroup = CourseAndLessonGroup::model()->findByAttributes(array('id_course'=>$id_course, 'id_group_lesson'=>$id_group));
@@ -166,6 +171,7 @@ class CoursesController extends Controller
                         $courseAndLessonGroup->save();
                     }
                 }
+                $model->changeDate();
                 $res['success'] = 1;
             } else {
                 $res['success'] = 0;

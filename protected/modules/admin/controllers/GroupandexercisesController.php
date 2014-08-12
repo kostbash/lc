@@ -32,40 +32,6 @@ class GroupandexercisesController extends Controller
             );
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$model=new GroupAndExercises;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['GroupAndExercises']))
-		{
-			$model->attributes=$_POST['GroupAndExercises'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
-
         public function actionChangeOrderExercise($id_group)
         {
             if($_POST['id_exercise'] && $_POST['id_sibling_exercise'])
@@ -78,7 +44,15 @@ class GroupandexercisesController extends Controller
                         $current->order = $sibling->order;
                         $sibling->order = $var;
                         if($current->save() && $sibling->save())
+                        {
+                            $group = GroupOfExercises::model()->findByPk($id_group);
+                            if($group)
+                            {
+                                $group->change_date = date('Y-m-d H:i:s');
+                                $group->save(false);
+                            }
                             echo 1;
+                        }
                 }
             }
         }
@@ -100,30 +74,18 @@ class GroupandexercisesController extends Controller
             }
         }
         
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['GroupAndExercises']))
-		{
-			$model->attributes=$_POST['GroupAndExercises'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
-
 	public function actionDelete($id_group, $id_exercise)
 	{
 		$model = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$id_exercise));
-                if($model) {
+                if($model)
+                {
                     $model->delete();
+                    $group = GroupOfExercises::model()->findByPk($model->id_group);
+                    if($group)
+                    {
+                        $group->change_date = date('Y-m-d H:i:s');
+                        $group->save(false);
+                    }
                     if($userExercisesGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group)))
                     {
                         foreach($userExercisesGroups as $userExerciseGroup)
@@ -134,37 +96,7 @@ class GroupandexercisesController extends Controller
                     }
                 }
 	}
-        
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('GroupAndExercises');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
 
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
-		$model=new GroupAndExercises('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['GroupAndExercises']))
-			$model->attributes=$_GET['GroupAndExercises'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return GroupAndExercises the loaded model
-	 * @throws CHttpException
-	 */
 	public function loadModel($id)
 	{
 		$model=GroupAndExercises::model()->findByPk($id);
@@ -173,10 +105,6 @@ class GroupandexercisesController extends Controller
 		return $model;
 	}
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param GroupAndExercises $model the model to be validated
-	 */
 	protected function performAjaxValidation($model)
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='group-and-exercises-form')

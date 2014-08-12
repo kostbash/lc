@@ -74,7 +74,7 @@ class UserExercisesLogs extends CActiveRecord
                         'courseName'=>'Курс',
                         'lessonName'=>'Урок',
                         'blockName'=>'Блок',
-                        'linkExerciseView'=>'Задание и ответ',
+                        'exerciseName'=>'Задание и ответ',
 		);
 	}
 
@@ -173,21 +173,36 @@ class UserExercisesLogs extends CActiveRecord
         {
             if(!$this->Course)
                 return 'Удален';
-            return $this->Course->name;
+            $change = '';
+            if($this->Course->change_date > $this->date)
+            {
+                $change = ' Изменен';
+            }
+            return $this->Course->name.$change;
         }
         
         public function getLessonName()
         {
             if(!$this->Lesson)
                 return 'Удален';
-            return $this->Lesson->name;
+            $change = '';
+            if($this->Lesson->change_date > $this->date)
+            {
+                $change = ' Изменен';
+            }
+            return $this->Lesson->name.$change;
         }
         
         public function getBlockName()
         {
             if(!$this->Block)
                 return 'Удален';
-            return $this->Block->name;
+            $change = '';
+            if($this->Block->change_date > $this->date)
+            {
+                $change = ' Изменен';
+            }
+            return $this->Block->name.$change;
         }
         
         public function getIsNew()
@@ -220,8 +235,15 @@ class UserExercisesLogs extends CActiveRecord
         }
         
         
-        public function getLinkExerciseView()
+        public function getExerciseName()
         {
-            echo CHtml::link('Просмотреть задание', array('/admin/exerciseslogs/view', 'id'=>$this->id), array('target'=>'_blank'));
+            if(!$this->Exercise)
+                return 'Удален';
+            $change = '';
+            if($this->Exercise->change_date > $this->date)
+            {
+                $change = ' Изменен';
+            }
+            return CHtml::link('Просмотреть задание', array('/admin/exerciseslogs/view', 'id'=>$this->id), array('target'=>'_blank')).$change;
         }
 }

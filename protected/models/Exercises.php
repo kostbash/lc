@@ -38,7 +38,8 @@ class Exercises extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('condition, id_type, course_creator_id', 'required'),
+			array('condition, id_type, course_creator_id, change_date', 'required'),
+                        array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
 			array('difficulty, limit, id_type, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
 			array('id, condition, limit, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
 		);
@@ -79,18 +80,25 @@ class Exercises extends CActiveRecord
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
+        // возвращает id блоков в которых используеться задание
+        public function getIdsBlocks()
+        {
+            $queryGroups = "SELECT id_group FROM `oed_group_and_exercises` WHERE `id_exercise`=$this->id";
+            $queryParts = "SELECT p.id_group FROM `oed_parts_of_test_and_exercises` pe, `oed_parts_of_test` p  WHERE pe.id_part=p.id AND pe.id_exercise=$this->id";
+            $groups = Yii::app()->db->createCommand($queryGroups)->queryAll();
+            $parts = Yii::app()->db->createCommand($queryParts)->queryAll();
+            $result = array();
+            foreach($groups as $group)
+            {
+                $result[] = $group['id_group'];
+            }
+            foreach($parts as $part)
+            {
+                $result[] = $part['id_group'];
+            }
+            return $result;
+        }
+        
 	public function search()
 	{
             $criteria=new CDbCriteria;
@@ -383,5 +391,21 @@ class Exercises extends CActiveRecord
             } else {
                 return 'Нет';
             }
+        }
+        
+        public function afterSave() {
+            if(!$this->isNewRecord)
+            {
+                foreach($this->idsBlocks as $id_block)
+                {
+                    $block = GroupOfExercises::model()->findByPk($id_block);
+                    if($block)
+                    {
+                        $block->change_date = date('Y-m-d H:i:s');
+                        $block->save(false);
+                    }
+                }
+            }
+            parent::afterSave();
         }
 }
