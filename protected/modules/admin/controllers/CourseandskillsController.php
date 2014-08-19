@@ -40,10 +40,11 @@ class CourseandskillsController extends Controller
 	public function actionCreate()
 	{
             $id_course = (int) $_POST['id_course'];
+            $course = Courses::existCourseById($id_course);
             $id_skill = (int) $_POST['id_skill'];
             $title = isset($_POST['title']);
             $skill = Skills::model()->findByPk($id_skill);
-            if($id_course && $skill)
+            if($course && $skill)
             {
                     $countSkills = CourseAndSkills::model()->countByAttributes(array('id_course'=>$id_course));
                     $model = new CourseAndSkills;
@@ -85,19 +86,16 @@ class CourseandskillsController extends Controller
 		));
 	}
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
 	public function actionDelete($id_skill, $id_course)
 	{
-            $model = CourseAndSkills::model()->findByAttributes(array('id_skill'=>$id_skill, 'id_course'=>$id_course));
-            if($model) {
-                $model->delete();
-                $res['success'] = 1;
-            } else {
-                $res['success'] = 0;
+            $res = array('success'=>0);
+            if(Courses::existCourseById($id_course))
+            {
+                $model = CourseAndSkills::model()->findByAttributes(array('id_skill'=>$id_skill, 'id_course'=>$id_course));
+                if($model) {
+                    $model->delete();
+                    $res['success'] = 1;
+                }
             }
             echo CJSON::encode($res);
 	}
@@ -113,7 +111,7 @@ class CourseandskillsController extends Controller
             }
             if($with_used)
             {
-                $course = Courses::model()->findByPk($id_course);
+                $course = Courses::CourseById($id_course);
                 if($course)
                     $criteria->addNotInCondition('id', $course->idsUsedSkills);
             }
@@ -130,32 +128,10 @@ class CourseandskillsController extends Controller
             echo $res;
 	}
 
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
-		$model=new CourseAndSkills('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['CourseAndSkills']))
-			$model->attributes=$_GET['CourseAndSkills'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return CourseAndSkills the loaded model
-	 * @throws CHttpException
-	 */
 	public function loadModel($id)
 	{
 		$model=CourseAndSkills::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !Courses::existCourseById($model->id_course))
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}

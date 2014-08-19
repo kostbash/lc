@@ -45,6 +45,12 @@ class ExercisesController extends Controller
             } elseif($id_group) {
                 $groupExercise = GroupOfExercises::model()->findBypk($id_group);
             }
+
+            if($groupExercise)
+            {
+                if(!Courses::existCourseById($groupExercise->id_course))
+                    throw new CHttpException(404,'The requested page does not exist.');
+            }
             
             if(isset($_POST['Exercises']))
             {
@@ -202,6 +208,7 @@ class ExercisesController extends Controller
             } elseif($id_group) {
                 $groupExercise = GroupOfExercises::model()->findBypk($id_group);
             }
+            
             if(isset($_POST['Exercises']))
             {
                 //CVarDumper::dump($_POST, 7, true); die;
@@ -364,7 +371,7 @@ class ExercisesController extends Controller
             {
                 foreach ($_POST['Exercises'] as $id => $attributes)
                 {
-                    $model = Exercises::model()->findByPk($id);
+                    $model = $this->loadModel($id);
                     if(!$model)
                         die('Нет такого задания');
                     $model->attributes=$attributes;
@@ -438,9 +445,19 @@ class ExercisesController extends Controller
                     $part = PartsOfTest::model()->findByPk($id_part);
                     $groupExercise = $part->Group;
                 }
+                
+                if($groupExercise)
+                {
+                    if(!Courses::existCourseById($groupExercise->id_course))
+                        throw new CHttpException(404,'The requested page does not exist.');
+                }
+                
                 if($id_course)
+                {
+                    if(!Courses::existCourseById($id_course))
+                        throw new CHttpException(404,'The requested page does not exist.');
                     $model->course_creator_id = $id_course;
-                else
+                } else
                     $model->course_creator_id = $local && $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
                 
 		if(isset($_POST['filter'])) {
@@ -579,7 +596,7 @@ class ExercisesController extends Controller
 
             if($_POST['Exercises']['SkillsIds'])
                 $criteria->addNotInCondition('id', $_POST['Exercises']['SkillsIds']);
-            if($group && $group->Skills) {
+            if($group &&  Courses::existCourseById($group->id_course) && $group->Skills) {
                 foreach($group->Skills as $groupSkill) {
                     if($_POST['Exercises']['SkillsIds'])
                     foreach($_POST['Exercises']['SkillsIds'] as $id_used) {
@@ -612,7 +629,7 @@ class ExercisesController extends Controller
 		$model=new Exercises;
                 
                 $exerciseGroup = GroupOfExercises::model()->findByPk($id_group);
-                if(!$exerciseGroup)
+                if( !($exerciseGroup && Courses::existCourseById($exerciseGroup->id_course)) )
                     die('Такой группы уроков не сущесвует');
                 
 		if(isset($_POST['Exercises']))
@@ -636,7 +653,7 @@ class ExercisesController extends Controller
 		$model=new Exercises;
                 
                 $exerciseGroup = GroupOfExercises::model()->findByPk($id_group);
-                if(!$exerciseGroup)
+                if( !($exerciseGroup && Courses::existCourseById($exerciseGroup->id_course)) )
                     die('Такой группы уроков не сущесвует');
 		if(isset($_POST['Exercises']))
 		{
@@ -658,7 +675,7 @@ class ExercisesController extends Controller
 	public function actionSaveChange($id_group, $id_part=null)
 	{
             $group = GroupOfExercises::model()->findByPk($id_group);
-            if(!($_POST['Exercises'] && $group))
+            if(!($_POST['Exercises'] && $group && Courses::existCourseById($group->id_course)))
                 return false;
 
             foreach($_POST['Exercises'] as $id_exercise => $attributes)
@@ -755,7 +772,7 @@ class ExercisesController extends Controller
 	public function loadModel($id)
 	{
 		$model=Exercises::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !$model->canChange)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -771,6 +788,15 @@ class ExercisesController extends Controller
         
         public function actionSWFUpload($id_course, $id_part=null)
         {
+            $id_course = (int) $id_course;
+            if($id_course)
+            {
+                if(!Courses::existCourseById($id_course))
+                {
+                    echo "<script>alert('Импорт невыполнен, данный курс вам не принадлежит!');</script>";
+                    return false;
+                }
+            }
             if ($_FILES['ImportFile'])
             {
 

@@ -36,17 +36,21 @@ class PartsoftestController extends Controller
         {
             if($_POST['id_criteria'] && $_POST['id_sibling_criteria'])
             {
-                $current = PartsOfTest::model()->findByAttributes(array('id_group'=>$id_group, 'id'=>$_POST['id_criteria']));
-                $sibling = PartsOfTest::model()->findByAttributes(array('id_group'=>$id_group, 'id'=>$_POST['id_sibling_criteria']));
-                if($current && $sibling)
+                $group = GroupOfExercises::model()->findByPk($id_group);
+                if($group && Courses::existCourseById($group->id_course))
                 {
-                    $var = $current->order;
-                    $current->order = $sibling->order;
-                    $sibling->order = $var;
-                    if($current->save() && $sibling->save())
+                    $current = PartsOfTest::model()->findByAttributes(array('id_group'=>$id_group, 'id'=>$_POST['id_criteria']));
+                    $sibling = PartsOfTest::model()->findByAttributes(array('id_group'=>$id_group, 'id'=>$_POST['id_sibling_criteria']));
+                    if($current && $sibling)
                     {
-                        GroupOfExercises::model()->findByPk($id_group)->changeDate();
-                        echo 1;
+                        $var = $current->order;
+                        $current->order = $sibling->order;
+                        $sibling->order = $var;
+                        if($current->save() && $sibling->save())
+                        {
+                            GroupOfExercises::model()->findByPk($id_group)->changeDate();
+                            echo 1;
+                        }
                     }
                 }
             }
@@ -65,9 +69,9 @@ class PartsoftestController extends Controller
 	public function actionMassDeleteExercises($id_part)
 	{
             $result = array('success'=>0);
-            $part = PartsOfTest::model()->findByPk($id_part);
-            if($_POST['checked'] && $part)
+            if($_POST['checked'])
             {
+                $part = $this->loadModel($id_part);
                 $criteria = new CDbCriteria;
                 $criteria->addInCondition('id_exercise', $_POST['checked']);
                 $criteria->compare('id_part', $id_part);
@@ -80,13 +84,13 @@ class PartsoftestController extends Controller
         
 	public function actionDeleteExercise($id_part, $id_exercise)
 	{
-		$model = PartsOfTestAndExercises::model()->findByAttributes(array('id_part'=>$id_part, 'id_exercise'=>$id_exercise));
-                $part = PartsOfTest::model()->findByPk($id_part);
-                if($model && $part)
-                {
-                    $model->delete();
-                    $part->Group->changeDate();
-                }
+            $part = $this->loadModel($id_part);
+            $model = PartsOfTestAndExercises::model()->findByAttributes(array('id_part'=>$id_part, 'id_exercise'=>$id_exercise));
+            if($model)
+            {
+                $model->delete();
+                $part->Group->changeDate();
+            }
                     
 	}
         
@@ -96,7 +100,7 @@ class PartsoftestController extends Controller
             {
                 foreach($_POST['PartsOfTest'] as $id_part => $attributes)
                 {
-                    $model= PartsOfTest::model()->findByPk($id_part);
+                    $model= $this->loadModel($id_part);
                     if(!$model)
                         die('Не существует такой части !');
                     $model->attributes = $attributes;
@@ -122,7 +126,7 @@ class PartsoftestController extends Controller
 	public function loadModel($id)
 	{
 		$model=PartsOfTest::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !$model->Group or !Courses::existCourseById($model->Group->id_course))
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}

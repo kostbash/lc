@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete','create','update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
+				'actions'=>array('delete', 'update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -73,7 +73,7 @@ class GroupofexercisesController extends Controller
 	public function loadModel($id)
 	{
 		$model=GroupOfExercises::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !Courses::existCourseById($model->id_course))
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -141,7 +141,7 @@ class GroupofexercisesController extends Controller
         public function actionAddSkill() {
             $id_group = (int) $_POST['id_group'];
             $id_skill = (int) $_POST['id_skill'];
-            $group = GroupOfExercises::model()->findByPk($id_group);
+            $group = $this->loadModel($id_group);
             if($group && $id_skill)
             {
                 $model = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$id_group, 'id_skill'=>$id_skill));
@@ -188,7 +188,7 @@ class GroupofexercisesController extends Controller
         
 	public function actionSkillsByAjax($id)
 	{
-            $group = GroupOfExercises::model()->findByPk($id);
+            $group = $this->loadModel($id);
             
             $criteria = new CDbCriteria;
             if (isset($_POST['term']))// если переданы символы
@@ -215,7 +215,7 @@ class GroupofexercisesController extends Controller
 	{
             $name = trim($_POST['name']);
             $type = (int) $_POST['type'];
-            if($name && $type && Courses::model()->findByPk($id_course))
+            if($name && $type && Courses::existCourseById($id_course))
             {
                 $model=new GroupOfExercises;
                 $model->name = $name;
@@ -241,6 +241,8 @@ class GroupofexercisesController extends Controller
         
         public function actionRemoveSkillByGroup($id_group, $id_skill)
         {
+            $group = $this->loadModel($id_group);
+            
             if($gof = GroupExerciseAndSkills::model()->findByAttributes(array('id_group'=>$id_group, 'id_skill'=>$id_skill)))
             {
                 if($gof->delete()) {

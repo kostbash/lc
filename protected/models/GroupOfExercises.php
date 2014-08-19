@@ -230,4 +230,13 @@ class GroupOfExercises extends CActiveRecord
             $this->change_date = date('Y-m-d H:i:s');
             $this->save(false);
         }
+        
+        public static function getBlockWithCheckAccess($id_group)
+        {
+            $group = GroupOfExercises::model()->findByPk($id_group);
+            if($group && Courses::existCourseById($group->id_course))
+            {
+                return $group;
+            }
+        }
 }

@@ -40,7 +40,7 @@ class ExerciseandskillsController extends Controller
 	public function actionCreate($id_exercise)
 	{
                 $exercise = Exercises::model()->findByPk($id_exercise);
-                if(!$exercise)
+                if(!($exercise && $exercise->canChange))
                     die("Задания не существует");
                 if($_POST['id_skill'])
                 { 
@@ -64,6 +64,9 @@ class ExerciseandskillsController extends Controller
 	public function actionDelete()
 	{
             if($_POST['id_exercise'] && $_POST['id_skill']) {
+                $exercise = Exercises::model()->findByPk($_POST['id_exercise']);
+                if(!($exercise && $exercise->canChange))
+                    die("Задания нельзя удалить");
 		$model = ExerciseAndSkills::model()->findByAttributes(array('id_exercise'=>$_POST['id_exercise'], 'id_skill'=>$_POST['id_skill']));
                 if($model)
                 {

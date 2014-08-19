@@ -285,8 +285,12 @@ $this->widget('ZGridView', array(
             'class' => 'CButtonColumn',
             'template' => '{update}{delete}',
             'buttons' => array(
+                'update' => array(
+                    'visible' => '$data->canChange',
+                ),
                 'delete' => array(
                     'click' => 'false',
+                    'visible' => '$data->canChange',
                 ),
             ),
             'htmlOptions' => array('width' => '6%'),

@@ -40,7 +40,7 @@ class GroupoflessonsController extends Controller
 	public function actionCreate($id_course)
 	{
             $name = trim($_POST['name']);
-            if($name && Courses::model()->findByPk($id_course))
+            if($name && Courses::CourseById($id_course))
             {
                 $model=new GroupOfLessons;
                 $model->name = $name;
@@ -59,61 +59,13 @@ class GroupoflessonsController extends Controller
                 }
             }
 	}
-
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['GroupOfLessons']))
-		{
-			$model->attributes=$_POST['GroupOfLessons'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
-
-//	public function actionDelete($id_course, $id)
-//	{
-//            $model = $this->loadModel($id);
-//            foreach($model->GroupAndLessons as $groupAndLesson) {
-//                $usersLesson = UserAndLessons::model()->findAllByAttributes(array('id_group'=>$groupAndLesson->id_group, 'id_lesson'=>$groupAndLesson->id_lesson));
-//                if($usersLesson)
-//                {
-//                    foreach($usersLesson as $userLesson) {
-//                        $usersExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
-//                        if($usersExerciseGroups)
-//                        {
-//                            foreach($usersExerciseGroups as $usersExerciseGroup)
-//                            {
-//                                UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
-//                                $usersExerciseGroup->delete();
-//                            }
-//                        }
-//                        UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_user_and_lesson'=>$userLesson->id));
-//                        $userLesson->delete();
-//                    }
-//                }
-//                $groupAndLesson->delete();
-//            }
-//            $courseAndLessonGroup = CourseAndLessonGroup::model()->findByAttributes(array('id_course'=>$id_course, 'id_group_lesson'=>$id));
-//            
-//            if($model->delete() && $courseAndLessonGroup->delete())
-//                echo 1;
-//	}
         
 	public function actionDelete()
 	{
             $id = (int) $_POST['id_theme'];
             $id_course = (int) $_POST['id_course'];
             $model = $this->loadModel($id);
-            $course = Courses::model()->findByPk($id_course);
+            $course = Courses::CourseById($id_course);
             if(!$course)
                 die('Такого курса не существует');
             $themes = $course->CoursesAndLessons;
@@ -182,7 +134,8 @@ class GroupoflessonsController extends Controller
         public function actionAddLesson($id_course) {
             $id_group = (int) $_POST['id_group'];
             $id_lesson = (int) $_POST['id_lesson'];
-            if($id_course && $id_group && $id_lesson)
+            $course = Courses::existCourseById($id_course);
+            if($course && $id_group && $id_lesson)
             {
                 $lesson = Lessons::model()->findByPk($id_lesson);
                 CoursesAndLessons::model()->deleteAllByAttributes(array('id_course'=>$id_course, 'id_lesson'=>$id_lesson));
@@ -202,7 +155,8 @@ class GroupoflessonsController extends Controller
         public function actionChangePositions() {
             $id_theme = (int) $_POST['id_theme'];
             $id_course = (int) $_POST['id_course'];
-            if($id_theme)
+            $course = Courses::existCourseById($id_course);
+            if($id_theme && $course)
             {
                 if($_POST['positions'])
                 {
@@ -238,7 +192,7 @@ class GroupoflessonsController extends Controller
                     GroupAndLessons::model()->deleteAllByAttributes(array('id_group'=>$id_theme));
                 }
                 $res['success'] = 1;
-            } elseif($id_course) {
+            } elseif($course) {
                 if($_POST['positions'])
                 {
                     foreach($_POST['positions'] as $key => $id_lesson)

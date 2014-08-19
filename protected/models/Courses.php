@@ -83,20 +83,18 @@ class Courses extends CActiveRecord
 
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+            $criteria=new CDbCriteria;
 
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('description',$this->description, true);
-                if(!Yii::app()->user->checkAccess('admin'))
-                {
-                    $criteria->compare('id_editor', Yii::app()->user->id);
-                }
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
+            $criteria->compare('id',$this->id);
+            $criteria->compare('name',$this->name,true);
+            $criteria->compare('description',$this->description, true);
+            if(!Yii::app()->user->checkAccess('admin'))
+            {
+                $criteria->compare('id_editor', Yii::app()->user->id);
+            }
+            return new CActiveDataProvider($this, array(
+                    'criteria'=>$criteria,
+            ));
 	}
         
 	public function searchUserCourses()
@@ -255,6 +253,22 @@ class Courses extends CActiveRecord
         {
             $this->change_date = date('Y-m-d H:i:s');
             $this->save(false);
+        }
+        
+        public static function CourseById($id)
+        {
+            $id = (int) $id;
+            if(Yii::app()->user->checkAccess('admin'))
+                return Courses::model()->findByPk($id);
+            return Courses::model()->findByAttributes(array('id'=>$id, 'id_editor'=>Yii::app()->user->id));
+        }
+        
+        public static function existCourseById($id)
+        {
+            $id = (int) $id;
+            if(Yii::app()->user->checkAccess('admin'))
+                return Courses::model()->exists('`id`=:id', array('id'=>$id));
+            return Courses::model()->exists('`id`=:id AND id_editor=:id_editor', array('id'=>$id, 'id_editor'=>Yii::app()->user->id));
         }
                  
 }

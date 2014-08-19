@@ -468,14 +468,14 @@ Yii::app()->clientScript->registerScript('#courses', "
                 $.ajax({
                     url:'".Yii::app()->createUrl('admin/groupoflessons/changepositions')."',
                     type:'POST',
-                    data: { id_theme: $(this).closest('.theme').data('id'), id_course: $(this).closest('#lessons-course').data('idcourse'), positions: positions },
+                    data: { id_theme: $(this).closest('.theme').data('id'), id_course: $('#course').data('id'), positions: positions },
                     dataType: 'json',
                     success: function(result) {
                        if(result.success)
                        {
 
                        } else {
-
+                           
                        }
                     }
                 });
@@ -624,7 +624,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
 
 ");
 ?>
-<div class="form">
+<div class="form" id="course" data-id="<?php echo $model->id; ?>">
 
 <?php 
 $form=$this->beginWidget('CActiveForm', array(

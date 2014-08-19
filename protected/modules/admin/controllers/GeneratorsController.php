@@ -53,8 +53,11 @@ class GeneratorsController extends Controller
                 $group = $part->Group;
             }
 
-            if(!$group)
-                $this->redirect('/');
+            if($group)
+            {
+                if(!Courses::existCourseById($group->id_course))
+                    throw new CHttpException(404,'The requested page does not exist.');
+            }
 
             if($_POST['Exercises'] && $_POST['Template'])
             {

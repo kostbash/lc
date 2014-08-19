@@ -179,9 +179,20 @@ class Exercises extends CActiveRecord
         }
         
         public function getCanDelete() {
-            if($this->ExercisesGroup)
+            if(!$this->canChange or $this->ExercisesGroup)
                 return 0;
             return 1;
+        }
+        
+        public function getCanChange()
+        {
+            $res = true;
+            if(!Yii::app()->user->checkAccess('admin'))
+            {
+                if(!Courses::existCourseById($this->course_creator_id))
+                    $res = false;
+            }
+            return $res;
         }
         
         public static function isRightAnswer($id_exercise, $answers) {

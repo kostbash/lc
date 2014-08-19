@@ -24,22 +24,7 @@ class CoursesController extends Controller
 			),
 		);
 	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+        
 	public function actionCreate()
 	{
 		$model=new Courses;
@@ -58,11 +43,6 @@ class CoursesController extends Controller
 		));
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -94,11 +74,6 @@ class CoursesController extends Controller
 		));
 	}
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id);
@@ -139,10 +114,10 @@ class CoursesController extends Controller
         
 	public function loadModel($id)
 	{
-		$model=Courses::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
-		return $model;
+            $model=Courses::CourseById($id);
+            if($model===null)
+                    throw new CHttpException(404,'The requested page does not exist.');
+            return $model;
 	}
 
 	/**

@@ -34,7 +34,8 @@ class GroupandexercisesController extends Controller
 
         public function actionChangeOrderExercise($id_group)
         {
-            if($_POST['id_exercise'] && $_POST['id_sibling_exercise'])
+            $group = GroupOfExercises::getBlockWithCheckAccess($id_group);
+            if($group && $_POST['id_exercise'] && $_POST['id_sibling_exercise'])
             {
                 $current = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$_POST['id_exercise']));
                 $sibling = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$_POST['id_sibling_exercise']));
@@ -45,12 +46,7 @@ class GroupandexercisesController extends Controller
                         $sibling->order = $var;
                         if($current->save() && $sibling->save())
                         {
-                            $group = GroupOfExercises::model()->findByPk($id_group);
-                            if($group)
-                            {
-                                $group->change_date = date('Y-m-d H:i:s');
-                                $group->save(false);
-                            }
+                            $group->changeDate();
                             echo 1;
                         }
                 }
@@ -61,40 +57,41 @@ class GroupandexercisesController extends Controller
         {
             if($_POST['id_group'] && $_POST['id_sibling_group'])
             {
-                $current = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$_POST['id_group']));
-                $sibling = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$_POST['id_sibling_group']));
-                if($current && $sibling)
+                $group = GroupOfExercises::getBlockWithCheckAccess($_POST['id_group']);
+                $siblingGroup = GroupOfExercises::getBlockWithCheckAccess($_POST['id_sibling_group']);
+                if($group && $siblingGroup)
                 {
-                        $var = $current->order;
-                        $current->order = $sibling->order;
-                        $sibling->order = $var;
-                        if($current->save() && $sibling->save())
-                            echo 1;
+                    $current = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$_POST['id_group']));
+                    $sibling = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$_POST['id_sibling_group']));
+                    if($current && $sibling)
+                    {
+                            $var = $current->order;
+                            $current->order = $sibling->order;
+                            $sibling->order = $var;
+                            if($current->save() && $sibling->save())
+                                echo 1;
+                    }
                 }
             }
         }
         
 	public function actionDelete($id_group, $id_exercise)
 	{
-		$model = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$id_exercise));
-                if($model)
+            $group = GroupOfExercises::getBlockWithCheckAccess($id_group);
+            $model = GroupAndExercises::model()->findByAttributes(array('id_group'=>$id_group, 'id_exercise'=>$id_exercise));
+            if($group && $model)
+            {
+                $model->delete();
+                $group->changeDate();
+                if($userExercisesGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group)))
                 {
-                    $model->delete();
-                    $group = GroupOfExercises::model()->findByPk($model->id_group);
-                    if($group)
+                    foreach($userExercisesGroups as $userExerciseGroup)
                     {
-                        $group->change_date = date('Y-m-d H:i:s');
-                        $group->save(false);
-                    }
-                    if($userExercisesGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group)))
-                    {
-                        foreach($userExercisesGroups as $userExerciseGroup)
-                        {
-                            if($userAndExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userExerciseGroup->id, 'id_exercise'=>$id_exercise)))
-                                $userAndExercise->delete();
-                        }
+                        if($userAndExercise = UserAndExercises::model()->findByAttributes(array('id_relation'=>$userExerciseGroup->id, 'id_exercise'=>$id_exercise)))
+                            $userAndExercise->delete();
                     }
                 }
+            }
 	}
 
 	public function loadModel($id)

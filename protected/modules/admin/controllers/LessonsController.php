@@ -19,11 +19,6 @@ class LessonsController extends Controller
 		);
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
 	public function accessRules()
 	{
 		return array(
@@ -37,21 +32,6 @@ class LessonsController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
 	public function actionCreate()
 	{
 		$model=new Lessons;
@@ -95,6 +75,9 @@ class LessonsController extends Controller
         
 	public function actionSaveChange($id_course, $id_group, $id_lesson)
 	{
+                if(!Courses::existCourseById($id_course))
+                    die('Такого курса не существует');
+            
                 if(trim($_POST['nameLesson'])=='')
                     die('Введите название урока');
                 
@@ -245,7 +228,7 @@ class LessonsController extends Controller
             $id_lesson = (int) $_POST['id_lesson'];
             $id_course = (int) $_POST['id_course'];
             $model = $this->loadModel($id_lesson);
-            $course = Courses::model()->findByPk($id_course);
+            $course = Courses::CourseById($id_course);
             if(!$course)
                 die('Такого курса не существует');
             
@@ -292,7 +275,7 @@ class LessonsController extends Controller
                 
                 if($id_course && $id_group && $_POST['checked'])
                 {
-                    $course = Courses::model()->findByPk($id_course);
+                    $course = Courses::existCourseById($id_course);
                     $groupLesson = GroupOfLessons::model()->findBypk($id_group);
                     if($course && $groupLesson)
                     {
@@ -372,7 +355,7 @@ class LessonsController extends Controller
 	public function loadModel($id)
 	{
 		$model=Lessons::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !Courses::existCourseById($model->course_creator_id))
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -406,7 +389,7 @@ class LessonsController extends Controller
         public function actionCreateInCourse($id_course)
 	{
             $name = trim($_POST['name']);
-            if($name && Courses::model()->findByPk($id_course))
+            if($name && Courses::existCourseById($id_course))
             {
                 $model=new Lessons;
                 $model->name = $name;
