@@ -2,13 +2,13 @@
 return array(
     'guest' => array(
         'type' => CAuthItem::TYPE_ROLE,
-        'description' => 'Guest',
+        'description' => 'guest',
         'bizRule' => null,
         'data' => null
     ),
     'admin' => array(
         'type' => CAuthItem::TYPE_ROLE,
-        'description' => 'Admin',
+        'description' => 'admin',
         'children' => array(
             'teacher',
         ),
@@ -34,7 +34,7 @@ return array(
     ),
     'parent' => array(
         'type' => CAuthItem::TYPE_ROLE,
-        'description' => 'Parent',
+        'description' => 'parent',
         'children' => array(
             'student',
             'observer',
