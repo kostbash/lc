@@ -8,7 +8,7 @@ class m140811_172933_create_table_user_blocks_logs_skills extends CDbMigration
                 'id' => 'pk',
                 'id_log' => "int(11) NOT NULL",
                 'id_skill' => "int(11) NOT NULL",
-                'achieved_percen' => "tinyint(4) NOT NULL",
+                'achieved_percent' => "tinyint(4) NOT NULL",
                 'need_percent' => "tinyint(4) NOT NULL",
             ));
 	}
