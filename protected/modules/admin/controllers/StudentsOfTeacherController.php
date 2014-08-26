@@ -28,8 +28,8 @@ class StudentsOfTeacherController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('confirmdeal'),
-                            'roles'=>array('student'),
+                            'actions'=>array('confirmdeal', 'regectdeal'),
+                            'users'=>array('*'),
                     ),
                     array('allow',
                             'actions'=>array('index', 'view', 'delete', 'create', 'update'),
@@ -40,26 +40,59 @@ class StudentsOfTeacherController extends Controller
                     ),
             );
 	}
-
-        public function actionConfirmDeal()
+        
+        public function actionConfirmDeal($deal)
         {
-            $result = array('success'=>0);
-            $id = (int) $_POST['id'];
-            $answer = (int) $_POST['answer'];
-            if($answer && $id)
+            $model = StudentsOfTeacher::model()->findByAttributes(array('confirm'=>$deal));
+            if($model)
             {
-                $model = StudentsOfTeacher::model()->findByAttributes(array('id'=>$id, 'id_student'=>Yii::app()->user->id));
-                if($model)
+                $model->status = 1;
+                $model->confirm = NULL;
+                $model->regect = NULL;
+                if($model->save(false))
                 {
-                    $model->status = $answer;
-                    if($model->save())
-                    {
-                        $result['success'] = 1;
-                    }
+                    
                 }
             }
-            echo CJSON::encode($result);
+            $this->redirect('/');
         }
+        
+        public function actionRegectDeal($deal)
+        {
+            $model = StudentsOfTeacher::model()->findByAttributes(array('regect'=>$deal));
+            if($model)
+            {
+                $model->status = 2;
+                $model->confirm = NULL;
+                $model->regect = NULL;
+                if($model->save(false))
+                {
+                    
+                }
+            }
+            $this->redirect('/');
+        }
+
+//        Истользуеться для подтверждения с сайта, а не по эмейлу
+//        public function actionConfirmDeal()
+//        {
+//            $result = array('success'=>0);
+//            $id = (int) $_POST['id'];
+//            $answer = (int) $_POST['answer'];
+//            if($answer && $id)
+//            {
+//                $model = StudentsOfTeacher::model()->findByAttributes(array('id'=>$id, 'id_student'=>Yii::app()->user->id));
+//                if($model)
+//                {
+//                    $model->status = $answer;
+//                    if($model->save())
+//                    {
+//                        $result['success'] = 1;
+//                    }
+//                }
+//            }
+//            echo CJSON::encode($result);
+//        }
         
 	public function actionView($id)
 	{
@@ -132,7 +165,31 @@ class StudentsOfTeacherController extends Controller
                     {
                         if(!$existRecord)
                         {
+                            $model->confirm = substr(md5($user->email.$model->Teacher->email.uniqid().'podtverditika'), 0,26);
+                            $model->regect =  substr(md5($model->Teacher->email.uniqid().$user->email.'otklonitika'), 0,26);
                             $model->save(false);
+                            
+                            CMailer::send(
+                                array(
+                                    'email' => $user->email,
+                                    'name' => $user->email,
+                                ),
+                                array(
+                                    'email' => 'registration@cursys.ru',
+                                    'name' => 'Cursys.ru'
+                                ),
+                                Yii::app()->name,
+                                array(
+                                    'template' => 'deal_from_teacher',
+                                    'vars' => array(
+                                        'email_teacher'=> $model->Teacher->email,
+                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/studentsofteacher/confirmdeal', 'deal' => $model->confirm)),
+                                        'regect_link' => CHtml::link('Отклонить', array('/admin/studentsofteacher/regectdeal', 'deal' => $model->regect)),
+                                        'site_name'=>Yii::app()->name,
+                                    ),
+                                )
+                            );
+                            
                             $this->redirect(array('index'));
                         } else
                         {

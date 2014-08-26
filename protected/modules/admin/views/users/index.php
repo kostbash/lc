@@ -28,6 +28,7 @@
 		    'value' => '$data->id',
                 ),
 		'email',
+                'rusRoleName',
                 'registration_day',
                 'countPassLessons',
                 'last_activity',

@@ -44,6 +44,8 @@ class ChildrenOfParent extends CActiveRecord
                 array('child_name, child_surname', 'length', 'max'=>255),
                 array('status', 'in', 'range'=>array(0,1,2)),
                 array('id, id_parent, id_child, child_name, child_surname, status', 'safe', 'on'=>'search'),
+                array('id, id_parent, id_child, status', 'unsafe', 'on'=>'update'),
+                array('confirm, regect', 'unsafe'),
             );
 	}
 

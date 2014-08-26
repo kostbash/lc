@@ -18,6 +18,13 @@ class Users extends CActiveRecord
             '4' => 'parent',
         );
         
+        private $rolesRusNames = array(
+            '1' => 'Админ',
+            '2' => 'Студент',
+            '3' => 'Учитель',
+            '4' => 'Родитель',
+        );
+        
         public $temporary_password;
         
         public $checkPassword;
@@ -81,6 +88,7 @@ class Users extends CActiveRecord
                         'last_activity' => 'Последняя активность',
                         'sendOnMail' => 'Отправить новый пароль на e-mail',
 			'role' => 'Роль',
+			'rusRoleName' => 'Роль',
                         'countPassLessons' => 'Число пройденных уроков',
                         'rememberMe' => 'Узнавать меня на этом устройстве',
                         'send_notifications'=>'Отправлять на e-mail оповещения учеников',
@@ -329,5 +337,10 @@ class Users extends CActiveRecord
                     !$allTeachers[$id_teacher] = $id_teacher;
             }
             return $allTeachers;
+        }
+        
+        public function getRusRoleName()
+        {
+            return $this->rolesRusNames[$this->role];
         }
 }

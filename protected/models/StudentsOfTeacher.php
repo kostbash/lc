@@ -50,6 +50,7 @@ class StudentsOfTeacher extends CActiveRecord
                         array('status', 'in', 'range'=>array(0,1,2)),
 			array('id, id_teacher, id_student, student_name, student_surname, status', 'safe', 'on'=>'search'),
 			array('id, id_teacher, id_student, status', 'unsafe', 'on'=>'update'),
+			array('confirm, regect', 'unsafe'),
 		);
 	}
 
