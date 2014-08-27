@@ -153,7 +153,7 @@ class StudentsOfTeacherController extends Controller
                     $user->registration($_POST['Users']);
                 }
                 
-                $existRecord = StudentsOfTeacher::model()->exists("id_teacher=:id_teacher AND id_student=:id_student", array('id_teacher'=>Yii::app()->user->id, 'id_student'=>$user->id));
+                $existRecord = StudentsOfTeacher::model()->find("id_teacher=:id_teacher AND id_student=:id_student", array('id_teacher'=>Yii::app()->user->id, 'id_student'=>$user->id));
                 
                 $model->attributes=$_POST['StudentsOfTeacher'];
                 $model->id_student=$user->id;
@@ -193,7 +193,7 @@ class StudentsOfTeacherController extends Controller
                             $this->redirect(array('index'));
                         } else
                         {
-                            $user->addError('email', 'У вас уже есть такой ученик');
+                            $user->addError('email', "У вас уже есть ученик ($existRecord->student_name $existRecord->student_surname) c таким адресом электронной почты.");
                         }
                     } else
                     {

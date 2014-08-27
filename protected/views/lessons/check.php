@@ -1,37 +1,159 @@
 <script type="text/javascript">
     $(function(){
-        $('.exercise .answer input').focusout(function(){
-            if($(this).val()) {
-                $(this).closest('.answer').removeClass('has-error has-feedback');
-                $(this).siblings('.form-control-feedback').remove();
-            }
-            else {
-                $(this).siblings('.form-control-feedback').remove();
-                $(this).closest('.answer').addClass('has-error has-feedback').append('<span class="glyphicon glyphicon-pencil form-control-feedback"></span>');
-            }
-        });
-        $('#check input[type=submit]').click(function(){
-            can = true;
-            $('.exercise .answer input').each(function(){
-               if(!$.trim($(this).val()))
-                {
-                    can = false;
-                    $(this).closest('.answer').append('<span class="glyphicon glyphicon-pencil form-control-feedback"></span>').addClass('has-error has-feedback');
-                }
+        $('#exercises-form input[type=submit]').click(function(){
+            result = true;
+            $('input[name*=answers][type=text], input[name*=answers][type=hidden], select[name*=answers]').each(function(n, answer){
+                if(!checkInput(answer))
+                    result = false;
             });
-            if(!can) {
-                alert('Не для всех вопросов даны ответы');
+
+            $('.checkbox-answer , .radio-answer').each(function(n, answer){
+                if(!checkRadioCheckBox(answer))
+                    result = false;
+            });
+            $('.text-with-space').each(function(n, withSpace){
+                if(!checkTextWithSpaces(withSpace))
+                    result = false;
+            });
+            if(!result)
+                alert('Не для всех заданий даны ответы');
+            return result;
+        });
+
+        $('.for-editor-field').click(function(){
+            answer = $(this);
+            setDuration(answer);
+            key = answer.data('key');
+            $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
+            answer.addClass('selected-answer');
+            hidden = $('.hidden-answer[data-key='+key+']');
+            hidden.val(answer.data('val'));
+            checkInput(hidden);
+        });
+
+        $('.comparisons .list-one').sortable({
+            axis: 'y',
+            cancel: null,
+            cursor: 'move',
+            items: '> .comparison',
+            update: function(event, ui) {
+                setDuration(this);
+            }
+        });
+
+        $('.comparisons .list-two').sortable({
+            axis: 'y',
+            cancel: null,
+            cursor: 'move',
+            items: '> .comparison',
+            update: function(event, ui) {
+                setDuration(this);
+            }
+        });
+
+        $('.orderings ul').sortable({
+            cancel: null,
+            cursor: 'move',
+            items: '> .word',
+            containment: 'parent',
+            update: function(event, ui) {
+                setDuration(this);
+            }
+        });
+        $('.text-with-space .word').draggable({cursor: 'move', revert:true});
+        $('.text-with-space .answer-droppable').droppable({
+            accept:'.text-with-space .word',
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                answer = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                words = cont.closest('.text').siblings('.words');
+                existWord = cont.find('.word');
+                if(existWord.length)
+                {
+                    words.append(existWord);
+                }
+                cont.append(answer);
+            }
+        });
+            
+        $('[name*=answers]').keydown(function(e){
+            nextTab = null;
+            current = $(this);
+            if(e.keyCode==13){
+              $('[tabindex]').each(function(n, tabElement){
+                  tab = $(tabElement);
+                  if( parseInt(tab.attr('tabindex')) > current.attr('tabindex') )
+                  {
+                      if(!nextTab)
+                          nextTab = tab;
+                  }   
+              });
+              if(nextTab)
+                  nextTab.focus();
+              return false;
+            }
+        });
+        $('#skills').popover();
+        
+        $('input[name*=answers][type=text], select[name*=answers]').change(function(){
+            setDuration(this);
+            checkInput(this);
+        });
+
+        $('.checkbox-answer , .radio-answer').change(function(){
+            setDuration(this);
+            checkRadioCheckBox(this);
+        });
+    });
+    
+    function checkInput(input)
+    {
+        input = $(input);
+        if( !$.trim(input.val()) )
+        {
+            input.closest('.answer').addClass('no-selected-answer');
+            return false;
+        } else {
+            input.closest('.answer').removeClass('no-selected-answer');
+            return true;
+        }
+    }
+    
+    function checkTextWithSpaces(withSpaces)
+    {
+        withSpaces = $(withSpaces);
+        drops = withSpaces.find('.text .answer-droppable');
+        res = true;
+        drops.each(function(n, space) {
+            space = $(space);
+            if(!space.find('.word').length)
+            {
+                withSpaces.closest('.answer').addClass('no-selected-answer');
+                res = false;
                 return false;
             }
         });
-        $('.exercise .answer input').keydown(function(e){
-              if(e.keyCode==13){
-                nextTab = $('input[tabindex='+(parseInt($(this).attr('tabindex'))+1)+']');
-                nextTab.focus();
-                return false;
-              }
-         });
-    });
+        if(res)
+            withSpaces.closest('.answer').removeClass('no-selected-answer');
+        return res;
+    }
+    
+    function checkRadioCheckBox(answer)
+    {
+        answer = $(answer);
+        checked = answer.find('input:checked');
+        if( !checked.length )
+        {
+            answer.closest('.answer').addClass('no-selected-answer');
+            return false;
+        } else {
+            answer.closest('.answer').removeClass('no-selected-answer');
+            return true;
+        }
+    }
 </script>
 <div id="check">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -47,22 +169,28 @@
         <div class="login"><p>или <?php echo CHtml::link("Войдите", array('site/index', 'showlogin'=>true)); ?> если Вы уже зарегистрированы</p></div>
     </div>
 </div>
-    
+
+<?php if($exercises) : $position=0; ?>
 <div id="exercises">
-    <?php foreach($exercises as $index => $exercise) : ?>
-        <div class="exercise clearfix">
-            <h2>Вопрос <?php echo ++$number; ?></h2>
-            <div class="row">
-                <div class="question col-lg-3 col-md-3">
+    <div class="list-execises">
+        <?php foreach($exercises as $index => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; $position++; ?>
+            <div class="exercise clearfix<?php echo $classExercise; ?>">
+                <h2>Задание <?php echo ++$number; ?></h2>
+                <div class="question">
                     <?php echo $exercise->condition; ?>
                 </div>
-                <div class="answer col-lg-2 col-md-2 clearfix">
-                    <?php echo CHtml::textField("Exercises[$exercise->id][answer]", '', array('class'=>'form-control', 'placeholder'=>'Введите ответ', 'tabindex'=>$index, 'autocomplete'=>'off')); ?>
+                <div class="answer clearfix">
+                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$index, 'index'=>$index+1)); ?>
                 </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    </div>
 </div>
+<?php else : ?>
+    Нет заданий
+<?php endif; ?>
+    
+    
 <div id="bottom">
     <?php if($nextGroup) : ?>
         <?php echo CHtml::submitButton('Далее', array('class'=>'btn btn-primary'));?>

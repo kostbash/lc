@@ -163,7 +163,7 @@ class LessonsController extends Controller
         public function actionCheck($step=1)
         {
             $this->layout='//layouts/begin';
-            $course = Courses::model()->findByPk(Courses::$defaultCourse);
+            $course = Courses::model()->findByPk(17); // Courses::$defaultCourse
             $checkLesson = $course->LessonsGroups[0]->LessonsRaw[0];
             $currentGroup = $checkLesson->ExercisesGroups[$step-1];
             $nextGroup = $checkLesson->ExercisesGroups[$step] ? 1 : 0;

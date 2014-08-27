@@ -176,7 +176,7 @@ class ChildrenOfParentController extends Controller
                     {
                         if(!$existParent)
                         {
-                            $model->confirm = substr(md5($user->email.$model->Teacher->email.uniqid().'podtverditiko'), 0,26);
+                            $model->confirm = substr(md5($user->email.$model->Parent->email.uniqid().'podtverditiko'), 0,26);
                             $model->regect =  substr(md5($model->Parent->email.uniqid().$user->email.'otklonitiko'), 0,26);
                             $model->save(false);
                             
