@@ -104,9 +104,9 @@
 
 <div id='generator-page'>
     <div class="page-header clearfix">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>К блоку', array('/admin/groupofexercises/update', 'id'=>$group->id), array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:left; width: 12%;')); ?>
+        <?php if($group) echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>К блоку', array('/admin/groupofexercises/update', 'id'=>$group->id), array('class'=>'btn btn-success btn-icon btn-sm', 'style'=>'float:left; width: 12%;')); ?>
         <h2 style="width: 73%; margin: 0 1%; border-bottom: none; text-align: center">Генератор <?php echo $generator->name; ?></h2>
-        <?php echo CHtml::link('Запустить<i class="glyphicon glyphicon-play"></i>', '#', array('id'=>'generate', 'class'=>'btn btn-success btn-icon-right btn-sm', 'style'=>'float:left; width: 12%;')); ?>
+        <?php echo CHtml::link('Запустить<i class="glyphicon glyphicon-play"></i>', '#', array('id'=>'generate', 'class'=>'btn btn-success btn-icon-right btn-sm', 'style'=>'float:right; width: 12%;')); ?>
     </div>
 
     <div class="section" id='setting'>

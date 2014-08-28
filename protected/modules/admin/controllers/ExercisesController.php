@@ -454,7 +454,7 @@ class ExercisesController extends Controller
                 
                 if($id_course)
                 {
-                    if(!Courses::existCourseById($id_course))
+                    if(!$course = Courses::CourseById($id_course))
                         throw new CHttpException(404,'The requested page does not exist.');
                     $model->course_creator_id = $id_course;
                 } else

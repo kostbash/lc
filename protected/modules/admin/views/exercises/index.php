@@ -321,7 +321,7 @@ Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
 $this->endWidget();
 ?>
 
-<div id="dropdown-types_of_exercises" style="width: 136px;">
+<div id="dropdown-types_of_exercises" style="/* width: 136px; */">
     <div class="input-group-btn">
         <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
         <ul class="dropdown-menu" role="menu">
@@ -335,6 +335,14 @@ $this->endWidget();
                     </li>
                 <?php endforeach; ?>
             <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<div id="dropdown-generators" style="margin-left: 20px;">
+    <div class="input-group-btn">
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <ul class="dropdown-menu" role="menu">
+            <?php echo Generators::ListGenerators($course->id, 'course'); ?>
         </ul>
     </div>
 </div>

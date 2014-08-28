@@ -42,22 +42,26 @@ class GeneratorsController extends Controller
             $generator=$this->loadModel($id);
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
+            $id_course = (int) $_GET['id_course'];
 
             if($id_group)
             {
                 $group = GroupOfExercises::model()->findByPk($id_group);
+                $id_course = $group->id_course;
             }
             elseif($id_part)
             {
                 $part = PartsOfTest::model()->findByPk($id_part);
                 $group = $part->Group;
+                $id_course = $group->id_course;
             }
 
-            if($group)
+            if($id_course)
             {
-                if(!Courses::existCourseById($group->id_course))
+                if(!Courses::existCourseById($id_course))
                     throw new CHttpException(404,'The requested page does not exist.');
             }
+            
 
             if($_POST['Exercises'] && $_POST['Template'])
             {
@@ -79,6 +83,12 @@ class GeneratorsController extends Controller
                     }
                     $partExercises = new PartsOfTestAndExercises;
                     $redirect = array('/admin/partsoftest/update', 'id'=>$part->id);
+                } elseif($id_course)
+                {
+                    $redirect = array('/admin/exercises/index', 'id_course'=>$id_course);
+                } else
+                {
+                    $redirect = array('/admin/exercises/index');
                 }
 
                 $exerciseSkills = new ExerciseAndSkills; // нужен для поиска, поэтому тут
@@ -88,7 +98,8 @@ class GeneratorsController extends Controller
                     $exercise->attributes = $attributes;
                     $exercise->id_type = $_POST['Template']['id_type'];
                     $exercise->id_visual = $_POST['Template']['id_visual'];
-                    $exercise->course_creator_id = $group->id_course;
+                    $exercise->change_date = date('Y-m-d H:i:s');
+                    $exercise->course_creator_id = $id_course;
                     if($exercise->save())
                     {
                         if($attributes['SkillsIds'])
@@ -142,7 +153,7 @@ class GeneratorsController extends Controller
                             $partExercises->id = false;
                             $partExercises->isNewRecord = true;
                         }
-                        else // если части нет. Значит добавляем в группу
+                        elseif($group) // если части нет. Значит добавляем в группу
                         { 
                             $groupExercises->id_group = $id_group;
                             $groupExercises->id_exercise = $exercise->id;
@@ -184,6 +195,7 @@ class GeneratorsController extends Controller
 		$generator=$this->loadModel($id);
                 $id_group = (int) $_GET['id_group'];
                 $id_part = (int) $_GET['id_part'];
+                $id_course = (int) $_GET['id_course'];
                 
                 $words = new GeneratorsWords('search');
                 $words->unsetAttributes();
@@ -192,17 +204,30 @@ class GeneratorsController extends Controller
                 if($id_group)
                 {
                     $group = GroupOfExercises::model()->findByPk($id_group);
+                    if($group)
+                    {
+                        $redirect = array('/admin/generators/generation', 'id'=>$id, 'id_group'=>$id_group);
+                    } else {
+                        $this->redirect('/');
+                    }
                 }
                 elseif($id_part)
                 {
                     $part = PartsOfTest::model()->findByPk($id_part);
-                    $group = $part->Group;
+                    if($part)
+                    {
+                        $group = $part->Group;
+                        $redirect = array('/admin/generators/generation', 'id'=>$id, 'id_part'=>$id_part);
+                    } else {
+                        $this->redirect('/');
+                    }
+                }elseif($id_course)
+                {
+                    $redirect = array('/admin/generators/generation', 'id'=>$id, 'id_course'=>$id_course);
+                } else
+                {
+                    $redirect = array('/admin/generators/generation', 'id'=>$id);
                 }
-                
-                $redirect = isset($part) ? array('/admin/generators/generation', 'id'=>$id, 'id_part'=>$id_part) : array('/admin/generators/generation', 'id'=>$id, 'id_group'=>$id_group);
-                
-                if(!$group)
-                    $this->redirect('/');
                 
 		if(isset($_POST['GeneratorsTemplates']))
 		{

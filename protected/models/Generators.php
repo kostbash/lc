@@ -201,14 +201,21 @@ class Generators extends CActiveRecord
             }
         }
         
-        static function ListGenerators($id, $type='group') {
+        static function ListGenerators($id=0, $type='group') {
             $gens = Generators::model()->findAll();
             $list = '';
+            $id = (int) $id;
+            $params = array('/admin/generators/settings');
+            if($id)
+            {
+                $params["id_$type"] = $id;
+            }
             if($gens)
             {
                 foreach($gens as $gen)
                 {
-                    $list .= "<li data-id='$gen->id'>". CHtml::link($gen->name, array('/admin/generators/settings', 'id'=>$gen->id, "id_$type"=>$id)) ."</li>";
+                    $params['id'] = $gen->id;
+                    $list .= "<li data-id='$gen->id'>". CHtml::link($gen->name, $params) ."</li>";
                 }
             } else {
                 $list .= "<li><a href='javascript:void(0)'>Нет генераторов</a></li>";
