@@ -163,7 +163,7 @@ class LessonsController extends Controller
         public function actionCheck($step=1)
         {
             $this->layout='//layouts/begin';
-            $course = Courses::model()->findByPk(17); // Courses::$defaultCourse
+            $course = Courses::model()->findByPk(Courses::$defaultCourse);
             $checkLesson = $course->LessonsGroups[0]->LessonsRaw[0];
             $currentGroup = $checkLesson->ExercisesGroups[$step-1];
             $nextGroup = $checkLesson->ExercisesGroups[$step] ? 1 : 0;
@@ -202,6 +202,7 @@ class LessonsController extends Controller
                     'id_lesson' => $checkLesson->id,
                     'id_exercise_group' => $currentGroup->id,
                 ));
+
                 foreach($_POST['Exercises'] as $id_exercise => $exercise)
                 {
                     $answersLog = new AnswersLog;
@@ -212,7 +213,7 @@ class LessonsController extends Controller
                     $answersLog->id_exercise_group = $currentGroup->id;
                     $answersLog->id_exercise = $id_exercise;
                     $answersLog->date = date('Y-m-d');
-                    $answersLog->answer = $exercise['answer'];
+                    $answersLog->answer = serialize($exercise['answers']);
                     $answersLog->save();
                 }
                 if($nextGroup)
@@ -223,7 +224,7 @@ class LessonsController extends Controller
                     $rightAnswers = 0;
                     foreach($userAnswers as $userAnswer)
                     {
-                        if(Exercises::isRightAnswer($userAnswer->id_exercise, $userAnswer->answer))
+                        if(Exercises::isRightAnswer($userAnswer->id_exercise, unserialize($userAnswer->answer)))
                             $rightAnswers++;
                     }
                     

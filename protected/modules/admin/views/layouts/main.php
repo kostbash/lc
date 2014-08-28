@@ -41,9 +41,10 @@
             ?>
             <?php $this->widget('zii.widgets.CMenu',array(
                     'items'=>array(
-                            array('label'=>Yii::app()->user->name, 'url'=>array('/admin/users/update'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::app()->user->name." (".Users::$rolesRusNames[Users::UserType()].")", 'url'=>array('/admin/users/update'), 'visible'=>!Yii::app()->user->isGuest, 'type'=>'raw'),
                             array('label'=>'Выход', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
                     ),
+                    'encodeLabel'=>false,
                     'htmlOptions'=>array('class'=>'nav navbar-nav navbar-right'),
             )); ?>
         </div>

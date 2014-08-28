@@ -11,14 +11,14 @@
  */
 class Users extends CActiveRecord
 { 
-        private $rolesNames = array(
+        public static $rolesNames = array(
             '1' => 'admin',
             '2' => 'student',
             '3' => 'teacher',
             '4' => 'parent',
         );
         
-        private $rolesRusNames = array(
+        public static $rolesRusNames = array(
             '1' => 'Админ',
             '2' => 'Студент',
             '3' => 'Учитель',
@@ -245,8 +245,8 @@ class Users extends CActiveRecord
         
         public function getRoleName()
         {
-            if($this->rolesNames[$this->role])
-                return $this->rolesNames[$this->role];
+            if(self::$rolesNames[$this->role])
+                return self::$rolesNames[$this->role];
         }
         
         public function getParentRelation()
@@ -341,6 +341,6 @@ class Users extends CActiveRecord
         
         public function getRusRoleName()
         {
-            return $this->rolesRusNames[$this->role];
+            return self::$rolesRusNames[$this->role];
         }
 }

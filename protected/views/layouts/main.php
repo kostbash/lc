@@ -56,10 +56,10 @@
             <?php $this->widget('zii.widgets.CMenu',array(
                     'items'=>array(
                             array('label'=>"Выносливость: $user->stamina дней<br>Опыт: $user->experience тестов<br>Точность: $user->accuracy%", 'itemOptions'=>array('id'=>'myprogress'), 'url'=>array('/users/progress'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>'Профиль', 'url'=>array('/users/update'), 'visible'=>!Yii::app()->user->isGuest),
                             //array('label'=>'Предложения'.$htmlCountDeal, 'url'=>array('/deals/index'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'Обратная связь', 'url'=>array('/site/contact'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'О системе', 'url'=>array('/site/page', 'view'=>'about'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::app()->user->name." (".Users::$rolesRusNames[Users::UserType()].")", 'url'=>array('/users/update'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>'Выход', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
                     ),
                     'encodeLabel'=>false,

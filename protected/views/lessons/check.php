@@ -1,3 +1,4 @@
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <script type="text/javascript">
     $(function(){
         $('#exercises-form input[type=submit]').click(function(){
@@ -22,7 +23,6 @@
 
         $('.for-editor-field').click(function(){
             answer = $(this);
-            setDuration(answer);
             key = answer.data('key');
             $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
             answer.addClass('selected-answer');
@@ -35,30 +35,21 @@
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
-            update: function(event, ui) {
-                setDuration(this);
-            }
+            items: '> .comparison'
         });
 
         $('.comparisons .list-two').sortable({
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
-            update: function(event, ui) {
-                setDuration(this);
-            }
+            items: '> .comparison'
         });
 
         $('.orderings ul').sortable({
             cancel: null,
             cursor: 'move',
             items: '> .word',
-            containment: 'parent',
-            update: function(event, ui) {
-                setDuration(this);
-            }
+            containment: 'parent'
         });
         $('.text-with-space .word').draggable({cursor: 'move', revert:true});
         $('.text-with-space .answer-droppable').droppable({
@@ -68,7 +59,6 @@
             {
                 answer = $(info.draggable);
                 cont = $(this);
-                setDuration(cont);
                 words = cont.closest('.text').siblings('.words');
                 existWord = cont.find('.word');
                 if(existWord.length)
@@ -98,13 +88,11 @@
         });
         $('#skills').popover();
         
-        $('input[name*=answers][type=text], select[name*=answers]').change(function(){
-            setDuration(this);
+        $('input[name*=answers][type=text], select[name*=answer]').change(function(){
             checkInput(this);
         });
 
         $('.checkbox-answer , .radio-answer').change(function(){
-            setDuration(this);
             checkRadioCheckBox(this);
         });
     });
@@ -157,7 +145,8 @@
 </script>
 <div id="check">
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'method'=>'POST',
+    'id'=>'exercises-form',
+    'enableAjaxValidation'=>false,
 )); ?>
 <div class="row">
     <div class="head col-lg-8 col-md-8">
@@ -180,7 +169,7 @@
                     <?php echo $exercise->condition; ?>
                 </div>
                 <div class="answer clearfix">
-                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$index, 'index'=>$index+1)); ?>
+                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$index+1)); ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -188,6 +177,7 @@
 </div>
 <?php else : ?>
     Нет заданий
+    <input type="hidden" name="Exercises" />
 <?php endif; ?>
     
     
