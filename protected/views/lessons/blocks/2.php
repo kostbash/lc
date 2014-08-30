@@ -163,7 +163,7 @@
             <h2><?php echo "Задание $position:"; ?></h2>
             <div class="question"><?php echo "$exercise->condition"; ?></div>
             <div class="answer clearfix">
-                <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key+1)); ?>
+                <?php if($exercise->id_visual) $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key+1)); ?>
             </div>
             <input class="duration" type="hidden" name="Exercises[<?php echo $key; ?>][duration]" value="0" />
         </div>

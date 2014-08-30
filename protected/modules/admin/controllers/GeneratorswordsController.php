@@ -96,6 +96,7 @@ class GeneratorswordsController extends Controller
                     $model = GeneratorsWords::model()->findByPk($id_word);
                     if($model)
                     {
+                        $model->remote = 1;
                         $model->attributes=$attributes;
                         if($model->save())
                         {
@@ -130,6 +131,7 @@ class GeneratorswordsController extends Controller
                                 GeneratorsWordsTags::model()->deleteAllByAttributes(array('id_word'=>$id_word));
                             }
                            $result['success'] = 1;
+                           $result['image'] = $model->imageWithUpload;
                         } else {
                             $result['errors'] = print_r($model->errors, true);
                         }
@@ -238,18 +240,29 @@ class GeneratorswordsController extends Controller
         {
             if ($_FILES['ImportFile'])
             {
-
-                if ($file = CUploadedFile::getInstanceByName("ImportFile"))
-                { 
+                $word = GeneratorsWords::model()->findByPk($id_word);
+                $file = CUploadedFile::getInstanceByName("ImportFile");
+                if($word && $file)
+                {
                     $fname = substr(md5($file->name.time()),0,10);
-                    $file->saveAs(Yii::app()->params['WordsImagesPath']."/".$fname.'.'.$file->extensionName);
-                    if($word = GeneratorsWords::model()->findByPk($id_word))
+                    if(GeneratorsWords::accessFormatImage($file->extensionName))
                     {
-                        $word->image = $fname.'.'.$file->extensionName;
-                        $word->save(false);
-                        
-                        echo $this->processOutput($word->imageLinkWithUpload);
+                        $saveImage = $file->saveAs(Yii::app()->params['WordsImagesPath']."/".$fname.'.'.$file->extensionName);
                     }
+                        
+                    $word->image = $fname.'.'.$file->extensionName;
+                    $word->remote = 0;
+                    if($word->validate() && $saveImage)
+                    {
+                        $word->save(false);
+                    }
+                    else
+                    {
+                        $errors = $word->errors;
+                        echo '<div class="errorMessage">'.$errors['image'][0].'</div>';
+                        $word->image = null;
+                    }
+                    echo $this->processOutput($word->imageWithUpload);
                 }
             }
         }
@@ -260,7 +273,7 @@ class GeneratorswordsController extends Controller
             {
                 $word->image = null;
                 $word->save(false);
-                echo $word->imageLinkWithUpload;
+                echo $word->imageWithUpload;
             }
         }
 }

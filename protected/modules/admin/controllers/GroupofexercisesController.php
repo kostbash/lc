@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete', 'update', 'updatebyajax', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
+				'actions'=>array('delete', 'update', 'updatebyajax', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -24,6 +24,19 @@ class GroupofexercisesController extends Controller
 			),
 		);
 	}
+        
+        public function actionView($id)
+        {
+            $block = $this->loadModel($id);
+            if($block->type==2)
+            {
+                $exercisesTest = $block->ExercisesTest;
+            }
+            $this->render('view', array(
+                'block'=>$block,
+                'exercisesTest' => $exercisesTest,
+            ));
+        }
 
 	public function actionCreate($id_lesson)
 	{

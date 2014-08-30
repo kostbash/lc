@@ -260,7 +260,7 @@
             <?php if($exercise->id_type!==4) : ++$posTest; ?>
                 <div class="question"><?php echo "$exercise->condition"; ?></div>
                 <div class="answer clearfix">
-                    <?php if($exercise->id_visual) $this->renderPartial("/exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$i)); ?>
+                    <?php if($exercise->id_visual) $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$i)); ?>
                 </div>
                 <div class="result"></div>
             <?php else : ?>
@@ -274,6 +274,9 @@
 <?php endif; ?>
 <div class='control-buttons'>
     <?php
-        echo $userAndExerciseGroup->getNextButton(++$i);
+        if($userAndExerciseGroup)
+        {
+            echo $userAndExerciseGroup->getNextButton(++$i);
+        }
     ?>
 </div>

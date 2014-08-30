@@ -193,7 +193,7 @@
                     'htmlOptions' => array('width' => '20%'),
                 ),
                 array(
-                    'name'=>'imageLink',
+                    'name'=>'imageWithoutUpload',
                     'type'=>'raw',
                     'htmlOptions' => array('width' => '10%'),
                 ),

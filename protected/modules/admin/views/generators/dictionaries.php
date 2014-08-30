@@ -242,7 +242,7 @@
         });
         
             
-        $('#words-grid tbody tr textarea, input[type=text]:not([name=term]), input[type=file], select').live('change', function(){
+        $('#words-grid tbody tr textarea, input[type=text]:not([name=term]), select').live('change', function(){
             $(this).closest('tr').find('.save-row').show();
         });
         
@@ -265,6 +265,7 @@
                 success: function(result) { 
                     if(result.success) {
                         current.hide();
+                        current.closest('tr').find('.word-image-container').closest('td').html(result.image);
                     } else {
                         alert(result.errors);
                     }
@@ -332,6 +333,29 @@
             return false;
         });
         
+        $('#replace-mass-tags').click(function(){
+            checked = $('input[type=checkbox][name="checked[]"]:checked');
+            tags = $('#selected-mass-tags .skill');
+            if(checked.length && tags.length)
+            {
+                checked.each(function(n, check)
+                {
+                    check = $(check);
+                    tagsContainer = check.closest('tr').find('.skills');
+                    tagsContainer.html('');
+                    tags.each(function(k, tag)
+                    {
+                        tag = $(tag);
+                        tag_id = tag.data('id');
+                        tag_name = tag.find('.name').html();
+                        tagsContainer.append(getTags(tag_id, tag_name, check.val()));
+                        check.closest('tr').find('.save-row').show();
+                    });
+                });
+            }
+            return false;
+        });
+        
         $('#add-selected-words').click(function(){
             checked = $('input[type=checkbox][name="checked[]"]:checked');
             if(checked.length)
@@ -339,6 +363,30 @@
                 $("#paramsSearch").submit();
             } else {
                 alert('Не отмечено ни одно слово для добавления');
+            }
+            return false;
+        });
+        
+        $('.import-button').live('click', function(){
+            current = $(this);
+            uploadcont = current.siblings('.upload-container');
+            current.hide();
+            SWFUpload(uploadcont);
+            uploadcont.show();
+            return false;
+        });
+        
+        $('.word-image-container .remove-image').live('click', function(){
+            current = $(this);
+            if(confirm('Вы уверены, что хотите удалить картинку ?'))
+            {
+                $.ajax({
+                    url: current.attr('href'),
+                    type:'POST',
+                    success: function(result) { 
+                        current.closest('.word-image-container').html(result);
+                    }
+                });
             }
             return false;
         });
@@ -372,6 +420,29 @@
              });
         }
         return false;
+    }
+    
+    function SWFUpload(container)
+    {
+        input = container.find('.upload-image');
+        id_word = container.closest('tr').data('id');
+        up = new uploader(input.get(0), {
+            prefix:'ImportFile',
+            url:'<?php echo Yii::app()->createUrl("/admin/generatorswords/SWFUpload/id_word/") ?>/'+id_word,
+            autoUpload:true,
+            error: function(ev){
+                console.log('error');
+                remove_veil();
+                $('#import-button'+id).show();
+                input.hide();
+            },
+            success: function(data){
+                wordImageCont = container.closest('.word-image-container');
+                wordImageCont.siblings().remove();
+                wordImageCont.replaceWith(data);
+                remove_veil();
+            }
+        });
     }
 </script>
 
@@ -447,7 +518,7 @@
             <div class="col-lg-3 col-md-3"  style="text-align: right;">
                   <?php echo CHtml::dropDownList('Words[idsTags]', '', array(), array('empty'=>'Показать все теги', 'class'=>'form-control input-sm', 'id'=>'wordsTags')); ?>
             </div>
-            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3"  style="text-align: right;">
+            <div class="col-lg-2 col-md-2"  style="text-align: right;">
                 <div class="skills-mini">
                     <div class="skills" id="selected-mass-tags"></div>
                     <div class="input-group mydrop">
@@ -459,8 +530,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-2"  style="text-align: right;">
+            <div class="col-lg-2 col-md-2"  style="text-align: left;">
                 <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить отмеченным', '#', array('class'=>'btn btn-success btn-icon btn-sm', 'id'=>'add-mass-tags')); ?>
+            </div>
+            <div class="col-lg-2 col-md-2"  style="text-align: right;">
+                <?php echo CHtml::link('<i class="glyphicon glyphicon-refresh"></i>Заменить отмеченным', '#', array('class'=>'btn btn-primary btn-icon btn-sm', 'id'=>'replace-mass-tags')); ?>
             </div>
         </div>
         <input type="hidden" name="checked" />
@@ -469,7 +543,6 @@
             'id' => 'words-grid',
             'selectableRows' => null,
             'ajaxType'=>'POST',
-            'afterAjaxUpdate'=>'function() {updateSWFUpload()}',
             'enableSorting' => false,
             'rowHtmlOptionsExpression' => 'array("data-id"=>"$data->id")',
             'dataProvider' => $words->search(),
@@ -484,29 +557,29 @@
                 array(
                     'name' => 'word',
                     'type' => 'textField',
-                    'htmlOptions' => array('width' => '20%'),
+                    'htmlOptions' => array('width' => '19%'),
                 ),
 
                 array(
                     'name' => 'translate',
                     'type' => 'textArea',
-                    'htmlOptions' => array('width' => '20%'),
+                    'htmlOptions' => array('width' => '19%'),
                 ),
                 array(
                     'name'=>'description',
                     'type' => 'forEditor',
-                    'htmlOptions' => array('width' => '20%'),
+                    'htmlOptions' => array('width' => '18%'),
                 ),
                 array(
                     'name' => 'Tags',
                     'header' => 'Теги',
                     'type' => 'tags',
-                    'htmlOptions' => array('width' => '20%'),
+                    'htmlOptions' => array('width' => '18%'),
                 ),
                 array(
-                    'name'=>'imageLinkWithUpload',
+                    'name'=>'imageWithUpload',
                     'type'=>'raw',
-                    'htmlOptions' => array('width' => '10%'),
+                    'htmlOptions' => array('width' => '16%'),
                 ),
                 array(
                     'class' => 'CButtonColumn',
@@ -562,39 +635,4 @@
         </div>
     </div>
 </div>
-<?php // Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
-//                        function uploadHandle()
-//                        {
-//                            var f = $(".upload-image"),
-//			    up = new uploader(f.get(0), {
-//				prefix:"ImportFile",
-//				url:"' . Yii::app()->createUrl("/admin/exercises/SWFUpload", array('id_course'=>$id_course)) . '",
-//				autoUpload:true,
-//				error:function(ev){ console.log("error"); remove_veil(); $("#import-button").show();$("#import-input").hide();},
-//				success:function(data){$(document.body).after(data);remove_veil();$("#import-button").show();$("#import-input").hide();}
-//			    });
-//                             
-//                        }
-//			$(function(){
-//                            	uploadHandle();
-//			});
-//		    ');
-$this->endWidget(); ?>
-<script>
-    function updateSWFUpload()
-    {
-        $('[class^="upload-image"]').each(function(i,e){
-            var id = $(e).data('id'); 
-            var f = $('.upload-image'+id),
-                up = new uploader(f.get(0), {
-                    prefix:'ImportFile',
-                    url:'<?php echo Yii::app()->createUrl("/admin/generatorswords/SWFUpload/id_word/") ?>/'+id,
-                    autoUpload:true,
-                    error:function(ev){console.log('error'); remove_veil(); $('#import-button'+id).show();$('#import-input'+id).hide();},
-                    success:function(data){$('.word-image-container'+id).html(data);remove_veil();}
-                });
-        });
-        
-    }
-    updateSWFUpload();
-</script>
+<?php $this->endWidget(); ?>

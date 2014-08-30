@@ -1375,3 +1375,30 @@ z-index:10000000;
 {
     margin-top: 7px;
 }
+
+.word-image-container
+{
+    text-align: center;
+}
+
+.upload-container
+{
+    display: none;
+}
+
+.upload-container .upload-image
+{
+    width: 100%;
+}
+
+.upload-container p
+{
+    margin: 4px 0;
+}
+
+.word-image-container .remove-image i
+{
+    top: 2px;
+    left: 3px;
+    color: #d9534f;
+}

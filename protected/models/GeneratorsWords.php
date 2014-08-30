@@ -20,6 +20,8 @@ class GeneratorsWords extends CActiveRecord
 	{
 		return 'oed_generators_words';
 	}
+        
+        static $imageAccessFormats = array('gif', 'jpg', 'jpeg', 'png');
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -32,15 +34,19 @@ class GeneratorsWords extends CActiveRecord
 			array('id_dictionary, word, translate', 'required'),
 			array('id_dictionary', 'numerical', 'integerOnly'=>true),
 			array('word, translate, image', 'length', 'max'=>255),
+			array('remote', 'boolean'),
+                        array('image', 'fileTypes'),
                         array('description', 'safe'),
-
 			array('id, id_dictionary, word, translate, description, image, idsTags', 'safe', 'on'=>'search'),
 		);
 	}
+        
+        public static function accessFormatImage($format)
+        {
+            $format = strtolower($format);
+            return in_array($format, self::$imageAccessFormats);
+        }
 
-	/**
-	 * @return array relational rules.
-	 */
 	public function relations()
 	{
 		return array(
@@ -61,10 +67,17 @@ class GeneratorsWords extends CActiveRecord
 			'word' => 'Слово',
 			'translate' => 'Перевод',
 			'description' => 'Описание',
-			'imageLink' => 'Картинка',
-			'imageLinkWithUpload' => 'Картинка',
+			'imageWithoutUpload' => 'Картинка',
+			'imageWithUpload' => 'Картинка',
 		);
 	}
+        
+        public function fileTypes($attribute, $params)
+        {
+            $format = substr(strrchr($this->$attribute, '.'), 1);
+            if(!self::accessFormatImage($format))
+                $this->addError($attribute, "Разрешены только форматы: ".  implode(', ', self::$imageAccessFormats));
+        }
 
 	public function search($id_template = null)
 	{
@@ -133,26 +146,43 @@ class GeneratorsWords extends CActiveRecord
             return $res;
         }
         
-        public function getImageLink()
+        public function getImageWithoutUpload()
         {
             if($this->image)
             {
-                $res = CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'));
+                $res = CHtml::link('Есть', $this->imageLink, array('target'=>'_blank'));
             } else {
                 $res = 'Нет';
             }
             return $res;
         }
-
-        public function getImageLinkWithUpload()
+        
+        public function getImageLink()
         {
-            $res = '<div class="word-image-container'.$this->id.'">';
+            if($this->remote)
+            {
+                return $this->image;
+            } else {
+                return "/".Yii::app()->params['WordsImagesPath']."/".$this->image;
+            }
+        }
+
+        public function getImageWithUpload()
+        {
+            $res = '<div class="word-image-container">';
             if($this->image)
             {
-                $res .= CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'))." ".CHtml::ajaxLink('<i class="glyphicon glyphicon-remove"></i>', '/admin/generatorswords/removeImage/id_word/'.$this->id, array('success'=>'function(data){$(\'.word-image-container'.$this->id.'\').html(data);updateSWFUpload();}')/*, array('onclick'=>'return confirm("Вы уверены?");',)*/);
+                $res .= CHtml::link('Есть', $this->imageLink, array('target'=>'_blank'));
+                $res .= CHtml::link('<i class="glyphicon glyphicon-remove"></i>', array('/admin/generatorswords/removeImage', 'id_word'=>$this->id), array('class'=>'remove-image'));
             } else {
-                $file = CHtml::fileField('ImportFile', '', array('onchange' => '$(this).hide();', 'style' => 'width:100%;', 'class'=>'upload-image'.$this->id, 'data-id'=>$this->id));
-                $res .= " <a href='javascript:;' onclick='$(this).hide();$(this).next().show();return false;' id='import-button{$this->id}' style='margin-left:10px;'>Нет</a><div id='import-input{$this->id}' style='display:none;float:left; line-height:35px; margin-left:10px;'>$file</div></div>"; //"<input type=\"file\" name=\"GeneratorsWords[$data->id][image]\">"
+                $res .= " <a href='#' class='import-button'>Нет</a>";
+                
+                $res .= '<div class="upload-container">';
+                    $res .= '<p style="margin-top: 0;"><b>Загрузите картинку</b></p>';
+                    $res .= CHtml::fileField('ImportFile', '', array('id'=>'false', 'class'=>'upload-image'));
+                    $res .= '<p><b>или укажите ссылку</b></p>';
+                    $res .= CHtml::textField("GeneratorsWords[$this->id][image]", '', array('id'=>'false', 'class'=>'form-control input-sm', 'placeholder'=>'Введите прямую ссылку на картинку'));
+                $res .= '</div>';
             }
             $res .= "</div>";
             return $res;
