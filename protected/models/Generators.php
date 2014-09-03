@@ -132,9 +132,22 @@ class Generators extends CActiveRecord
                 $newVar = new GeneratorsTemplatesVariables;
                 foreach($variables as $attributes)
                 {
-                    if($attributes['value_max'] > $attributes['value_min'])
+                    if($attributes['values_type']==1)
+                    {
+                        if($attributes['value_max'] > $attributes['value_min'])
+                        {
+                            $newVar->attributes = $attributes;
+                            $newVar->values = null;
+                            $newVar->id_template = $template->id;
+                            $newVar->save();
+                            $newVar->isNewRecord = true;
+                            $newVar->id = false;
+                        }
+                    } elseif($attributes['values_type']==2 && $attributes['values'])
                     {
                         $newVar->attributes = $attributes;
+                        $newVar->value_min = null;
+                        $newVar->value_max = null;
                         $newVar->id_template = $template->id;
                         $newVar->save();
                         $newVar->isNewRecord = true;

@@ -74,10 +74,16 @@ class ExampleAndTasks
             $forReplace = $this->template->ForPeplace;
             if($this->notExistsReplacements($forReplace['replacements']))
             {
+                // в шаблоне нам не нужно заменять =, на ==. Поэтому делаем отдельный массив
+                $forReplaceWithPhpConditions = $forReplace;
+                $forReplaceWithPhpConditions['patterns'][] = '#[^<>]=#u'; // заменяем одинарное равно на двойное
+                $forReplaceWithPhpConditions['replacements'][] = '==';
+                $forReplaceWithPhpConditions['patterns'][] = '#mod#u'; // остаток от деления заменяем на php-ный
+                $forReplaceWithPhpConditions['replacements'][] = '%';
                 $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->template);
-                $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
-                $convertedConditions = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->conditionsArray);
-                $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->WrongAnswersArray);
+                $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
+                $convertedConditions = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->conditionsArray);
+                $convertedWrongAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->WrongAnswersArray);
                 if(GeneratorsTemplates::ConditionsMet($convertedConditions))
                 {
                     $exerciseModel = new Exercises;

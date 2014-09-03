@@ -61,6 +61,27 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
         });
         
+        $('.enumeration').live('change keyup input click', function() {
+            if (this.value.match(/[^0-9 ,]/g))
+                this.value = this.value.replace(/[^0-9 ,]/g, '');
+        });
+        
+        $('.type-min-max').live('change', function(){
+            current = $(this);
+            variable = current.closest('.variable');
+            enumeration  = variable.find('.enumeration');
+            enumeration.attr('disabled', 'disabled');
+            variable.find('input[name*=value_min], input[name*=value_max]').removeAttr('disabled');
+        });
+        
+        $('.type-enumeration').live('change', function(){
+            current = $(this);
+            variable = current.closest('.variable');
+            enumeration  = variable.find('.enumeration');
+            enumeration.removeAttr('disabled');
+            variable.find('input[name*=value_min], input[name*=value_max]').attr('disabled', 'disabled');
+        });
+        
         $('#add-condition').click(function(){
             current = $(this);
             current.addClass('disabled');
@@ -254,31 +275,49 @@
         variables.each(function(n, variable)
         {
             variable = $(variable);
+            type = variable.find('input[name*=values_type]:checked').val();
             minVal = variable.find('input[name*=value_min]');
             errorMin = minVal.siblings('.errorMessage').html('Введите мин. значение');
             maxVal = variable.find('input[name*=value_max]');
             errorMax = maxVal.siblings('.errorMessage');
-            if(!minVal.val()) {
-                errorMin.html('Введите мин. значение');
-                res = 0;
-            } else {
-                if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
-                    errorMin.html('Мин. значение не может быть больше или равно макс. значению');
+            values = variable.find('input[name$="[values]"]');
+            errorValues = values.siblings('.errorMessage');
+            if(type==1)
+            {
+                if(!minVal.val()) {
+                    errorMin.html('Введите мин. значение');
                     res = 0;
+                } else {
+                    if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
+                        errorMin.html('Мин. значение не может быть больше или равно макс. значению');
+                        res = 0;
+                    }
+                    else
+                        errorMin.html('');
                 }
-                else
-                    errorMin.html('');
+                if(!maxVal.val()) {
+                    errorMax.html('Введите макс. значение');
+                    res = 0;
+                } else
+                    if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
+                        errorMax.html('Макс. значение не может быть меньше или равно мин. значению');
+                        res = 0;
+                    }
+                    else
+                    errorMax.html('');
+                errorValues.html('');
             }
-            if(!maxVal.val()) {
-                errorMax.html('Введите макс. значение');
-                res = 0;
-            } else
-                if(parseInt(minVal.val(),10) >= parseInt(maxVal.val(),10)) {
-                    errorMax.html('Макс. значение не может быть меньше или равно мин. значению');
+            else if(type==2)
+            {
+                if(!values.val()) {
+                    errorValues.html('Введите значения переменной');
                     res = 0;
+                } else {
+                    errorValues.html('');
                 }
-                else
+                errorMin.html('');
                 errorMax.html('');
+            }
         });
         if(res) {
             return true;
@@ -381,6 +420,17 @@
     </div>
     <div class="section" id='variables'>
         <h3 class="head">Переменные</h3>
+        <div class="row" id="header-variables">
+            <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-md-2">
+                <label>Минимальное значение</label>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <label>Максимальное значение</label>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <label>Перечисление значений</label>
+            </div>
+        </div>
         <?php
         if($generator->Template->Variables)
         {

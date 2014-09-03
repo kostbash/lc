@@ -62,7 +62,6 @@ class GeneratorsController extends Controller
                     throw new CHttpException(404,'The requested page does not exist.');
             }
             
-
             if($_POST['Exercises'] && $_POST['Template'])
             {
 //                CVarDumper::dump($_POST, 10, true);

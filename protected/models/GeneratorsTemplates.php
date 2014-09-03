@@ -99,15 +99,13 @@ class GeneratorsTemplates extends CActiveRecord
         
         public function getForPeplace(){
             $result = array();
+            $result['patterns'] = array();
+            $result['replacements'] = array();
             foreach($this->Variables as $variable)
             {
                 $result['patterns'][] = "#$variable->name#u";
                 $result['replacements'][] = $variable->randomNum;
             }
-            $result['patterns'][] = '#[^<>]=#u'; // заменяем одинарное равно на двойное
-            $result['replacements'][] = '==';
-            $result['patterns'][] = '#mod#u'; // остаток от деления заменяем на php-ный
-            $result['replacements'][] = '%';
             return $result;
         }
         

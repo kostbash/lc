@@ -1135,6 +1135,14 @@ h2{
     cursor: pointer;
 }
 
+#generator-page #header-variables label
+{
+    line-height:  normal;
+    margin-bottom: 6px;
+    font-size: 13px;
+    cursor: default;
+}
+
 #generator-page #add-condition {
     margin-top: 10px;
 }
