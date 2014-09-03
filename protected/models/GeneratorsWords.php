@@ -74,9 +74,12 @@ class GeneratorsWords extends CActiveRecord
         
         public function fileTypes($attribute, $params)
         {
-            $format = substr(strrchr($this->$attribute, '.'), 1);
-            if(!self::accessFormatImage($format))
-                $this->addError($attribute, "Разрешены только форматы: ".  implode(', ', self::$imageAccessFormats));
+            if($this->$attribute != '')
+            {
+                $format = substr(strrchr($this->$attribute, '.'), 1);
+                if(!self::accessFormatImage($format))
+                    $this->addError($attribute, "Разрешены только форматы: ".  implode(', ', self::$imageAccessFormats));
+            }
         }
 
 	public function search($id_template = null)
