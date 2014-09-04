@@ -81,6 +81,8 @@ class ExampleAndTasks
                 $forReplaceWithPhpConditions['patterns'][] = '#mod#u'; // остаток от деления заменяем на php-ный
                 $forReplaceWithPhpConditions['replacements'][] = '%';
                 $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->template);
+                $convertedTemplate = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForTemplate", $convertedTemplate); // выполняем выражения в {}
+                
                 $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
                 $convertedConditions = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->conditionsArray);
                 $convertedWrongAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->WrongAnswersArray);

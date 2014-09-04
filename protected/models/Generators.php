@@ -246,6 +246,11 @@ class Generators extends CActiveRecord
             return $res;
         }
         
+        static function callBackForTemplate($matches) {
+            $string = preg_replace('#mod#u', '%', $matches[1]);
+            return (int) self::executeCode($string);
+        }
+        
         static function getConvertStrings(array $patterns, array $replacements, $strings) {
             return preg_replace($patterns, $replacements, $strings);
         }

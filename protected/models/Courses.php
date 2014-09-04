@@ -227,11 +227,12 @@ class Courses extends CActiveRecord
             {
                 $block->delete();
             }
+            
             CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_course'=>$this->id));
             
-            foreach($this->Lessons as $lesson)
+            foreach($this->Lessons as $lessonCourse)
             {
-                $lesson->delete();
+                $lessonCourse->delete();
             }
             
             foreach($this->LessonsGroups as $lessonGroup)
