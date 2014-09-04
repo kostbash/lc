@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete', 'update', 'updatebyajax', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
+				'actions'=>array('delete', 'update', 'updatebyajax', 'shuffleexericises', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -222,6 +222,27 @@ class GroupofexercisesController extends Controller
             if($res=='')
                 $res = '<li><a href="#">Результатов нет</a></li>';
             echo $res;
+	}
+        
+	public function actionShuffleExericises($id_block)
+	{
+            $group = $this->loadModel($id_block);
+            $res = array('success'=>0);
+            $criteria = new CDbCriteria;
+            $criteria->compare('id_group', $group->id);
+            $criteria->order = 'RAND()';
+            $blockExercises = GroupAndExercises::model()->findAll($criteria);
+            if($blockExercises)
+            {
+                $i = 0;
+                foreach($blockExercises as $blockExercise)
+                {
+                    $blockExercise->order = ++$i;
+                    $blockExercise->save(false);
+                }
+                $res['success'] = 1;
+            }
+            echo CJSON::encode($res);
 	}
         
         public function actionCreateInCourse($id_course)

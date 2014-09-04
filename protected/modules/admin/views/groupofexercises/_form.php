@@ -269,6 +269,21 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 });
             });
             
+            $('#shuffle-exericises').click(function(){
+                current = $(this);
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/shuffleexericises', array('id_block'=>$exerciseGroup->id))."',
+                    type:'POST',
+                    dataType: 'json',
+                    success: function(result) { 
+                        if(result.success) {
+                            $('#exerciseGroup-$exerciseGroup->id-grid').yiiGridView('update');
+                        }
+                    }
+                });
+                return false;
+            });
+            
             $('.for-editor-field').live('click', function() {
                 current = $(this);
                 hidden = current.siblings('input[type=hidden]');
@@ -384,9 +399,12 @@ Yii::app()->clientScript->registerScript("skills-grid",
         </div>
     </div>
     <div class="section exercisegroup-container">
-        <h3 class="head">Задания</h3>
-        <div class="exercisegroup" data-id=<?php echo $exerciseGroup->id; ?> >
+        <div style="margin-top: 20px;" class="exercisegroup" data-id=<?php echo $exerciseGroup->id; ?> >
         <?php if($exerciseGroup->type == 1) : ?>
+        <div style="padding-bottom: 0;" class="clearfix page-header">
+            <h3 style="float: left; width: 83%; margin:0 2% 0 0; border-bottom: none; line-height: 34px;" class="head">Задания</h3>
+            <a href="#" style="float: right; width: 15%" id="shuffle-exericises" class="btn btn-primary btn-icon"><i class="glyphicon glyphicon-random"></i>Перемешать</a>
+        </div>
         <div class="row">
             <div class="col-lg-12 col-md-12">
                     <?php $this->widget('ZGridView', array(
@@ -489,8 +507,11 @@ Yii::app()->clientScript->registerScript("skills-grid",
             </div>
         </div>
         <?php elseif($exerciseGroup->type == 2) : ?>
+        <div style="padding-bottom: 0;" class="clearfix page-header">
+            <h3 style="float: left; width: 83%; margin:0 2% 0 0; border-bottom: none; line-height: 34px;" class="head">Части теста</h3>
+        </div>
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-lg-offset-1 col-md-offset-1">
+            <div class="col-lg-6 col-md-6">
                     <?php $this->widget('ZGridView', array(
                             'id'=>"exerciseGroup-$exerciseGroup->id-grid",
                             'htmlOptions' => array('class'=>'clearfix zgrid type-test'),
