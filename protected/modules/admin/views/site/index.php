@@ -1,8 +1,5 @@
-<?php
-/* @var $this SiteController */
+<?php $this->pageTitle=Yii::app()->name; ?>
 
-$this->pageTitle=Yii::app()->name;
-?>
 <?php if($showRegModal) : ?>
 <script type="text/javascript">
     $(function() {
@@ -10,6 +7,7 @@ $this->pageTitle=Yii::app()->name;
     });
 </script>
 <?php endif; ?>
+
 <?php if($showLoginModal) : ?>
 <script type="text/javascript">
     $(function() {
@@ -17,6 +15,7 @@ $this->pageTitle=Yii::app()->name;
     });
 </script>
 <?php endif; ?>
+
 <h1>Добро пожаловать на сайт <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
 <div>Описание целевых пользователей, решаемых задачи преимуществ программы (для детей)</div>
 <?php $this->renderPartial('login', array('model'=>$loginForm)); ?>

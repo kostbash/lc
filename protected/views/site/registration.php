@@ -24,7 +24,20 @@
 		<?php echo $form->error($model,'email'); ?>
             </div>
 	</div>
-        <input id="role" type="hidden" name="Users[role]" value="2" />
+        <div class="row" id="reg-roles">
+            <div class="role">
+                <input id="user-role-student" type="radio" name="Users[role]" value="2" />
+                <label for="user-role-student">Я ученик</label>
+            </div>
+            <div class="role">
+                <input id="user-role-teacher" type="radio" name="Users[role]" value="3" />
+                <label for="user-role-teacher">Я педагог</label>
+            </div>
+            <div class="role">
+                <input id="user-role-parent" type="radio" name="Users[role]" value="4" />
+                <label for="user-role-parent">Я родитель</label>
+            </div>
+        </div>
 	<div class="row rememberMe">
             <?php echo $form->label($model,'rememberMe'); ?>
             <?php echo $form->checkBox($model,'rememberMe'); ?>
