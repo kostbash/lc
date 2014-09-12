@@ -1,20 +1,27 @@
 @font-face {
    font-family: 'PT Sans';
-   src: url(../fonts/PTS55F_W.eot);
+   src: url(/fonts/PTS55F_W.eot);
 }
 
 @font-face {
   font-family: 'PT Sans';
   src: local("PT Sans"),
-       url(../fonts/PTS55F_W.ttf);
+       url(/fonts/PTS55F_W.ttf);
 }
 
 @font-face {
     font-family: 'PT Sans';
-    src: url('../fonts/pts75f_w.eot');
+    src: url('/fonts/pts75f_w.eot');
     font-style: normal;
     font-weight: bold; 
-    src: local('PT Sans Bold'), url('../fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('../fonts/PTS75F_W.woff') format('woff'), url('../fonts/PTS75F_W.ttf') format('truetype'), url('../fonts/PTS75F_W.svg#PTSans-Bold') format('svg');
+    src: local('PT Sans Bold'), url('/fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('/fonts/PTS75F_W.woff') format('woff'), url('/fonts/PTS75F_W.ttf') format('truetype'), url('/fonts/PTS75F_W.svg#PTSans-Bold') format('svg');
+}
+
+
+@font-face {
+  font-family: 'a_FuturaOrtoLt';
+  src: local("a_FuturaOrtoLt"),
+       url(/fonts/a_FuturaOrtoLt_Light.ttf);
 }
 
 html, body {
@@ -22,14 +29,10 @@ html, body {
     font: 14px/18px Arial, Tahoma, Verdana, sans-serif;
 }
 
-.bg-main-back {
-    background: url("/images/bg.png") repeat 0 0;
-}
-
 .course-info,  .lesson-header
 {
     background-color: white;
-    /*border-radius: 10px;*/
+    
     padding-top: 10px !important;
     padding-bottom:10px !important;
 }
@@ -310,85 +313,6 @@ h2{
 
 .errorMessage {
     color: #D00;
-}
-
-.course-info {
-    padding: 0 12px;
-    margin: 0;
-}
-
-.course-info h1, .lesson-info h1 {
-    font-size: 20px;
-    margin: 0 0 3px 0;
-}
-
-.course-info h2, .lesson-info h2 {
-    font-size: 18px;
-}
-
-.course-info .skills ul {
-    padding-left: 20px;
-}
-
-.course-info .skills ul li {
-    list-style: none;
-    font-size: 13px;
-}
-
-.course-info .lessons h3 {
-    font-size: 15px;
-    font-weight: bold;
-    /*margin: 7px 0 7px 20px;*/
-}
-
-.course-info .lessons ul {
-    padding-left: 30px;
-    list-style: none;
-    margin: 0;
-}
-
-.course-info .lessons ul li {
-    margin: 3px 0;
-}
-
-.course-info .lessons ul li .link {
-    text-decoration: none;
-    width: 230px;
-    float: left;
-    margin-right: 10px;
-}
-
-.course-info .lessons ul li .link:hover {
-    color: #007;
-    font-weight: bold;
-}
-
-.course-info .lessons ul li .current {
-    color: #007;
-    font-weight: bold;
-}
-
-.course-info .left-block {
-    float: left;
-    margin-right: 2%;
-    width: 68%;
-}
-
-.course-info .right-block {
-    float: right;
-    width: 30%;
-}
-
-.course-info .left-block .desc {
-    margin-bottom: 5px;
-}
-
-.course-info .right-block .progress {
-    margin-bottom: 4px;
-}
-
-.course-info .lessons ul li .btn {
-    float: left;
 }
 
 .list-exercises ul {
@@ -1363,20 +1287,24 @@ z-index:10000000;
     margin-right: 26px;
 }
 
-#login .login-button a
+.orange-button a
 {
     background: #fddd76;
     padding: 10px 24px;
     font-size: 16px;
-    color: #0076c9;
-    text-decoration: none;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: bold;
+    font-family: 'PT Sans' !important;
+    color: #0076c9 !important;
+    text-decoration: none !important;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
     box-shadow: rgba(50, 50, 50, 0.27) 0px 0px 5px 0px;
 }
 
-#login .login-button a:hover
+.orange-button a:hover
 {
     background: #fed75a;
 }
@@ -1386,16 +1314,32 @@ z-index:10000000;
     float: right;
 }
 
-#reg-as-student a
+#reg-as-student a, #user-page-link a
 {
     text-decoration: none;
     border-bottom: 1px dotted #fff;
     padding: 0  0 2px;
 }
 
+#user-page-link
+{
+    float: right;
+    margin-right: 40px;
+}
+
+#logout
+{
+    float: right;
+}
+
 #top-menu-on-main
 {
     margin-top: 22px;
+}
+
+#top-menu-on-main ul
+{
+    padding: 0;
 }
 
 #top-menu-on-main li
@@ -1431,14 +1375,14 @@ z-index:10000000;
     margin: 0 auto;
 }
 
-#separate-advantages
+#separate-header-part
 {
     height: 14px;
     background: #588ec5;
     text-align: center;
 }
 
-#separate-advantages img
+#separate-header-part img
 {
     vertical-align: top;
 }
@@ -1843,3 +1787,343 @@ z-index:10000000;
     font-family: 'Arial';
     text-align: center;
 }
+
+/*------------------------------------------------------ Course-Page ------------------------------------------------------*/
+
+#course-page
+{
+    margin: 30px 0;
+}
+
+#course-page .theme-name
+{
+    font-size: 34px;
+    font-family: 'a_FuturaOrtoLt' !important;
+    font-weight: bold;
+    color: #fff;
+    margin: 40px 0;
+}
+
+#course-page .lessons-table
+{
+    width: 100%;
+    font-family: 'a_FuturaOrtoLt';
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    border-collapse: separate !important;
+    table-layout: fixed;
+}
+
+#course-page .lessons-table p
+{
+    margin: 0;
+    padding: 0;
+}
+
+#course-page .lessons-table th
+{
+    background: #fff;
+    height: 54px;
+    font-size: 20px;
+    padding: 0 25px;
+    color: #0d1d56;
+}
+
+#course-page .lessons-table thead .name
+{
+    background: #ffe582;
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+#course-page .lessons-table thead .status
+{
+    background: #afdb98;
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+#course-page .lessons-table td
+{
+    border: 1px solid #f5f4f3;
+    background: #fff;
+    height: 58px;
+    font-size: 18px;
+    padding: 0 25px;
+    color: #022f6d;
+}
+
+#course-page .lessons-table tr:last-child td:first-child
+{
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+#course-page .lessons-table tr:last-child td:last-child
+{
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+
+#course-page .lessons-table .lesson-name
+{
+    color: #022f6d;
+}
+
+#course-page .lessons-table .to-lesson
+{
+    display: inline-block;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+#course-page .lessons-table .passed
+{
+    color: #6bb444;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#course-page .lessons-table .unaccess
+{
+    color: #b5486d;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#course-page .lessons-table .percent
+{
+    color: #404241;
+    font-weight: bold;
+}
+
+#course-page .lessons-table .percent span
+{
+    color: #6ab83f;
+    font-size: 14px;
+    vertical-align: top;
+    font-weight: normal;
+}
+
+#achievements-links
+{
+    float: left;
+    margin: 15px 0 0 47px;
+}
+
+#achievements-links:after
+{
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#achievements-links > a
+{
+    display: inline-block;
+    text-align: center;
+    color: #b42151;
+    float: left;
+    margin: 0 1px;
+    font-family: 'PT Sans';
+    font-size: 13px;
+    width: 102px;
+    height: 73px;
+    background: #fff;
+    text-decoration: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#achievements-links .top
+{
+    background: #eeedeb;
+    height: 43px;
+    padding: 6px 0;
+}
+
+#achievements-links .top h5
+{
+    margin: 0;
+}
+
+#achievements-links .bottom
+{
+    height: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #404241;
+}
+
+#achievements-links .bottom span
+{
+    vertical-align: top;
+    font-size: 14px;
+    font-weight: normal;
+    color: #b42151;
+}
+
+.head-column
+{
+    height: 215px;
+    position: relative;
+    top: -98px;
+    padding: 12px;
+    background: #fff;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.head-column > .content
+{
+    height: 100%;
+    font-size: 14px;
+    font-family: Arial;
+    color: #263870;
+    background: #f8f8f8;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #f4f4f4;;
+    border-bottom: 4px solid #d9d9d9;
+}
+
+.head-column > .content > .text
+{
+    padding: 14px 12px;
+}
+
+#head-col-left
+{
+    float: left;
+    width: 471px;
+    margin-left: 3px;
+}
+
+#head-col-right
+{
+    float: right;
+    width: 471px;
+    margin-right: 3px;
+}
+
+.course-state-button
+{
+    display: inline-block;
+    background: #e094b2;
+    text-decoration: none !important;
+    color: #fff !important;
+    padding: 7px 17px 9px;
+    font-size: 16px;
+    line-height: 16px;
+    font-family: 'PT Sans';
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+}
+
+.course-state-button:hover
+{
+    background: #e05c90;
+}
+
+#head-col-left .course
+{
+    
+}
+
+#head-col-left .course .head
+{
+    padding: 10px;
+    height: 65px;
+    overflow: hidden;
+}
+
+#head-col-left .course .head .name
+{
+    font-family: 'a_FuturaOrto';
+    font-size: 18px;
+    padding: 3px 0;
+    color: #263870;
+}
+
+#head-col-left .course .head .status
+{
+    font-family: Arial;
+    font-size: 14px;
+    color: #588ec5;
+}
+
+#head-col-left .course > .content
+{
+    height: 60px;
+}
+
+#head-col-left .course > .content > div
+{
+    float: left;
+    width: 50%;
+    padding: 9px 0;
+    text-align: center;
+    color: #fff;
+    height: 100%;
+    background: #a2c8f0;
+    border: 1px solid #8fb5dd;
+}
+
+#head-col-left .course > .content h4
+{
+    margin: 0;
+    font-size: 14px;
+    font-family: Arial;
+}
+
+#head-col-left .course > .content .value
+{
+    color: #b5486d;
+    font-size: 22px;
+}
+
+#head-col-left .course > .content .value span
+{
+    color: #fff;
+    font-family: 'PT Sans';
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#head-col-left .course > .content .passed-lessons
+{
+    border-right: none;
+}
+
+#head-col-left .course > .progress
+{
+    background: #9adeca;
+    border-radius: 0;
+    height: 10px;
+}
+#head-col-left .course > .progress .progress-bar
+{
+    background-size: 10px 10px;
+}
+

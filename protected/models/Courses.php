@@ -126,13 +126,6 @@ class Courses extends CActiveRecord
             return $ids;
         }
         
-        public function getCountLessons() {
-            $mass = array();
-            foreach($this->LessonsGroups as $group)
-                $mass[] = $group->id;
-            return GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
-        }
-        
         public function getCourseSkills() {
             $res = array();
             foreach($this->LessonsGroups as $lessonGroup)
@@ -144,11 +137,46 @@ class Courses extends CActiveRecord
             return $res;
         }
         
+        public function getCountPassedLessons() {
+            return UserAndLessons::model()->countByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id, 'passed'=>1));
+        }
+        
+        public function getCountLessons() {
+            $mass = array();
+            foreach($this->LessonsGroups as $group)
+                $mass[] = $group->id;
+            return GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
+        }
+        
+        public function getAverageByTests() {
+            $userLessons = UserAndLessons::model()->findAllByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id));
+            $userLessonsIds = array();
+            $number_all = 0;
+            $number_right = 0;
+            foreach($userLessons as $userLesson)
+            {
+                $userLessonsIds[] = $userLesson->id;
+            }
+            
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition('id_user_and_lesson', $userLessonsIds);
+            $criteria->with = array('Group');
+            $criteria->compare('Group.type', 2);
+            
+            $resultTests = UserAndExerciseGroups::model()->findAll($criteria);
+            foreach($resultTests as $resultTest)
+            {
+                $number_all += $resultTest->number_all;
+                $number_right += $resultTest->number_right;
+            }
+            
+            return $number_all==0 ? 0 : round($number_right/$number_all * 100);
+        }
+        
         public function getProgress() {
-            $countLessonUser = UserAndLessons::model()->countByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id, 'passed'=>1));
             if(!$this->countLessons)
                 return 0;
-            return round($countLessonUser/$this->countLessons * 100);
+            return round($this->countPassedLessons/$this->countLessons * 100);
         }
         
         public function nextLesson($id_group, $id_lesson) {
@@ -192,7 +220,7 @@ class Courses extends CActiveRecord
                   $text = "Начать урок $number";
             }
             if($lastLesson)
-                return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'btn btn-success btn-sm'));
+                return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'course-state-button'));
             return false;
         }
         

@@ -50,7 +50,7 @@
         </div>
     </div>
 </div><!-- navbar -->
-<div class="container bg-main" id="container">
+<div class="container">
 <?php if(isset($this->breadcrumbs)):?>
         <?php $this->widget('zii.widgets.CBreadcrumbs', array(
                 'links'=>$this->breadcrumbs,

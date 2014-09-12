@@ -343,4 +343,19 @@ class Users extends CActiveRecord
         {
             return self::$rolesRusNames[$this->role];
         }
+        
+        public static function getLogoLink()
+        {
+            if(Yii::app()->user->isGuest)
+            {
+                return '/';
+            }
+            else
+            {
+               if(Yii::app()->user->checkAccess('admin'))
+                   return Yii::app()->createUrl('/admin/courses/index');
+               else
+                   return Yii::app()->createUrl('courses/index');
+            }
+        }
 }

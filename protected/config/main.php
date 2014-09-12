@@ -6,7 +6,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Education',
+	'name'=>'Курсис',
         'timeZone' => 'Europe/Moscow',
         'language' => 'ru',
 
@@ -83,19 +83,19 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'log'=>array(
-			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				array(
-					'class'=>'CProfileLogRoute',
-				),
-			),
-		),
+//		'log'=>array(
+//			'class'=>'CLogRouter',
+//			'routes'=>array(
+//				array(
+//					'class'=>'CFileLogRoute',
+//					'levels'=>'error, warning',
+//				),
+//				// uncomment the following to show log messages on web pages
+//				array(
+//					'class'=>'CProfileLogRoute',
+//				),
+//			),
+//		),
 	),
 
 	// application-level parameters that can be accessed

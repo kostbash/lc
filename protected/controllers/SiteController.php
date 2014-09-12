@@ -26,7 +26,6 @@ class SiteController extends Controller
             if(!Yii::app()->user->isGuest)
                 $this->redirect(array('courses/index','id'=>Courses::$defaultCourse));
             
-            $this->layout = '//layouts/begin';
             $loginForm = new LoginForm;
             $user = new Users;
             
