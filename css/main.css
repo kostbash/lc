@@ -19,9 +19,14 @@
 
 
 @font-face {
-  font-family: 'a_FuturaOrtoLt';
-  src: local("a_FuturaOrtoLt"),
-       url(/fonts/a_FuturaOrtoLt_Light.ttf);
+    font-family: 'a_FuturaOrto';
+    src: local("a_FuturaOrto"), url('/fonts/a_futuraorto.ttf');
+}
+
+@font-face {
+    font-family: 'a_FuturaOrto';
+    src: local("a_FuturaOrto"), url('/fonts/a_futuraorto-bold.ttf');
+    font-weight: bold; 
 }
 
 html, body {
@@ -1638,7 +1643,7 @@ z-index:10000000;
 #course-page .theme-name
 {
     font-size: 34px;
-    font-family: 'a_FuturaOrtoLt' !important;
+    font-family: 'a_FuturaOrto' !important;
     font-weight: bold;
     color: #fff;
     margin: 40px 0;
@@ -1647,7 +1652,7 @@ z-index:10000000;
 #course-page .lessons-table
 {
     width: 100%;
-    font-family: 'a_FuturaOrtoLt';
+    font-family: 'a_FuturaOrto';
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
@@ -1902,6 +1907,7 @@ z-index:10000000;
 {
     font-family: 'a_FuturaOrto';
     font-size: 18px;
+    font-weight: bold; 
     padding: 3px 0;
     color: #263870;
 }
