@@ -1,27 +1,27 @@
 @font-face {
    font-family: 'PT Sans';
-   src: url(/fonts/PTS55F_W.eot);
+   src: url(fonts/PTS55F_W.eot);
 }
 
 @font-face {
   font-family: 'PT Sans';
   src: local("PT Sans"),
-       url(/fonts/PTS55F_W.ttf);
+       url(fonts/PTS55F_W.ttf);
 }
 
 @font-face {
     font-family: 'PT Sans';
-    src: url('/fonts/pts75f_w.eot');
+    src: url('fonts/pts75f_w.eot');
     font-style: normal;
     font-weight: bold; 
-    src: local('PT Sans Bold'), url('/fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('/fonts/PTS75F_W.woff') format('woff'), url('/fonts/PTS75F_W.ttf') format('truetype'), url('/fonts/PTS75F_W.svg#PTSans-Bold') format('svg');
+    src: local('PT Sans Bold'), url('fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('fonts/PTS75F_W.woff') format('woff'), url('fonts/PTS75F_W.ttf') format('truetype'), url('fonts/PTS75F_W.svg#PTSans-Bold') format('svg');
 }
 
 
 @font-face {
   font-family: 'a_FuturaOrtoLt';
   src: local("a_FuturaOrtoLt"),
-       url(/fonts/a_FuturaOrtoLt_Light.ttf);
+       url(fonts/a_FuturaOrtoLt_Light.ttf);
 }
 
 html, body {
@@ -40,11 +40,6 @@ html, body {
 .course-info
 {
     margin-right: 10px !important;
-}
-
-.lesson-info, .pass-lesson .exercises
-{
-    /*margin-right: -10px !important;*/
 }
 
 h1{
@@ -335,161 +330,6 @@ h2{
     height: 100%;
     left: 58.4%;
     position: absolute;
-}
-
-.pass-lesson {
-    margin-bottom: 80px;
-}
-
-.pass-lesson h2 {
-    font-size: 18px;
-}
-
-.pass-lesson .theory {
-    padding: 0 0 10px;
-}
-
-.pass-lesson .list-exercises {
-    /*border-top: 2px solid #ddd;*/
-    margin-left: -13px;
-    padding-left: 15px;
-}
-
-.pass-lesson .list-exercises ul li {
-    margin: 3px 0;
-}
-
-.pass-lesson .list-exercises ul li .link {
-    text-decoration: none;
-}
-
-.pass-lesson .list-exercises ul li .link:hover {
-    color: #007;
-    font-weight: bold;
-}
-
-.pass-lesson .list-exercises ul li .current {
-    color: #007;
-    font-weight: bold;
-}
-
-.pass-lesson .exercise {
-    padding: 5px;
-    width: 70%;
-    margin: 0 auto 10px;
-}
-
-.pass-lesson .exercise.gray {
-    background: #f7f7f7;
-}
-
-.pass-lesson .control-buttons {
-    width: 70%;
-    margin: 10px auto;
-    text-align: right;
-}
-
-.pass-lesson .label {
-    float: right;
-    margin-top: 5px;
-    display: inline-block;
-    line-height: 16px;
-    width: 150px;
-    word-break: break-all;
-    white-space: normal;
-}
-
-.pass-lesson .question {
-    margin-bottom: 5px;
-    border-bottom: 2px solid #eee;
-}
-
-.check .answer,
-.pass-lesson .answer {
-    margin: 10px auto;
-    width: 50%;
-    text-align: center;
-}
-
-.check .result,
-.pass-lesson .result {
-    line-height: 21px;
-    margin-top: 5px;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.check .answer .for-editor-field,
-.pass-lesson .answer .for-editor-field {
-    margin-top: 10px;
-}
-
-.check .answer .for-editor-field:first-child,
-.pass-lesson .answer .for-editor-field:first-child {
-    margin-top: 0;
-}
-
-.pass-lesson .answer .form-control-feedback {
-    top: 0;
-}
-
-.pass-lesson .comparisons .list-one
-{
-    float: left;
-    width: 48%;
-}
-
-.pass-lesson .comparisons .list-two
-{
-    float: right;
-    width: 48%;
-}
-
-.pass-lesson .comparisons .comparison  {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 4px 0;
-    background: #fff;
-    min-height: 32px;
-    word-break: break-all;
-    padding: 6px 12px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-
-.pass-lesson .orderings .word
-{
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 4px;
-    display: inline-block;
-    background: #fff;
-    min-height: 32px;
-    word-break: break-all;
-    padding: 6px 12px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-
-.color-right {
-    color: #5cb85c;
-}
-
-.color-unright {
-    color: #d9534f;
-}
-
-.pass-lesson .header-lesson .popover {
-    max-width: 390px;
-}
-
-.bg-cell {
-    background: url(/images/cell.png);
-    padding: 0 21px !important;
 }
 
 .widget
@@ -2125,5 +1965,208 @@ z-index:10000000;
 #head-col-left .course > .progress .progress-bar
 {
     background-size: 10px 10px;
+}
+
+/*------------------------------------------------------ Lesson-Page ------------------------------------------------------*/
+
+#lesson-page {
+    margin: 22px 0 80px;
+}
+
+#lesson-page .lesson-name {
+    font-size: 36px !important;
+    color: #feffff;
+    margin: 22px 0;
+    font-family: 'a_FuturaOrto' !important;
+    font-weight: normal !important;
+    border: none;
+}
+
+#lesson-page .theory {
+    padding: 0 0 10px;
+}
+
+#lesson-page .list-exercises {
+    margin-left: -13px;
+    padding-left: 15px;
+}
+
+#lesson-page .list-exercises ul li {
+    margin: 3px 0;
+}
+
+#lesson-page .list-exercises ul li .link {
+    text-decoration: none;
+}
+
+#lesson-page .list-exercises ul li .link:hover {
+    color: #007;
+    font-weight: bold;
+}
+
+#lesson-page .list-exercises ul li .current {
+    color: #007;
+    font-weight: bold;
+}
+
+#lesson-page #exercises
+{
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+}
+
+#lesson-page .exercise:first-child
+{
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+}
+
+#lesson-page .exercise:last-child
+{
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+}
+
+#lesson-page .exercise {
+    padding: 18px 14px;
+}
+
+#lesson-page .exercise.even {
+    background: #fff;
+}
+
+#lesson-page .exercise.odd {
+    background: #e8f5e1;
+}
+
+#lesson-page .exercise .head
+{
+    
+}
+
+#lesson-page .exercise .head .number {
+    float: left;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'PT Sans';
+    width: 52px;
+    height: 52px;
+    line-height: 48px;
+    vertical-align: middle;
+    border: 2px solid #98c1e7;
+    border-radius: 30px;
+}
+
+#lesson-page .exercise .head .condition {
+    float: left;
+    width: 880px;
+    margin-top: 13px;
+    margin-left: 14px;
+    font-family: Arial;
+    font-size: 15px;
+    line-height: 21px;
+    color: #263870;
+}
+
+#lesson-page .control-buttons {
+    width: 70%;
+    margin: 10px auto;
+    text-align: right;
+}
+
+#lesson-page .label {
+    float: right;
+    margin-top: 5px;
+    display: inline-block;
+    line-height: 16px;
+    width: 150px;
+    word-break: break-all;
+    white-space: normal;
+}
+
+.check .answer,
+#lesson-page .answer {
+    margin: 10px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.check .result,
+#lesson-page .result {
+    line-height: 21px;
+    margin-top: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.check .answer .for-editor-field,
+#lesson-page .answer .for-editor-field {
+    margin-top: 10px;
+}
+
+.check .answer .for-editor-field:first-child,
+#lesson-page .answer .for-editor-field:first-child {
+    margin-top: 0;
+}
+
+#lesson-page .answer .form-control-feedback {
+    top: 0;
+}
+
+#lesson-page .comparisons .list-one
+{
+    float: left;
+    width: 48%;
+}
+
+#lesson-page .comparisons .list-two
+{
+    float: right;
+    width: 48%;
+}
+
+#lesson-page .comparisons .comparison  {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 4px 0;
+    background: #fff;
+    min-height: 32px;
+    word-break: break-all;
+    padding: 6px 12px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+#lesson-page .orderings .word
+{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 4px;
+    display: inline-block;
+    background: #fff;
+    min-height: 32px;
+    word-break: break-all;
+    padding: 6px 12px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.color-right {
+    color: #5cb85c;
+}
+
+.color-unright {
+    color: #d9534f;
+}
+
+#lesson-page .header-lesson .popover {
+    max-width: 390px;
 }
 
