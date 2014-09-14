@@ -41,37 +41,37 @@
     <?php $this->renderPartial('login', array('model'=>$loginForm)); ?>
     <?php $this->renderPartial('registration', array('model'=>$user)); ?>
     <div id="separate-header-part">
-        <img src="images/separate-adventages.png" width="1026" height="14" />
+        <img src="/images/separate-adventages.png" width="1026" height="14" />
     </div>
     <div id="back-header-bottom">
         <div id="header-bottom">
             <div id="advantages">
                 <div class="advantage">
-                    <img src="images/books-main.png" width="169" height="169" />
+                    <img src="/images/books-main.png" width="169" height="169" />
                     <div class="explanation">
                         КУРСЫ ЯДРА ШКОЛЬНОЙ ПРОГРАММЫ
                     </div>
                 </div>
                 <div class="advantage">
-                    <img src="images/idea-main.png" width="169" height="169" />
+                    <img src="/images/idea-main.png" width="169" height="169" />
                     <div class="explanation">
                         САМОСТОЯТЕЛЬНАЯ ПРАКТИКА ДО ПОЛНОГО УСВОЕНИЯ
                     </div>
                 </div>
                 <div class="advantage">
-                    <img src="images/statistic-main.png" width="169" height="169" />
+                    <img src="/images/statistic-main.png" width="169" height="169" />
                     <div class="explanation">
                         СЛОЖНОСТЬ УПРАЖНЕНИЙ И ТЕСТОВ РАСТЕТ ПОСТЕПЕННО
                     </div>
                 </div>
                 <div class="advantage">
-                    <img src="images/person-main.png" width="169" height="169" />
+                    <img src="/images/person-main.png" width="169" height="169" />
                     <div class="explanation">
                         РОДИТЕЛЬСКИЙ КОНТРОЛЬ ЗА УСПЕХАМИ
                     </div>
                 </div>
                 <div class="advantage">
-                    <img src="images/cloud-main.png" width="169" height="169" />
+                    <img src="/images/cloud-main.png" width="169" height="169" />
                     <div class="explanation">
                         БЕСПЛАТНО!
                     </div>
@@ -87,19 +87,19 @@
             <li class="active">
                 <div href="#panel-1" data-toggle="tab" class="tab-header">
                     <div class='course-shadow' style='display: none;'></div>
-                    <img class="course-icon" src="images/math-icon.png" />
+                    <img class="course-icon" src="/images/math-icon.png" />
                     <div class="name">
                         <h3>Математика</h3>
                     </div>
                 </div>
                 <div class="triangle">
-                    <img src="images/triangle-active.png" width="25" height="11" />
+                    <img src="/images/triangle-active.png" width="25" height="11" />
                 </div>
             </li>
             <li>
                 <div href="#panel-2" data-toggle="tab" class="tab-header">
                     <div class='course-shadow'></div>
-                    <img class="course-icon" src="images/english-icon.png" />
+                    <img class="course-icon" src="/images/english-icon.png" />
                     <div class="name">
                         <h3>Английский язык</h3>
                     </div>
@@ -108,7 +108,7 @@
             <li>
                 <div href="#panel-3" data-toggle="tab" class="tab-header">
                     <div class='course-shadow'></div>
-                    <img class="course-icon" src="images/russian-icon.png" />
+                    <img class="course-icon" src="/images/russian-icon.png" />
                     <div class="name">
                         <h3>Русский язык</h3>
                     </div>
@@ -117,14 +117,14 @@
             <li class="fourth">
                 <div href="#panel-4" data-toggle="tab" class="tab-header">
                     <div class='course-shadow'></div>
-                    <img class="course-icon" src="images/history-icon.png" />
+                    <img class="course-icon" src="/images/history-icon.png" />
                     <div class="name">
                         <h3>История</h3>
                     </div>
                 </div>
             </li>
             <li class="dropdown open" id="more-courses">
-                <a href="#" id="tabDrop1" class="dropdown-toggle" data-toggle="dropdown"><img src="images/vertical-dotes.png" width="6" height="24" /></a>
+                <a href="#" id="tabDrop1" class="dropdown-toggle" data-toggle="dropdown"><img src="/images/vertical-dotes.png" width="6" height="24" /></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="tabDrop1">
                     <li class=""><a href="#dropdown1" tabindex="-1" data-toggle="tab">@fat</a></li>
                     <li class=""><a href="#dropdown2" tabindex="-1" data-toggle="tab">@mdo</a></li>
