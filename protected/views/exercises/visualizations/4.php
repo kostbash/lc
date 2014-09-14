@@ -1,3 +1,11 @@
-<div style="text-align: left; display: inline-block;" class="checkbox-answer">
-    <?php echo CHtml::checkBoxList("Exercises[$key][answers]", '', CHtml::listData($model->Answers, 'id', 'answer'), array('tabindex'=>$index)); ?>
+<div class="checkboxes">
+    <?php $n = -1; ?>
+    <?php foreach($model->Answers as $answer) : $n++; ?>
+        <div class="checkbox">
+            <?php
+                echo "<input tabindex='$index' value='$answer->id' id='Exercises_{$key}_answers_{$n}' type='checkbox' name='Exercises[$key][answers][]'>";
+                echo "<label for='Exercises_{$key}_answers_{$n}'><span></span>$answer->answer</label>";
+            ?>
+        </div>
+    <?php endforeach; ?>
 </div>

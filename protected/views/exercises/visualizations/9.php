@@ -11,9 +11,7 @@ if($text && $spaces)
     }             
 }
 ?>
-        
-<div class="orderings clearfix">
-     <ul>
-        <?php echo $text; ?>
-    </ul>
+
+<div class="text-with-limits clearfix">
+    <?php echo $text; ?>
 </div>

@@ -2,7 +2,7 @@
     $(function(){
         $('[name*=answers]').change(function(){
             current = $(this);
-            resultAnswer = current.closest('.answer').siblings('.result');
+            resultAnswer = current.closest('.exercise').find('> .head .result');
             if(current.val()=='')
                 resultAnswer.html('');
             else
@@ -12,23 +12,23 @@
                     data: current.closest('.answer').find('input,select').serialize(),
                     success: function(result) { 
                         if(result==1)
-                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                         else if(result==0)
-                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                         else
                             alert(result);
                      }
                 });
         });
 
-        $('.nextGroup').click(function(){
+        $('.next-button').click(function(){
             result = true;
             $('input[name*=answers][type=text], input[name*=answers][type=hidden], select[name*=answers]').each(function(n, answer){
                 if(!checkInput(answer))
                     result = false;
             });
 
-            $('.checkbox-answer , .radio-answer').each(function(n, answer){
+            $('.checkboxes , .radio-buttons').each(function(n, answer){
                 if(!checkRadioCheckBox(answer))
                     result = false;
             });
@@ -46,25 +46,25 @@
             return false;
         });
 
-        $('.for-editor-field').click(function(){
+        $('.block').click(function(){
             answer = $(this);
             setDuration(answer);
             key = answer.data('key');
-            $('.for-editor-field[data-key='+key+']').removeClass('selected-answer');
-            answer.addClass('selected-answer');
+            $('.block[data-key='+key+']').removeClass('selected');
+            answer.addClass('selected');
             hiddenAnswer = $('.hidden-answer[data-key='+key+']')
             hiddenAnswer.val(answer.data('val'));
 
-            resultAnswer = answer.closest('.answer').siblings('.result');
+            resultAnswer = answer.closest('.exercise').find('> .head .result');
             $.ajax({
                 url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                 type:'POST',
                 data: hiddenAnswer.serialize(),
                 success: function(result) { 
                     if(result==1)
-                        resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                        resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                     else if(result==0)
-                        resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                        resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                 }
             });
             checkInput(hiddenAnswer);
@@ -78,7 +78,7 @@
             update: function(event, ui) {
                 current = $(this);
                 setDuration(current);
-                resultAnswer = current.closest('.exercise').find('> .result');
+                resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
@@ -86,9 +86,9 @@
                     data: hiddenAnswer.serialize(),
                     success: function(result) { 
                         if(result==1)
-                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                         else if(result==0)
-                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
                 });
             }
@@ -102,7 +102,7 @@
             update: function(event, ui) {
                 current = $(this);
                 setDuration(current);
-                resultAnswer = current.closest('.exercise').find('> .result');
+                resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
@@ -110,23 +110,24 @@
                     data: hiddenAnswer.serialize(),
                     success: function(result) { 
                         if(result==1)
-                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                         else if(result==0)
-                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
                 });
             }
         });
 
-        $('.orderings ul').sortable({
+        $('.orderings').sortable({
             cancel: null,
             cursor: 'move',
             items: '> .word',
+            tolerance: 'pointer',
             containment: 'parent',
             update: function(event, ui) {
                 current = $(this);
                 setDuration(current);
-                resultAnswer = current.closest('.exercise').find('> .result');
+                resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
@@ -134,9 +135,9 @@
                     data: hiddenAnswer.serialize(),
                     success: function(result) { 
                         if(result==1)
-                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                         else if(result==0)
-                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
                 });
             }
@@ -144,7 +145,11 @@
 
         $('.text-with-space .word').draggable({cursor: 'move', revert:true});
         $('.text-with-space .answer-droppable').droppable({
-            accept:'.text-with-space .word',
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
             tolerance:'pointer',
             drop: function(event,info)
             {
@@ -158,7 +163,7 @@
                     words.append(existWord);
                 }
                 cont.append(answer);
-                resultAnswer = cont.closest('.exercise').find('> .result');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
                 hiddenAnswer = cont.closest('.text').find('.hidden-answer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
@@ -166,9 +171,9 @@
                     data: hiddenAnswer.serialize(),
                     success: function(result) { 
                         if(result==1)
-                            resultAnswer.removeClass('color-unright').addClass('color-right').html('Верно');
+                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
                         else if(result==0)
-                            resultAnswer.removeClass('color-right').addClass('color-unright').html('Не верно');
+                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                         else
                             alert(result);
                     }
@@ -200,7 +205,7 @@
             checkInput(this);
         });
 
-        $('.checkbox-answer , .radio-answer').change(function(){
+        $('.checkboxes , .radio-buttons').change(function(){
             setDuration(this);
             checkRadioCheckBox(this);
         });
@@ -211,10 +216,10 @@
         input = $(input);
         if( !$.trim(input.val()) )
         {
-            input.closest('.answer').addClass('no-selected-answer');
+            input.closest('.answer').addClass('no-selected');
             return false;
         } else {
-            input.closest('.answer').removeClass('no-selected-answer');
+            input.closest('.answer').removeClass('no-selected');
             return true;
         }
     }
@@ -228,13 +233,13 @@
             space = $(space);
             if(!space.find('.word').length)
             {
-                withSpaces.closest('.answer').addClass('no-selected-answer');
+                withSpaces.closest('.answer').addClass('no-selected');
                 res = false;
                 return false;
             }
         });
         if(res)
-            withSpaces.closest('.answer').removeClass('no-selected-answer');
+            withSpaces.closest('.answer').removeClass('no-selected');
         return res;
     }
     
@@ -244,31 +249,33 @@
         checked = answer.find('input:checked');
         if( !checked.length )
         {
-            answer.closest('.answer').addClass('no-selected-answer');
+            answer.closest('.answer').addClass('no-selected');
             return false;
         } else {
-            answer.closest('.answer').removeClass('no-selected-answer');
+            answer.closest('.answer').removeClass('no-selected');
             return true;
         }
     }
 </script>
 
 <?php if($exerciseGroup->Exercises) : $posTest = 1; ?>
-    <?php foreach($exerciseGroup->Exercises as $i => $exercise) : $classExercise = (++$i%2)==0 ? ' gray' : ''; ?>
-        <div class="exercise clearfix<?php echo $classExercise; ?>">
-            <h2><?php if($exercise->id_type!==4) echo "Задание $posTest:"; else echo 'Теория:'; ?></h2>
-            <?php if($exercise->id_type!==4) : ++$posTest; ?>
-                <div class="question"><?php echo "$exercise->condition"; ?></div>
-                <div class="answer clearfix">
-                    <?php if($exercise->id_visual) $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$i)); ?>
+    <div id="exercises">
+        <?php foreach($exerciseGroup->Exercises as $i => $exercise) : ?>
+            <div id="exercise_<?php echo $i; ?>"  class="exercise <?php echo (++$i%2)==0 ? 'even' : 'odd'; ?>">
+                <div class="head clearfix">
+                    <div class="number"><?php echo $posTest++; ?></div>
+                    <div class="condition"><?php echo "$exercise->condition"; ?></div>
+                    <div class="result"></div>
                 </div>
-                <div class="result"></div>
-            <?php else : ?>
-                <?php echo $exercise->condition; ?>
-            <?php endif; ?>
-            <input class="duration" type="hidden" name="Exercises[<?php echo $exercise->id; ?>][duration]" value="0" />
-        </div>
-    <?php endforeach; ?>
+                <div class="answer clearfix">
+                    <?php if($exercise->id_visual) : ?>
+                        <?php $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$exercise->id, 'index'=>$i)); ?>
+                    <?php endif; ?>
+                </div>
+                <input class="duration" type="hidden" name="Exercises[<?php echo $exercise->id; ?>][duration]" value="0" />
+            </div>
+        <?php endforeach; ?>
+    </div>
 <?php else : ?>
     Нет заданий
 <?php endif; ?>

@@ -377,7 +377,7 @@ class UserAndExerciseGroups extends CActiveRecord
         
         public function getNextButton($tab=-1)
         {
-            $attrs = array('class'=>'btn btn-success btn-icon-right nextGroup');
+            $attrs = array('class'=>'next-button');
             $tab = (int) $tab;
             if($tab >= 0)
             {
@@ -385,13 +385,13 @@ class UserAndExerciseGroups extends CActiveRecord
             }
             if($this->nextGroup)
             {
-                return CHtml::link('Перейти к следующей группе заданий<i class="glyphicon glyphicon-arrow-right"></i>', array('lessons/nextgroup', 'id'=>$this->id), $attrs);
+                return CHtml::link('К следующей группе заданий', array('lessons/nextgroup', 'id'=>$this->id), $attrs);
             }
             elseif($this->UserAndLesson->Course->nextLesson($this->UserAndLesson->id_group, $this->UserAndLesson->id_lesson)) 
             {
-                return CHtml::link('Следующий урок<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
+                return CHtml::link('К следующему уроку', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
             } else {
-                return CHtml::link('Завершить курс<i class="glyphicon glyphicon-arrow-right"></i>', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
+                return CHtml::link('Завершить курс', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
             }
         }
         

@@ -7,10 +7,10 @@ if(!empty($model->Answers))
     
     foreach($listWords as $listWord)
     {
-        $list[] = "<li class='word'>"
+        $list[] = "<div class='word'>"
                     ."$listWord"
                     ."<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][]' value='$listWord' />"
-                  ."</li>";
+                  ."</div>";
     }             
     // перемешиваем массивы
     shuffle($list);
@@ -18,7 +18,5 @@ if(!empty($model->Answers))
 ?>
         
 <div class="orderings clearfix">
-     <ul>
-        <?php echo implode('', $list); ?>
-    </ul>
+    <?php echo implode('', $list); ?>
 </div>
