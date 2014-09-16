@@ -41,9 +41,12 @@
                                                 $contentSkills .= "</tr>";
                                                 ++$numSkill;
                                             }
-                                        } else {
-                                            $contentSkills = "<tr><td><td>Нет умений<td></tr>";
                                         }
+                                        else
+                                        {
+                                            $contentSkills .= "<tr class='skill no-skills'><td class='number'></td><td class='name'>Нет умений<td></tr>";
+                                        }
+                                        
                                     $contentSkills .= "</table>";
                                 ?>
                                 <div id="lesson-name">

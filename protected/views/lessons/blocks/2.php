@@ -15,9 +15,13 @@
                 if(!checkTextWithSpaces(withSpace))
                     result = false;
             });
-            if(!result)
+            
+            if(result) {
+                $('#exercises-form').submit();
+            } else {
                 alert('Не для всех заданий даны ответы');
-            return result;
+            }
+            return false;
         });
 
         $('.block').click(function(){

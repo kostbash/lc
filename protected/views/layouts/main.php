@@ -24,7 +24,7 @@
                     </div>
                     <?php if(!Yii::app()->user->isGuest) : $user = Users::model()->findByPk(Yii::app()->user->id); ?>
                         <div id="achievements-links">
-                            <a href="<?php echo $this->createUrl('users/progress'); ?>" >
+                            <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/stamina-link.png" height="19" />
                                     <h5>Выносливость</h5>
@@ -33,7 +33,7 @@
                                     <?php echo $user->stamina; ?> <span>дней</span>
                                 </div>
                             </a>
-                            <a href="<?php echo $this->createUrl('users/progress'); ?>" >
+                            <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/experience-link.png" height="19" />
                                     <h5>Опыт</h5>
@@ -42,7 +42,7 @@
                                     <?php echo $user->experience; ?> <span>тестов</span>
                                 </div>
                             </a>
-                            <a href="<?php echo $this->createUrl('users/progress'); ?>" >
+                            <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/accuracy-link.png" height="19" />
                                     <h5>Точность</h5>

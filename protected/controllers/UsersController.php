@@ -7,7 +7,7 @@ class UsersController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
     
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	/**
 	 * @return array action filters
@@ -29,7 +29,7 @@ class UsersController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('activate', 'recovery', 'successreg', 'progress'),
+				'actions'=>array('activate', 'recovery', 'successreg', 'achievements'),
 				'users'=>array('*'),
 			),
 			array('allow',
@@ -112,7 +112,7 @@ class UsersController extends Controller
             $this->redirect('/');
         }
         
-        public function actionProgress($key=null)
+        public function actionAchievements($key=null)
         {
             if($key)
                 $user = Users::model()->findByAttributes(array('progress_key'=>$key));
@@ -120,7 +120,7 @@ class UsersController extends Controller
                 $user = Users::model()->findByAttributes(array('id'=>Yii::app()->user->id));
             if(!$user)
                 $this->redirect('/');
-            $this->render('progress', array(
+            $this->render('achievements', array(
                 'user'=>$user,
                 'progress_key'=>$key,
             ));

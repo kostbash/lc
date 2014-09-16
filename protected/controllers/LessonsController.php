@@ -3,7 +3,7 @@
 class LessonsController extends Controller
 {
     
-	public $layout='//layouts/column2';
+	public $layout='//layouts/main';
 
 	public function filters()
 	{
@@ -91,6 +91,7 @@ class LessonsController extends Controller
                 
                 if(isset($_POST['Exercises'])) 
                 {
+                    $_POST['Exercises'] = (array) $_POST['Exercises'];
                     if($currentExerciseGroup->type==1)
                     {
                         $userAndExerciseGroup->saveResultBlock($_POST['Exercises']);
@@ -115,7 +116,7 @@ class LessonsController extends Controller
                     {
                         $exercisesTest = $currentExerciseGroup->ExercisesTest;
                         // т.к. задания выбираются постоянно новые для теста, мы сохраняем этот набор, чтобы его потом проверить
-                        unset($_SESSION['exercisesTest']);
+                        $_SESSION['exercisesTest'] = array();
                         foreach($exercisesTest as $keyMass => $exerciseTest)
                         {
                             $_SESSION['exercisesTest'][$keyMass] = $exerciseTest->id;
@@ -160,10 +161,9 @@ class LessonsController extends Controller
             ));
         }
         
-        public function actionCheck($step=1)
+        public function actionCheck($course, $step=1)
         {
-            $this->layout='//layouts/begin';
-            $course = Courses::model()->findByPk(Courses::$defaultCourse);
+            $course = Courses::model()->findByPk($course);
             $checkLesson = $course->LessonsGroups[0]->LessonsRaw[0];
             $currentGroup = $checkLesson->ExercisesGroups[$step-1];
             $nextGroup = $checkLesson->ExercisesGroups[$step] ? 1 : 0;
@@ -217,7 +217,7 @@ class LessonsController extends Controller
                     $answersLog->save();
                 }
                 if($nextGroup)
-                    $this->redirect(array('lessons/check', 'step'=>$step+1));
+                    $this->redirect(array('lessons/check', 'course'=>$course->id, 'step'=>$step+1));
                 else
                 {
                     $userAnswers = AnswersLog::model()->findAllByAttributes(array('ip'=>$_SERVER['REMOTE_ADDR']));

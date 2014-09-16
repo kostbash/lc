@@ -25,6 +25,12 @@ class Users extends CActiveRecord
             '4' => 'Родитель',
         );
         
+        public static $places = array(
+            '1' => 'first',
+            '2' => 'second',
+            '3' => 'third',
+        );
+        
         public $temporary_password;
         
         public $checkPassword;
@@ -33,7 +39,7 @@ class Users extends CActiveRecord
         public static $placeImage = array(
             1 => 'first-place.png',
             2 => 'second-place.png',
-            3 => 'three-place.png',
+            3 => 'third-place.png',
         );
         
     

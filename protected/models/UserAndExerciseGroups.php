@@ -131,8 +131,8 @@ class UserAndExerciseGroups extends CActiveRecord
             $result = array();
             $attrForBlockLog = array();
             $attrForBlockLog['duration'] = 0;
-            //CVarDumper::dump($answers, 10, true);
-            //CVarDumper::dump($exercises, 10, true); die;
+//            CVarDumper::dump($answers, 10, true);
+//            CVarDumper::dump($exercises, 10, true); die;
             if($exercises && is_array($exercises))
             {
                 $countRight = 0;
@@ -180,7 +180,12 @@ class UserAndExerciseGroups extends CActiveRecord
                     $resultSkills[$id_skill]['skill'] = $skill;
                     if($resultSkills[$id_skill]['need'] > $resultSkills[$id_skill]['achieved'])
                     {
+                        $resultSkills[$id_skill]['passed'] = 0;
                         $testPassed = 0;
+                    }
+                    else
+                    {
+                        $resultSkills[$id_skill]['passed'] = 1;
                     }
                 }
                 
