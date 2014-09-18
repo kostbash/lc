@@ -161,7 +161,7 @@
     <div id="courses-tabs">
         <ul class="nav nav-tabs">
             <?php echo $mainNavTabs;  ?>
-            <li class="dropdown open" id="more-courses">
+            <li class="dropdown" id="more-courses">
                 <a href="#" id="tabDrop1" class="dropdown-toggle" data-toggle="dropdown"><img src="/images/vertical-dotes.png" width="6" height="24" /></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="tabDrop1">
                     <?php echo $underNavTabs; ?>
