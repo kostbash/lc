@@ -7,8 +7,11 @@
                 <div class="content">
                     <div class="course">
                         <div class="head">
-                            <div class="status">Текущий курс:</div>
-                            <div class="name"><?php echo $course->name; ?></div>
+                            <div class="info">
+                                <div class="status current">Текущий курс:</div>
+                                <div class="name"><?php echo $course->name; ?></div>
+                            </div>
+                            <?php echo $course->stateButton(); ?>
                         </div>
                         <div class="content clearfix">
                             <div class="passed-lessons">
@@ -22,7 +25,7 @@
                         </div>
                         <div class="progress progress-striped active">
                             <?php $courseProgress = $course->progress; ?>
-                            <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="<?php echo $courseProgress ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courseProgress ?>%"></div>
+                            <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="<?php echo $courseProgress; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courseProgress; ?>%"></div>
                         </div>
                     </div>
                 </div>
@@ -30,9 +33,7 @@
             <div id="head-col-right" class="head-column">
                 <div class="content">
                     <div class="text">
-                        <p>На этой странице отображены темы курса и уроки каждой темы. Чтобы освоить курс пройдите все уроки.</p>
-                        <p>Справа от каждого урока отображается Ваш прогресс по этому уроку.</p>
-                        <p><?php echo $course->stateButton(); ?></p>
+                        <p>Место, чтобы инфу по курсу поместить</p>
                     </div>
                 </div>
             </div>

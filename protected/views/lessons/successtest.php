@@ -10,87 +10,14 @@
     <div id="back-header-bottom">
         <div id="header-bottom">
             <div id="head-full-column" class="head-column">
-                <div class="content">
-                    <div id="lesson-page-header">
-                        <div class="clearfix">
-                            <div id="lesson-info">
-                                <?php
-                                    $contentSkills .= "<table>";
-                                        if($userLesson->Lesson->Skills) {
-                                            $numSkill = 1;
-                                            foreach($userLesson->Lesson->Skills as $lessonSkill)
-                                            {
-                                                $contentSkills .= "<tr class='skill'>";
-                                                    $contentSkills .= "<td class='number'>$numSkill</td>";
-                                                    $contentSkills .= "<td class='name'>$lessonSkill->name</td>";
-                                                $contentSkills .= "</tr>";
-                                                ++$numSkill;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $contentSkills .= "<tr class='skill no-skills'><td class='number'></td><td class='name'>Нет умений<td></tr>";
-                                        }
-                                        
-                                    $contentSkills .= "</table>";
-                                ?>
-                                <div id="lesson-name">
-                                    <?php echo "УРОК $userLesson->position: ".$userLesson->Lesson->name; ?>
-                                    <div id="skills" data-toggle="popover" data-trigger ="hover" data-html='true' data-container="#lesson-name" data-placement="right" data-content="<?php echo $contentSkills; ?>"></div>
-                                </div>
-                                <?php echo CHtml::link('Название курса "'.$userLesson->Course->name.'"', array('courses/index', 'id'=>$userLesson->Course->id), array('id'=>'course-name')); ?>
-                            </div>
-                            <div id="next-lesson">
-                                <?php 
-                                    if( $userLesson->Lesson->accessNextLesson($userLesson->id) )
-                                        echo CHtml::link('Следующий урок', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'next-lesson-button'));
-                                ?>
-                            </div>
-                        </div>
-                        <div id="blocks">
-                            <h1>Блоки урока</h1>
-                            <ul>
-                                <?php if($userLesson->Lesson->ExercisesGroups) : ?>
-                                    <?php foreach($userLesson->Lesson->ExercisesGroups as $pos => $group) : ++$pos; ?>
-                                        <?php if(UserAndExerciseGroups::ExistUserAndGroup($userLesson->id, $group->id)) : ?>
-                                            <?php
-                                                if($exerciseGroup->id == $group->id)
-                                                {
-                                                    $class = 'current';
-                                                    $currentPos = $pos;
-                                                } else {
-                                                    $class = '';
-                                                }
-                                            ?>
-                                            <li>
-                                                <?php
-                                                    echo "$pos. ";
-                                                    echo CHtml::link($group->name, array('lessons/pass', 'id'=>$userLesson->id, 'group'=>$group->id), array('class'=>$class));
-                                                    if($group->type==2) echo '<span class="test">Тест!</span>'; 
-                                                ?>
-                                            </li>
-                                        <?php else : ?>
-                                            <li>
-                                                <?php
-                                                    echo "$pos. $group->name";
-                                                    if($group->type==2) echo '<span class="test">Тест!</span>'; 
-                                                ?>
-                                            </li>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <li>Нет блоков</li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="content-mini">
+                    <div class="head"><?php echo $resultTest['passed'] ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?></div>
                 </div>
             </div>
         </div>        
     </div>
 </div><!-- end-header-->
 
-<?php //$resultText = $resultTest['passed'] ? 'Вы успешно прошли тест' : 'Тест не пройден'; ?>
 <div id="container">
     <div id="lesson-page">
         <div id="result-test-page">

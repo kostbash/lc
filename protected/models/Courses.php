@@ -31,6 +31,20 @@ class Courses extends CActiveRecord
             8 => 'a89',
             9 => 'a32',
         );
+        
+        public static $difficulties = array(
+            0 => 0,
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+            5 => 5,
+            6 => 6,
+            7 => 7,
+            8 => 8,
+            9 => 9,
+            10 => 10,
+        );
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -41,9 +55,10 @@ class Courses extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('name', 'length', 'max'=>255),
+			array('name, learning_time', 'length', 'max'=>255),
 			array('description', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
+                        array('difficulty, id_subject, id_class', 'numerical'),
                         array('id_editor', 'numerical', 'on'=>'create'),
 			array('id, name, description', 'safe', 'on'=>'search'),
 		);
@@ -54,18 +69,16 @@ class Courses extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-                    'CourseAndGroupLesson' => array(self::HAS_MANY, 'CourseAndLessonGroup','id_course'),
-                    'LessonsGroups' => array(self::MANY_MANY, 'GroupOfLessons', 'oed_course_and_lesson_group(id_course, id_group_lesson)', 'order'=>'LessonsGroups_LessonsGroups.order ASC'),
-                    'User' => array(self::MANY_MANY, 'Users', 'oed_courses_and_users(id_course, id_user)'),
-                    'Skills' => array(self::MANY_MANY, 'Skills', 'oed_course_and_skills(id_course, id_skill)'),
-                    'Lessons'=>array(self::MANY_MANY, 'Lessons', 'oed_courses_and_lessons(id_course, id_lesson)', 'order'=>'Lessons_Lessons.order ASC'),
-                    'Blocks'=>array(self::MANY_MANY, 'GroupOfExercises', 'oed_courses_and_group_exercise(id_course, id_group)', 'order'=>'Blocks_Blocks.order ASC'),
-                    'CoursesAndGroupExercise'=>array(self::HAS_MANY, 'CoursesAndGroupExercise', 'id_course', 'order'=>'CoursesAndGroupExercise.order'),
-                    'CoursesAndLessons'=>array(self::HAS_MANY, 'CoursesAndLessons', 'id_course', 'order'=>'CoursesAndLessons.order'),
-		);
+            return array(
+                'CourseAndGroupLesson' => array(self::HAS_MANY, 'CourseAndLessonGroup','id_course'),
+                'LessonsGroups' => array(self::MANY_MANY, 'GroupOfLessons', 'oed_course_and_lesson_group(id_course, id_group_lesson)', 'order'=>'LessonsGroups_LessonsGroups.order ASC'),
+                'Users' => array(self::MANY_MANY, 'Users', 'oed_courses_and_users(id_course, id_user)'),
+                'Skills' => array(self::MANY_MANY, 'Skills', 'oed_course_and_skills(id_course, id_skill)'),
+                'Lessons'=>array(self::MANY_MANY, 'Lessons', 'oed_courses_and_lessons(id_course, id_lesson)', 'order'=>'Lessons_Lessons.order ASC'),
+                'Blocks'=>array(self::MANY_MANY, 'GroupOfExercises', 'oed_courses_and_group_exercise(id_course, id_group)', 'order'=>'Blocks_Blocks.order ASC'),
+                'CoursesAndGroupExercise'=>array(self::HAS_MANY, 'CoursesAndGroupExercise', 'id_course', 'order'=>'CoursesAndGroupExercise.order'),
+                'CoursesAndLessons'=>array(self::HAS_MANY, 'CoursesAndLessons', 'id_course', 'order'=>'CoursesAndLessons.order'),
+            );
 	}
 
 	/**
@@ -74,10 +87,14 @@ class Courses extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Название',
-			'description' => 'Описание',
-                        'countLessons' => 'Число уроков',
+                    'id' => 'ID',
+                    'name' => 'Название',
+                    'difficulty' => 'Сложность',
+                    'id_subject' => 'Предмет',
+                    'id_class' => 'Класс',
+                    'description' => 'Описание',
+                    'countLessons' => 'Число уроков',
+                    'learning_time' => 'Предполагаемое время обучения',
 		);
 	}
 
@@ -103,7 +120,7 @@ class Courses extends CActiveRecord
 		$criteria->compare('id',$this->id);
                 $criteria->with = array('User');
                 $criteria->together = true;
-                $criteria->compare('User.id', Yii::app()->user->id);
+                $criteria->compare('Users.id', Yii::app()->user->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
 
@@ -146,6 +163,47 @@ class Courses extends CActiveRecord
             foreach($this->LessonsGroups as $group)
                 $mass[] = $group->id;
             return GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
+        }
+        
+        public function getCountBlocks($type=1)
+        {
+            $type = (int) $type;
+            $queryThemes = "SELECT id_group_lesson FROM `oed_course_and_lesson_group` WHERE `id_course`=$this->id ORDER BY `order` ASC";
+            $themes = Yii::app()->db->createCommand($queryThemes)->queryAll();
+            $themesIds = array();
+            foreach($themes as $n => $theme)
+            {
+                if($n == 0)
+                    continue; // убераем проверочный тест
+                $themesIds[] = $theme['id_group_lesson'];
+            }
+            if(!$themesIds)
+                return 0;
+                $themesIds = implode(',', $themesIds);
+            
+            $queryLessons = "SELECT id_lesson FROM `oed_group_and_lessons` WHERE `id_group` IN($themesIds)";
+            $lessons = Yii::app()->db->createCommand($queryLessons)->queryAll();
+            $lessonsIds = array();
+            foreach($lessons as $lesson)
+            {
+                $lessonsIds[] = $lesson['id_lesson'];
+            }
+            $lessonsIds = implode(',', $lessonsIds);
+            if(!$lessonsIds)
+                return 0;
+            $queryCount = "SELECT COUNT(*) as count FROM `oed_lesson_and_exercise_group` lb, `oed_group_of_exercises` b WHERE lb.id_group_exercises=b.id AND lb.id_lesson IN($lessonsIds) AND b.type=$type";
+            $count = Yii::app()->db->createCommand($queryCount)->queryAll();
+            return $count[0]['count'];
+        }
+        
+        public function getThemesLessons()
+        {
+            $lessons = array();
+            foreach($this->LessonsGroups as $theme)
+            {
+                $lessons = array_merge($lessons, $theme->LessonsRaw);
+            }
+            return $lessons;
         }
         
         public function getAverageByTests() {
@@ -298,6 +356,35 @@ class Courses extends CActiveRecord
             if(Yii::app()->user->checkAccess('admin'))
                 return Courses::model()->exists('`id`=:id', array('id'=>$id));
             return Courses::model()->exists('`id`=:id AND id_editor=:id_editor', array('id'=>$id, 'id_editor'=>Yii::app()->user->id));
+        }
+        
+        public function getClassName()
+        {
+            $class = CourseClasses::model()->findByPk($this->id_class);
+            if($class)
+                return $class->name;
+            else
+                return '*';
+        }
+        
+        public function getUserStatus()
+        {
+            $lastActive = CoursesAndUsers::model()->find(array(
+                'condition'=> 'id_user=:id_user',
+                'params'=>array('id_user'=>Yii::app()->user->id),
+                'order'=>'`activity_date` DESC',
+            ));
+            if($lastActive && $lastActive->id_course == $this->id)
+                return "<div class='last-active'>ПОСЛЕДНИЙ АКТИВНЫЙ</div>";
+            $userAndCourse = CoursesAndUsers::model()->findByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id));
+            if($userAndCourse)
+            {
+                if($userAndCourse->status==1)
+                    return "<div class='active'>$this->progress <span class='percent'>%</span></div>";
+                if($userAndCourse->status==2)
+                    return "<div class='passed'>ПРОЙДЕНО!</div>";
+            }
+            return "<div class='not-active'>НЕ ПРИСТУПАЛ</div>";
         }
                  
 }

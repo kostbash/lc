@@ -28,14 +28,6 @@
         $('#reg-as-parent').click(function(){
             $('#user-role-parent').attr('checked', 'checked');
         });
-        
-        $('#courses-tabs li').click(function(){
-            current = $(this);
-            triangle = current.closest('.nav-tabs').find('li .triangle');
-            current.closest('.nav-tabs').find('li .course-shadow').show();
-            current.find('.course-shadow').hide();
-            current.append(triangle);
-        });
     });
 </script>
     <?php $this->renderPartial('login', array('model'=>$loginForm)); ?>
@@ -82,255 +74,110 @@
 </div><!-- end-header-->
 <div id="container">
     <h1 class="choose-course">Выберите предмет<br />и курс</h1>
+    <?php 
+        if($subjects)
+        {
+            $mainNavTabs = '';
+            $underNavTabs = '';
+            $tabs = '';
+            $zIndex = 4;
+            foreach($subjects as $i => $subject)
+            {
+                if($i>=0 AND $i <=3)
+                {
+                    if($i==0)
+                        $classNav = 'active';
+                    elseif($i==3)
+                        $classNav = 'fourth';
+                    else
+                        $classNav = '';
+                    
+                    $imageSize = getimagesize("images/tabCourseIcons/$subject->id.png");
+                    if($imageSize)
+                    {
+                        $width = round($imageSize[0]/2);
+                        $image = "<div class='course-icon' style='width:{$width}px; height:$imageSize[1]px; background: url(/images/tabCourseIcons/$subject->id.png) right bottom;'></div>";
+                    }
+                    else
+                    {
+                        $image = '';
+                    }
+                    
+                    $mainNavTabs .= "<li class='$classNav' style='z-index: $zIndex'>
+                                        <div href='#panel-$i' data-toggle='tab' class='tab-header'>
+                                            $image
+                                            <div class='name'>
+                                                <h3>$subject->name</h3>
+                                            </div>
+                                        </div>
+                                    </li>";
+                    $zIndex--;
+                }
+                else
+                {
+                    $underNavTabs .= "<li><a href='#panel-$i' data-toggle='tab'>$subject->name</a></li>";
+                }
+                
+                    if($i==0)
+                        $classTab = 'active';
+                    else
+                        $classTab = '';
+                
+                $tabs .= "<div class='tab-pane $classTab' id='panel-$i'>";
+                    $subjectCourses = $subject->Courses;
+                    if($subjectCourses)
+                    {
+                        $tabs .="<div class='courses clearfix'>";
+                            foreach($subjectCourses as $n => $subjectCourse)
+                            {
+                                $number = $n+1;
+                                $tabs .="<div class='course'>
+                                            <div class='head'>
+                                                <div class='number'>$number</div>
+                                                <div class='name'>$subjectCourse->name</div>
+                                            </div>
+                                            <div class='content clearfix'>
+                                                <div class='class'>
+                                                    <h4>Класс:</h4>
+                                                    <div class='value'>$subjectCourse->className</div>
+                                                </div>
+                                                <div class='difficulty'>
+                                                    <h4>Сложность:</h4>
+                                                    <div class='value'>$subjectCourse->difficulty</div>
+                                                </div>
+                                                <div class='count-lessons'>
+                                                    <h4>Уроков:</h4>
+                                                    <div class='value'>$subjectCourse->countLessons</div>
+                                                </div>
+                                            </div>
+                                            <div class='foot'>
+                                                <a class='to-course' href='".Yii::app()->createUrl('courses/view', array('id'=>$subjectCourse->id))."'>к курсу</a>
+                                            </div>
+                                        </div>";
+                            }
+                        $tabs .= "</div>";
+                    }
+                    else
+                    {
+                        $tabs .= '<p style="margin-top:20px; margin-left: 10px">Курсов пока нет, они в разработке. В ближайшее время появятся :)</p>';
+                    }
+                $tabs .= "</div>";
+            }
+        }
+    ?>
     <div id="courses-tabs">
         <ul class="nav nav-tabs">
-            <li class="active">
-                <div href="#panel-1" data-toggle="tab" class="tab-header">
-                    <div class='course-shadow' style='display: none;'></div>
-                    <img class="course-icon" src="/images/math-icon.png" />
-                    <div class="name">
-                        <h3>Математика</h3>
-                    </div>
-                </div>
-                <div class="triangle">
-                    <img src="/images/triangle-active.png" width="25" height="11" />
-                </div>
-            </li>
-            <li>
-                <div href="#panel-2" data-toggle="tab" class="tab-header">
-                    <div class='course-shadow'></div>
-                    <img class="course-icon" src="/images/english-icon.png" />
-                    <div class="name">
-                        <h3>Английский язык</h3>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div href="#panel-3" data-toggle="tab" class="tab-header">
-                    <div class='course-shadow'></div>
-                    <img class="course-icon" src="/images/russian-icon.png" />
-                    <div class="name">
-                        <h3>Русский язык</h3>
-                    </div>
-                </div>
-            </li>
-            <li class="fourth">
-                <div href="#panel-4" data-toggle="tab" class="tab-header">
-                    <div class='course-shadow'></div>
-                    <img class="course-icon" src="/images/history-icon.png" />
-                    <div class="name">
-                        <h3>История</h3>
-                    </div>
-                </div>
-            </li>
+            <?php echo $mainNavTabs;  ?>
             <li class="dropdown open" id="more-courses">
                 <a href="#" id="tabDrop1" class="dropdown-toggle" data-toggle="dropdown"><img src="/images/vertical-dotes.png" width="6" height="24" /></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="tabDrop1">
-                    <li class=""><a href="#dropdown1" tabindex="-1" data-toggle="tab">@fat</a></li>
-                    <li class=""><a href="#dropdown2" tabindex="-1" data-toggle="tab">@mdo</a></li>
+                    <?php echo $underNavTabs; ?>
                 </ul>
             </li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="panel-1">
-                <div class="courses clearfix">
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">1</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">1</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">1</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">1</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">156</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">12</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">55</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">10</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">99</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="panel-2">
-                <div class="courses clearfix">
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">1</div>
-                            <div class="name">Сложение в пределах 100000000000000</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">005</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">1</div>
-                            <div class="name">Сложение в пределах 0</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">1</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">22</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">12</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">5</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                    <div class="course">
-                        <div class="head">
-                            <div class="number">55</div>
-                            <div class="name">Сложение в пределах 100</div>
-                        </div>
-                        <div class="content clearfix">
-                            <div class="class">
-                                <h4>Класс:</h4>
-                                <div class="value">10</div>
-                            </div>
-                            <div class="difficulty">
-                                <h4>Сложность:</h4>
-                                <div class="value">99</div>
-                            </div>
-                            <div class="count-lessons">
-                                <h4>Уроков:</h4>
-                                <div class="value">30</div>
-                            </div>
-                        </div>
-                        <div class="foot">
-                            <a class='to-course' href='#'>к курсу</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="panel-3">
-
-            </div>
-            <div class="tab-pane" id="panel-4">
-
-            </div>
+            <?php echo $tabs; ?>
         </div>
     </div>
 </div>

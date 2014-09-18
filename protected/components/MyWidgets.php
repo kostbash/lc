@@ -6,6 +6,9 @@ class MyWidgets {
         $begin = (int) $begin;
         $end = (int) $end;
         
+//        $begin = rand(0, 100);
+//        $end = rand(0,100);
+        
         if($begin >= $end)
         {
             $begin_index = 0;

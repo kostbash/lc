@@ -17,8 +17,12 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('list','index', 'add', 'mylist', 'view', 'nextlesson'),
+				'actions'=>array('list','index', 'nextlesson'),
 				'roles'=>array('student'),
+			),
+			array('allow',
+				'actions'=>array('view'),
+                                'users'=>array('?'),
 			),
 			array('deny',
 				'users'=>array('*'),
@@ -27,11 +31,11 @@ class CoursesController extends Controller
 	}
         
         public function actionView($id){
-            if(!$id)
-                $id = Courses::$defaultCourse;
-            $model = $this->loadModel($id);
+            $course = $this->loadModel($id);
+            $themesLessons = $course->themesLessons;
             $this->render('view',array(
-                'model'=>$model,
+                'course'=>$course,
+                'themesLessons'=>$themesLessons,
             ));
         }
         
@@ -57,12 +61,23 @@ class CoursesController extends Controller
 		$course = $this->loadModel($id);
                 $user = Users::model()->findByPk(Yii::app()->user->id);
                 
+                $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id));
                 // сущесвует ли курс у пользователя
-                if(!CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id)))
+                if($courseUser)
+                {
+                    if($courseUser->status == 1)
+                    {
+                        $courseUser->activity_date = date('Y-m-d H:i:s');
+                        $courseUser->save();
+                    }
+                }
+                else
                 {
                     $courseUser = new CoursesAndUsers;
                     $courseUser->id_course = $course->id;
                     $courseUser->id_user = $user->id;
+                    $courseUser->activity_date = date('Y-m-d H:i:s');
+                    $courseUser->status = 1;
                     $courseUser->save();
                 }
                 
@@ -111,14 +126,18 @@ class CoursesController extends Controller
 
 	public function actionList()
 	{
-            $this->redirect(array('courses/view', 'id'=>Courses::$defaultCourse));
             $model=new Courses('search');
-            $model->unsetAttributes();  // clear any default values
+            $model->unsetAttributes();
             if(isset($_GET['Courses']))
                     $model->attributes=$_GET['Courses'];
-
+            $user = Users::model()->findByPk(Yii::app()->user->id);
+            $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
             $this->render('list',array(
                     'model'=>$model,
+                    'lastActiveCourse' => $user->lastActiveCourse,
+                    'activeCourses' => $user->lastCourses(1),
+                    'passedCourses' => $user->lastCourses(2),
+                    'subjects' => $subjects,
             ));
 	}
         

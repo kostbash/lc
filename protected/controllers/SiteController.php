@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
             if(!Yii::app()->user->isGuest)
-                $this->redirect(array('courses/index','id'=>Courses::$defaultCourse));
+                $this->redirect(array('courses/list'));
             
             $loginForm = new LoginForm;
             $user = new Users;
@@ -56,16 +56,19 @@ class SiteController extends Controller
                         if($loggedUser->role == 1)
                             $this->redirect(array('admin/courses/index'));
                         else
-                            $this->redirect(array('courses/index','id'=>Courses::$defaultCourse));
+                            $this->redirect(array('courses/list'));
                     } else
                         $showLoginModal = true;
             }
+            
+            $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
             
             $this->render('index', array(
                 'loginForm' => $loginForm,
                 'user' => $user,
                 'showRegModal'=>$showRegModal,
                 'showLoginModal'=>$showLoginModal,
+                'subjects' => $subjects,
             ));
 	}
 

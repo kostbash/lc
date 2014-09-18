@@ -76,7 +76,7 @@ class Users extends CActiveRecord
 	public function relations()
 	{
 		return array(
-
+                    'Courses'=>array(self::MANY_MANY, 'Courses', 'oed_courses_and_users(id_user, id_course)'),
 		);
 	}
 
@@ -361,7 +361,40 @@ class Users extends CActiveRecord
                if(Yii::app()->user->checkAccess('admin'))
                    return Yii::app()->createUrl('/admin/courses/index');
                else
-                   return Yii::app()->createUrl('courses/index');
+                   return Yii::app()->createUrl('courses/list');
+            }
+        }
+        
+        public function lastCourses($status)
+        {
+            $status = (int) $status;
+            $criteria=new CDbCriteria;
+            $criteria->with = array('Users');
+            $criteria->together = true;
+            $criteria->compare('Users.id', Yii::app()->user->id);
+            if($status===1)
+            {
+                $criteria->compare('status', $status);
+                $criteria->order = 'activity_date ASC';
+            }
+            elseif($status===2)
+            {
+                $criteria->compare('status', $status);
+                $criteria->order = 'passed_date ASC';
+            }
+            return Courses::model()->findAll($criteria);
+        }
+        
+        public function getLastActiveCourse()
+        {
+            $lastActive = CoursesAndUsers::model()->find(array(
+                'condition'=> 'id_user=:id_user',
+                'params'=>array('id_user'=>$this->id),
+                'order'=>'`activity_date` DESC',
+            ));
+            if($lastActive)
+            {
+                return Courses::model()->findByPk($lastActive->id_course);
             }
         }
 }

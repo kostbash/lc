@@ -25,6 +25,7 @@ class CoursesAndUsers extends CActiveRecord
 	{
 		return array(
 			array('id_user, id_course', 'required'),
+                        array('activity_date, passed_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
 			array('id_user, id_course', 'numerical', 'integerOnly'=>true),
 			array('id, id_user, id_course', 'safe', 'on'=>'search'),
 		);

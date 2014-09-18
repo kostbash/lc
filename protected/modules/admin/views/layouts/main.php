@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
-            <?php echo CHtml::link(Yii::app()->name, array('/courses/index','id'=>Courses::$defaultCourse), array('class'=>'navbar-brand')); ?>
+            <?php echo CHtml::link(Yii::app()->name, array('/courses/list'), array('class'=>'navbar-brand')); ?>
         </div>
         <div class="collapse navbar-collapse">
             <?php
@@ -32,7 +32,10 @@
                 if(Yii::app()->user->checkAccess('parent'))
                     $this->menu[] = array('label'=>'Дети', 'url'=>array('/admin/childrenofparent/index'));
                 if(Yii::app()->user->checkAccess('admin'))
+                {
+                    $this->menu[] = array('label'=>'Параметры курсов', 'url'=>array('/admin/courseParams/index'));
                     $this->menu[] = array('label'=>'Пользователи', 'url'=>array('/admin/users/index'));
+                }
                 
                     $this->widget('zii.widgets.CMenu',array(
                             'items'=>$this->menu,

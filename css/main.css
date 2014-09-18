@@ -23,6 +23,12 @@
     font-weight: bold; 
 }
 
+@font-face {
+    font-family: 'PT Sans';
+    src: local("PT Sans Italic"), url('/fonts/PTSansItalic.ttf');
+    font-style: italic;
+    font-weight: normal; 
+}
 
 @font-face {
     font-family: 'a_FuturaOrto';
@@ -33,6 +39,16 @@
     font-family: 'a_FuturaOrto';
     src: local("a_FuturaOrto Bold"), url('/fonts/a_futuraorto-bold.ttf');
     font-weight: bold; 
+}
+
+@font-face {
+    font-family: 'a_FuturaOrtoLt';
+    src: local("a_FuturaOrtoLt"), url('/fonts/a_FuturaOrtoLtLight.ttf');
+}
+@font-face {
+    font-family: 'a_FuturaOrtoLt';
+    src: local("a_FuturaOrtoLt Bold"), url('/fonts/a_FuturaOrtoLtBold.ttf');
+    font-weight: bold;
 }
 
 html, body {
@@ -46,6 +62,11 @@ html, body {
     
     padding-top: 10px !important;
     padding-bottom:10px !important;
+}
+
+#course .main-attrs .row
+{
+    margin-bottom: 10px;
 }
 
 .course-info
@@ -182,7 +203,7 @@ h2{
 .zgrid .inputs-mini {
     
 }
-/*#dff0d8; #d9edf7; #428bca;*/
+
 .zgrid .inputs-mini .input-mini-container {
     background: #d9edf7;
     text-align: left;
@@ -202,6 +223,7 @@ h2{
 .mydrop {
 
 }
+
 .zgrid .mydrop input {
     text-align: left;
     height: 25px;
@@ -933,15 +955,16 @@ z-index:10000000;
 
 #logo {
     float: left;
+    margin-top: 13px;
 }
 
 #logo a {
     text-transform: uppercase;
     color: #fff;
-    font-size: 52px;
-    line-height: 72px;
+    font-size: 50px;
+    line-height: 52px;
     font-weight: bold;
-    font-family: 'PT Sans';
+    font-family: 'a_FuturaOrto';
 }
 #logo a:hover {
     text-decoration: none;
@@ -950,6 +973,9 @@ z-index:10000000;
 #slogan
 {
     color: #fff;
+    margin-top: 2px;
+    font-family: 'PT Sans';
+    font-size: 17px;
     font-style: italic;
 }
 
@@ -1095,6 +1121,12 @@ z-index:10000000;
     margin: 0 auto;
 }
 
+#header-bottom:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
 .advantage:first-child
 {
     margin-left: 4px;
@@ -1211,9 +1243,10 @@ z-index:10000000;
 .choose-course
 {
     color: #fff;
-    font-family: 'PT Sans' !important;
+    font-family: 'a_FuturaOrto' !important;
     text-transform: uppercase;
-    font-size: 34px;
+    font-weight: bold;
+    font-size: 35px;
     margin: 30px 0 28px 0;
 }
 
@@ -1222,6 +1255,7 @@ z-index:10000000;
     -webkit-box-shadow: 0px 12px 21px 0px rgba(0, 0, 0, 0.25);
     -moz-box-shadow:    0px 12px 21px 0px rgba(0, 0, 0, 0.25);
     box-shadow:         0px 12px 21px 0px rgba(0, 0, 0, 0.25);
+    margin-top: 30px;
     margin-bottom: 70px;
 }
 
@@ -1233,44 +1267,45 @@ z-index:10000000;
 
 #courses-tabs .nav-tabs > li
 {
+    position: relative;
     background: -moz-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: -webkit-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: -o-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: -ms-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: linear-gradient(to bottom, #ffef8c 0%, #f6d774 100%);
     
+    -webkit-box-shadow: 6px 0px 2px 0px rgba(176, 176, 176, 0.4);
+    -moz-box-shadow:    6px 0px 2px 0px rgba(176, 176, 176, 0.4);
+    box-shadow:         6px 0px 1px 0px rgba(80, 80, 80, 0.2);
+    
     border: 1px solid #f2e497;
-    border-radius: 6px 6px 0 0;
+    border-radius: 4px 4px 0 0;
     width: 238px;
     height: 60px;
     text-align: right;
-    position: relative;
 }
 
 #courses-tabs .nav-tabs > .fourth
 {
-    border-radius: 6px 0 0 0;
+    border-radius: 4px 0 0 0;
+    box-shadow: none !important;
+}
+
+#courses-tabs .nav-tabs > .fourth.active
+{
+    border-radius: 4px 4px 0 0;
 }
 
 #courses-tabs .nav-tabs > li .course-icon
 {
     position: absolute;
-    top: 0;
     bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto 14px;
-    margin-right: 0;
+    margin-left: 14px;
 }
 
-#courses-tabs .nav-tabs > li .course-shadow
+#courses-tabs .nav-tabs > .active .course-icon
 {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 7px;
-    background: url(../images/course-shadow.png) top left repeat-y;
+    background-position: left bottom !important;
 }
 
 #courses-tabs .nav-tabs > .active
@@ -1281,6 +1316,32 @@ z-index:10000000;
     background: -ms-linear-gradient(top, #80c682 0%, #afdb98 100%);
     background: linear-gradient(to bottom, #80c682 0%, #afdb98 100%);
     border: 1px solid #bee396;
+    z-index: 5 !important;
+    height: 62px;
+    margin-top: -2px;
+}
+
+#courses-tabs .nav-tabs > .active:after
+{
+    position: absolute;
+    left: 50%;
+    margin-left: -12px;
+    display: block;
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid #afdb98;
+}
+
+#courses-tabs .nav-tabs > #more-courses:after
+{
+    border-top: 12px solid #8f844d !important;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    margin-left: -14px;
+    margin-top: 2px;
 }
 
 #courses-tabs .tab-content
@@ -1302,40 +1363,36 @@ z-index:10000000;
 #courses-tabs .tab-header .name
 {
     color: #062261;
-    width: 160px;
-    padding-right: 7px;
+    width: 150px;
+    padding-right: 12px;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-    font-family: 'PT Sans';
 }
 
 #courses-tabs .tab-header h3
 {
-    font-size: 22px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'a_FuturaOrtoLt';
     margin: 0;
-    line-height: 22px;
-}
-
-.triangle
-{
-    text-align: center;
-    height: 11px;
-}
-
-.triangle img
-{
-    vertical-align: top;
+    line-height: 20px;
 }
 
 #courses-tabs #more-courses
 {
+    float: right;
     background: #8f854e;
     border: 1px solid #b4a96b;
     width: 28px;
-    border-radius: 0 6px 0 0;
+    border-radius: 0 4px 0 0;
     text-align: center;
-    float: right;
+    box-shadow: none !important;
+}
+
+#courses-tabs #more-courses.active
+{
+    border-radius: 4px 4px 0 0;
 }
 
 #courses-tabs #more-courses #tabDrop1
@@ -1367,7 +1424,7 @@ z-index:10000000;
 .courses .course .head
 {
     height: 70px;
-    color: #464e73;
+    color: #0d1d56;
     display: table;
     width: 100%;
     font-family: 'PT Sans';
@@ -1378,7 +1435,7 @@ z-index:10000000;
 .courses .course .head .number
 {
     text-align: center;
-    font-size: 20px;
+    font-size: 24px;
     width: 52px;
     height: 52px;
     line-height: 48px;
@@ -1396,6 +1453,7 @@ z-index:10000000;
     width: 208px;
     padding: 10px 14px 10px 0;
     font-size: 18px;
+    font-family: 'a_FuturaOrto';
 }
 
 .courses .course .content
@@ -1409,13 +1467,16 @@ z-index:10000000;
 {
     margin: 0;
     color: #fff;
+    font-family: Arial;
     font-size: 14px;
 }
 
 .courses .course .content .value
 {
     color: #b5486d;
-    font-size: 22px;
+    font-size: 24px;
+    font-family: 'PT Sans';
+    font-weight: bold;
 }
 
 .courses .course .content .class,
@@ -1451,15 +1512,26 @@ z-index:10000000;
 .courses .course .foot .to-course
 {
     color: #0076c9;
-    margin-top: 7px;
     display: inline-block;
-    font-family: 'PT Sans';
+    font-family: 'Arial';
+    font-size: 12px;
+    line-height: 36px;
     text-decoration: underline;
 }
 
 .courses .course .foot .to-course:hover
 {
     text-decoration: none;
+}
+
+.main-title
+{
+    font-size: 36px !important;
+    color: #feffff;
+    margin: 24px 0;
+    font-family: 'a_FuturaOrto' !important;
+    font-weight: normal !important;
+    border: none;
 }
 
 /*------------------------------------------------------ Footer ------------------------------------------------------*/
@@ -1504,7 +1576,7 @@ z-index:10000000;
 #course-page .lessons-table
 {
     width: 100%;
-    font-family: 'a_FuturaOrto';
+    font-family: 'a_FuturaOrtoLt';
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
@@ -1618,7 +1690,7 @@ z-index:10000000;
 #achievements-links
 {
     float: left;
-    margin: 15px 0 0 47px;
+    margin: 15px 0 0 35px;
 }
 
 #achievements-links:after
@@ -1752,6 +1824,62 @@ z-index:10000000;
     margin-right: 3px;
 }
 
+#head-col-right .active-courses,
+#head-col-right .passed-courses
+{
+    width: 46%;
+}
+
+#head-col-right .active-courses
+{
+    float: left;
+}
+
+#head-col-right .passed-courses
+{
+    float: right;
+}
+
+#head-col-right .active-courses .head,
+#head-col-right .passed-courses .head
+{
+    font-family: 'a_FuturaOrto';
+    font-weight: bold;
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #b5486d;
+}
+
+#head-col-right .active-courses ul,
+#head-col-right .passed-courses ul
+{
+    padding: 0;
+    list-style: none;
+}
+
+#head-col-right .active-courses ul li,
+#head-col-right .passed-courses ul li
+{
+    margin-bottom: 10px;
+}
+
+#head-col-right .active-courses ul li a,
+#head-col-right .passed-courses ul li a
+{
+    font-family: Arial;
+    font-size: 15px;
+    color: #263870;
+    text-decoration: underline;
+}
+
+#head-col-right .active-courses ul li a:hover,
+#head-col-right .passed-courses ul li a:hover
+{
+    text-decoration: none;
+}
+
+
+
 #head-full-column
 {
     width: 974px;
@@ -1788,9 +1916,26 @@ z-index:10000000;
 
 #head-col-left .course .head
 {
-    padding: 10px;
-    height: 65px;
+    padding: 10px 10px 4px 10px;
     overflow: hidden;
+}
+
+#head-col-left .course .head .info
+{
+    float: left;
+    width: 223px;
+    margin-right: 12px;
+}
+
+#head-col-left .course .head .continue-course-button
+{
+    float: right;
+    width: 190px;
+}
+
+#head-col-left .course .head .course-state-button
+{
+    float: right;
 }
 
 #head-col-left .course .head .name
@@ -1802,11 +1947,45 @@ z-index:10000000;
     color: #263870;
 }
 
-#head-col-left .course .head .status
+#head-col-left .course .head .status.current
 {
     font-family: Arial;
     font-size: 14px;
+}
+
+#head-col-left .course .head .status.current
+{
     color: #588ec5;
+}
+
+#head-col-left .course .head .status.last-active
+{
+    color: #b5486d;
+}
+
+.continue-course-button
+{
+    display: inline-block;
+    background: #6ab83f;
+    text-decoration: none !important;
+    color: #fff !important;
+    padding: 6px 17px 8px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 18px;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+}
+
+.continue-course-button:hover
+{
+    background: #55a429;
 }
 
 #head-col-left .course > .content
@@ -1836,7 +2015,9 @@ z-index:10000000;
 #head-col-left .course > .content .value
 {
     color: #b5486d;
-    font-size: 22px;
+    font-size: 24px;
+    font-family: 'PT Sans';
+    font-weight: bold;
 }
 
 #head-col-left .course > .content .value span
@@ -2995,4 +3176,260 @@ z-index:10000000;
     font-size: 14px;
     font-weight: normal;
     vertical-align: top;
+}
+
+/*------------------------------------------------------ Course-View-Page ------------------------------------------------------*/
+
+#course-view-page #top-buttons
+{
+    margin-bottom: 50px;
+}
+
+#course-view-page #top-buttons a
+{
+    width: 275px;
+    text-align: center;
+}
+
+#course-view-page #top-buttons .next-button
+{
+    margin-right: 5px;
+}
+
+#course-view-page #course-info
+{
+    margin-bottom: 80px;
+}
+
+#course-view-page #course-info > div
+{
+    position: relative;
+    width: 305px;
+    float: left;
+    height: 100%;
+    margin-right: 32px;
+    padding: 14px;
+    background: #fff;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+#course-view-page #course-info > div > .content
+{
+    position: relative;
+    min-height: 220px;
+    font-size: 14px;
+    font-family: Arial;
+    color: #263870;
+    background: #f8f8f8;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border: 1px solid #f4f4f4;;
+    border-bottom: 4px solid #d9d9d9;
+}
+
+#course-view-page #course-info > div > .content .right-background
+{
+    position: absolute;
+    z-index: 0;
+    background: #f1f0ee;
+    height: 100%;
+    width: 50%;
+    right: 0;
+    top: 0;
+}
+
+#course-view-page #course-info > div > .content .info
+{
+    position: relative;
+    z-index: 1;
+    font-family: Arial;
+    font-size: 15px;
+    color: #263870;
+}
+
+#course-view-page #course-info > div > .content .name
+{
+    font-family: 'a_FuturaOrto';
+    font-size: 18px;
+    font-weight: bold;
+    margin: 12px 0;
+    text-decoration: underline;
+    text-align: center;
+    color: #b5486d;
+}
+
+#course-view-page #course-info > div > .content ul
+{
+    padding: 0 10px 10px 26px;
+    color: #b5486d;
+    margin-bottom: 0;
+}
+
+#course-view-page #course-info > div > .content li
+{
+    margin-bottom: 15px;
+}
+
+#course-view-page #course-info > div > .content li span
+{
+    color: #263870;
+}
+
+#course-view-page #course-info > .statistic
+{
+    margin-right: 0;
+}
+
+#course-view-page #course-info > .statistic .param-cont
+{
+    margin: 0 10px 15px 10px;
+}
+
+#course-view-page #course-info > .statistic .param
+{
+    float: left;
+    width: 67%;
+}
+
+#course-view-page #course-info > .statistic .value
+{
+    float: left;
+    margin-left: 1%;
+    width: 32%;
+    font-weight: bold;
+}
+
+
+#course-view-page #lessons-table
+{
+    width: 100%;
+    margin: 20px 0 70px;
+    font-family: 'a_FuturaOrtoLt';
+    font-size: 14px;
+    color: #022f6d;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    border-collapse: separate !important;
+    table-layout: fixed;
+}
+
+#course-view-page #lessons-table th
+{
+    height: 54px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 24px;
+    color: #0d1d56;
+}
+
+#course-view-page #lessons-table thead .number
+{
+    background: #afdb98;
+    width: 15%;
+    text-align: center;
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+#course-view-page #lessons-table thead .name
+{
+    background: #ffe582;
+    width: 85%;
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+#course-view-page #lessons-table td
+{
+    border: 1px solid #f5f4f3;
+    background: #fefefe;
+    padding: 7px 24px;
+    color: #022f6d;
+}
+
+#course-view-page #lessons-table tbody .number
+{
+    font-family: 'PT Sans';
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+    color: #b5486d;
+}
+
+#course-view-page #lessons-table tr:last-child td:first-child
+{
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+#course-view-page #lessons-table tr:last-child td:last-child
+{
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+
+/*------------------------------------------------------ Courses-Page ------------------------------------------------------*/
+
+#courses-page
+{
+    
+}
+
+#courses-page #courses-tabs .course .foot .status
+{
+    float: left;
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 12px;
+}
+
+#courses-page #courses-tabs .course .foot .status .last-active
+{
+    color: #d05b89;
+    margin-top: 12px;
+}
+
+#courses-page #courses-tabs .course .foot .status .passed
+{
+    color: #6ab83e;
+    margin-top: 12px;
+}
+
+#courses-page #courses-tabs .course .foot .status .not-active
+{
+    color: #0076c9;
+    margin-top: 12px;
+}
+
+#courses-page #courses-tabs .course .foot .status .active
+{
+    font-family: 'PT Sans';
+    font-weight: bold;
+    font-size: 24px;
+    color: #0076c9;
+    margin-top: 2px;
+}
+
+#courses-page #courses-tabs .course .foot .status .active .percent
+{
+    font-size: 14px;
+}
+
+#courses-page #courses-tabs .course .foot .to-course
+{
+    float: right;
+    margin-right: 12px;
 }
