@@ -23,8 +23,8 @@ class GeneratorsTemplates extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_user, id_generator', 'required'),
-                    	array('correct_answers', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
-                        array('template', 'safe'),
+                    	//array('correct_answers', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
+                        array('template, correct_answers', 'safe'),
 			array('id_user, id_generator, number_exercises, number_words, type_of_building, id_visual, separate_template_and_correct_answers', 'numerical', 'integerOnly'=>true),
 			array('id, id_user, id_generator, template, number_exercises', 'safe', 'on'=>'search'),
 		);

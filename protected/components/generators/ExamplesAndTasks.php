@@ -76,16 +76,20 @@ class ExampleAndTasks
             {
                 // в шаблоне нам не нужно заменять =, на ==. Поэтому делаем отдельный массив
                 $forReplaceWithPhpConditions = $forReplace;
-                $forReplaceWithPhpConditions['patterns'][] = '#[^<>]=#u'; // заменяем одинарное равно на двойное
+                $forReplaceWithPhpConditions['patterns'][] = '#=#u'; // заменяем одинарное равно на двойное
                 $forReplaceWithPhpConditions['replacements'][] = '==';
+                $forReplaceWithPhpConditions['patterns'][] = '#>==#u';
+                $forReplaceWithPhpConditions['replacements'][] = '>=';
+                $forReplaceWithPhpConditions['patterns'][] = '#<==#u';
+                $forReplaceWithPhpConditions['replacements'][] = '<=';
                 $forReplaceWithPhpConditions['patterns'][] = '#mod#u'; // остаток от деления заменяем на php-ный
                 $forReplaceWithPhpConditions['replacements'][] = '%';
                 $convertedTemplate = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->template);
-                $convertedTemplate = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForTemplate", $convertedTemplate); // выполняем выражения в {}
+                $convertedTemplate = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForBraces", $convertedTemplate); // выполняем выражения в {}
+                $convertedTemplate = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedTemplate); // выполняем выражения в []
                 
-                $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
                 $convertedConditions = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->conditionsArray);
-                $convertedWrongAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->WrongAnswersArray);
+                $wrongAnswers = $this->template->WrongAnswersArray;
                 if(GeneratorsTemplates::ConditionsMet($convertedConditions))
                 {
                     $exerciseModel = new Exercises;
@@ -94,17 +98,36 @@ class ExampleAndTasks
                     $exercises[$count] = $exerciseModel;
 
                     // получием список неправильных ответов задания
-                    if(!empty($convertedWrongAnswers))
+                    if(!empty($wrongAnswers))
                     {
-                        foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
+                        if($this->template->separate_template_and_correct_answers)
                         {
-                            $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
+                            $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
+                            $convertedCorrectAnswers = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForBraces", $convertedCorrectAnswers); // выполняем выражения в {}
+                            $convertedCorrectAnswers = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedCorrectAnswers); // выполняем выражения в []
+                            
+                            $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $wrongAnswers);
+                            foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
+                            {
+                                $convertedWrongAnswer = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForBraces", $convertedWrongAnswer); // выполняем выражения в {}
+                                $answers[$count][$index]['answer'] = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedWrongAnswer); // выполняем выражения в []
+                            }
+                        }
+                        else
+                        {
+                            $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
+                            $convertedCorrectAnswers = Generators::executeCode($convertedCorrectAnswers);
+                            $convertedWrongAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $wrongAnswers);
+                            foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
+                            {
+                                $answers[$count][$index]['answer'] = Generators::executeCode($convertedWrongAnswer);
+                            }
                         }
                     }
 
                     // сохраняем правильный ответ
                     $index++;
-                    $answers[$count][$index]['answer'] = Generators::executeCode($convertedCorrectAnswers);
+                    $answers[$count][$index]['answer'] = $convertedCorrectAnswers;
                     $answers[$count][$index]['is_right'] = 1;
                     unset($index);
                     $count++;

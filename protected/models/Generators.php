@@ -26,6 +26,19 @@ class Generators extends CActiveRecord
             10=>'Сопоставление: перевод-слово',
             11=>'Сопоставление: слово-тег',
         );
+        
+        public static $replacePhp = array(
+            'patterns' => array(
+                '#=#u',
+                '#>==#u',
+                '#<==#u',
+            ),
+            'replacements' => array(
+                '==',
+                '>=',
+                '<=',
+            )
+        );
 
 
         public function tableName()
@@ -246,9 +259,29 @@ class Generators extends CActiveRecord
             return $res;
         }
         
-        static function callBackForTemplate($matches) {
+        static function callBackForBraces($matches) {
             $string = preg_replace('#mod#u', '%', $matches[1]);
             return (int) self::executeCode($string);
+        }
+        
+        static function callBackForSquareBrackets($matches) {
+            $str = self::getConvertStrings(self::$replacePhp['patterns'], self::$replacePhp['replacements'], $matches[1]);
+            $result = array();
+            while(($endConditionPos = mb_strpos($str, ':', null, 'UTF-8'))!==false)
+            {
+                if(($endContentPos = mb_strpos($str, ';', $endConditionPos, 'UTF-8'))!==false AND $endContentPos > $endConditionPos)
+                {
+                    $condition = trim(mb_substr($str, 0, $endConditionPos, 'UTF-8'));
+                    $content = trim(mb_substr($str, $endConditionPos+1, $endContentPos-$endConditionPos-1, 'UTF-8'));
+                    $str = mb_substr($str, $endContentPos+1, null, 'UTF-8');
+                    $result[] = self::executeCode("$condition ? '$content' : ''");
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return implode('', $result);
         }
         
         static function getConvertStrings(array $patterns, array $replacements, $strings) {

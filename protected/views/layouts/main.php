@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css" />
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    
 </head>
 
 <body>
@@ -58,6 +59,30 @@
                             <?php if(Yii::app()->user->isGuest) : ?>
                                 <div id="reg-as-student" data-toggle="modal" data-target="#regModel"><a href="#">Зарегистрируйтесь</a></div>
                                 <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#">Войдите</a></div>
+                                <?php
+                                    $controller = Yii::app()->getController();
+                                    $isHome = (($controller->id === Yii::app()->defaultController) && ($controller->action->id === $controller->defaultAction)) ? true : false;
+                                    if(!$isHome)
+                                    {
+                                        $this->renderPartial('//site/login', array('model'=>new LoginForm));
+                                        $this->renderPartial('//site/registration', array('model'=>new Users));
+                                    }
+                                ?>
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $('#reg-as-student').click(function(){
+                                            $('#user-role-student').attr('checked', 'checked');
+                                        });
+
+                                        $('#reg-as-teacher').click(function(){
+                                            $('#user-role-teacher').attr('checked', 'checked');
+                                        });
+
+                                        $('#reg-as-parent').click(function(){
+                                            $('#user-role-parent').attr('checked', 'checked');
+                                        });
+                                    });
+                                </script>
                             <?php else : ?>
                                 <div id='logout' class="orange-button"><?php echo CHtml::link('Выход', array('site/logout')); ?></div>
                                 <div id='user-page-link'><?php echo CHtml::link(Yii::app()->user->name." (".Users::$rolesRusNames[Users::UserType()].")", array('/users/update')); ?></div>

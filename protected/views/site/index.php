@@ -14,22 +14,6 @@
         });
     </script>
 <?php endif; ?>
-
-<script type="text/javascript">
-    $(function(){
-        $('#reg-as-student').click(function(){
-            $('#user-role-student').attr('checked', 'checked');
-        });
-        
-        $('#reg-as-teacher').click(function(){
-            $('#user-role-teacher').attr('checked', 'checked');
-        });
-        
-        $('#reg-as-parent').click(function(){
-            $('#user-role-parent').attr('checked', 'checked');
-        });
-    });
-</script>
     <?php $this->renderPartial('login', array('model'=>$loginForm)); ?>
     <?php $this->renderPartial('registration', array('model'=>$user)); ?>
     <div id="separate-header-part">

@@ -1,6 +1,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'reg-form',
         'enableClientValidation'=>true,
+        'action'=>array('site/index'),
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,
         ),
@@ -26,15 +27,15 @@
 	</div>
         <div class="row" id="reg-roles">
             <div class="role">
-                <input id="user-role-student" type="radio" name="Users[role]" value="2" />
+                <input id="user-role-student" type="radio" name="Users[role]"<?php if($model->role==2) echo ' checked="checked"'; ?> value="2" />
                 <label for="user-role-student">Я ученик</label>
             </div>
             <div class="role">
-                <input id="user-role-teacher" type="radio" name="Users[role]" value="3" />
+                <input id="user-role-teacher" type="radio" name="Users[role]"<?php if($model->role==3) echo ' checked="checked"'; ?> value="3" />
                 <label for="user-role-teacher">Я педагог</label>
             </div>
             <div class="role">
-                <input id="user-role-parent" type="radio" name="Users[role]" value="4" />
+                <input id="user-role-parent" type="radio" name="Users[role]"<?php if($model->role==4) echo ' checked="checked"'; ?> value="4" />
                 <label for="user-role-parent">Я родитель</label>
             </div>
         </div>

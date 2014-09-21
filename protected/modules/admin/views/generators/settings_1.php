@@ -38,16 +38,19 @@
         $('#GeneratorsTemplates_template').live('change keyup input click', function() {
             if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
             {
-                template = /[^x\+\-\*\d\/\(\)\s]/gi;
+                template = /[^x\+\-\*\d\/\(\)\smod]/gi;
                 if (this.value.match(template))
                     this.value = this.value.replace(template, '');
             }
         });
         
         $('#GeneratorsTemplates_correct_answers, #option-name').live('change keyup input click', function() {
-            template = /[^x\+\-\*\d\/\(\)\s]/gi;
-            if (this.value.match(template))
-                this.value = this.value.replace(template, '');
+            if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
+            {
+                template = /[^x\+\-\*\d\/\(\)\smod]/gi;
+                if (this.value.match(template))
+                    this.value = this.value.replace(template, '');
+            }
         });
         
         $('.condition input[name*=condition]').live('change keyup input click', function() {
@@ -115,7 +118,7 @@
         });
         
         $('#GeneratorsTemplates_correct_answers').change(function(){
-            checkCorrectAnswers()
+            checkCorrectAnswers();
         });
         
         $('#generate').click(function(){
@@ -256,7 +259,7 @@
                 errors.html('Введите шаблон');
                 return false;
             } else {
-                templateExp = /^[x\+\-\*\d\/\(\)\s]+$/i;
+                templateExp = /^[x\+\-\*\d\/\(\)\smod]+$/i;
                 if (!templateExp.test(template.val()))
                 {
                     errors.html('Шаблон может содержать только числа, мат.операции, пробел и букву x');

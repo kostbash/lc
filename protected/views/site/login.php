@@ -1,6 +1,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'login-form',
         'enableClientValidation'=>true,
+        'action'=>array('site/index'),
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,
         ),

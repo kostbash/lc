@@ -29,7 +29,7 @@ class GeneratorsTemplatesWrongAnswers extends CActiveRecord
 			array('id_template, wrong_answer', 'required'),
 			array('id_template', 'numerical', 'integerOnly'=>true),
 			array('wrong_answer', 'length', 'max'=>255),
-                        array('wrong_answer', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
+                        //array('wrong_answer', 'match', 'pattern'=>'/^[x\+\-\*\d\/\(\)\s]+$/i'),
 			array('id, id_template, wrong_answer', 'safe', 'on'=>'search'),
 		);
 	}

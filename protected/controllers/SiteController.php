@@ -32,6 +32,16 @@ class SiteController extends Controller
             $showRegModal = $_GET['showreg'];
             $showLoginModal = $_GET['showlogin'];
             
+            $role = (int) $_GET['role'];
+            
+            if($role)
+            {
+                if($_GET['role']==2 or $_GET['role']==3 or $_GET['role']==4)
+                {
+                    $user->role = $role;
+                }
+            }
+            
             // регистрация
             if(isset($_POST['Users']))
             {
