@@ -98,14 +98,14 @@ class ExampleAndTasks
                     $exercises[$count] = $exerciseModel;
 
                     // получием список неправильных ответов задания
-                    if(!empty($wrongAnswers))
+                    if($this->template->separate_template_and_correct_answers)
                     {
-                        if($this->template->separate_template_and_correct_answers)
+                        $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
+                        $convertedCorrectAnswers = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForBraces", $convertedCorrectAnswers); // выполняем выражения в {}
+                        $convertedCorrectAnswers = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedCorrectAnswers); // выполняем выражения в []
+
+                        if(!empty($wrongAnswers))
                         {
-                            $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
-                            $convertedCorrectAnswers = preg_replace_callback("#\{(.*)\}#uUm", "Generators::callBackForBraces", $convertedCorrectAnswers); // выполняем выражения в {}
-                            $convertedCorrectAnswers = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedCorrectAnswers); // выполняем выражения в []
-                            
                             $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $wrongAnswers);
                             foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
                             {
@@ -113,10 +113,13 @@ class ExampleAndTasks
                                 $answers[$count][$index]['answer'] = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedWrongAnswer); // выполняем выражения в []
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
+                        $convertedCorrectAnswers = Generators::executeCode($convertedCorrectAnswers);
+                        if(!empty($wrongAnswers))
                         {
-                            $convertedCorrectAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $this->template->correct_answers);
-                            $convertedCorrectAnswers = Generators::executeCode($convertedCorrectAnswers);
                             $convertedWrongAnswers = Generators::getConvertStrings($forReplaceWithPhpConditions['patterns'], $forReplaceWithPhpConditions['replacements'], $wrongAnswers);
                             foreach($convertedWrongAnswers as $index => $convertedWrongAnswer)
                             {

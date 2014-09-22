@@ -32,7 +32,7 @@ class GeneratorsTemplatesVariables extends CActiveRecord
 			array('id_template, value_min, value_max, values_type', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>10),
 			array('values', 'length', 'max'=>500),
-                        array('values', 'match', 'pattern'=>'/^[\d ,]+$/i'),
+                        //array('values', 'match', 'pattern'=>'/^[\d ,]+$/i'),
 			array('id, id_template, name, value_min, value_max', 'safe', 'on'=>'search'),
 		);
 	}

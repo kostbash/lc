@@ -156,18 +156,18 @@ class Generators extends CActiveRecord
                             $newVar->isNewRecord = true;
                             $newVar->id = false;
                         }
-                    } elseif($attributes['values_type']==2 && $attributes['values'])
+                    }
+                    elseif($attributes['values_type']==2 && $attributes['values']!='')
                     {
                         $newVar->attributes = $attributes;
                         $newVar->value_min = null;
                         $newVar->value_max = null;
                         $newVar->id_template = $template->id;
-                        $newVar->save(false);
+                        $newVar->save();
                         $newVar->isNewRecord = true;
                         $newVar->id = false;
                     }
                 }
-                
             }
         }
         
