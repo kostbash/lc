@@ -259,13 +259,16 @@
                 errors.html('Введите шаблон');
                 return false;
             } else {
-                templateExp = /^[x\+\-\*\d\/\(\)\smod]+$/i;
-                if (!templateExp.test(template.val()))
+                if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
                 {
-                    errors.html('Шаблон может содержать только числа, мат.операции, пробел и букву x');
-                    return false;
-                } else {
-                    errors.html('');
+                    templateExp = /^[x\+\-\*\d\/\(\)\smod]+$/i;
+                    if (!templateExp.test(template.val()))
+                    {
+                        errors.html('Шаблон может содержать только числа, мат.операции, пробел и букву x');
+                        return false;
+                    } else {
+                        errors.html('');
+                    }
                 }
             } 
         }

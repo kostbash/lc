@@ -162,11 +162,12 @@ class Generators extends CActiveRecord
                         $newVar->value_min = null;
                         $newVar->value_max = null;
                         $newVar->id_template = $template->id;
-                        $newVar->save();
+                        $newVar->save(false);
                         $newVar->isNewRecord = true;
                         $newVar->id = false;
                     }
                 }
+                
             }
         }
         
