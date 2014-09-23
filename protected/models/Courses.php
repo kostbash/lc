@@ -362,11 +362,13 @@ class Courses extends CActiveRecord
         
         public function getClassName()
         {
-            $class = CourseClasses::model()->findByPk($this->id_class);
-            if($class)
-                return $class->name;
-            else
-                return '*';
+            $result = '';
+            foreach($this->Classes as $class)
+            {
+                $result .= $class->name;
+                break;
+            }
+            return $result;
         }
         
         public function getUserStatus()
