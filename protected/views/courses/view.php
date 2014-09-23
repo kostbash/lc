@@ -52,9 +52,13 @@
                     <div class="info">
                         <div class="name">ЧТО ПОЛУЧИТЕ:</div>
                         <ul>
-                            <li><span>Умение складывать любые числа с результатом в пределах 100</span></li>
-                            <li><span>Понимание числового ряда</span></li>
-                            <li><span>Владение техниками и приемами быстрого счета</span></li>
+                            <?php if($course->NeedKnows) : ?>
+                                <?php foreach($course->NeedKnows as $needknow) : ?>
+                                    <li><span><?php echo $needknow->name; ?></span></li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <li><span>Ничего</span></li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                     <div class="right-background"></div>
@@ -65,8 +69,13 @@
                     <div class="info">
                         <div class="name">ЧТО НУЖНО:</div>
                         <ul>
-                            <li><span>Знать цифры</span></li>
-                            <li><span>Уметь складывать в пределах 10</span></li>
+                            <?php if($course->YouGets) : ?>
+                                <?php foreach($course->YouGets as $youget) : ?>
+                                    <li><span><?php echo $youget->name; ?></span></li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <li><span>Ничего</span></li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                     <div class="right-background"></div>

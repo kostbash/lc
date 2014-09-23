@@ -639,43 +639,12 @@ $form=$this->beginWidget('CActiveForm', array(
             <?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите название курса')); ?>
             <?php echo $form->error($model,'name'); ?>
         </div>
-        <?php if($model->id) { ?>
-        <div class="col-lg-2 col-md-2">
-            <?php echo CHtml::link('Умения курса', array('/admin/skills/index', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
-        </div>
-        <?php } ?>
-    </div>
-    
-    <div class="row">
-        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'learning_time'); ?></div>
-        <div class="col-lg-6 col-md-6">
-            <?php echo $form->textField($model,'learning_time',array('size'=>60, 'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите время обучения')); ?>
-            <?php echo $form->error($model,'learning_time'); ?>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'difficulty'); ?></div>
-        <div class="col-lg-6 col-md-6">
-            <?php echo CHtml::dropDownList("Courses[difficulty]", $model->difficulty, Courses::$difficulties, array('class'=>'form-control')); ?>
-            <?php echo $form->error($model,'difficulty'); ?>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'id_subject'); ?></div>
-        <div class="col-lg-6 col-md-6">
-            <?php echo CHtml::dropDownList("Courses[id_subject]", $model->id_subject, CourseSubjects::listData(), array('class'=>'form-control', 'empty'=>'Выберите предмет')); ?>
-            <?php echo $form->error($model,'id_subject'); ?>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'id_class'); ?></div>
-        <div class="col-lg-6 col-md-6">
-            <?php echo CHtml::dropDownList("Courses[id_class]", $model->id_class, CourseClasses::listData(), array('class'=>'form-control', 'empty'=>'Выберите класс')); ?>
-            <?php echo $form->error($model,'id_class'); ?>
-        </div>
+        <?php if($model->id) : ?>
+            <div class="col-lg-4 col-md-4">
+                <?php echo CHtml::link('Умения курса', array('/admin/skills/index', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
+                <?php echo CHtml::link('<i class="glyphicon glyphicon-cog"></i>Параметры курса', array('/admin/courses/params', 'id_course'=>$model->id), array('class'=>'btn btn-primary btn-sm btn-icon')); ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 <?php $this->endWidget(); ?>

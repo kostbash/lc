@@ -16,7 +16,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('create','update','delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax'),
+				'actions'=>array('create','update','delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -70,6 +70,69 @@ class CoursesController extends Controller
 		}
 
 		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
+        
+	public function actionParams($id_course)
+	{
+		$model=$this->loadModel($id_course);
+                
+                $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));
+                
+		if(isset($_POST['Courses']))
+		{
+                    $model->attributes=$_POST['Courses'];
+                    $model->change_date = date('Y-m-d H:i:s');
+                    if($model->save())
+                    {
+                        if($_POST['Courses']['Subjects'] && is_array($_POST['Courses']['Subjects']))
+                        {
+                            foreach($_POST['Courses']['Subjects'] as $id_subject)
+                            {
+                                if(!Courses::hasSubject($id_course, $id_subject))
+                                {
+                                    $coursesAndSubjects = new CoursesAndSubjects;
+                                    $coursesAndSubjects->id_course = $id_course;
+                                    $coursesAndSubjects->id_subject = $id_subject;
+                                    $coursesAndSubjects->save();
+                                }
+                            }
+                            $criteria = new CDbCriteria;
+                            $criteria->addNotInCondition('id_subject', $_POST['Courses']['Subjects']);
+                            CoursesAndSubjects::model()->deleteAll($criteria);
+                        }
+                        else
+                        {
+                            CoursesAndSubjects::model()->deleteAllByAttributes(array('id_course'=>$id_course));
+                        }
+                        
+                        if($_POST['Courses']['Classes'] && is_array($_POST['Courses']['Classes']))
+                        {
+                            foreach($_POST['Courses']['Classes'] as $id_class)
+                            {
+                                if(!Courses::hasClass($id_course, $id_class))
+                                {
+                                    $coursesAndClasses = new CoursesAndClasses;
+                                    $coursesAndClasses->id_course = $id_course;
+                                    $coursesAndClasses->id_class = $id_class;
+                                    $coursesAndClasses->save();
+                                }
+                            }
+                            $criteria = new CDbCriteria;
+                            $criteria->addNotInCondition('id_class', $_POST['Courses']['Classes']);
+                            CoursesAndClasses::model()->deleteAll($criteria);
+                        }
+                        else
+                        {
+                            CoursesAndClasses::model()->deleteAllByAttributes(array('id_course'=>$id_course));
+                        }
+                        
+                        $this->redirect(array('/admin/courses/update', 'id'=>$model->id));
+                    }
+		}
+
+		$this->render('params',array(
 			'model'=>$model,
 		));
 	}

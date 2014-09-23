@@ -58,7 +58,7 @@ class Courses extends CActiveRecord
 			array('name, learning_time', 'length', 'max'=>255),
 			array('description', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
-                        array('difficulty, id_subject, id_class', 'numerical'),
+                        array('difficulty', 'numerical'),
                         array('id_editor', 'numerical', 'on'=>'create'),
 			array('id, name, description', 'safe', 'on'=>'search'),
 		);
@@ -78,6 +78,10 @@ class Courses extends CActiveRecord
                 'Blocks'=>array(self::MANY_MANY, 'GroupOfExercises', 'oed_courses_and_group_exercise(id_course, id_group)', 'order'=>'Blocks_Blocks.order ASC'),
                 'CoursesAndGroupExercise'=>array(self::HAS_MANY, 'CoursesAndGroupExercise', 'id_course', 'order'=>'CoursesAndGroupExercise.order'),
                 'CoursesAndLessons'=>array(self::HAS_MANY, 'CoursesAndLessons', 'id_course', 'order'=>'CoursesAndLessons.order'),
+                'Subjects'=>array(self::MANY_MANY, 'CourseSubjects', 'oed_courses_and_subjects(id_course, id_subject)'),
+                'Classes'=>array(self::MANY_MANY, 'CourseClasses', 'oed_courses_and_classes(id_course, id_class)'),
+                'NeedKnows'=>array(self::HAS_MANY, 'CourseNeedknows', 'id_course'),
+                'YouGets'=>array(self::HAS_MANY, 'CourseYougets', 'id_course'),
             );
 	}
 
@@ -90,8 +94,6 @@ class Courses extends CActiveRecord
                     'id' => 'ID',
                     'name' => 'Название',
                     'difficulty' => 'Сложность',
-                    'id_subject' => 'Предмет',
-                    'id_class' => 'Класс',
                     'description' => 'Описание',
                     'countLessons' => 'Число уроков',
                     'learning_time' => 'Предполагаемое время обучения',
@@ -385,6 +387,44 @@ class Courses extends CActiveRecord
                     return "<div class='passed'>ПРОЙДЕНО!</div>";
             }
             return "<div class='not-active'>НЕ ПРИСТУПАЛ</div>";
+        }
+        
+        public function getIdsSubjects()
+        {
+            $ids = array();
+            $query = "SELECT id_subject FROM `oed_courses_and_subjects` WHERE `id_course`=$this->id";
+            $subjects = Yii::app()->db->createCommand($query)->queryAll();
+            foreach($subjects as $subject)
+            {
+                $ids[] = $subject['id_subject'];
+            }
+            return $ids;
+        }
+        
+        public static function hasSubject($id_course, $id_subject)
+        {
+            $id_course = (int) $id_course;
+            $id_subject = (int) $id_subject;
+            return CoursesAndSubjects::model()->exists('id_course=:id_course AND id_subject=:id_subject', array('id_course'=>$id_course, 'id_subject'=>$id_subject));
+        }
+        
+        public static function hasClass($id_course, $id_class)
+        {
+            $id_course = (int) $id_course;
+            $id_class = (int) $id_class;
+            return CoursesAndClasses::model()->exists('id_course=:id_course AND id_class=:id_class', array('id_course'=>$id_course, 'id_class'=>$id_class));
+        }
+        
+        public function getIdsClasses()
+        {
+            $ids = array();
+            $query = "SELECT id_class FROM `oed_courses_and_classes` WHERE `id_course`=$this->id";
+            $classes = Yii::app()->db->createCommand($query)->queryAll();
+            foreach($classes as $class)
+            {
+                $ids[] = $class['id_class'];
+            }
+            return $ids;
         }
                  
 }
