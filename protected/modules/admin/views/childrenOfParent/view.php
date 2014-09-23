@@ -173,7 +173,7 @@
     <div class='row'>
         <div class='col-lg-12 col-md-12'>
             <?php
-            $this->widget('ZgridView', array(
+            $this->widget('ZGridView', array(
                 'id'=>'exercises-logs-grid',
                 'rowHtmlOptionsExpression' => 'array("class"=>"$data->classLog")',
                 'ajaxType'=>'POST',

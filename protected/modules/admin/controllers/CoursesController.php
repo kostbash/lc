@@ -99,6 +99,7 @@ class CoursesController extends Controller
                                 }
                             }
                             $criteria = new CDbCriteria;
+                            $criteria->compare('id_course', $id_course);
                             $criteria->addNotInCondition('id_subject', $_POST['Courses']['Subjects']);
                             CoursesAndSubjects::model()->deleteAll($criteria);
                         }
@@ -120,6 +121,7 @@ class CoursesController extends Controller
                                 }
                             }
                             $criteria = new CDbCriteria;
+                            $criteria->compare('id_course', $id_course);
                             $criteria->addNotInCondition('id_class', $_POST['Courses']['Classes']);
                             CoursesAndClasses::model()->deleteAll($criteria);
                         }
