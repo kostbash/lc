@@ -8,8 +8,7 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Курсис',
         'timeZone' => 'Europe/Moscow',
-        'language' => 'ru',
-
+        'language' => 'ru', 
 	// preloading 'log' component
 	'preload'=>array('log'),
 

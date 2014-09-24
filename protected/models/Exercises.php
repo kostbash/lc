@@ -202,7 +202,7 @@ class Exercises extends CActiveRecord
                 $rightAnswers = $exercise->rightAnswers;
                 if($rightAnswers)
                 {
-                    if($exercise->id_type==1) // точный ответ
+                    if($exercise->id_visual==1) // точный ответ
                     {
                         foreach($rightAnswers as $rightAnswer)
                         {
@@ -296,7 +296,6 @@ class Exercises extends CActiveRecord
                             }
                             return true;
                         }
-                        
                     }
                     elseif($exercise->id_visual==9) // Tекст с пробелами с ограничением
                     {
@@ -308,6 +307,32 @@ class Exercises extends CActiveRecord
                                 if(!ExercisesListOfAnswers::model()->exists('id_exercise=:id_exercise AND id=:id AND number_space=:space AND is_right=1', $attrs))
                                 {
                                     return false;
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                    elseif($exercise->id_visual==10) // точный ответ текст с пробелами
+                    {
+                        if(count($rightAnswers) == count($answers['number_spaces']))
+                        {
+                            //print_r($answers['number_spaces']); die;
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $space = $answers['number_spaces'][$rightAnswer->number_space];
+                                if($space=='')
+                                    return false;
+                                if($rightAnswer->reg_exp)
+                                {
+                                    if(!@preg_match($rightAnswer->answer, $space))
+                                    {
+                                        return false;
+                                    }
+                                } else {
+                                    if($rightAnswer->answer != $space)
+                                    {
+                                        return false;
+                                    }
                                 }
                             }
                             return true;

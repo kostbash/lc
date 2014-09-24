@@ -33,6 +33,7 @@ class ExercisesController extends Controller
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
             $id_visual = (int) $_GET['id_visual'];
+
             // не даем возможность добавлять тесту тип контент т.к. у него нету ответа
             if($id_type==4 && $id_part)
                 $this->redirect(array('/admin/exercises/index'));
@@ -108,7 +109,33 @@ class ExercisesController extends Controller
                         {
                             preg_match_all('#sp(\d+)#ui', $question->text, $matches);
                             $numberSpaces = array_unique($matches[1]);
-                            
+                            if($_POST['Exercises']['answers'])
+                            {
+                                $i = 0;
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    if(!$numberSpaces[$i])
+                                        break;
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttr;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers ->id_question = $question->id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->number_space = $numberSpaces[$i++];
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    elseif($id_visual==10)
+                    {
+                        $question = new ExercisesQuestions;
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        $question->id_exercise = $model->id;
+                        if($question->save())
+                        {
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = array_unique($matches[1]);
                             if($_POST['Exercises']['answers'])
                             {
                                 $i = 0;
@@ -257,6 +284,33 @@ class ExercisesController extends Controller
                         }
                     } 
                     elseif($model->id_visual==8)
+                    {
+                        $question = $model->Questions[0];
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        if($question->save())
+                        {
+                            preg_match_all('#sp(\d+)#ui', $question->text, $matches);
+                            $numberSpaces = array_unique($matches[1]);
+                            if($_POST['Exercises']['answers'])
+                            {
+                                $i = 0;
+                                foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                                foreach($_POST['Exercises']['answers'] as $answerAttr)
+                                {
+                                    if(!$numberSpaces[$i])
+                                        break;
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttr;
+                                    $exercisesAnswers->id_exercise = $model->id;
+                                    $exercisesAnswers->id_question = $question->id;
+                                    $exercisesAnswers->is_right = 1;
+                                    $exercisesAnswers->number_space = $numberSpaces[$i++];
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==10)
                     {
                         $question = $model->Questions[0];
                         $question->attributes = $_POST['Exercises']['questions'][0];
