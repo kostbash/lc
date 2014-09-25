@@ -31,11 +31,14 @@
 	</div>
 
 	<div class="row rememberMe">
-		<?php echo $form->label($model,'rememberMe'); ?>
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
+            <?php echo $form->label($model,'rememberMe'); ?>
+            <?php echo $form->checkBox($model,'rememberMe'); ?>
+            <?php echo $form->error($model,'rememberMe'); ?>
 	</div>
-
+        
+        <div class="row">
+            <?php echo CHtml::link('Забыли пароль ?', array('users/forget')); ?>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">закрыть</button>

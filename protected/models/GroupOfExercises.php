@@ -239,4 +239,17 @@ class GroupOfExercises extends CActiveRecord
                 return $group;
             }
         }
+        
+        public function getPrevGroupId()
+        {
+            $lessonExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
+            $prev = LessonAndExerciseGroup::model()->find('`order` < :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonExerciseGroup->order, 'id_lesson'=>$lessonExerciseGroup->id_lesson));
+            return $prev->id_group_exercises;
+        }
+        public function getNextGroupId()
+        {
+            $lessonExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
+            $next = LessonAndExerciseGroup::model()->find('`order` > :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonExerciseGroup->order, 'id_lesson'=>$lessonExerciseGroup->id_lesson));
+            return $next->id_group_exercises;
+        }
 }

@@ -1246,6 +1246,20 @@ z-index:10000000;
     padding-bottom: 136px;
 }
 
+#container > #content
+{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 12px 12px 12px 20px;
+    background: #fff;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
 .choose-course
 {
     color: #fff;
@@ -3465,4 +3479,16 @@ z-index:10000000;
 {
     float: right;
     margin-right: 12px;
+}
+
+/*------------------------------------------------------ Recovery-Password-Page ------------------------------------------------------*/
+
+#recovery-password
+{
+    
+}
+
+#recovery-password .row
+{
+    margin-bottom: 10px;
 }

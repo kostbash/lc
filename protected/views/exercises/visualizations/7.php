@@ -7,8 +7,9 @@ if(!empty($model->Answers))
     
     foreach($listWords as $listWord)
     {
+        $clearListWord = preg_replace('/_/u',' ',$listWord);
         $list[] = "<div class='word'>"
-                    ."$listWord"
+                    ."$clearListWord"
                     ."<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][]' value='$listWord' />"
                   ."</div>";
     }             
