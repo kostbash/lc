@@ -64,17 +64,15 @@ class GroupofexercisesController extends Controller
         
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-                $skills = new GroupExerciseAndSkills('search');
-                $skills->id_group = $model->id;
-                
-                $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$model->id_course));
-                //echo CHtml::link('prev', array('groupofexercises/update', 'id'=>$model->prevGroupId));
-                //echo CHtml::link('next', array('groupofexercises/update', 'id'=>$model->nextGroupId));
-		$this->render('update',array(
-			'exerciseGroup'=>$model,
-                        'skills'=>$skills,
-		));
+            $model=$this->loadModel($id);
+            $skills = new GroupExerciseAndSkills('search');
+            $skills->id_group = $model->id;
+
+            $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$model->id_course));
+            $this->render('update',array(
+                    'exerciseGroup'=>$model,
+                    'skills'=>$skills,
+            ));
 	}
 
 	public function actionDelete($id)

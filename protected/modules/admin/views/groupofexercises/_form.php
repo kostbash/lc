@@ -337,6 +337,14 @@ Yii::app()->clientScript->registerScript("skills-grid",
 	'id'=>'lessons-form',
 	'enableAjaxValidation'=>false,
 )); ?>
+    <div class="clearfix">
+        <div class="pull-left">
+            <?php echo $exerciseGroup->prevGroupLink; ?>
+        </div>
+        <div class="pull-right">
+            <?php echo $exerciseGroup->nextGroupLink; ?>
+        </div>
+    </div>
   <div class="section" id="main">
         <h3 class="head">Основное</h3>
         <div class="row">

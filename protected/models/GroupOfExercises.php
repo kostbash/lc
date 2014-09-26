@@ -240,16 +240,61 @@ class GroupOfExercises extends CActiveRecord
             }
         }
         
-        public function getPrevGroupId()
+        public function getPrevGroupLink()
         {
-            $lessonExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
-            $prev = LessonAndExerciseGroup::model()->find('`order` < :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonExerciseGroup->order, 'id_lesson'=>$lessonExerciseGroup->id_lesson));
-            return $prev->id_group_exercises;
+            $lessonBlock = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
+            $prevBlock = LessonAndExerciseGroup::model()->find('`order` < :order AND `id_lesson`=:id_lesson ORDER BY `order` DESC', array('order'=>$lessonBlock->order, 'id_lesson'=>$lessonBlock->id_lesson));
+            if($prevBlock)
+            {
+                $name = 'К предыдущему блоку';
+                $link = array('groupofexercises/update', 'id'=>$prevBlock->id_group_exercises);
+            }
+            else
+            {
+                $themeLesson = GroupAndLessons::model()->findByAttributes(array('id_lesson'=>$lessonBlock->id_lesson));
+                if($themeLesson)
+                {
+                    $prevLesson = GroupAndLessons::model()->find('`order` < :order AND `id_group`=:id_group ORDER BY `order` DESC', array('order'=>$themeLesson->order, 'id_group'=>$themeLesson->id_group));
+                    if($prevLesson)
+                    {
+                        $prevBlock = LessonAndExerciseGroup::model()->find('`id_lesson`=:id_lesson ORDER BY `order` DESC', array('id_lesson'=>$prevLesson->id_lesson));
+                        if($prevBlock)
+                        {
+                            $name = 'К предыдущему уроку';
+                            $link = array('groupofexercises/update', 'id'=>$prevBlock->id_group_exercises);
+                        }
+                    }
+                }
+            }
+            return $link ? CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>'.$name, $link, array('class'=>'btn btn-success btn-icon')) : '';
         }
-        public function getNextGroupId()
+        
+        public function getNextGroupLink()
         {
-            $lessonExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
-            $next = LessonAndExerciseGroup::model()->find('`order` > :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonExerciseGroup->order, 'id_lesson'=>$lessonExerciseGroup->id_lesson));
-            return $next->id_group_exercises;
+            $lessonBlock = LessonAndExerciseGroup::model()->findByAttributes(array('id_group_exercises'=>$this->id));
+            $nextBlock = LessonAndExerciseGroup::model()->find('`order` > :order AND `id_lesson`=:id_lesson ORDER BY `order` ASC', array('order'=>$lessonBlock->order, 'id_lesson'=>$lessonBlock->id_lesson));
+            if($nextBlock)
+            {
+                $name = 'К следующему блоку';
+                $link = array('groupofexercises/update', 'id'=>$nextBlock->id_group_exercises);
+            }
+            else
+            {
+                $themeLesson = GroupAndLessons::model()->findByAttributes(array('id_lesson'=>$lessonBlock->id_lesson));
+                if($themeLesson)
+                {
+                    $nextLesson = GroupAndLessons::model()->find('`order` > :order AND `id_group`=:id_group ORDER BY `order` ASC', array('order'=>$themeLesson->order, 'id_group'=>$themeLesson->id_group));
+                    if($nextLesson)
+                    {
+                        $nextBlock = LessonAndExerciseGroup::model()->find('`id_lesson`=:id_lesson ORDER BY `order` ASC', array('id_lesson'=>$nextLesson->id_lesson));
+                        if($nextBlock)
+                        {
+                            $name = 'К следующему уроку';
+                            $link = array('groupofexercises/update', 'id'=>$nextBlock->id_group_exercises);
+                        }
+                    }
+                }
+            }
+            return $link ? CHtml::link($name.'<i class="glyphicon glyphicon-arrow-right"></i>', $link, array('class'=>'btn btn-success btn-icon-right')) : '';
         }
 }
