@@ -110,7 +110,7 @@ class UsersController extends Controller
                     $auth->authenticate(true);
                     Yii::app()->user->login($auth, 0);
                     //$this->redirect(array('users/update'));
-                    $this->redirect(array('courses/index', 'id'=>Courses::$defaultCourse));
+                    $this->redirect(array('courses/list'));
                 }
             }
             $this->redirect('/');

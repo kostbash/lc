@@ -51,7 +51,7 @@ class SiteController extends Controller
                     $loginForm->password = $user->temporary_password;
                     $loginForm->rememberMe = $user->rememberMe;
                     $loginForm->login();
-                    $this->redirect(array('courses/index','id'=>Courses::$defaultCourse));
+                    $this->redirect(array('courses/list'));
                 } else {
                     $showRegModal = true;
                 }
