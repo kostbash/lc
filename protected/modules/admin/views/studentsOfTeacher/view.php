@@ -117,7 +117,7 @@
     <div class='row'>
         <div class='col-lg-12 col-md-12'>
             <?php
-            $this->widget('ZgridView', array(
+            $this->widget('ZGridView', array(
                 'id'=>'notifications-grid',
                 'rowHtmlOptionsExpression' => 'array("class"=>"$data->classLog")',
                 'summaryText'=>"Новых: ".StudentNotificationsAndTeacher::CountNew(Yii::app()->user->id, $model->id_student),
