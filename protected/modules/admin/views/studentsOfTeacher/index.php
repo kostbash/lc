@@ -2,7 +2,7 @@
     <h2>Мои ученики</h2>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить ученика', array('/admin/studentsofteacher/create'), array('class'=>'btn btn-primary btn-icon')); ?>
 </div>
-<?php $this->widget('ZgridView', array(
+<?php $this->widget('ZGridView', array(
 	'id'=>'students-of-teacher-grid',
 	'dataProvider'=>$model->search(),
 	'columns'=>array(
