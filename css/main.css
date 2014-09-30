@@ -97,7 +97,15 @@ h2{
     padding: 5px 15px;
 }
 
-/*------*/
+.reset-pass
+{
+    display: inline-block;
+    background: url(../images/reset-pass.png) no-repeat;
+    width: 15px;
+    height: 16px;
+    vertical-align: bottom;
+    margin-right: 4px;
+}
 
 #container {
     margin-bottom: 80px;

@@ -33,7 +33,7 @@ class UsersController extends Controller
                             'roles'=>array('student'),
                     ),
                     array('allow',
-                            'actions'=>array('delete','index', 'massdelete'),
+                            'actions'=>array('delete','index', 'massdelete', 'resetpassword'),
                             'roles'=>array('admin'),
                     ),
                     array('deny',  // deny all users
@@ -119,6 +119,45 @@ class UsersController extends Controller
                 // не даем удалять других админов
                 if($user->role != 1)
                     $user->delete();
+	}
+
+	public function actionResetPassword($id)
+	{
+		$user = $this->loadModel($id);
+                // не даем сбрасывать пароль других админов
+                $result = array('success'=>0);
+                if($user->role != 1)
+                {
+                    $user->temporary_password = substr(md5('lol'.uniqid().'azaza'), 0, 10);
+                    $user->password = $user->temporary_password;
+                    $user->checkPassword = $user->temporary_password;
+                    if($user->validate())
+                    {
+                        $user->password = md5(Yii::app()->params['beginSalt'].$user->password.Yii::app()->params['endSalt']);
+                        $user->save(false);
+                        
+                        CMailer::send(
+                            array(
+                                'email' => $user->email,
+                                'name' => $user->email,
+                            ),
+                            array(
+                                'email' => 'registration@cursys.ru',
+                                'name' => 'Cursys.ru'
+                            ),
+                            Yii::app()->name,
+                            array(
+                                'template' => 'reset_password',
+                                'vars' => array(
+                                    'site_name'=>Yii::app()->name,
+                                    'new_password'=>$user->temporary_password,
+                                ),
+                            )
+                        );
+                        $result['success'] = 1;
+                    }
+                }
+                echo CJSON::encode($result);
 	}
 
 	public function actionMassDelete()
