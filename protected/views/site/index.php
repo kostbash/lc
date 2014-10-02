@@ -79,8 +79,8 @@
                     $imageSize = getimagesize("images/tabCourseIcons/$subject->id.png");
                     if($imageSize)
                     {
-                        $width = round($imageSize[0]/2);
-                        $image = "<div class='course-icon' style='width:{$width}px; height:$imageSize[1]px; background: url(/images/tabCourseIcons/$subject->id.png) right bottom;'></div>";
+                        $width = round($imageSize[0]/2, 0, PHP_ROUND_HALF_DOWN);
+                        $image = "<div class='course-icon' style='width:{$width}px; height:$imageSize[1]px; background: url(/images/tabCourseIcons/$subject->id.png) right bottom no-repeat;'></div>";
                     }
                     else
                     {

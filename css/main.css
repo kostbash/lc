@@ -1296,6 +1296,7 @@ z-index:10000000;
 #courses-tabs .nav-tabs > li
 {
     position: relative;
+    background: #ffef8c;
     background: -moz-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: -webkit-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
     background: -o-linear-gradient(top, #ffef8c 0%, #f6d774 100%);
@@ -1338,6 +1339,7 @@ z-index:10000000;
 
 #courses-tabs .nav-tabs > .active
 {
+    background: #80c682;
     background: -moz-linear-gradient(top, #80c682 0%, #afdb98 100%);
     background: -webkit-linear-gradient(top, #80c682 0%, #afdb98 100%);
     background: -o-linear-gradient(top, #80c682 0%, #afdb98 100%);
@@ -1375,7 +1377,7 @@ z-index:10000000;
 #courses-tabs .tab-content
 {
     background: #fff;
-    height: 400px;
+    min-height: 400px;
     overflow: hidden;
     border-radius: 0 0 4px 4px;
 }
@@ -1487,6 +1489,7 @@ z-index:10000000;
 .courses .course .content
 {
     height: 60px;
+    width: 288px;
     text-align: center;
     background: #a2c8f0;
 }
@@ -1946,6 +1949,7 @@ z-index:10000000;
 {
     padding: 10px 10px 4px 10px;
     overflow: hidden;
+    width: 445px;
 }
 
 #head-col-left .course .head .info
