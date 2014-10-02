@@ -250,9 +250,12 @@ Yii::app()->clientScript->registerScript("skills-grid",
             
             $('#main input, #main select').live('change', function() {
                 current = $(this);
-                if(current.is('[name*=type]')) {
-                    if(!confirm('Все задания группы удаляться, продолжить ?'))
-                        return false;
+                if($exerciseGroup->hasExercises)
+                {
+                    if(current.is('[name*=type]')) {
+                        if(!confirm('Система изменит тип блока. Все задания из блока при этом будут удалены. Продолжить?'))
+                            return false;
+                    }
                 }
                 $.ajax({
                     url:'".Yii::app()->createUrl('admin/groupofexercises/updatebyajax')."',

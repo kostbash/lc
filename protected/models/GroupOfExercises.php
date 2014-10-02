@@ -297,4 +297,17 @@ class GroupOfExercises extends CActiveRecord
             }
             return $link ? CHtml::link($name.'<i class="glyphicon glyphicon-arrow-right"></i>', $link, array('class'=>'btn btn-success btn-icon-right')) : '';
         }
+        
+        public function getHasExercises()
+        {
+            if($this->type == 1)
+            {
+                return (int) GroupAndExercises::model()->exists('id_group=:id_group', array('id_group'=>$this->id));
+            }
+            elseif($this->type == 2)
+            {
+                return (int) PartsOfTest::model()->exists('id_group=:id_group', array('id_group'=>$this->id));
+            }
+            return 0;
+        }
 }

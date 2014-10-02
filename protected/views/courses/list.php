@@ -6,6 +6,7 @@
             <div id="head-col-left" class="head-column">
                 <div class="content">
                     <div class="course">
+                        <?php if($lastActiveCourse) : ?>
                         <div class="head">
                             <div class="info">
                                 <div class="status last-active">Последний активный курс:</div>
@@ -27,6 +28,13 @@
                             <?php $lastActiveCourseProgress = $lastActiveCourse->progress; ?>
                             <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="<?php echo $lastActiveCourseProgress; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $lastActiveCourseProgress; ?>%"></div>
                         </div>
+                        <?php else : ?>
+                            <div class="head">
+                                <div class="info">
+                                    <div class="name">Выберите предмет и начните курс</div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

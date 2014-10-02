@@ -35,7 +35,59 @@ class CoursesController extends Controller
 			$model->id_editor=Yii::app()->user->id;
                         $model->change_date = date('Y-m-d H:i:s');
 			if($model->save())
-				$this->redirect(array('update','id'=>$model->id));
+                        {
+                            if($_POST['Courses']['Subjects'] && is_array($_POST['Courses']['Subjects']))
+                            {
+                                foreach($_POST['Courses']['Subjects'] as $id_subject)
+                                {
+                                    if(!Courses::hasSubject($model->id, $id_subject))
+                                    {
+                                        $coursesAndSubjects = new CoursesAndSubjects;
+                                        $coursesAndSubjects->id_course = $model->id;
+                                        $coursesAndSubjects->id_subject = $id_subject;
+                                        $coursesAndSubjects->save();
+                                    }
+                                }
+                            }
+
+                            if($_POST['Courses']['Classes'] && is_array($_POST['Courses']['Classes']))
+                            {
+                                foreach($_POST['Courses']['Classes'] as $id_class)
+                                {
+                                    if(!Courses::hasClass($model->id, $id_class))
+                                    {
+                                        $coursesAndClasses = new CoursesAndClasses;
+                                        $coursesAndClasses->id_course = $model->id;
+                                        $coursesAndClasses->id_class = $id_class;
+                                        $coursesAndClasses->save();
+                                    }
+                                }
+                            }
+                            
+                            if($_POST['Courses']['Needknows'] && is_array($_POST['Courses']['Needknows']))
+                            {
+                                foreach($_POST['Courses']['Needknows'] as $needknow_name)
+                                {
+                                    $courseNeedknow = new CourseNeedknows;
+                                    $courseNeedknow->name = $needknow_name;
+                                    $courseNeedknow->id_course = $model->id;
+                                    $courseNeedknow->save();
+                                }
+                            }
+                            
+                            if($_POST['Courses']['Yougets'] && is_array($_POST['Courses']['Yougets']))
+                            {
+                                foreach($_POST['Courses']['Yougets'] as $youget_name)
+                                {
+                                    $courseYouget = new CourseYougets;
+                                    $courseYouget->name = $youget_name;
+                                    $courseYouget->id_course = $model->id;
+                                    $courseYouget->save();
+                                }
+                            }
+                            
+                            $this->redirect(array('update','id'=>$model->id));
+                        }
 		}
 
 		$this->render('create',array(

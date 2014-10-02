@@ -33,6 +33,7 @@ class CoursesController extends Controller
         public function actionView($id){
             $course = $this->loadModel($id);
             $themesLessons = $course->themesLessons;
+            $_SESSION['id_course'] = $id;
             $this->render('view',array(
                 'course'=>$course,
                 'themesLessons'=>$themesLessons,

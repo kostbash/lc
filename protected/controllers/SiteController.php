@@ -33,10 +33,9 @@ class SiteController extends Controller
             $showLoginModal = $_GET['showlogin'];
             
             $role = (int) $_GET['role'];
-            
             if($role)
             {
-                if($_GET['role']==2 or $_GET['role']==3 or $_GET['role']==4)
+                if($role==2 or $role==3 or $role==4)
                 {
                     $user->role = $role;
                 }
@@ -51,6 +50,17 @@ class SiteController extends Controller
                     $loginForm->password = $user->temporary_password;
                     $loginForm->rememberMe = $user->rememberMe;
                     $loginForm->login();
+                    
+                    $id_course = (int) $_SESSION['id_course'];
+                    if($id_course)
+                    {
+                        unset($_SESSION['id_course']);
+                        if(Courses::model()->exists('id=:id_course', array('id_course'=>$id_course)))
+                        {
+                            $this->redirect(array('courses/index', 'id'=>$id_course));
+                        }
+                    }
+                    
                     $this->redirect(array('courses/list'));
                 } else {
                     $showRegModal = true;
