@@ -39,7 +39,7 @@
                                     <div class="name"><?php echo $skillMass[skill]->name ?></div>
                                 </td>
                                 <td class="percent"><?php echo MyWidgets::ProgressBarWithLimiter($skillMass['need'], $skillMass['achieved']); ?></td>
-                                <?php if($skillMass['passsed']) : ?>
+                                <?php if($skillMass['passed']) : ?>
                                     <td class="result-skills pass">ПРОЙДЕНО!</td>
                                 <?php else : ?>
                                     <td class="result-skills not-pass">НЕ ПРОЙДЕНО</td>
