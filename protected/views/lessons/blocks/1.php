@@ -165,19 +165,26 @@
                 cont.append(answer);
                 resultAnswer = cont.closest('.exercise').find('> .head .result');
                 hiddenAnswer = cont.closest('.text').find('.hidden-answer');
-                $.ajax({
-                    url: '<?php echo $this->createUrl('/exercises/right'); ?>',
-                    type:'POST',
-                    data: hiddenAnswer.serialize(),
-                    success: function(result) { 
-                        if(result==1)
-                            resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
-                        else if(result==0)
-                            resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
-                        else
-                            alert(result);
-                    }
-                });
+                if(!words.find('.word').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                            else
+                                alert(result);
+                        }
+                    });
+                } 
+                else
+                {
+                    resultAnswer.html('');
+                }
             }
         });
         $('[name*=answers]').keydown(function(e){

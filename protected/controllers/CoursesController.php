@@ -57,58 +57,59 @@ class CoursesController extends Controller
 
 	public function actionIndex($id, $lesson=null)
 	{
-            if(!$id)
-                $id = Courses::$defaultCourse;
-		$course = $this->loadModel($id);
-                $user = Users::model()->findByPk(Yii::app()->user->id);
-                
-                $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id));
-                // сущесвует ли курс у пользователя
-                if($courseUser)
+            $course = $this->loadModel($id);
+            $user = Users::model()->findByPk(Yii::app()->user->id);
+
+            $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id));
+            // сущесвует ли курс у пользователя
+            if($courseUser)
+            {
+                if($courseUser->status == 1)
                 {
-                    if($courseUser->status == 1)
-                    {
-                        $courseUser->activity_date = date('Y-m-d H:i:s');
-                        $courseUser->save();
-                    }
-                }
-                else
-                {
-                    $courseUser = new CoursesAndUsers;
-                    $courseUser->id_course = $course->id;
-                    $courseUser->id_user = $user->id;
                     $courseUser->activity_date = date('Y-m-d H:i:s');
-                    $courseUser->status = 1;
                     $courseUser->save();
                 }
-                
-                $index = $user->role==1 ? 0 : 1;
-                    
-                if($lesson)
-                    $userAndLesson = UserAndLessons::model()->findByPk($lesson);
-                else {
-                    $userAndLesson = UserAndLessons::model()->find("`id_course` = $id AND `id_user` = $user->id ORDER BY `id` DESC");
-                    // если не сущесвует связи
-                    if(!$userAndLesson)
+            }
+            else
+            {
+                $courseUser = new CoursesAndUsers;
+                $courseUser->id_course = $course->id;
+                $courseUser->id_user = $user->id;
+                $courseUser->activity_date = date('Y-m-d H:i:s');
+                $courseUser->status = 1;
+                $courseUser->save();
+            }
+
+            $index = $user->role==1 ? 0 : 1;
+
+            if($lesson)
+            {
+                $userAndLesson = UserAndLessons::model()->findByPk($lesson);
+            } 
+            else
+            {
+                $userAndLesson = UserAndLessons::model()->find("`id_course` = $id AND `id_user` = $user->id ORDER BY `id` DESC");
+                // если не сущесвует связи
+                if(!$userAndLesson)
+                {
+                    if($course->LessonsGroups[0]->LessonsRaw[$index])
                     {
-                        if($course->LessonsGroups[0]->LessonsRaw[$index])
-                        {
-                            $userAndLesson = new UserAndLessons;
-                            $userAndLesson->id_course = $id;
-                            $userAndLesson->id_user = $user->id;
-                            $userAndLesson->id_group = $course->LessonsGroups[0]->id;
-                            $userAndLesson->id_lesson = $course->LessonsGroups[0]->LessonsRaw[$index]->id;
-                            $userAndLesson->save(false);
-                        }
+                        $userAndLesson = new UserAndLessons;
+                        $userAndLesson->id_course = $id;
+                        $userAndLesson->id_user = $user->id;
+                        $userAndLesson->id_group = $course->LessonsGroups[0]->id;
+                        $userAndLesson->id_lesson = $course->LessonsGroups[0]->LessonsRaw[$index]->id;
+                        $userAndLesson->save(false);
                     }
                 }
+            }
                 
-		$this->render('index',array(
-			'course'=>$course,
-                        'userLesson'=>$userAndLesson,
-                        'currentLesson'=>$userAndLesson->Lesson,
-                        'pos'=>$index,
-		));
+            $this->render('index',array(
+                    'course'=>$course,
+                    'userLesson'=>$userAndLesson,
+                    'currentLesson'=>$userAndLesson->Lesson,
+                    'pos'=>$index,
+            ));
 	}
         
         public function actionNextLesson($id_user_lesson) {
