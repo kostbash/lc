@@ -21,15 +21,15 @@ class LessonsController extends Controller
 
 	public function accessRules()
 	{
-		return array(
-			array('allow',
-				'actions'=>array('index','delete','create','update', 'skillsbyajax','skillsbyidsajax', 'savechange', 'createfromcourse', 'changename', 'createincourse', 'addexercisegroup', 'changepositions'),
-				'roles'=>array('editor'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+            return array(
+                    array('allow',
+                            'actions'=>array('index','delete','create','update', 'skillsbyajax','skillsbyidsajax', 'savechange', 'createfromcourse', 'changename', 'createincourse', 'addexercisegroup', 'changepositions'),
+                            'roles'=>array('editor'),
+                    ),
+                    array('deny',  // deny all users
+                            'users'=>array('*'),
+                    ),
+            );
 	}
 
 	public function actionCreate()

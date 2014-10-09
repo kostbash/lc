@@ -86,6 +86,12 @@ h2{
     border-bottom:2px dotted silver;
 }
 
+.row-attr
+{
+    margin-bottom: 10px;
+}
+
+
 #main-menu a, #menu-logo {
     padding: 22px 15px;
     height: 64px;
@@ -3503,4 +3509,16 @@ z-index:10000000;
 #recovery-password .row
 {
     margin-bottom: 10px;
+}
+
+/*------------------------------------------------------ Map-Page ------------------------------------------------------*/
+
+#map-image
+{
+    text-align: center;
+}
+
+#map-image img
+{
+    max-width: 100%;
 }

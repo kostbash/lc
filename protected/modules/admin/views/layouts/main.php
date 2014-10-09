@@ -27,6 +27,16 @@
                 $this->menu[] = array('label'=>'Курсы', 'url'=>array('/admin/courses/index'));
                 $this->menu[] = array('label'=>'Задания', 'url'=>array('/admin/exercises/index'));
                 $this->menu[] = array('label'=>'Умения', 'url'=>array('/admin/skills/index'));
+                $this->menu[] = array('label'=>'Списки <b class="caret"></b>',
+                                      'url'=>array('#'),
+                                      'itemOptions'=>array('class'=>'dropdown'),
+                                      'submenuOptions'=>array('class'=>'dropdown-menu'),
+                                      'linkOptions'=>array('class'=>'dropdown-toggle', 'data-toggle'=>'dropdown'),
+                                      'items'=>array(
+                                            array('label'=>'Слова', 'url'=>array('#')),
+                                            array('label'=>'Карты', 'url'=>array('/admin/maps/index')),
+                                      ),
+                                );
                 if(Yii::app()->user->checkAccess('teacher'))
                     $this->menu[] = array('label'=>'Ученики', 'url'=>array('/admin/studentsofteacher/index'));
                 if(Yii::app()->user->checkAccess('parent'))
@@ -39,6 +49,7 @@
                 
                     $this->widget('zii.widgets.CMenu',array(
                             'items'=>$this->menu,
+                            'encodeLabel'=>false,
                             'htmlOptions'=>array('class'=>'nav navbar-nav'),
                     ));
             ?>
