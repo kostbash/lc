@@ -204,12 +204,18 @@ class MapsController extends Controller
     {
         $model=new Maps('search');
         $model->unsetAttributes();
+        $id_visual = (int) $_GET['id_visual'];
+        if($id_visual)
+            $visual = ExercisesVisuals::model()->findByPk($id_visual);
+        else
+            $visual = null;
         
         if(isset($_POST['Maps']))
                 $model->attributes=$_POST['Maps'];
 
         $this->render('index',array(
                 'model'=>$model,
+                'visual'=>$visual,
         ));
     }
 

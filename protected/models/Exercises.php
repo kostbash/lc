@@ -40,7 +40,7 @@ class Exercises extends CActiveRecord
 		return array(
 			array('condition, id_type, course_creator_id, change_date', 'required'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
-			array('difficulty, limit, id_type, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
+			array('difficulty, limit, id_type, id_map, id_visual, course_creator_id', 'numerical', 'integerOnly'=>true),
 			array('id, condition, limit, SkillsIds, difficulty, pageSize', 'safe', 'on'=>'search'),
 		);
 	}
@@ -59,6 +59,7 @@ class Exercises extends CActiveRecord
                     'Visual'=>array(self::BELONGS_TO, 'ExercisesVisuals', 'id_visual'),
                     'Comparisons'=>array(self::HAS_MANY, 'ExercisesComparisons', 'id_exercise'),
                     'Questions'=>array(self::HAS_MANY, 'ExercisesQuestions', 'id_exercise'),
+                    'Map'=>array(self::BELONGS_TO, 'Maps', 'id_map'),
 		);
 	}
 
@@ -338,6 +339,16 @@ class Exercises extends CActiveRecord
                             return true;
                         }
                     }
+                    elseif($exercise->id_visual==11) // hotmap указание
+                    {
+                        foreach($rightAnswers as $rightAnswer)
+                        {
+                            if($rightAnswer->answer == $answers)
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 } 
             }
             return false;
@@ -372,6 +383,15 @@ class Exercises extends CActiveRecord
             foreach($this->rightAnswers as $rightAnswer)
             {
                 $res[] = $rightAnswer->id;
+            }
+            return $res;
+        }
+        
+        public function getIdsRightAreas() {
+            $res = array();
+            foreach($this->rightAnswers as $rightAnswer)
+            {
+                $res[] = $rightAnswer->answer;
             }
             return $res;
         }

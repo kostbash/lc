@@ -8,6 +8,20 @@ $(function(){
     $('#search-form').change(function(){
         $('#maps-grid').yiiGridView('update', { data: $(this).serialize()});
     });
+    
+    $('#pick-map').click(function(){
+        current = $(this);
+        id_map = $('.select-on-check:checked').val();
+        if(id_map)
+        {
+            document.location.href=current.attr('href')+"/id_map/"+id_map;
+        }
+        else
+        {
+            alert('Выберите карту');
+        }
+        return false;
+    });
 });
 </script>
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -29,13 +43,19 @@ $(function(){
 	'dataProvider'=>$model->search(),
         'ajaxType'=>'POST',
 	'columns'=>array(
+                array(
+                    'class' => 'CCheckBoxColumn',
+                    'id' => 'checked',
+                    'value' => '$data->id',
+                    'htmlOptions' => array('width' => '2%'),
+                ),
 		'name',
 		'tagsString',
                 'countAreas',
                 array(
                     'header'=>'Просмотр',
                     'type'=>'raw',
-                    'value'=>'CHtml::link("Просмотр", "$data->MapImageLink", array("target"=>"_blank"))',
+                    'value'=>'CHtml::link("Просмотр", "$data->mapImageLink", array("target"=>"_blank"))',
                 ),
 		array(
 			'class'=>'CButtonColumn',
@@ -44,3 +64,10 @@ $(function(){
 	),
         'itemsCssClass'=>'table table-hover',
 )); ?>
+
+<?php 
+    if($visual)
+    {
+        echo CHtml::link('Выбрать', array('exercises/create', 'id_type'=>$visual->id_type, 'id_visual'=>$visual->id), array('id'=>'pick-map', 'class'=>'btn btn-sm btn-success btn-icon-right'));
+    }
+?>

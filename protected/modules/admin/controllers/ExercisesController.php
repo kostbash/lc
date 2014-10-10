@@ -33,7 +33,10 @@ class ExercisesController extends Controller
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
             $id_visual = (int) $_GET['id_visual'];
+            $id_map = (int) $_GET['id_map'];
 
+            $model->id_map = $id_map && Maps::existMapById($id_map) ? $id_map : null;
+            
             // не даем возможность добавлять тесту тип контент т.к. у него нету ответа
             if($id_type==4 && $id_part)
                 $this->redirect(array('/admin/exercises/index'));
@@ -151,6 +154,20 @@ class ExercisesController extends Controller
                                     $exercisesAnswers ->number_space = $numberSpaces[$i++];
                                     $exercisesAnswers->save();
                                 }
+                            }
+                        }
+                    }
+                    elseif($id_visual==11)
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($_POST['Exercises']['answers'] as $id_area => $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->answer = $id_area;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
                             }
                         }
                     }
@@ -337,6 +354,21 @@ class ExercisesController extends Controller
                             }
                         }
                     }
+                    elseif($model->id_visual==11)
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $id_area => $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->answer = $id_area;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                            }
+                        }
+                    }
                     else
                     {
                         if($_POST['Exercises']['answers'])
@@ -412,7 +444,9 @@ class ExercisesController extends Controller
             if($id_visual && ExercisesVisuals::model()->exists('id=:id', array('id'=>$id_visual)))
             {
                 $result['success'] = 1;
-                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> new Exercises), true);
+                $exercise = new Exercises;
+                $exercise->id_visual = $id_visual;
+                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> $exercise), true);
             } else {
                 $result['success'] = 0;
             }

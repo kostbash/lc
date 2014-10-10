@@ -118,7 +118,7 @@ class Maps extends CActiveRecord
 		return parent::model($className);
 	}
         
-        public function getMapImageLink()
+        public function getMapImageLink($phisyc=false)
         {
             if($this->is_link)
             {
@@ -126,7 +126,10 @@ class Maps extends CActiveRecord
             }
             else
             {
-                return '/'.Yii::app()->params['MapImagesPath']."/".$this->url_image;
+                $divider = '/';
+                if($phisyc)
+                    $divider='';
+                return $divider.Yii::app()->params['MapImagesPath']."/".$this->url_image;
             }
         }
         
@@ -156,6 +159,14 @@ class Maps extends CActiveRecord
             if(Yii::app()->user->checkAccess('admin'))
                 return Maps::model()->findByPk($id);
             return Maps::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
+        }
+        
+        public static function existMapById($id)
+        {
+            $id = (int) $id;
+            if(Yii::app()->user->checkAccess('admin'))
+                return Maps::model()->exists('`id`=:id', array('id'=>$id));
+            return Maps::model()->exists('`id`=:id AND id_user=:id_user', array('id'=>$id, 'id_user'=>Yii::app()->user->id));
         }
         
         public function afterDelete() {

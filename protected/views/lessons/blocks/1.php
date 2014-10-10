@@ -216,6 +216,34 @@
             setDuration(this);
             checkRadioCheckBox(this);
         });
+        
+        $('.pick-area g').click(function(){
+            answer = $(this);
+            setDuration(answer);
+            answerCont = answer.closest('.answer');
+            exercise = answer.closest('.exercise');
+            key = answer.data('key');
+            answerCont.find('.pick-area g[data-key='+key+']').attr('class', '');
+            answer.attr('class', 'selected');
+            hiddenAnswer = answerCont.find('.hidden-answer[data-key='+key+']');
+            hiddenAnswer.val(answer.data('val'));
+
+            resultAnswer = answer.closest('.exercise').find('> .head .result');
+            $.ajax({
+                url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                type:'POST',
+                data: hiddenAnswer.serialize(),
+                success: function(result) { 
+                    if(result==1)
+                        resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                    else if(result==0)
+                        resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                    else
+                        alert(result);
+                }
+            });
+            checkInput(hiddenAnswer);
+        });
     });
     
     function checkInput(input)

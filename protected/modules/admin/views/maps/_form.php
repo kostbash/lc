@@ -70,6 +70,7 @@
                 }
             });
         });
+        
 
         $('#tags .dropdown-menu li').live('click', function(){
             current = $(this);
@@ -229,12 +230,29 @@
     </div>
     <?php if(!$model->isNewRecord) : ?>
         <div id="map-image">
-            <img src="<?php echo $clone->mapImageLink; ?>" usemap="#map-areas" />
-            <map id="map-areas" name="map-areas">
-                <?php foreach($model->Areas as $area) : ?>
-                    <area shape="<?php echo MapAreas::$shapesEng[$area->shape]; ?>" coords="<?php echo $area->coords; ?>" href alt>
-                <?php endforeach; ?>
-            </map>
+            <img src="<?php echo $clone->mapImageLink; ?>" />
+            <?php $imageSize = getimagesize($clone->getMapImageLink(true)); ?>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="<?php echo $imageSize[0]; ?>" height="<?php echo $imageSize[1]; ?>">
+                <?php
+                    foreach($model->Areas as $area)
+                    {
+                        $coords = $area->cleanCoords;
+                        if($area->shape==1)
+                        {
+                            $shape = "<circle cx='{$coords['cx']}' cy='{$coords['cy']}' r='{$coords['r']}'></circle>";
+                        }
+                        elseif($area->shape==2)
+                        {
+                            $shape = "<rect x='{$coords['x']}' y='{$coords['y']}' width='{$coords['width']}' height='{$coords['height']}'></rect>";
+                        }
+                        elseif($area->shape==3)
+                        {
+                           $shape = "<polygon points='{$coords['points']}'></polygon>";
+                        }
+                        echo "<g data-index='$area->id'>$shape</g>";
+                    }
+                ?>
+            </svg>
         </div>
         <div class="section">
             <div class="head row row-attr">

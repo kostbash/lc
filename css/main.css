@@ -3515,10 +3515,67 @@ z-index:10000000;
 
 #map-image
 {
-    text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 #map-image img
 {
-    max-width: 100%;
+    max-width: 790px;
 }
+
+.pick-area
+{
+    position: relative;
+    z-index: 1;
+}
+
+#map-image svg, .pick-area svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+}
+
+#map-image svg g, .pick-area svg g {
+    cursor: pointer;
+}
+
+#map-image svg rect {
+    stroke-width: 3px;
+    stroke: #F00;
+    fill: transparent;
+}
+
+#map-image svg circle {
+    stroke-width: 3px;
+    stroke: #0F0;
+    fill: transparent;
+}
+
+#map-image svg polygon {
+    stroke-width: 3px;
+    stroke: #00F;
+    fill: transparent;
+}
+
+.pick-area svg rect {
+    fill: transparent;
+}
+
+.pick-area svg circle {
+    fill: transparent;
+}
+
+.pick-area svg polygon {
+    fill: transparent;
+}
+
+.pick-area svg g.selected
+{
+    stroke-width: 2px;
+    stroke: #00F;
+}
+
+

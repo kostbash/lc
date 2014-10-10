@@ -79,4 +79,33 @@ class MapAreas extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        public function getCleanCoords()
+        {
+            $dirtyCoords = explode(',', $this->coords);
+            $cleanCoords = array();
+            $coords = array();
+            foreach($dirtyCoords as $dirtyCoord)
+            {
+                $cleanCoords[] = (int) trim($dirtyCoord);
+            }
+            if($this->shape==1)
+            {
+                $coords['cx'] = $cleanCoords[0];
+                $coords['cy'] = $cleanCoords[1];
+                $coords['r'] = $cleanCoords[2];
+            }
+            elseif($this->shape==2)
+            {
+                $coords['x'] = $cleanCoords[0];
+                $coords['y'] = $cleanCoords[1];
+                $coords['width'] = $cleanCoords[2]-$cleanCoords[0];
+                $coords['height'] = $cleanCoords[3]-$cleanCoords[1];
+            }
+            elseif($this->shape==3)
+            {
+               $coords['points'] = implode(' ', $cleanCoords);
+            }
+            return $coords;
+        }
 }
