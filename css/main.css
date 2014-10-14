@@ -135,6 +135,11 @@ h2{
     margin-top: 10px;
 }
 
+.delete
+{
+    cursor: pointer;
+}
+
 .lessongroup, .exercisegroup {
     border-bottom: 1px solid #eee;
     margin-bottom: 20px;
@@ -2298,6 +2303,9 @@ z-index:10000000;
     font-family: Arial;
     font-size: 15px;
     color: #263870;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 #lesson-page .exercise:first-child
@@ -2377,6 +2385,8 @@ z-index:10000000;
     color: #cf5a88;
 }
 
+/*---------------------- 1.ccurate-answer ----------------------*/
+
 .accurate-answer
 {
     
@@ -2401,6 +2411,8 @@ z-index:10000000;
     -moz-box-shadow:    0px 0px 5px 0px rgba(50, 50, 50, 0.20);
     box-shadow:         0px 0px 5px 0px rgba(50, 50, 50, 0.20);
 }
+
+/*---------------------- 2.dropdown-list ----------------------*/
 
 .dropdown-list
 {
@@ -2428,6 +2440,8 @@ z-index:10000000;
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
+/*---------------------- 3.radio-buttons ----------------------*/
 
 .radio-buttons
 {
@@ -2476,6 +2490,8 @@ z-index:10000000;
 {
     background: url(../images/square-radio-button.png) left bottom no-repeat;
 }
+
+/*---------------------- 4.checkboxes ----------------------*/
 
 .checkboxes
 {
@@ -2526,6 +2542,8 @@ z-index:10000000;
     background: url(../images/check-button.png) left bottom no-repeat;
 }
 
+/*---------------------- 5.pick-blocks ----------------------*/
+
 .pick-blocks
 {
     
@@ -2558,7 +2576,7 @@ z-index:10000000;
     margin-left: 0;
 }
 
-
+/*---------------------- 6.orderings ----------------------*/
 
 #lesson-page .orderings
 {
@@ -2592,6 +2610,7 @@ z-index:10000000;
     padding: 2px 40px;
 }
 
+/*---------------------- 7.text-with-space ----------------------*/
 
 .text-with-space .text {
     vertical-align: bottom;
@@ -2629,6 +2648,8 @@ z-index:10000000;
     padding: 2px 40px;
 }
 
+/*---------------------- 8.text-with-limits ----------------------*/
+
 .text-with-limits
 {
     
@@ -2658,12 +2679,14 @@ z-index:10000000;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-.text-with-space-field
+/*---------------------- 9.text-with-space-field ----------------------*/
+
+.exact-answers-with-space
 {
     
 }
 
-.text-with-space-field input
+.exact-answers-with-space input
 {
     display: inline-block;
     font-family: Arial;
@@ -2684,6 +2707,8 @@ z-index:10000000;
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
+/*---------------------- 10.text-with-space-field ----------------------*/
 
 .comparisons .list-one
 {
@@ -2707,6 +2732,82 @@ z-index:10000000;
     min-height: 32px;
     word-break: break-all;
     padding: 6px 12px;
+}
+
+/*---------------------- 11.pick-area ----------------------*/
+
+.pick-area svg rect {
+    fill: transparent;
+}
+
+.pick-area svg circle {
+    fill: transparent;
+}
+
+.pick-area svg polygon {
+    fill: transparent;
+}
+
+.pick-area svg g.selected
+{
+    stroke-width: 2px;
+    stroke: #00F;
+}
+
+/*---------------------- 12.text-with-space-field ----------------------*/
+
+#lesson-page .hotmap-items
+{
+    
+}
+
+#lesson-page .hotmap-items .areas
+{
+    position: relative;
+}
+
+#lesson-page .hotmap-items .items .item
+{
+    margin: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 24px;
+    color: #b5486d;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    background: #fff;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
+#lesson-page .hotmap-items .areas svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+}
+
+#lesson-page .hotmap-items .areas svg rect {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-items .areas svg circle {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-items .areas svg polygon {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-items .areas svg g.mouseover
+{
+    stroke-width: 2px;
+    stroke: #00F;
 }
 
 #lesson-page .label {
@@ -3558,24 +3659,6 @@ z-index:10000000;
     stroke-width: 3px;
     stroke: #00F;
     fill: transparent;
-}
-
-.pick-area svg rect {
-    fill: transparent;
-}
-
-.pick-area svg circle {
-    fill: transparent;
-}
-
-.pick-area svg polygon {
-    fill: transparent;
-}
-
-.pick-area svg g.selected
-{
-    stroke-width: 2px;
-    stroke: #00F;
 }
 
 

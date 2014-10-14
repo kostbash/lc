@@ -1,3 +1,106 @@
+<script>
+    $(function(){
+        $('.question-text').live('change', function() {
+            question = $(this);
+            val = question.val();
+            template = /sp(\d+)/ig;
+            data = new Array();
+            i = 0;
+            
+            while ( (res = template.exec(val)) != null )
+            {
+              variable = $('.spaces option[value='+res[0]+']');
+              if(variable.length)
+                  variable.addClass('dont-remove');
+              else {
+                data[res[1]] = res[0];
+              }
+            }
+            
+            $('.spaces option:not(.dont-remove)').remove();
+            
+            if(data.length)
+            {
+                for(var space in data)
+                {
+                    $('.spaces').append('<option value='+space+'>Пробел '+space+'</option>');
+                }
+            }
+            return false;
+        });
+        
+        
+        $('.add-answer').live('click', function(){
+            current = $(this);
+            space = $('.spaces');
+            answer = $('.new-answer');
+            lastHidden = $('#hidden-options input:last');
+            index = lastHidden.length ? lastHidden.data('index')+1 : 0;
+            hiddens = '';
+            option = '';
+            if(space.find('option').length > $('.answers').find('option').length)
+            {
+                if(answer.val())
+                {
+                    hiddens += '<input data-index="'+index+'" type="hidden" name="Exercises[answers]['+index+'][answer]" value="'+answer.val()+'" />';
+                    option += '<option value='+index+'>'+answer.val()+'</option>';
+                    $('.answers').append(option);
+                    $('#hidden-options').append(hiddens);
+                    answer.val('');
+                } else {
+                    alert('Введите вариант ответа');
+                    answer.focus();
+                }
+            } else {
+                alert('Количество ответов не может превышать кол-во пробелов');
+            }
+            return false;
+        });
+        
+        $('.delete-answer').live('click', function(){
+            current = $(this);
+            selected = $('.answers :selected');
+            if(selected.length)
+            {
+                hiddens = $('#hidden-options input[data-index='+selected.val()+']');
+                hiddens.remove();
+                selected.remove();
+            }
+            return false;
+        });
+        
+        $('#exercises-form').submit(function(){
+            $return = true;
+            spacesCont = $('.spaces');
+            spaces = spacesCont.find('option');
+            errorsDiv = spacesCont.siblings('.errorMessage'); 
+            if(spaces.length)
+            {
+                if(spaces.length != $('.answers').find('option').length)
+                {
+                    errorsDiv.html('Кол-во пробелов должно быть равно кол-ву ответов');
+                    $return = false;
+                } else {
+                    errorsDiv.html('');
+                }
+            } else {
+                errorsDiv.html('Не создано ни одного пробела');
+                $return = false;
+            }
+            
+            error = $('.question-text').siblings('.errorMessage');
+            if(!$('.question-text').val())
+            {
+                error.html('Введите текст');
+                $return = false;
+            } else {
+                error.html('');
+            }
+            return $return;
+        });
+    });
+</script>
+
 <div id="space-text">
     <div class="row">
         <div class="col-lg-6 col-md-6">

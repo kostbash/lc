@@ -15,7 +15,7 @@ if($text && $spaces)
 }
 ?>
         
-<div class="text-with-space-field clearfix">
+<div class="exact-answers-with-space clearfix">
     <div class="text">
         <?php echo $text; ?>
     </div>

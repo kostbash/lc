@@ -26,12 +26,11 @@ class ExercisesListOfAnswers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_exercise', 'required'),
-			array('answer', 'requiredSpacePass'),
-			array('id_exercise, is_right, reg_exp, number_space, id_question', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, id_exercise, answer', 'safe', 'on'=>'search'),
+                    array('id_exercise', 'required'),
+                    array('answer', 'requiredSpacePass'),
+                    array('name', 'length', 'max'=>255),
+                    array('id_exercise, is_right, reg_exp, number_space, id_question', 'numerical', 'integerOnly'=>true),
+                    array('id, id_exercise, answer', 'safe', 'on'=>'search'),
 		);
 	}
 

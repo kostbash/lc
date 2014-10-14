@@ -187,6 +187,59 @@
                 }
             }
         });
+        
+        $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
+        
+        $('.hotmap-items svg g').mouseover(function(){
+            current = $(this);
+            current.attr('class', 'area mouseover');
+        });
+        $('.hotmap-items svg g').mouseleave(function(){
+            current = $(this);
+            current.attr('class', 'area');
+        });
+        
+        $('.hotmap-items svg g').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return $(this).attr('class')==='area mouseover' && item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                item = $(info.draggable);
+                area = $(this);
+                setDuration(area);
+                id_area = area.data('id');
+                resultAnswer = item.closest('.exercise').find('> .head .result');
+                hiddenAnswer = item.find('.hidden-answer');
+                hiddenAnswer.val(id_area);
+                item.removeClass('not-hide').addClass('hide');
+                allAnswers = item.closest('.items').find('.hidden-answer');
+                if(!item.closest('.items').find('.item.not-hide').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: allAnswers.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                            else
+                                alert(result);
+                        }
+                    });
+                } 
+                else
+                {
+                    resultAnswer.html('');
+                }
+            }
+        });
+        
         $('[name*=answers]').keydown(function(e){
             nextTab = null;
             current = $(this);

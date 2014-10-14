@@ -171,6 +171,20 @@ class ExercisesController extends Controller
                             }
                         }
                     }
+                    elseif($id_visual==12)
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->is_right = 1;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                            }
+                        }
+                    }
                     else 
                     {
                         if($_POST['Exercises']['answers'])
@@ -364,6 +378,21 @@ class ExercisesController extends Controller
                                 $exercisesAnswers = new ExercisesListOfAnswers;
                                 $exercisesAnswers->attributes = $answerAttr;
                                 $exercisesAnswers ->answer = $id_area;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==12)
+                    {
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers ->is_right = 1;
                                 $exercisesAnswers ->id_exercise = $model->id;
                                 $exercisesAnswers->save();
                             }

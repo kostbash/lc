@@ -15001,3 +15001,22 @@ $.widget( "ui.tooltip", {
 });
 
 }( jQuery ) );
+
+
+// скрипт нужен для работы svg. Обычный ui игнорирует размеры width и height <g> 
+$.ui.intersect_o = $.ui.intersect;
+$.ui.intersect = function(draggable, droppable, toleranceMode) {
+    //Fix helper
+    if (draggable.helperProportions && draggable.helperProportions.width === 0 && draggable.helperProportions.height === 0) {
+        draggable.helperProportionsBBox = draggable.helperProportionsBBox || $(draggable.element).get(0).getBBox();
+        draggable.helperProportions = draggable.helperProportionsBBox;
+    }
+
+    //Fix droppable
+    if (droppable.proportions && droppable.proportions.width === 0 && droppable.proportions.height === 0) {
+        droppable.proportionsBBox = droppable.proportionsBBox || $(droppable.element).get(0).getBBox();
+        droppable.proportions = droppable.proportionsBBox;
+    }
+
+    return $.ui.intersect_o(draggable, droppable, toleranceMode);
+};

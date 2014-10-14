@@ -1,7 +1,7 @@
 <div class="pick-area">
     <img src="<?php echo $model->Map->mapImageLink; ?>" />
     <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" id="svg" width="<?php echo $imageSize[0]; ?>" height="<?php echo $imageSize[1]; ?>" style="display: block;">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="<?php echo $imageSize[0]; ?>" height="<?php echo $imageSize[1]; ?>">
         <?php
             foreach($model->Map->Areas as $area)
             {

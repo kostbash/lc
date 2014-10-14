@@ -349,6 +349,21 @@ class Exercises extends CActiveRecord
                             }
                         }
                     }
+                    elseif($exercise->id_visual==12) // hotmap предметы
+                    {
+                        if(count($answers)==count($rightAnswers))
+                        {
+                            $cleanRightAnswers = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
+                            }
+                            if(!array_diff_assoc($cleanRightAnswers, $answers))
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 } 
             }
             return false;

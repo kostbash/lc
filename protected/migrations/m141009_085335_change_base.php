@@ -11,7 +11,7 @@ class m141009_085335_change_base extends CDbMigration
             'is_link' => "tinyint(1) NOT NULL",
             'id_user' => "INT(11) NOT NULL",
         ));
-        $this->createTable('oed_maps_tags', array(
+        $this->createTable('oed_map_tags', array(
             'id' => 'pk',
             'name' => "varchar(255) NOT NULL",
         ));

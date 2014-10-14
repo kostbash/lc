@@ -10,6 +10,34 @@ if(!($model->isNewRecord && empty($model->Comparisons)))
 }
 ?>
 
+<script>
+    $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;
+            answers = $('.hidden-answer');
+            if(answers.length)
+            {
+            answers.each(function(n, answer){
+                answer = $(answer);
+                if(!answer.val())
+                {
+                    answer.siblings('.errorMessage').html('Введите текст варианта сопоставления');
+                    $return = false;
+                } else {
+                    answer.siblings('.errorMessage').html('');
+                }
+            });
+            }
+            else
+            {
+                alert('Добавьте сравнение');
+                $return = false;
+            }
+            return $return;
+        });
+    });
+</script>
+
 <div class="row" id="comparisons">
     <div class="col-lg-offset-9 col-md-offset-9 col-lg-3 col-md-3">
         <div class="errorMessage"></div>

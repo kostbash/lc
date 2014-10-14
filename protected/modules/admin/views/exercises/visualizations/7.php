@@ -1,3 +1,28 @@
+<script>
+    $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;
+            sentences = $('textarea[name*=answers]');
+            if(sentences.length)
+            {
+                sentences.each(function(n, answer){
+                    answer = $(answer);
+                    if(!answer.val())
+                    {
+                        answer.siblings('.errorMessage').html('Введите предложение');
+                        $return = false;
+                    } else {
+                        answer.siblings('.errorMessage').html('');
+                    }
+                });
+            } else {
+                $return = false;
+            }
+            return $return;
+        });
+    });
+</script>
+
 <div class="row" id="sentences">
     <div class="col-lg-offset-3 col-md-offset-3 col-lg-8 col-md-8 answer">
         <?php echo CHtml::textArea("Exercises[answers][0][answer]", $model->Answers[0]->answer, array('class'=>'form-control', 'placeholder'=>'Введите предложение')); ?>

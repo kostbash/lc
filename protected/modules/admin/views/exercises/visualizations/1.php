@@ -1,5 +1,31 @@
-<?php
+<script>
+    $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            answers = $('input[name*=answers][type=text]');
+            if(answers.length)
+            {
+                answers.each(function(n, answer){
+                    answer = $(answer);
+                    if(!answer.val())
+                    {
+                        answer.siblings('.errorMessage').html('Введите текст ответа');
+                        $return = false;
+                    } else {
+                        answer.siblings('.errorMessage').html('');
+                    }
+                });
+                $('#errorCorrectAnswer').html('');
+            } else {
+                $('#errorCorrectAnswer').html('Добавьте вариант ответа');
+                $return = false;
+            }
+            return $return;
+        });
+    });
+</script>
 
+<?php
 if(!($model->isNewRecord && empty($model->Answers)))
 {
     $n = 0;
