@@ -89,6 +89,28 @@
             }
         });
         
+        $('.bags-type .item').draggable({cursor: 'move', revert:true});
+        $('.bags-type .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                answer = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                cont.append(answer);
+                items = cont.closest('.bags-type').find('.items');
+                bags = cont.closest('.bags-type').find('.bags');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
+                hiddenAnswer = answer.find('.hidden-answer');
+                hiddenAnswer.val(cont.closest('.bag').data('index'));
+            }
+        });
+        
         $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
         
         $('.hotmap-items svg g').mouseover(function(){

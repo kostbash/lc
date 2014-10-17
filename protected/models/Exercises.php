@@ -60,6 +60,7 @@ class Exercises extends CActiveRecord
                     'Comparisons'=>array(self::HAS_MANY, 'ExercisesComparisons', 'id_exercise'),
                     'Questions'=>array(self::HAS_MANY, 'ExercisesQuestions', 'id_exercise'),
                     'Map'=>array(self::BELONGS_TO, 'Maps', 'id_map'),
+                    'Bags'=>array(self::HAS_MANY, 'ExercisesBags', 'id_exercise'),
 		);
 	}
 
@@ -350,6 +351,21 @@ class Exercises extends CActiveRecord
                         }
                     }
                     elseif($exercise->id_visual==12) // hotmap предметы
+                    {
+                        if(count($answers)==count($rightAnswers))
+                        {
+                            $cleanRightAnswers = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
+                            }
+                            if(!array_diff_assoc($cleanRightAnswers, $answers))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    elseif($exercise->id_visual==13) // Мешки
                     {
                         if(count($answers)==count($rightAnswers))
                         {

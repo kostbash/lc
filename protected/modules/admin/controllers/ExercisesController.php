@@ -185,6 +185,40 @@ class ExercisesController extends Controller
                             }
                         }
                     }
+                    elseif($id_visual==13)
+                    {
+                        $saveBags = array();
+                        if($_POST['Bags'] && is_array($_POST['Bags']))
+                        {
+                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            {
+                                $bag = new ExercisesBags;
+                                $bag->attributes = $bagAttrs;
+                                $bag->id_exercise = $model->id;
+                                if($bag->save())
+                                {
+                                    $saveBags[$index] = $bag->id;
+                                }
+                            }
+                        }
+                        
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $bag_id = $saveBags[$answerAttrs['answer']];
+                                if($bag_id)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttrs;
+                                    $exercisesAnswers->answer = $bag_id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
                     else 
                     {
                         if($_POST['Exercises']['answers'])
@@ -395,6 +429,42 @@ class ExercisesController extends Controller
                                 $exercisesAnswers ->is_right = 1;
                                 $exercisesAnswers ->id_exercise = $model->id;
                                 $exercisesAnswers->save();
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==13)
+                    {
+                        $saveBags = array();
+                        if($_POST['Bags'] && is_array($_POST['Bags']))
+                        {
+                            foreach($model->Bags as $eBag) $eBag->delete();
+                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            {
+                                $bag = new ExercisesBags;
+                                $bag->attributes = $bagAttrs;
+                                $bag->id_exercise = $model->id;
+                                if($bag->save())
+                                {
+                                    $saveBags[$index] = $bag->id;
+                                }
+                            }
+                        }
+                        
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $bag_id = $saveBags[$answerAttrs['answer']];
+                                if($bag_id)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttrs;
+                                    $exercisesAnswers->answer = $bag_id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers->save();
+                                }
                             }
                         }
                     }

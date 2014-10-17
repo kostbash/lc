@@ -29,16 +29,6 @@
                 itemId_areaError.html('');
             }
             
-            if(!itemName.val())
-            {
-                itemNameError.html('Введите название предмета');
-                error = true;
-            }
-            else
-            {
-                itemNameError.html('');
-            }
-            
             if(!error)
             {
                 items.append(createItem(index, itemName.val(), itemId_area.val()));
@@ -126,7 +116,7 @@
                                 <input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
                             </td>
                             <td>
-                                <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $dataAreas, array('class'=>'form-control input-sm', 'нет области')); ?>
+                                <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $dataAreas, array('class'=>'form-control input-sm', 'empty'=>'Выберите область')); ?>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>

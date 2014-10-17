@@ -2810,6 +2810,87 @@ z-index:10000000;
     stroke: #00F;
 }
 
+/*---------------------- 13.bags ----------------------*/
+
+#lesson-page .bags-type
+{
+    
+}
+
+
+#lesson-page .bags-type .items .item
+{
+    margin: 5px 6px 5px 0;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 24px;
+    color: #b5486d;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    background: #fff;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
+#lesson-page .bags-type .head
+{
+    background: #f1f1f1;
+    padding: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid #bbd6e9;
+}
+
+#lesson-page .bags-type .bags
+{
+    margin-top: 20px;
+}
+
+#lesson-page .bags-type .bag
+{
+    float: left;
+    border: 1px solid #bbd6e9;
+    background: #fefefe;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    width:  160px;
+    text-align: center;
+    min-height: 160px;
+    margin-left: 36px;
+    margin-bottom: 30px;
+}
+
+#lesson-page .bags-type .bag.first-in-line
+{
+    clear: both;
+    margin-left: 0;
+}
+
+#lesson-page .bags-type .bag-drop
+{
+    padding: 8px;
+    min-height: 121px;
+}
+#lesson-page .bags-type .bag-drop .item
+{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    color: #b5486d;
+    width: 142px;
+    margin-bottom: 8px;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
 #lesson-page .label {
     float: right;
     margin-top: 5px;

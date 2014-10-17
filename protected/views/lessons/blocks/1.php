@@ -187,6 +187,48 @@
                 }
             }
         });
+
+        $('.bags-type .item').draggable({cursor: 'move', revert:true});
+        $('.bags-type .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                answer = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                cont.append(answer);
+                items = cont.closest('.bags-type').find('.items');
+                bags = cont.closest('.bags-type').find('.bags');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
+                hiddenAnswer = answer.find('.hidden-answer');
+                hiddenAnswer.val(cont.closest('.bag').data('index'));
+                if(!items.find('.item').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: bags.find('.hidden-answer').serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                            else
+                                alert(result);
+                        }
+                    });
+                } 
+                else
+                {
+                    resultAnswer.html('');
+                }
+            }
+        });
         
         $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
         
