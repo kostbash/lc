@@ -29,16 +29,15 @@ class ExercisesListOfAnswers extends CActiveRecord
                     array('id_exercise', 'required'),
                     array('answer', 'requiredSpacePass'),
                     array('name', 'length', 'max'=>255),
-                    array('id_exercise, is_right, reg_exp, number_space, id_question', 'numerical', 'integerOnly'=>true),
+                    array('id_exercise, is_right, reg_exp, number_space, id_question, id_area', 'numerical', 'integerOnly'=>true),
                     array('id, id_exercise, answer', 'safe', 'on'=>'search'),
 		);
 	}
 
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
+                    'Area'=>array(self::BELONGS_TO, 'MapAreas', 'id_area'),
 		);
 	}
 

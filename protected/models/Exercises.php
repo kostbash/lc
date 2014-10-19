@@ -271,7 +271,7 @@ class Exercises extends CActiveRecord
                         }
                         
                     }
-                    elseif($exercise->id_type==6) // упорядочивание
+                    elseif($exercise->id_visual==7) // упорядочивание
                     {
                         if(is_array($answers))
                         {
@@ -375,6 +375,43 @@ class Exercises extends CActiveRecord
                                 $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
                             }
                             if(!array_diff_assoc($cleanRightAnswers, $answers))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    elseif($exercise->id_visual==14) // hotmap мешки
+                    {
+                        if(count($answers)==count($rightAnswers))
+                        {
+                            $cleanRightAnswers = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
+                            }
+                            if(!array_diff_assoc($cleanRightAnswers, $answers))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    elseif($exercise->id_visual==15) // hotmap упорядочивание
+                    {
+                        if(count($answers)==count($rightAnswers))
+                        {
+                            $cleanAnswers = array();
+                            $i = 1;
+                            foreach($answers as $id_answer => $answer)
+                            {
+                                $cleanAnswers[$id_answer] = $i++;
+                            }
+                            
+                            $cleanRightAnswers = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
+                            }
+                            if(!array_diff_assoc($cleanRightAnswers, $cleanAnswers))
                             {
                                 return true;
                             }

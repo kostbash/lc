@@ -153,6 +153,153 @@
             hiddenAnswer.val(answer.data('val'));
             checkInput(hiddenAnswer);
         });
+        
+        
+        $('.hotmap-bags .area').draggable({
+            cursor: 'move',
+            drag:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-bags').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('left', event.pageX - 7);
+                item.css('top', event.pageY - 7);
+                item.css('display', 'inline-block');
+            },
+            stop:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-bags').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('display', 'none');
+            }
+        });
+        
+        $('.hotmap-bags .item').draggable({cursor: 'move', revert:true});
+        
+        $('.hotmap-bags .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                area = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                items = cont.closest('.hotmap-bags').find('.items');
+                if(area.hasClass('item'))
+                {
+                   answer = area;
+                }
+                else
+                {
+                    answer = items.find('.item[data-area='+area.data('id')+']');
+                    area.draggable("disable");
+                    area.attr('class', 'area disable');
+                }
+                cont.append(answer.css('left', 0).css('top',0));
+            }
+        });
+        
+        $('.hotmap-bags .bag-drop .item').live('mouseover',function(){
+            current = $(this);
+            area = current.closest('.hotmap-bags').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area visible');
+        });
+        $('.hotmap-bags .bag-drop .item').live('mouseleave',function(){
+            current = $(this);
+            area = current.closest('.hotmap-bags').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-items  .item').draggable({cursor: 'move', revert:true});
+        
+        $('.hotmap-items svg g').mouseover(function(){
+            current = $(this);
+            current.attr('class', 'area mouseover');
+        });
+        $('.hotmap-items svg g').mouseleave(function(){
+            current = $(this);
+            current.attr('class', 'area');
+        });
+        
+        $('.hotmap-items svg g').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return $(this).attr('class')==='area mouseover' && item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                item = $(info.draggable);
+                area = $(this);
+                setDuration(area);
+                id_area = area.data('id');
+                resultAnswer = item.closest('.exercise').find('> .head .result');
+                hiddenAnswer = item.find('.hidden-answer');
+                hiddenAnswer.val(id_area);
+                item.removeClass('not-hide').addClass('hide');
+            }
+        });
+        
+        $('.hotmap-ordering .area').draggable({
+            cursor: 'move',
+            drag:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-ordering').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('left', event.pageX - 7);
+                item.css('top', event.pageY - 7);
+                item.css('display', 'block');
+            },
+            stop:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-ordering').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('display', 'none');
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop .dropped-items').sortable({
+            cancel: null,
+            cursor: 'move',
+            items: '> .item',
+            tolerance: 'pointer',
+            containment: 'parent',
+            update: function(event, ui) {
+                current = $(this);
+                setDuration(current);
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return $(item).get(0).tagName === 'g' && item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                area = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                items = cont.closest('.hotmap-ordering').find('.items');
+                answer = items.find('.item[data-area='+area.data('id')+']');
+                area.draggable("disable");
+                area.attr('class', 'area disable');
+                cont.find('.dropped-items').append(answer.css('left', 0).css('top',0));
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop .item').live('mouseover',function(){
+            current = $(this);
+            area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area visible');
+        });
+        $('.hotmap-ordering .bag-drop .item').live('mouseleave',function(){
+            current = $(this);
+            area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area disable');
+        });
             
         $('[name*=answers]').keydown(function(e){
             nextTab = null;

@@ -58,7 +58,7 @@ class ExercisesController extends Controller
             
             if(isset($_POST['Exercises']))
             {
-                //CVarDumper::dump($_POST, 5, true); die;
+                //CVarDumper::dump($_POST['Exercises'], 5, true); die;
                 $model->attributes = $_POST['Exercises'];
                 $model->course_creator_id = $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
                 $model->change_date = date('Y-m-d H:i:s');
@@ -216,6 +216,57 @@ class ExercisesController extends Controller
                                     $exercisesAnswers ->id_exercise = $model->id;
                                     $exercisesAnswers->save();
                                 }
+                            }
+                        }
+                    }
+                    elseif($id_visual==14)
+                    {
+                        $saveBags = array();
+                        if($_POST['Bags'] && is_array($_POST['Bags']))
+                        {
+                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            {
+                                $bag = new ExercisesBags;
+                                $bag->attributes = $bagAttrs;
+                                $bag->id_exercise = $model->id;
+                                if($bag->save())
+                                {
+                                    $saveBags[$index] = $bag->id;
+                                }
+                            }
+                        }
+                        
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $bag_id = $saveBags[$answerAttrs['answer']];
+                                if($bag_id)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttrs;
+                                    $exercisesAnswers->answer = $bag_id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    elseif($id_visual==15)
+                    {
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            $order = 1;
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttrs;
+                                $exercisesAnswers->answer = $order;
+                                $exercisesAnswers ->is_right = 1;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                                $order++;
                             }
                         }
                     }
@@ -465,6 +516,60 @@ class ExercisesController extends Controller
                                     $exercisesAnswers ->id_exercise = $model->id;
                                     $exercisesAnswers->save();
                                 }
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==14)
+                    {
+                        $saveBags = array();
+                        if($_POST['Bags'] && is_array($_POST['Bags']))
+                        {
+                            foreach($model->Bags as $eBag) $eBag->delete();
+                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            {
+                                $bag = new ExercisesBags;
+                                $bag->attributes = $bagAttrs;
+                                $bag->id_exercise = $model->id;
+                                if($bag->save())
+                                {
+                                    $saveBags[$index] = $bag->id;
+                                }
+                            }
+                        }
+                        
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $bag_id = $saveBags[$answerAttrs['answer']];
+                                if($bag_id)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers->attributes = $answerAttrs;
+                                    $exercisesAnswers->answer = $bag_id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==15)
+                    {
+                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                        {
+                            $order = 1;
+                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            {
+                                $exercisesAnswers = new ExercisesListOfAnswers;
+                                $exercisesAnswers->attributes = $answerAttrs;
+                                $exercisesAnswers->answer = $order;
+                                $exercisesAnswers ->is_right = 1;
+                                $exercisesAnswers ->id_exercise = $model->id;
+                                $exercisesAnswers->save();
+                                $order++;
                             }
                         }
                     }

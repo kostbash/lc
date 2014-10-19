@@ -136,7 +136,7 @@
                     <?php foreach($model->Bags as $bag) : $listDataBags[$bag->id] = $bag->name; ?>
                         <tr class="update-bag" data-index="<?php echo $bag->id; ?>">
                             <td>
-                                <input class="form-control input-sm name" placeholder="Введите название предмета" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
+                                <input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -180,7 +180,7 @@
         <div class="col-lg-6 col-md-6">
             <div class="row" id="add-bag">
                 <div class="col-lg-8 col-md-8">
-                    <?php echo CHtml::textField('', '', array('class'=>'form-control input-sm name', 'placeholder'=>'Введите название предмета')); ?>
+                    <?php echo CHtml::textField('', '', array('class'=>'form-control input-sm name', 'placeholder'=>'Введите название мешка')); ?>
                     <div class="errorMessage"></div>
                 </div>
                 <div class="col-lg-4 col-md-4">

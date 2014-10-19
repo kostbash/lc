@@ -2891,6 +2891,257 @@ z-index:10000000;
     padding: 2px 30px;
 }
 
+/*---------------------- 14.Hotmap-bags ----------------------*/
+
+#lesson-page .hotmap-bags
+{
+    
+}
+
+
+#lesson-page .hotmap-bags .items .item
+{
+    margin: 5px 6px 5px 0;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 24px;
+    color: #b5486d;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    background: #fff;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
+#lesson-page .hotmap-bags .head
+{
+    background: #f1f1f1;
+    padding: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid #bbd6e9;
+}
+
+#lesson-page .hotmap-bags .bags
+{
+    margin-top: 20px;
+}
+
+#lesson-page .hotmap-bags .bag
+{
+    float: left;
+    border: 1px solid #bbd6e9;
+    background: #fefefe;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    width:  160px;
+    text-align: center;
+    min-height: 160px;
+    margin-left: 36px;
+    margin-bottom: 30px;
+}
+
+#lesson-page .hotmap-bags .bag.first-in-line
+{
+    clear: both;
+    margin-left: 0;
+}
+
+#lesson-page .hotmap-bags .bag-drop
+{
+    padding: 8px;
+    min-height: 121px;
+}
+#lesson-page .hotmap-bags .bag-drop .item
+{
+    position: relative;
+    z-index: 4;
+    border-radius: 4px;
+    display: inline-block;
+    color: #b5486d;
+    background: #fff;
+    width: 142px;
+    margin-bottom: 8px;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
+#lesson-page .hotmap-bags .areas
+{
+    position: relative;
+}
+
+#lesson-page .hotmap-bags .items .item
+{
+    margin: 4px 6px;
+    position: absolute;
+    z-index: 3;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 24px;
+    color: #b5486d;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    background: #fff;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+    display: none;
+}
+
+#lesson-page .hotmap-bags .areas svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+}
+
+#lesson-page .hotmap-bags .areas svg rect {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-bags .areas svg circle {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-bags .areas svg polygon {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-bags .areas svg g,
+#lesson-page .hotmap-bags .areas svg g.visible
+{
+    stroke-width: 2px;
+    stroke: #00F;
+}
+
+#lesson-page .hotmap-bags .areas svg g.disable
+{
+    stroke: none;
+}
+
+
+/*---------------------- 15.Hotmap-ordering ----------------------*/
+
+#lesson-page .hotmap-ordering .areas
+{
+    position: relative;
+}
+
+#lesson-page .hotmap-ordering .areas svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+}
+
+#lesson-page .hotmap-ordering .areas svg rect {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-ordering .areas svg circle {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-ordering .areas svg polygon {
+    fill: transparent;
+}
+
+#lesson-page .hotmap-ordering .areas svg g,
+#lesson-page .hotmap-ordering .areas svg g.visible
+{
+    stroke-width: 2px;
+    stroke: #00F;
+}
+
+#lesson-page .hotmap-ordering .areas svg g.disable
+{
+    stroke: none;
+}
+
+#lesson-page .hotmap-ordering .items .item
+{
+    margin: 4px 6px;
+    position: absolute;
+    z-index: 3;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 24px;
+    color: #b5486d;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    border: 1px solid #a4c8e2;
+    background: #fff;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+    display: none;
+}
+
+#lesson-page .hotmap-ordering .bag
+{
+    border: 1px solid #bbd6e9;
+    background: #fefefe;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 160px;
+    margin-top: 20px;
+}
+
+#lesson-page .hotmap-ordering .bag .head
+{
+    background: #f1f1f1;
+    padding: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid #bbd6e9;
+}
+
+#lesson-page .hotmap-ordering .bag-drop
+{
+    padding: 8px;
+    min-height: 121px;
+}
+#lesson-page .hotmap-ordering .dropped-items
+{
+    width: 150px;
+    margin: 0 auto;
+}
+
+#lesson-page .hotmap-ordering .bag-drop .item
+{
+    position: relative;
+    z-index: 4;
+    border-radius: 4px;
+    display: block;
+    color: #b5486d;
+    background: #fff;
+    width: 100%;
+    margin: 8px 0;
+    font-family: 'PT Sans';
+    font-weight: bold;
+    font-size: 18px;
+    border: 1px solid #a4c8e2;
+    text-align: center;
+    line-height: normal;
+    vertical-align: top;
+    padding: 2px 30px;
+}
+
 #lesson-page .label {
     float: right;
     margin-top: 5px;

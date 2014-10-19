@@ -230,7 +230,87 @@
             }
         });
         
-        $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
+        $('.hotmap-bags .area').draggable({
+            cursor: 'move',
+            drag:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-bags').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('left', event.pageX - 7);
+                item.css('top', event.pageY - 7);
+                item.css('display', 'inline-block');
+            },
+            stop:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-bags').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('display', 'none');
+            }
+        });
+        
+        $('.hotmap-bags .item').draggable({cursor: 'move', revert:true});
+        
+        $('.hotmap-bags .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                area = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                items = cont.closest('.hotmap-bags').find('.items');
+                if(area.hasClass('item'))
+                {
+                   answer = area;
+                }
+                else
+                {
+                    answer = items.find('.item[data-area='+area.data('id')+']');
+                    area.draggable("disable");
+                    area.attr('class', 'area disable');
+                }
+                cont.append(answer.css('left', 0).css('top',0));
+                bags = cont.closest('.hotmap-bags').find('.bags');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
+                hiddenAnswer = answer.find('.hidden-answer');
+                hiddenAnswer.val(cont.closest('.bag').data('index'));
+                if(!items.find('.item').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: bags.find('.hidden-answer').serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                            else
+                                alert(result);
+                        }
+                    });
+                } 
+                else
+                {
+                    resultAnswer.html('');
+                }
+            }
+        });
+        
+        $('.hotmap-bags .bag-drop .item').live('mouseover',function(){
+            current = $(this);
+            area = current.closest('.hotmap-bags').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area visible');
+        });
+        $('.hotmap-bags .bag-drop .item').live('mouseleave',function(){
+            current = $(this);
+            area = current.closest('.hotmap-bags').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-items  .item').draggable({cursor: 'move', revert:true});
         
         $('.hotmap-items svg g').mouseover(function(){
             current = $(this);
@@ -280,6 +360,104 @@
                     resultAnswer.html('');
                 }
             }
+        });
+        
+        $('.hotmap-ordering .area').draggable({
+            cursor: 'move',
+            drag:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-ordering').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('left', event.pageX - 7);
+                item.css('top', event.pageY - 7);
+                item.css('display', 'block');
+            },
+            stop:function (event, ui){
+                cont = $(this);
+                item = cont.closest('.hotmap-ordering').find('.items .item[data-area='+cont.data('id')+']');
+                item.css('display', 'none');
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop .dropped-items').sortable({
+            cancel: null,
+            cursor: 'move',
+            items: '> .item',
+            tolerance: 'pointer',
+            containment: 'parent',
+            update: function(event, ui) {
+                current = $(this);
+                setDuration(current);
+                resultAnswer = current.closest('.exercise').find('> .head .result');
+                hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                items = current.closest('.hotmap-ordering').find('.items');
+                if(!items.find('.item').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: hiddenAnswer.serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                        }
+                    });
+                }
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return $(item).get(0).tagName === 'g' && item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                area = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                items = cont.closest('.hotmap-ordering').find('.items');
+                answer = items.find('.item[data-area='+area.data('id')+']');
+                area.draggable("disable");
+                area.attr('class', 'area disable');
+                cont.find('.dropped-items').append(answer.css('left', 0).css('top',0));
+                bag = cont.closest('.hotmap-ordering').find('.bag');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
+                if(!items.find('.item').length)
+                {
+                    $.ajax({
+                        url: '<?php echo $this->createUrl('/exercises/right'); ?>',
+                        type:'POST',
+                        data: bag.find('.hidden-answer').serialize(),
+                        success: function(result) { 
+                            if(result==1)
+                                resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            else if(result==0)
+                                resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
+                            else
+                                alert(result);
+                        }
+                    });
+                } 
+                else
+                {
+                    resultAnswer.html('');
+                }
+            }
+        });
+        
+        $('.hotmap-ordering .bag-drop .item').live('mouseover',function(){
+            current = $(this);
+            area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area visible');
+        });
+        $('.hotmap-ordering .bag-drop .item').live('mouseleave',function(){
+            current = $(this);
+            area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
+            area.attr('class', 'area disable');
         });
         
         $('[name*=answers]').keydown(function(e){
