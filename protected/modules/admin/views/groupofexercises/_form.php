@@ -14,6 +14,31 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 });
             });
             
+            $('.with-right').change(function(){
+                current = $(this);
+                links = current.closest('.export-button').find('.dropdown-menu li a');
+                if(current.val()==1)
+                {
+                    links.each(function(n, link){
+                        link = $(link);
+                        str = link.attr('href');
+                        str = str.replace(/with_right=1/g, 'with_right=0');
+                        link.attr('href', str);
+                    });
+                    current.val(0);
+                }
+                else
+                {
+                    links.each(function(n, link){
+                        link = $(link);
+                        str = link.attr('href');
+                        str = str.replace(/with_right=0/g, 'with_right=1');
+                        link.attr('href', str);
+                    });
+                    current.val(1);
+                }
+            });
+            
             $('#addSkill #searchSkill').live('keyup', function(){
                 current = $(this);
                 $.ajax({
@@ -356,6 +381,17 @@ Yii::app()->clientScript->registerScript("skills-grid",
             </div>
             <div class="col-lg-3 col-md-3">
                 <?php echo CHtml::dropDownList("GroupOfExercises[$exerciseGroup->id][type]", $exerciseGroup->type, GroupOfExercises::$typeGroup, array('class'=>'form-control')); ?>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="export-button">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт текущего блока<span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li><a href="<?php echo Yii::app()->createUrl('lessons/printBlock', array('block'=>$exerciseGroup->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                        <li><a href="<?php echo Yii::app()->createUrl('lessons/blocktoPdf', array('block'=>$exerciseGroup->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                    </ul>
+                    <input id='with-right' type='checkbox' class='with-right' name value='0' />
+                    <label for='with-right'>С ответами</label>
+                </div>
             </div>
         </div>
    </div>

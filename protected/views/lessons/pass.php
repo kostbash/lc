@@ -1,5 +1,31 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <script type="text/javascript">
+    $(function(){
+        $('.with-right').change(function(){
+            current = $(this);
+            links = current.closest('.export-button').find('.dropdown-menu li a');
+            if(current.val()==1)
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=1/g, 'with_right=0');
+                    link.attr('href', str);
+                });
+                current.val(0);
+            }
+            else
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=0/g, 'with_right=1');
+                    link.attr('href', str);
+                });
+                current.val(1);
+            }
+        });
+    });
     
     seconds = 0;
     
@@ -55,11 +81,22 @@
                                 </div>
                                 <?php echo CHtml::link('Название курса "'.$userLesson->Course->name.'"', array('courses/index', 'id'=>$userLesson->Course->id), array('id'=>'course-name')); ?>
                             </div>
-                            <div id="next-lesson">
+                            <div id='buttons'>
                                 <?php 
                                     if( $userLesson->Lesson->accessNextLesson($userLesson->id) )
                                         echo CHtml::link('Следующий урок', array('courses/nextlesson', 'id_user_lesson'=>$userLesson->id), array('class'=>'next-lesson-button'));
                                 ?>
+                                <div class="export-button">
+                                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт текущего блока<span class="caret"></span></button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="<?php echo Yii::app()->createUrl('lessons/printBlock', array('block'=>$exerciseGroup->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                                        <li><a href="<?php echo Yii::app()->createUrl('lessons/blockToPdf', array('block'=>$exerciseGroup->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                                    </ul>
+                                    <?php if(Yii::app()->user->checkAccess('editor')) : ?>
+                                        <input id='with-right' type='checkbox' class='with-right' name value='0' />
+                                        <label for='with-right'>С ответами</label>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                         <div id="blocks">

@@ -29,6 +29,31 @@ Yii::app()->clientScript->registerScript('#courses', "
             current = $(this);
             ee = e;
         });
+        
+        $('.with-right').change(function(){
+            current = $(this);
+            links = current.closest('.export-button').find('.dropdown-menu li a');
+            if(current.val()==1)
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=1/g, 'with_right=0');
+                    link.attr('href', str);
+                });
+                current.val(0);
+            }
+            else
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=0/g, 'with_right=1');
+                    link.attr('href', str);
+                });
+                current.val(1);
+            }
+        });
 
         $('#courseSkill .dropdown-toggle').live('click', function(){
             current = $(this);
@@ -627,10 +652,19 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
 
 <div class="page-header clearfix">
     <div class="row">
-        <div class="col-lg-10 col-md-10">
+        <div class="col-lg-7 col-md-7">
              <h2>Редактирование курса: "<?php echo $model->name; ?>"</h2>   
         </div>
-        <div class="col-lg-2 col-md-2">
+        <div class="col-lg-5 col-md-5">
+            <div class="export-button">
+                <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт курса<span class="caret"></span></button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a href="<?php echo Yii::app()->createUrl('courses/print', array('id'=>$model->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                    <li><a href="<?php echo Yii::app()->createUrl('courses/toPdf', array('id'=>$model->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                </ul>
+                <input id='with-right' type='checkbox' class='with-right' name value='0' />
+                <label for='with-right'>С ответами</label>
+            </div>
             <?php echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Сохранить', '#', array('class'=>'btn btn-success btn-icon', 'onclick'=>"$('#courses-form').submit(); return false;")); ?>
         </div>        
     </div>

@@ -98,6 +98,11 @@ class GroupExerciseAndSkills extends CActiveRecord
 		return parent::model($className);
 	}
         
+        public function getNicePercent()
+        {
+            return $this->pass_percent*100;
+        }
+        
         protected function afterDelete() {
             $group = GroupOfExercises::model()->findByPk($this->id_group);
             if($group)

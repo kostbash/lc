@@ -1,0 +1,130 @@
+#empty-layout
+{
+    width: 792px;
+    min-height: 297mm;
+    margin: 0 auto;
+    border: 1px #efefef solid;
+    padding: 10mm;
+    font-family: Arial;
+}
+
+table
+{
+    width: 792px;
+    text-align: center;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th, table td
+{
+    border: 1px solid #000;
+    padding: 8px;
+    font-size: 14px;
+}
+
+img
+{
+    max-width: 774px;
+}
+
+.course-name
+{
+    font-size: 30px;
+    margin: 0 0 14px 0;
+}
+
+.theme-header
+{
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.course .lesson .lesson-name
+{
+    margin: 30px 0 20px 0;
+}
+
+.lesson .lesson-name
+{
+    font-size: 26px;
+    margin: 0 0 10px 0;
+}
+
+.lesson .blocks-header
+{
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.lesson .blocks-container
+{
+    margin-top: 30px;
+}
+
+.lesson .block-name
+{
+    margin-top: 25px;
+}
+
+.block-name
+{
+    font-size: 24px;
+    margin: 0 0 10px 0;
+}
+
+.skill-header
+{
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.exercise-header
+{
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.exercise .exercise-main-td
+{
+    border: none;
+    padding: 0 0 10px 0;
+}
+
+.exercise .number
+{
+    font-weight: bold;
+    width: 16%;
+}
+
+.exercise .condition
+{
+    width: 84%;
+}
+
+.exercise .answer
+{
+    text-align: center;
+}
+
+.not-exercises
+{
+    font-size: 14px;
+}
+
+.right-answer
+{
+    padding-top: 20px;
+}
+
+.field
+{
+    display: inline-block;
+    height: 24px;
+    border: 1px solid #000;
+}
+
+.accurate-answer
+{
+    text-align: center;
+}

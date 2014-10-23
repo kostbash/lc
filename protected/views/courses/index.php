@@ -1,6 +1,36 @@
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
+<script type="text/javascript">
+    $(function(){
+        $('.with-right').change(function(){
+            current = $(this);
+            links = current.closest('.export-button').find('.dropdown-menu li a');
+            if(current.val()==1)
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=1/g, 'with_right=0');
+                    link.attr('href', str);
+                });
+                current.val(0);
+            }
+            else
+            {
+                links.each(function(n, link){
+                    link = $(link);
+                    str = link.attr('href');
+                    str = str.replace(/with_right=0/g, 'with_right=1');
+                    link.attr('href', str);
+                });
+                current.val(1);
+            }
+        });
+    });
+</script>
+
     <div id="back-header-bottom">
         <div id="header-bottom">
             <div id="head-col-left" class="head-column">
@@ -34,6 +64,19 @@
                 <div class="content">
                     <div class="text">
                         <p>Место, чтобы инфу по курсу поместить</p>
+                        <div class="export-button">
+                            <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт курса<span class="caret"></span></button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="<?php echo Yii::app()->createUrl('courses/print', array('id'=>$course->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                                <li><a href="<?php echo Yii::app()->createUrl('courses/toPdf', array('id'=>$course->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                            </ul>
+                            <?php if(Yii::app()->user->checkAccess('editor')) : ?>
+                                <div class='with-right-cont'>
+                                    <input id='with-right-course' type='checkbox' class='with-right' name value='0' />
+                                    <label for='with-right-course'>С ответами</label>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,14 +91,16 @@
                 <h1 class='theme-name'><?php echo "Тема $groupNum: \"$lessonGroup->name\""; ?></h1>
                     <table class='lessons-table'>
                         <colgroup>
-                         <col width="65%">
-                         <col width="20%">
-                         <col width="15%">
+                         <col width="50%">
+                         <col width="18%">
+                         <col width="10%">
+                         <col width="22%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th class='name'>Название урока</th>
                                 <th colspan="2" class='status'>Состояние</th>
+                                <th class="export">Экспорт урока</th>
                             </tr>
                         </thead>
                         <?php if ($lessonGroup->LessonsRaw) : ?>
@@ -80,6 +125,21 @@
                                             <?php $imageName = $userAndLesson->repeatLesson ? 'repeat' : 'play'; ?>
                                             <?php echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson')); ?>
                                         </td>
+                                        <td style="text-align: center;">
+                                            <div class="export-button">
+                                                <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт<span class="caret"></span></button>
+                                                <ul class="dropdown-menu pull-right" role="menu">
+                                                    <li><a href="<?php echo Yii::app()->createUrl('lessons/printLesson', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                                                    <li><a href="<?php echo Yii::app()->createUrl('lessons/lessonToPdf', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                                                </ul>
+                                                <?php if(Yii::app()->user->checkAccess('editor')) : ?>
+                                                    <div class='with-right-cont'>
+                                                        <input id='with-right-<?php echo $pos; ?>' type='checkbox' class='with-right' name value='0' />
+                                                        <label for='with-right-<?php echo $pos; ?>'>С ответами</label>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php else : ?>
                                     <tr>
@@ -87,7 +147,8 @@
                                         <td style="text-align: center;">
                                             <p class="unaccess">Не пройден</p>
                                         </td> 
-                                        <td style="text-align: center;"></td> 
+                                        <td></td> 
+                                        <td></td> 
                                     </tr>
                                 <?php endif; ++$pos; ?>
                             <?php endforeach; ?>

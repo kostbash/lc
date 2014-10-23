@@ -21,7 +21,7 @@ class LessonsController extends Controller
                             'users'=>array('?'),
                     ),
                     array('allow',
-                            'actions'=>array('pass', 'nextgroup', 'saverightanswers'),
+                            'actions'=>array('pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf'),
                             'roles'=>array('student'),
                     ),
                     array('deny',  // deny all users
@@ -280,4 +280,138 @@ class LessonsController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
+        public function actionBlockToPdf($block, $with_right=false)
+        {
+            $this->layout = '//layouts/empty';
+            if($with_right && !Yii::app()->user->checkAccess('editor'))
+            {
+                $with_right = false;
+            }
+            
+            $block = GroupOfExercises::model()->findByPk($block);
+            if(!$block)
+                $this->redirect('/');
+            
+            $exercises = $block->type==1 ? $block->Exercises : $block->ExercisesTest;
+            
+            if($with_right && !Yii::app()->user->checkAccess('editor'))
+            {
+                $with_right = false;
+            }
+            
+            $html = $this->renderPartial('export_block', array(
+                    'block'=>$block,
+                    'exercises' => $exercises,
+                    'with_right'=>$with_right,
+                    'pdf'=>true,
+                    ), true, true);
+            
+            $physicName = md5(uniqid().'export-block').".pdf";
+            $path = Yii::app()->params['pdfPath'].'/'.$physicName;
+            $this->createPDF('css/export.css', $html, $path);
+            
+            header("Content-Type: application/force-download");
+            header("Content-Type: application/octet-stream");
+            header("Content-Type: application/download");
+            header("Content-Disposition: attachment; filename=" . "'$block->name.pdf'");
+            header("Content-Transfer-Encoding: binary ");  
+            flush();
+            readfile($path);
+            unlink($path);
+        }
+        
+        public function actionPrintBlock($block, $with_right=false)
+        {
+            $this->layout = '//layouts/empty';
+
+            if($with_right && !Yii::app()->user->checkAccess('editor'))
+            {
+                $with_right = false;
+            }
+            
+            $block = GroupOfExercises::model()->findByPk($block);
+            if(!$block)
+                $this->redirect('/');
+            
+            
+            $exercises = $block->type==1 ? $block->Exercises : $block->ExercisesTest;
+            
+            Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl . "/css/export.css");
+            
+            $this->render('export_block',array(
+                'block'=>$block,
+                'exercises' => $exercises,
+                'with_right'=>$with_right,
+            ));
+        }
+        
+        public function actionPrintLesson($id, $with_right=false)
+        {
+            $this->layout = '//layouts/empty';
+            $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
+            if(!$userAndLesson)
+                $this->redirect('/');
+            Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl . "/css/export.css");
+            
+            if($with_right && !Yii::app()->user->checkAccess('editor'))
+            {
+                $with_right = false;
+            }
+            
+            $this->render('export_lesson',array(
+                'lesson'=>$userAndLesson->Lesson,
+                'with_right'=>$with_right,
+            ));
+        }
+        
+        public function actionLessonToPdf($id, $with_right=false)
+        {
+            $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
+            if(!$userAndLesson)
+                $this->redirect('/');
+            
+            $lesson = $userAndLesson->Lesson;
+            
+            if($with_right && !Yii::app()->user->checkAccess('editor'))
+            {
+                $with_right = false;
+            }
+            
+            $html = $this->renderPartial('export_lesson', array(
+                        'lesson'=>$lesson,
+                        'pdf'=>true,
+                        'with_right'=>$with_right,
+                    ), true, true);
+            
+            $physicName = md5(uniqid().'lesson-export').".pdf";
+            $path = Yii::app()->params['pdfPath'].'/'.$physicName;
+            $this->createPDF('css/export.css', $html, $path);
+            
+            header("Content-Type: application/force-download");
+            header("Content-Type: application/octet-stream");
+            header("Content-Type: application/download");
+            header("Content-Disposition: attachment; filename=" . "'$lesson->name.pdf'");
+            header("Content-Transfer-Encoding: binary ");  
+            flush();
+            readfile($path);
+            unlink($path);
+        }
+        
+        // сделать pdf из страницы html+php
+        public function createPDF($css, $html, $fileName, $output = 'F')
+        {
+            include_once("protected/extensions/MPDF56/mpdf.php");
+            $mpdf = new mPDF('', 'A4', '8', 'Arial', 10, 10, 10, 10, 10, 10); //* задаем формат, отступы и.т.д. /
+            $mpdf->charset_in = 'utf-8'; //* не забываем про русский /
+            $style = file_get_contents($css); //* подключаем css/
+
+            $mpdf->WriteHTML($style, 1);
+
+            $mpdf->list_indent_first_level = 0;
+            $mpdf->WriteHTML($html, 2); //* формируем pdf /
+            $x=$mpdf->x;
+            $y=$mpdf->y;
+            $mpdf->Output($fileName, $output);
+        }
 }

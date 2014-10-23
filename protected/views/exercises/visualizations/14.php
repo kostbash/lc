@@ -47,7 +47,7 @@
                 if($i==$next)
                     {
                         $additionClass = ' first-in-line';
-                        $next += 4;
+                        $next += 3;
                     }
                     else
                     {

@@ -103,6 +103,47 @@ h2{
     padding: 5px 15px;
 }
 
+.export-button
+{
+    position: relative;
+    display: inline-block;
+}
+
+.export-button .caret
+{
+    margin-left: 8px !important;
+}
+
+.export-button .dropdown-menu
+{
+   top: auto;
+}
+.export-button label
+{
+    vertical-align: middle;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Arial;
+    color: #263870;
+}
+
+.export-button button
+{
+    font-size: 16px;
+    line-height: 16px;
+    font-family: 'PT Sans';
+    padding: 7px 17px 9px;
+    border-radius: 3px;
+    border: none;
+    background: #0076c9;
+    color: #fff;
+    margin-bottom: 3px;
+    outline: none;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+}
+
 .reset-pass
 {
     display: inline-block;
@@ -127,7 +168,7 @@ h2{
     line-height: 24px;
 }
 
-.page-header a {
+.page-header .btn {
     float: right;
 }
 
@@ -1656,9 +1697,14 @@ z-index:10000000;
 #course-page .lessons-table thead .status
 {
     background: #afdb98;
-    -moz-border-radius: 0 6px 0 0;
-    -webkit-border-radius: 0 6px 0 0;
-    border-radius: 0 6px 0 0;
+}
+
+#course-page .lessons-table thead .export
+{
+    background: #a1c7f1;
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
 }
 
 #course-page .lessons-table td
@@ -1667,7 +1713,7 @@ z-index:10000000;
     background: #fff;
     height: 58px;
     font-size: 18px;
-    padding: 0 25px;
+    padding: 10px 25px;
     color: #022f6d;
 }
 
@@ -2100,12 +2146,22 @@ z-index:10000000;
 
 #lesson-page-header #lesson-info {
     float: left;
-    width: 726px;
+    width: 700px;
 }
 
-#lesson-page-header #next-lesson {
+#lesson-page-header #buttons {
     float: right;
-    width: 188px;
+    width: 220px;
+    text-align: right;
+}
+
+#lesson-page-header #buttons .dropdown-menu {
+    text-align: center;
+}
+
+#lesson-page-header #buttons .next-lesson-button
+{
+    margin-bottom: 10px;
 }
 
 .next-lesson-button
@@ -2856,7 +2912,7 @@ z-index:10000000;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    width:  160px;
+    width:  240px;
     text-align: center;
     min-height: 160px;
     margin-left: 36px;
@@ -2880,7 +2936,7 @@ z-index:10000000;
     border-radius: 4px;
     display: inline-block;
     color: #b5486d;
-    width: 142px;
+    width: 100%;
     margin-bottom: 8px;
     font-family: 'PT Sans';
     font-weight: bold;
@@ -2937,7 +2993,7 @@ z-index:10000000;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    width:  160px;
+    width:  240px;
     text-align: center;
     min-height: 160px;
     margin-left: 36px;
@@ -2963,7 +3019,7 @@ z-index:10000000;
     display: inline-block;
     color: #b5486d;
     background: #fff;
-    width: 142px;
+    width: 100%;
     margin-bottom: 8px;
     font-family: 'PT Sans';
     font-weight: bold;
