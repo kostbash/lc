@@ -1,4 +1,6 @@
-<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
+<?php 
+    $this->renderPartial("//lessons/_pass_scripts");
+?>
 <script type="text/javascript">
     function setDuration(){};
     $(function(){

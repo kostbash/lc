@@ -1,50 +1,6 @@
-<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
-<script type="text/javascript">
-    $(function(){
-        $('.with-right').change(function(){
-            current = $(this);
-            links = current.closest('.export-button').find('.dropdown-menu li a');
-            if(current.val()==1)
-            {
-                links.each(function(n, link){
-                    link = $(link);
-                    str = link.attr('href');
-                    str = str.replace(/with_right=1/g, 'with_right=0');
-                    link.attr('href', str);
-                });
-                current.val(0);
-            }
-            else
-            {
-                links.each(function(n, link){
-                    link = $(link);
-                    str = link.attr('href');
-                    str = str.replace(/with_right=0/g, 'with_right=1');
-                    link.attr('href', str);
-                });
-                current.val(1);
-            }
-        });
-    });
-    
-    seconds = 0;
-    
-    function setDuration(exerciseItem)
-    {
-        exercise = $(exerciseItem).closest('.exercise');
-        duration = exercise.find('.duration');
-        newVal = parseInt(seconds, 10) + parseInt(duration.val(), 10);
-        duration.val(newVal);
-        seconds=0;
-    }
-    
-    function countTime()
-    {
-        ++seconds;
-    }
-    setInterval('countTime()', 1000);
-</script>
-
+<?php 
+    $this->renderPartial("_pass_scripts");
+?>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>

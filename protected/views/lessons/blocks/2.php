@@ -1,38 +1,31 @@
 <script type="text/javascript">
     $(function(){
-        $('.send-result-button').click(function(){
-            result = true;
-            $('input[name*=answers][type=text], input[name*=answers][type=hidden], select[name*=answers]').each(function(n, answer){
-                if(!checkInput(answer))
-                    result = false;
-            });
-
-            $('.checkboxes , .radio-buttons').each(function(n, answer){
-                if(!checkRadioCheckBox(answer))
-                    result = false;
-            });
-            $('.text-with-space').each(function(n, withSpace){
-                if(!checkTextWithSpaces(withSpace))
-                    result = false;
-            });
-            
-            if(result) {
-                $('#exercises-form').submit();
-            } else {
-                alert('Не для всех заданий даны ответы');
-            }
-            return false;
+        
+        $('.accurate-answer').change(function() {
+            setDuration(this);
+            checkAccurateAnswer(this);
+        });
+        
+        $('.dropdown-list').change(function() {
+            setDuration(this);
+            checkDropdownList(this);
         });
 
-        $('.block').click(function(){
+        $('.checkboxes , .radio-buttons').change(function() {
+            setDuration(this);
+            checkRadioAndCheckBox(this);
+        });
+
+        $('.pick-blocks .block').click(function() {
             answer = $(this);
+            pickBlock = answer.closest('.pick-blocks');
             setDuration(answer);
             key = answer.data('key');
-            $('.block[data-key='+key+']').removeClass('selected');
+            $('.block[data-key=' + key + ']').removeClass('selected');
             answer.addClass('selected');
-            hidden = $('.hidden-answer[data-key='+key+']');
-            hidden.val(answer.data('val'));
-            checkInput(hidden);
+            hiddenAnswer = $('.hidden-answer[data-key=' + key + ']');
+            hiddenAnswer.val(answer.data('val'));
+            checkPickBlock(pickBlock);
         });
 
         $('.comparisons .list-one').sortable({
@@ -86,29 +79,44 @@
                     words.append(existWord);
                 }
                 cont.append(answer);
+                
+                if(!words.find('.word').length)
+                {
+                   checkTextWithSpace(cont);
+                }
             }
         });
         
-        $('.bags-type .item').draggable({cursor: 'move', revert:true});
-        $('.bags-type .bag-drop').droppable({
-            accept: function(item){
-                item_exericse_id = $(item).closest('.exercise').attr('id');
-                drop_exericse_id = $(this).closest('.exercise').attr('id');
-                return item_exericse_id === drop_exericse_id;
-            },
-            tolerance:'pointer',
-            drop: function(event,info)
+        $('.text-with-limits').change(function() {
+            current = $(this);
+            setDuration(this);
+            if(current.closest('.answer').hasClass('no-selected'))
             {
-                answer = $(info.draggable);
-                cont = $(this);
-                setDuration(cont);
-                cont.append(answer);
-                items = cont.closest('.bags-type').find('.items');
-                bags = cont.closest('.bags-type').find('.bags');
-                resultAnswer = cont.closest('.exercise').find('> .head .result');
-                hiddenAnswer = answer.find('.hidden-answer');
-                hiddenAnswer.val(cont.closest('.bag').data('index'));
+                checkTextWithLimits(this);
             }
+        });
+        
+        $('.exact-answers-with-space').change(function() {
+            current = $(this);
+            setDuration(this);
+            if(current.closest('.answer').hasClass('no-selected'))
+            {
+                checkExactAnswersWithSpace(this);
+            }
+        });
+        
+        
+        $('.pick-area g').click(function(){
+            answer = $(this);
+            setDuration(answer);
+            answerCont = answer.closest('.answer');
+            exercise = answer.closest('.exercise');
+            key = answer.data('key');
+            answerCont.find('.pick-area g[data-key='+key+']').attr('class', '');
+            answer.attr('class', 'selected');
+            hiddenAnswer = answerCont.find('.hidden-answer[data-key='+key+']');
+            hiddenAnswer.val(answer.data('val'));
+            checkPickArea(answer.closest('.pick-area'));
         });
         
         $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
@@ -137,23 +145,39 @@
                 id_area = area.data('id');
                 hiddenAnswer = item.find('.hidden-answer');
                 hiddenAnswer.val(id_area);
-                item.css('display', 'none');
+                item.removeClass('not-hide').addClass('hide');
+                if(area.closest('.answer').hasClass('no-selected'))
+                {
+                    checkHotmapItems(area.closest('.hotmap-items'));
+                }
             }
         });
         
-        $('.pick-area g').click(function(){
-            answer = $(this);
-            setDuration(answer);
-            answerCont = answer.closest('.answer');
-            exercise = answer.closest('.exercise');
-            key = answer.data('key');
-            answerCont.find('.pick-area g[data-key='+key+']').attr('class', '');
-            answer.attr('class', 'selected');
-            hiddenAnswer = answerCont.find('.hidden-answer[data-key='+key+']');
-            hiddenAnswer.val(answer.data('val'));
-            checkInput(hiddenAnswer);
+        $('.bags-type .item').draggable({cursor: 'move', revert:true});
+        $('.bags-type .bag-drop').droppable({
+            accept: function(item){
+                item_exericse_id = $(item).closest('.exercise').attr('id');
+                drop_exericse_id = $(this).closest('.exercise').attr('id');
+                return item_exericse_id === drop_exericse_id;
+            },
+            tolerance:'pointer',
+            drop: function(event,info)
+            {
+                answer = $(info.draggable);
+                cont = $(this);
+                setDuration(cont);
+                cont.append(answer);
+                items = cont.closest('.bags-type').find('.items');
+                bags = cont.closest('.bags-type').find('.bags');
+                resultAnswer = cont.closest('.exercise').find('> .head .result');
+                hiddenAnswer = answer.find('.hidden-answer');
+                hiddenAnswer.val(cont.closest('.bag').data('index'));
+                if(cont.closest('.answer').hasClass('no-selected'))
+                {
+                    checkBagType(cont.closest('.bags-type'));
+                }
+            }
         });
-        
         
         $('.hotmap-bags .area').draggable({
             cursor: 'move',
@@ -197,6 +221,10 @@
                     area.attr('class', 'area disable');
                 }
                 cont.append(answer.css('left', 0).css('top',0));
+                if(cont.closest('.answer').hasClass('no-selected'))
+                {
+                    checkHotmapBags(cont.closest('.hotmap-bags'));
+                }
             }
         });
         
@@ -209,37 +237,6 @@
             current = $(this);
             area = current.closest('.hotmap-bags').find('.area[data-id='+current.data('area')+']');
             area.attr('class', 'area disable');
-        });
-        
-        $('.hotmap-items  .item').draggable({cursor: 'move', revert:true});
-        
-        $('.hotmap-items svg g').mouseover(function(){
-            current = $(this);
-            current.attr('class', 'area mouseover');
-        });
-        $('.hotmap-items svg g').mouseleave(function(){
-            current = $(this);
-            current.attr('class', 'area');
-        });
-        
-        $('.hotmap-items svg g').droppable({
-            accept: function(item){
-                item_exericse_id = $(item).closest('.exercise').attr('id');
-                drop_exericse_id = $(this).closest('.exercise').attr('id');
-                return $(this).attr('class')==='area mouseover' && item_exericse_id === drop_exericse_id;
-            },
-            tolerance:'pointer',
-            drop: function(event,info)
-            {
-                item = $(info.draggable);
-                area = $(this);
-                setDuration(area);
-                id_area = area.data('id');
-                resultAnswer = item.closest('.exercise').find('> .head .result');
-                hiddenAnswer = item.find('.hidden-answer');
-                hiddenAnswer.val(id_area);
-                item.removeClass('not-hide').addClass('hide');
-            }
         });
         
         $('.hotmap-ordering .area').draggable({
@@ -287,6 +284,10 @@
                 area.draggable("disable");
                 area.attr('class', 'area disable');
                 cont.find('.dropped-items').append(answer.css('left', 0).css('top',0));
+                if(cont.closest('.answer').hasClass('no-selected'))
+                {
+                    checkHotmapOrdering(cont.closest('.hotmap-ordering'));
+                }   
             }
         });
         
@@ -319,63 +320,7 @@
             }
         });
         $('#skills').popover();
-        
-        $('input[name*=answers][type=text], select[name*=answers]').change(function(){
-            setDuration(this);
-            checkInput(this);
-        });
-
-        $('.checkboxes , .radio-buttons').change(function(){
-            setDuration(this);
-            checkRadioCheckBox(this);
-        });
     });
-    
-    function checkInput(input)
-    {
-        input = $(input);
-        if( !$.trim(input.val()) )
-        {
-            input.closest('.answer').addClass('no-selected');
-            return false;
-        } else {
-            input.closest('.answer').removeClass('no-selected');
-            return true;
-        }
-    }
-    
-    function checkTextWithSpaces(withSpaces)
-    {
-        withSpaces = $(withSpaces);
-        drops = withSpaces.find('.text .answer-droppable');
-        res = true;
-        drops.each(function(n, space) {
-            space = $(space);
-            if(!space.find('.word').length)
-            {
-                withSpaces.closest('.answer').addClass('no-selected');
-                res = false;
-                return false;
-            }
-        });
-        if(res)
-            withSpaces.closest('.answer').removeClass('no-selected');
-        return res;
-    }
-    
-    function checkRadioCheckBox(answer)
-    {
-        answer = $(answer);
-        checked = answer.find('input:checked');
-        if( !checked.length )
-        {
-            answer.closest('.answer').addClass('no-selected');
-            return false;
-        } else {
-            answer.closest('.answer').removeClass('no-selected');
-            return true;
-        }
-    }
 </script>
 
 <?php if($exercisesTest) : $position=0; ?>
