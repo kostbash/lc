@@ -352,6 +352,8 @@
                 cont.append(answer.css('left', 0).css('top', 0));
                 bags = cont.closest('.hotmap-bags').find('.bags');
                 resultAnswer = cont.closest('.exercise').find('> .head .result');
+                count = cont.closest('.hotmap-bags').find('> .left .count');
+                count.html(count.html()-1);
                 hiddenAnswer = answer.find('.hidden-answer');
                 hiddenAnswer.val(cont.closest('.bag').data('index'));
                 if (!items.find('.item').length)

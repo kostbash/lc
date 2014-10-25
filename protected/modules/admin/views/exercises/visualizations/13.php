@@ -33,7 +33,7 @@
             {
                 items.append(createItem(index, itemName.val(), itemId_bag.val()));
                 itemName.val('');
-                itemId_bag.val('');
+                itemId_bag.find('option[selected=selected]').removeAttr('selected');
             }
             return false;
         });

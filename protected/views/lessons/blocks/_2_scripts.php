@@ -220,6 +220,8 @@
                     area.attr('class', 'area disable');
                 }
                 cont.append(answer.css('left', 0).css('top',0));
+                count = cont.closest('.hotmap-bags').find('> .left .count');
+                count.html(count.html()-1);
                 if(cont.closest('.exercise').hasClass('without-answer'))
                 {
                     checkHotmapBags(cont.closest('.hotmap-bags'));

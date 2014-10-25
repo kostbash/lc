@@ -2,6 +2,7 @@
     <?php
         $rightAnswers = $model->rightAnswers;
     ?>
+    <div class="left">Осталось: <span class="count"><?php echo count($rightAnswers); ?></span></div>
     <div class="areas">
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
         <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>

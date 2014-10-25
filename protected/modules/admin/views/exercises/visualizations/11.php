@@ -1,3 +1,20 @@
+<script>
+    $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            answer = $('#select-area');
+            if(!answer.val())
+            {
+                answer.siblings('.errorMessage').html('Выберите правильный ответ');
+                $return = false;
+            } else {
+                answer.siblings('.errorMessage').html('');
+            }
+            return $return;
+        });
+    });
+</script>
+
 <div class="row">
     <div class="col-lg-3 col-md-3">
         <?php echo CHtml::label('Карта', ''); ?>
@@ -27,7 +44,7 @@
         <?php echo CHtml::label('Объекты маски', ''); ?>
     </div>
     <div class="col-lg-5 col-md-5">
-        <?php echo CHtml::dropDownList('Exercises[correct_answers]', $model->idsRightAreas, CHtml::listData($model->Map->Areas, 'id', 'name'), array('class'=>'form-control', 'size'=>2)); ?>
+        <?php echo CHtml::dropDownList('Exercises[answers][]', $model->idsRightAreas, CHtml::listData($model->Map->Areas, 'id', 'name'), array('class'=>'form-control', 'empty'=>'Выберите правильный овет', 'id'=>'select-area')); ?>
         <div class="errorMessage"></div>
         <div id="hidden-options">
             <?php foreach($model->idsRightAreas as $id_area) : ?>

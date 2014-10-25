@@ -2980,6 +2980,15 @@ z-index:10000000;
     border-bottom: 1px solid #bbd6e9;
 }
 
+#lesson-page .hotmap-bags .left
+{
+    text-align: right;
+    font-size: 13px;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    font-weight: bold;
+}
+
 #lesson-page .hotmap-bags .bags
 {
     margin-top: 20px;

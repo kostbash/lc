@@ -161,11 +161,11 @@ class ExercisesController extends Controller
                     {
                         if($_POST['Exercises']['answers'])
                         {
-                            foreach($_POST['Exercises']['answers'] as $id_area => $answerAttr)
+                            foreach($_POST['Exercises']['answers'] as $answer)
                             {
                                 $exercisesAnswers = new ExercisesListOfAnswers;
-                                $exercisesAnswers->attributes = $answerAttr;
-                                $exercisesAnswers ->answer = $id_area;
+                                $exercisesAnswers->answer = $answer;
+                                $exercisesAnswers ->is_right = 1;
                                 $exercisesAnswers ->id_exercise = $model->id;
                                 $exercisesAnswers->save();
                             }
@@ -458,11 +458,11 @@ class ExercisesController extends Controller
                         if($_POST['Exercises']['answers'])
                         {
                             foreach($model->Answers as $eAnswer) $eAnswer->delete();
-                            foreach($_POST['Exercises']['answers'] as $id_area => $answerAttr)
+                            foreach($_POST['Exercises']['answers'] as $answer)
                             {
                                 $exercisesAnswers = new ExercisesListOfAnswers;
-                                $exercisesAnswers->attributes = $answerAttr;
-                                $exercisesAnswers ->answer = $id_area;
+                                $exercisesAnswers->answer = $answer;
+                                $exercisesAnswers ->is_right = 1;
                                 $exercisesAnswers ->id_exercise = $model->id;
                                 $exercisesAnswers->save();
                             }
