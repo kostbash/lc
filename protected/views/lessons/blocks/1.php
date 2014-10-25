@@ -165,7 +165,7 @@
             current = $(this);
             setDuration(this);
             ResultAnswer(this);
-            if(current.closest('.answer').hasClass('no-selected'))
+            if(current.closest('.exercise').hasClass('without-answer'))
             {
                 checkTextWithLimits(this);
             }
@@ -175,7 +175,7 @@
             current = $(this);
             setDuration(this);
             ResultAnswer(this);
-            if(current.closest('.answer').hasClass('no-selected'))
+            if(current.closest('.exercise').hasClass('without-answer'))
             {
                 checkExactAnswersWithSpace(this);
             }
@@ -253,7 +253,7 @@
                                 alert(result);
                         }
                     });
-                    if(area.closest('.answer').hasClass('no-selected'))
+                    if(area.closest('.exercise').hasClass('without-answer'))
                     {
                         checkHotmapItems(area.closest('.hotmap-items'));
                     }
@@ -488,26 +488,6 @@
             area = current.closest('.hotmap-ordering').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area disable');
         });
-
-        $('[name*=answers]').keydown(function(e) {
-            nextTab = null;
-            current = $(this);
-            if (e.keyCode == 13) {
-                $('[tabindex]').each(function(n, tabElement) {
-                    tab = $(tabElement);
-                    if (parseInt(tab.attr('tabindex')) > current.attr('tabindex'))
-                    {
-                        if (!nextTab)
-                            nextTab = tab;
-                    }
-                });
-                if (nextTab)
-                    nextTab.focus();
-                return false;
-            }
-        });
-        
-        $('#skills').popover();
     });
     
     function ResultAnswer(container)

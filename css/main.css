@@ -3304,9 +3304,11 @@ z-index:10000000;
     background: #f3f2ef;
 }
 
-.answer.no-selected {
-    border: 2px solid #a11 !important;
-    border-radius: 5px;
+.exercise.without-answer.odd {
+    background: #FFEFEF !important;
+}
+.exercise.without-answer.even {
+    background: #FFD9D9 !important;
 }
 
 /*------------------------------------------------------ Check-Page ------------------------------------------------------*/

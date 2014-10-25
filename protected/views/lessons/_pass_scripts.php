@@ -24,6 +24,25 @@
                 });
                 current.val(1);
             }
+            
+            $('[name*=answers]').keydown(function(e){
+                nextTab = null;
+                current = $(this);
+                if(e.keyCode==13){
+                  $('[tabindex]').each(function(n, tabElement){
+                      tab = $(tabElement);
+                      if( parseInt(tab.attr('tabindex')) > current.attr('tabindex') )
+                      {
+                          if(!nextTab)
+                              nextTab = tab;
+                      }   
+                  });
+                  if(nextTab)
+                      nextTab.focus();
+                  return false;
+                }
+            });
+            $('#skills').popover();
         });
         
 
@@ -163,9 +182,9 @@
             }
 
             if (result) {
-                //$('#exercises-form').submit();
+                $('#exercises-form').submit();
             } else {
-                alert('Не для всех заданий даны ответы');
+                alert('Вы ответили не на все имеющиеся задания. Задания без ответа имеют розовый фон.');
             }
             return false;
         });
@@ -175,13 +194,13 @@
     {
         accurateAnswer = $(accurateAnswer);
         input = accurateAnswer.find('input');
-        answerCont = accurateAnswer.closest('.answer');
+        exerciseCont = accurateAnswer.closest('.exercise');
         if (!$.trim(input.val()))
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -190,13 +209,13 @@
     {
         dropdownList = $(dropdownList);
         select = dropdownList.find('select');
-        answerCont = dropdownList.closest('.answer');
+        exerciseCont = dropdownList.closest('.exercise');
         if (!$.trim(select.val()))
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -205,13 +224,13 @@
     {
         answer = $(answer);
         checked = answer.find('input:checked');
-        answerCont = answer.closest('.answer');
+        exerciseCont = answer.closest('.exercise');
         if (!checked.length)
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -220,13 +239,13 @@
     {
         pickBlock = $(pickBlock);
         input = pickBlock.find('.hidden-answer');
-        answerCont = input.closest('.answer');
+        exerciseCont = input.closest('.exercise');
         if (!$.trim(input.val()))
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -244,14 +263,14 @@
     function checkTextWithSpace(textWithSpace)
     {
         textWithSpace = $(textWithSpace);
-        answerCont = textWithSpace.closest('.answer');
+        exerciseCont = textWithSpace.closest('.exercise');
         words = textWithSpace.find('.words .word');
         if (words.length)
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -260,7 +279,7 @@
     {
         textWithLimits = $(textWithLimits);
         selects = textWithLimits.find('select');
-        answerCont = textWithLimits.closest('.answer');
+        exerciseCont = textWithLimits.closest('.exercise');
         res = true;
         selects.each(function(n, select) {
             select = $(select);
@@ -271,9 +290,9 @@
             }
         });
         if (res)
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
         else
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
         return res;
     }
     
@@ -281,7 +300,7 @@
     {
         answersWithSpace = $(answersWithSpace);
         inputs = answersWithSpace.find('input');
-        answerCont = answersWithSpace.closest('.answer');
+        exerciseCont = answersWithSpace.closest('.exercise');
         res = true;
         inputs.each(function(n, input) {
             input = $(input);
@@ -292,9 +311,9 @@
             }
         });
         if (res)
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
         else
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
         return res;
     }
     
@@ -302,13 +321,13 @@
     {
         pickArea = $(pickArea);
         input = pickArea.find('.hidden-answer');
-        answerCont = pickArea.closest('.answer');
+        exerciseCont = pickArea.closest('.exercise');
         if (!$.trim(input.val()))
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         } else {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -318,7 +337,7 @@
         hotmapItems = $(hotmapItems);
         res = true;
         items = hotmapItems.find('.items .item');
-        answerCont = hotmapItems.closest('.answer');
+        exerciseCont = hotmapItems.closest('.exercise');
         items.each(function(n, item) {
             item = $(item);
             if (item.find('.hidden-answer').val() === '')
@@ -328,9 +347,9 @@
             }
         });
         if (res)
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
         else
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
         return res;
     }
     
@@ -338,15 +357,15 @@
     {
         bag = $(bag);
         items = bag.find('.items .item');
-        answerCont = bag.closest('.answer');
+        exerciseCont = bag.closest('.exercise');
         if(items.length)
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         }
         else
         {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -355,15 +374,15 @@
     {
         hotmapBags = $(hotmapBags);
         items = hotmapBags.find('.items .item');
-        answerCont = hotmapBags.closest('.answer');
+        exerciseCont = hotmapBags.closest('.exercise');
         if(items.length)
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         }
         else
         {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
@@ -372,15 +391,15 @@
     {
         hotmapOrdering = $(hotmapOrdering);
         items = hotmapOrdering.find('.items .item');
-        answerCont = hotmapOrdering.closest('.answer');
+        exerciseCont = hotmapOrdering.closest('.exercise');
         if(items.length)
         {
-            answerCont.addClass('no-selected');
+            exerciseCont.addClass('without-answer');
             return false;
         }
         else
         {
-            answerCont.removeClass('no-selected');
+            exerciseCont.removeClass('without-answer');
             return true;
         }
     }
