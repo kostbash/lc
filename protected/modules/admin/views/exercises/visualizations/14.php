@@ -1,41 +1,47 @@
 <script>
     $(function(){
-        $('#add-area .add-button').click(function(){
-            areas = $('#areas');
-            areaName = $('#add-area .name');
-            areaNameError = areaName.siblings('.errorMessage');
-            areaId_bag = $('#add-area .id_bag');
-            areaId_bagError = areaId_bag.siblings('.errorMessage');
-            lastIndex = areas.find('.update-area:last');
-            index = lastIndex.length ? lastIndex.data('index')+1 : 0;
-            error = false;
-            if(!areaName.val())
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            areasCont = $('#areas');
+            areasError = areasCont.find('> .errorMessage');
+            areas = areasCont.find('.update-area');
+            if(areas.length)
             {
-                areaNameError.html('Введите название предмета');
-                error = true;
+                areas.each(function(n, area){
+                    if(!checkArea(area))
+                    {
+                        $return = false;
+                    }
+                });
+                areasError.html('');
             }
             else
             {
-                areaNameError.html('');
+                areasError.html('Добавьте области');
+                $return = false;
             }
             
-            if(!areaId_bag.val())
+            bagsCont = $('#bags-table');
+            bagsError = bagsCont.find('> .errorMessage');
+            bags = bagsCont.find('.update-bag');
+            
+            if(bags.length)
             {
-                areaId_bagError.html('Выберите область');
-                error = true;
+                bags.each(function(n, bag){
+                    if(!checkBag(bag))
+                    {
+                        $return = false;
+                    }
+                });
+                bagsError.html('');
             }
             else
             {
-                areaId_bagError.html('');
+                bagsError.html('Добавьте мешки');
+                $return = false;
             }
             
-            if(!error)
-            {
-                areas.append(createItem(index, areaName.val(), areaId_bag.val()));
-                areaName.val('');
-                areaId_bag.val('');
-            }
-            return false;
+            return $return;
         });
         
         $('.update-area .delete').live('click', function(){
@@ -47,7 +53,7 @@
         });
         
         $('#add-bag .add-button').click(function(){
-            bags = $('#bags-table');
+            bags = $('#bags-table table');
             bagName = $('#add-bag .name');
             bagNameError = bagName.siblings('.errorMessage');
             lastIndex = bags.find('.update-bag:last');
@@ -88,35 +94,70 @@
             index = current.data('index');
             name = current.find('.name').val();
             $('.id_bag option[value="'+index+'"]').html(name);
+            checkBag(this);
             return false;
+        });
+        
+        $('.update-area').live('change', function(){
+            checkArea(this);
         });
     });
     
-    function createItem(index, name, id_area)
+    function createBag(index, name)
     {
-        area = '<tr class="update-area" data-index="'+index+'">';
-            area += '<td><input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="'+name+'" name="Exercises[answers]['+index+'][name]"></td>';
-            area += '<td><select class="form-control input-sm id_bag" name="Exercises[answers]['+index+'][answer]">';
-            options = $('#add-area .id_bag option');
-            options.each(function(n, option){
-                option = $(option);
-                if(option.val()==id_area)
-                    $(option).attr('selected', 'selected');
-                area += $(option).prop('outerHTML');
-            });
-            area += '</select></td>';
+        area = '<tr class="update-bag" data-index="'+index+'">';
+            area += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"><div class="errorMessage"></div></td>';
             area += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         area += '</tr>';
         return area;
     }
     
-    function createBag(index, name)
+    function checkArea(item)
     {
-        area = '<tr class="update-bag" data-index="'+index+'">';
-            area += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"></td>';
-            area += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
-        area += '</tr>';
-        return area;
+        $returnItem = true;
+        item = $(item);
+        itemName = item.find('.name');
+        itemNameError = itemName.siblings('.errorMessage');
+        if(!itemName.val())
+        {
+            itemNameError.html('Введите название области');
+            $returnItem = false;
+        }
+        else
+        {
+            itemNameError.html('');
+        }
+
+        itemBag = item.find('.id_bag');
+        itemBagError = itemBag.siblings('.errorMessage');
+        if(!itemBag.val())
+        {
+            itemBagError.html('Выберите мешок');
+            $returnItem = false;
+        }
+        else
+        {
+            itemBagError.html('');
+        }
+        return $returnItem;
+    }
+    
+    function checkBag(bag)
+    {
+        $returnBag = true;
+        bag = $(bag);
+        bagName = bag.find('.name');
+        bagNameError = bagName.siblings('.errorMessage');
+        if(!bagName.val())
+        {
+            bagNameError.html('Введите название мешка');
+            $returnBag = false;
+        }
+        else
+        {
+            bagNameError.html('');
+        }
+        return $returnBag;
     }
 </script>
 
@@ -147,9 +188,9 @@
     <?php endif; ?>
     
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <label for="bags">Мешки</label>
-            <table id="bags-table" class="table table-hover">
+        <div id="bags-table" class="col-lg-6 col-md-6">
+            <label for>Мешки</label>
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
@@ -162,6 +203,7 @@
                         <tr class="update-bag" data-index="<?php echo $bag->id; ?>">
                             <td>
                                 <input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -170,11 +212,12 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
         
-        <div class="col-lg-6 col-md-6">
-            <label for="areas">Области</label>
-            <table id="areas" class="table table-hover">
+        <div id="areas" class="col-lg-6 col-md-6">
+            <label for>Области</label>
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
@@ -187,11 +230,13 @@
                         <?php foreach($model->Map->Areas as $index => $area) : ?>
                             <tr class="update-area" data-index="<?php echo $index; ?>">
                                 <td>
-                                    <input class="form-control input-sm" placeholder="Введите название области" type="text" value="<?php echo $area->name; ?>" name="Exercises[answers][<?php echo $index; ?>][name]">
+                                    <input class="form-control input-sm name" placeholder="Введите название области" type="text" value="<?php echo $area->name; ?>" name="Exercises[answers][<?php echo $index; ?>][name]">
                                     <input class="form-control input-sm" type="hidden" value="<?php echo $area->id; ?>" name="Exercises[answers][<?php echo $index; ?>][id_area]">
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <?php echo CHtml::dropDownList("Exercises[answers][$index][answer]", '', '', array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -204,9 +249,11 @@
                                 <td>
                                     <input class="form-control input-sm" placeholder="Введите название области" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
                                     <input class="form-control input-sm" type="hidden" value="<?php echo $answer->id_area; ?>" name="Exercises[answers][<?php echo $answer->id ?>][id_area]">
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $listDataBags, array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -216,6 +263,7 @@
                     <?php endif; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
     </div>
 

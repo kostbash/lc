@@ -1,12 +1,60 @@
 <script>
     $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            itemsCont = $('#items');
+            itemsError = itemsCont.find('> .errorMessage');
+            items = itemsCont.find('.update-item');
+            if(items.length)
+            {
+                items.each(function(n, item){
+                    if(!checkItems(item))
+                    {
+                        $return = false;
+                    }
+                });
+                itemsError.html('');
+            }
+            else
+            {
+                itemsError.html('Добавьте предметы');
+                $return = false;
+            }
+            
+            bagsCont = $('#bags-table');
+            bagsError = bagsCont.find('> .errorMessage');
+            bags = bagsCont.find('.update-bag');
+            
+            if(bags.length)
+            {
+                bags.each(function(n, bag){
+                    if(!checkBag(bag))
+                    {
+                        $return = false;
+                    }
+                });
+                bagsError.html('');
+            }
+            else
+            {
+                bagsError.html('Добавьте мешки');
+                $return = false;
+            }
+            
+            return $return;
+        });
+        
+        $('.update-item').live('change', function(){
+            checkItems(this);
+        });
+        
         $('#add-item .add-button').click(function(){
-            items = $('#items');
+            itemsCont = $('#items');
             itemName = $('#add-item .name');
             itemNameError = itemName.siblings('.errorMessage');
             itemId_bag = $('#add-item .id_bag');
             itemId_bagError = itemId_bag.siblings('.errorMessage');
-            lastIndex = items.find('.update-item:last');
+            lastIndex = itemsCont.find('.update-item:last');
             index = lastIndex.length ? lastIndex.data('index')+1 : 0;
             error = false;
             if(!itemName.val())
@@ -21,7 +69,7 @@
             
             if(!itemId_bag.val())
             {
-                itemId_bagError.html('Выберите область');
+                itemId_bagError.html('Выберите мешок');
                 error = true;
             }
             else
@@ -31,7 +79,7 @@
             
             if(!error)
             {
-                items.append(createItem(index, itemName.val(), itemId_bag.val()));
+                itemsCont.find('> table').append(createItem(index, itemName.val(), itemId_bag.val()));
                 itemName.val('');
                 itemId_bag.find('option[selected=selected]').removeAttr('selected');
             }
@@ -47,7 +95,7 @@
         });
         
         $('#add-bag .add-button').click(function(){
-            bags = $('#bags-table');
+            bags = $('#bags-table > table');
             bagName = $('#add-bag .name');
             bagNameError = bagName.siblings('.errorMessage');
             lastIndex = bags.find('.update-bag:last');
@@ -88,6 +136,7 @@
             index = current.data('index');
             name = current.find('.name').val();
             $('.id_bag option[value="'+index+'"]').html(name);
+            checkBag(this);
             return false;
         });
     });
@@ -95,7 +144,7 @@
     function createItem(index, name, id_item)
     {
         item = '<tr class="update-item" data-index="'+index+'">';
-            item += '<td><input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="'+name+'" name="Exercises[answers]['+index+'][name]"></td>';
+            item += '<td><input class="form-control input-sm name" placeholder="Введите название предмета" type="text" value="'+name+'" name="Exercises[answers]['+index+'][name]"><div class="errorMessage"></div></td>';
             item += '<td><select class="form-control input-sm id_bag" name="Exercises[answers]['+index+'][answer]">';
             options = $('#add-item .id_bag option');
             options.each(function(n, option){
@@ -104,7 +153,7 @@
                     $(option).attr('selected', 'selected');
                 item += $(option).prop('outerHTML');
             });
-            item += '</select></td>';
+            item += '</select><div class="errorMessage"></div></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
@@ -113,18 +162,66 @@
     function createBag(index, name)
     {
         item = '<tr class="update-bag" data-index="'+index+'">';
-            item += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"></td>';
+            item += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"><div class="errorMessage"></div></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
+    }
+    
+    function checkItems(item)
+    {
+        $returnItem = true;
+        item = $(item);
+        itemName = item.find('.name');
+        itemNameError = itemName.siblings('.errorMessage');
+        if(!itemName.val())
+        {
+            itemNameError.html('Введите название предмета');
+            $returnItem = false;
+        }
+        else
+        {
+            itemNameError.html('');
+        }
+
+        itemBag = item.find('.id_bag');
+        itemBagError = itemBag.siblings('.errorMessage');
+        if(!itemBag.val())
+        {
+            itemBagError.html('Выберите мешок');
+            $returnItem = false;
+        }
+        else
+        {
+            itemBagError.html('');
+        }
+        return $returnItem;
+    }
+    
+    function checkBag(bag)
+    {
+        $returnBag = true;
+        bag = $(bag);
+        bagName = bag.find('.name');
+        bagNameError = bagName.siblings('.errorMessage');
+        if(!bagName.val())
+        {
+            bagNameError.html('Введите название мешка');
+            $returnBag = false;
+        }
+        else
+        {
+            bagNameError.html('');
+        }
+        return $returnBag;
     }
 </script>
 
 <div id="bags">
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <label for="bags">Мешки</label>
-            <table id="bags-table" class="table table-hover">
+        <div id="bags-table" class="col-lg-6 col-md-6">
+            <label for>Мешки</label>
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
@@ -137,6 +234,7 @@
                         <tr class="update-bag" data-index="<?php echo $bag->id; ?>">
                             <td>
                                 <input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -145,11 +243,12 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
         
-        <div class="col-lg-6 col-md-6">
-            <label for="items">Предметы</label>
-            <table id="items" class="table table-hover">
+        <div id="items" class="col-lg-6 col-md-6">
+            <label for>Предметы</label>
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
@@ -161,10 +260,12 @@
                     <?php foreach($model->Answers as $answer) : ?>
                         <tr class="update-item" data-index="<?php echo $answer->id; ?>">
                             <td>
-                                <input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                <input class="form-control input-sm name" placeholder="Введите название предмета" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
                                 <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $listDataBags, array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -173,6 +274,7 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
     </div>
 

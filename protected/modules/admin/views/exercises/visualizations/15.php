@@ -1,5 +1,29 @@
 <script>
     $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            areasCont = $('#areas');
+            areasError = areasCont.find('> .errorMessage');
+            areas = areasCont.find('.update-area');
+            if(areas.length)
+            {
+                areas.each(function(n, area){
+                    if(!checkArea(area))
+                    {
+                        $return = false;
+                    }
+                });
+                areasError.html('');
+            }
+            else
+            {
+                areasError.html('Нет ни одной области');
+                $return = false;
+            }
+            
+            return $return;
+        });
+        
         $('.update-area .delete').live('click', function(){
             if(confirm('Вы дествительно хотите удалить область из задания ?'))
             {
@@ -19,7 +43,30 @@
             downCriteria = currentCriteria.next('tr');
             currentCriteria.before(downCriteria);
         });
+        
+        $('.update-area').live('change', function(){
+            checkArea(this);
+        });
     });
+    
+    function checkArea(item)
+    {
+        $returnItem = true;
+        item = $(item);
+        itemName = item.find('.name');
+        itemNameError = itemName.siblings('.errorMessage');
+        if(!itemName.val())
+        {
+            itemNameError.html('Введите название области');
+            $returnItem = false;
+        }
+        else
+        {
+            itemNameError.html('');
+        }
+        
+        return $returnItem;
+    }
 </script>
 
 <div id="hotmap-bags">
@@ -50,10 +97,10 @@
     
     <div class="row">
         <div class="col-lg-3 col-md-3">
-            <label for="areas">Области</label>
+            <label for>Области</label>
         </div>
-        <div class="col-lg-5 col-md-5">
-            <table id="areas" class="table table-hover">
+        <div id="areas" class="col-lg-5 col-md-5">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="5%">Позиция</th>
@@ -72,8 +119,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input class="form-control input-sm" placeholder="Введите название области" type="text" value="<?php echo $area->name; ?>" name="Exercises[answers][<?php echo $index; ?>][name]">
+                                    <input class="form-control input-sm name" placeholder="Введите название области" type="text" value="<?php echo $area->name; ?>" name="Exercises[answers][<?php echo $index; ?>][name]">
                                     <input class="form-control input-sm" type="hidden" value="<?php echo $area->id; ?>" name="Exercises[answers][<?php echo $index; ?>][id_area]">
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -90,8 +138,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input class="form-control input-sm" placeholder="Введите название области" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                    <input class="form-control input-sm name" placeholder="Введите название области" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
                                     <input class="form-control input-sm" type="hidden" value="<?php echo $answer->id_area; ?>" name="Exercises[answers][<?php echo $answer->id ?>][id_area]">
+                                    <div class="errorMessage"></div>
                                 </td>
                                 <td>
                                     <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -101,6 +150,7 @@
                     <?php endif; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
     </div>
 </div>

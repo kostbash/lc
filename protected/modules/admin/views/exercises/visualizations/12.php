@@ -1,7 +1,34 @@
 <script>
     $(function(){
+        $('#exercises-form').submit(function(){
+            $return = true;    
+            itemsCont = $('#items');
+            itemsError = itemsCont.find('> .errorMessage');
+            items = itemsCont.find('.update-item');
+            if(items.length)
+            {
+                items.each(function(n, item){
+                    if(!checkItems(item))
+                    {
+                        $return = false;
+                    }
+                });
+                itemsError.html('');
+            }
+            else
+            {
+                itemsError.html('Добавьте предметы');
+                $return = false;
+            }
+            return $return;
+        });
+        
+        $('.update-item').live('change', function(){
+            checkItems(this);
+        });
+        
         $('#add-button').click(function(){
-            items = $('#items');
+            items = $('#items table');
             itemName = $('#add-item .name');
             itemNameError = itemName.siblings('.errorMessage');
             itemId_area = $('#add-item .id_area');
@@ -33,7 +60,7 @@
             {
                 items.append(createItem(index, itemName.val(), itemId_area.val()));
                 itemName.val('');
-                itemId_area.val('');
+                itemId_area.find('option[selected=selected]').removeAttr('selected');
             }
             return false;
         });
@@ -50,8 +77,8 @@
     function createItem(index, name, id_item)
     {
         item = '<tr class="update-item" data-index="'+index+'">';
-            item += '<td><input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="'+name+'" name="Exercises[answers]['+index+'][name]"></td>';
-            item += '<td><select class="form-control input-sm" name="Exercises[answers]['+index+'][answer]">';
+            item += '<td><input class="form-control input-sm name" placeholder="Введите название предмета" type="text" value="'+name+'" name="Exercises[answers]['+index+'][name]"><div class="errorMessage"></div></td>';
+            item += '<td><select class="form-control input-sm id_area" name="Exercises[answers]['+index+'][answer]">';
             options = $('#add-item .id_area option');
             options.each(function(n, option){
                 option = $(option);
@@ -59,10 +86,40 @@
                     $(option).attr('selected', 'selected');
                 item += $(option).prop('outerHTML');
             });
-            item += '</select></td>';
+            item += '</select><div class="errorMessage"></div></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
+    }
+    
+    function checkItems(item)
+    {
+        $return = true;
+        item = $(item);
+        itemName = item.find('.name');
+        itemNameError = itemName.siblings('.errorMessage');
+        if(!itemName.val())
+        {
+            itemNameError.html('Введите название');
+            $return = false;
+        }
+        else
+        {
+            itemNameError.html('');
+        }
+
+        itemArea = item.find('.id_area');
+        itemAreaError = itemArea.siblings('.errorMessage');
+        if(!itemArea.val())
+        {
+            itemAreaError.html('Выберите область');
+            $return = false;
+        }
+        else
+        {
+            itemAreaError.html('');
+        }
+        return $return;
     }
 </script>
 
@@ -99,9 +156,9 @@
             <?php echo CHtml::dropDownList('areas', '', $dataAreas, array('id'=>'areas', 'class'=>'form-control', 'size'=>2)); ?>
             <div class="errorMessage"></div>
         </div>
-        <div class="col-lg-8 col-md-8">
+        <div id="items" class="col-lg-8 col-md-8">
             <label for="items">Предметы</label>
-            <table id="items" class="table table-hover">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
@@ -113,10 +170,12 @@
                     <?php foreach($model->Answers as $answer) : ?>
                         <tr class="update-item" data-index="<?php echo $answer->id; ?>">
                             <td>
-                                <input class="form-control input-sm" placeholder="Введите название предмета" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                <input class="form-control input-sm name" placeholder="Введите название предмета" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
-                                <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $dataAreas, array('class'=>'form-control input-sm', 'empty'=>'Выберите область')); ?>
+                                <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $dataAreas, array('class'=>'form-control input-sm id_area', 'empty'=>'Выберите область')); ?>
+                                <div class="errorMessage"></div>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -125,6 +184,7 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <div class="errorMessage"></div>
         </div>
     </div>
 
