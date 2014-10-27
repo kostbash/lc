@@ -218,6 +218,8 @@
                     answer = items.find('.item[data-area='+area.data('id')+']');
                     area.draggable("disable");
                     area.attr('class', 'area disable');
+                    count = cont.closest('.hotmap-bags').find('> .left .count');
+                    count.html(count.html()-1);
                 }
                 cont.append(answer.css('left', 0).css('top',0));
                 count = cont.closest('.hotmap-bags').find('> .left .count');
