@@ -10,50 +10,42 @@
     <div class="block">
         <h2 class="block-name"><?php echo "Блок $pos: \"$block->name\""; ?></h2>
         <h3 class="skill-header">Умения</h3>
-        <table class="skill">
-            <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Проходной процент</th>
-                </tr>
-            </thead>
+        <table class="block-skills">
             <tbody>
                 <?php
                     if($skills = $block->GroupAndSkills)
                     {
-                        foreach($skills as $skill)
+                        foreach($skills as $numerSkill => $skill)
                         {
+                            $numerSkill++;
                             echo "<tr>";
-                                echo "<td>{$skill->Skill->name}</td>";
-                                echo "<td>$skill->nicePercent%</td>";
+                                echo "<td>$numerSkill.{$skill->Skill->name}</td>";
                             echo "</tr>";
                         }
                     }
                     else
                     {
-                        echo '<tr><td colspan="2">Нет умений</td></tr>';
+                        echo '<tr><td>Нет умений</td></tr>';
                     }
                 ?>
             </tbody>
         </table>
 
         <h3 class="exercise-header">Задания</h3>
-        <?php if ($exercises) : $posTest = 1; ?>
+        <?php if ($exercises) : $posExercise = 0; ?>
             <table class="exercises">
-                <?php foreach ($exercises as $i => $exercise) : ?>
+                <?php foreach ($exercises as $i => $exercise) : $posExercise++; ?>
                     <tr class="exercise <?php echo ( ++$i % 2) == 0 ? 'even' : 'odd'; ?>">
                         <td class="exercise-main-td">
                             <table>
                                 <tr>
-                                    <td class="number">
-                                        <?php echo "Номер: ". $posTest++; ?>
-                                    </td>
                                     <td class="condition">
-                                        <?php echo $exercise->condition; ?>
+                                        <?php echo "<span class='number'>$posExercise.</span> $exercise->condition"; ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="answer" colspan="2">
+                                    <td class="answer">
+                                        <div class="answer-head">Ответ :</div>
                                         <?php if ($exercise->id_visual) : ?>
                                             <?php $this->renderPartial("//exercises/export_visualizations/{$exercise->id_visual}", array('model' => $exercise, 'with_right'=>$with_right)); ?>
                                         <?php endif; ?>

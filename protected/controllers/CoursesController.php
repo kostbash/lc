@@ -136,7 +136,7 @@ class CoursesController extends Controller
             header("Content-Type: application/force-download");
             header("Content-Type: application/octet-stream");
             header("Content-Type: application/download");
-            header("Content-Disposition: attachment; filename=" . "'$course->name.pdf'");
+            header("Content-Disposition: attachment; filename=" . "'Курс_$course->name.pdf'");
             header("Content-Transfer-Encoding: binary ");  
             flush();
             readfile($path);

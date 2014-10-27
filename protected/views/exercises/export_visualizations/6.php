@@ -7,11 +7,9 @@ if(!empty($model->Comparisons))
     {
         $listOne[] = "<div class='comparison'>".
                         "<div class='comp-answer'>{$comparison->AnswerOne->answer}</div>".
-                        "<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][1][]' value='{$comparison->AnswerOne->id}' />".
                     "</div>";
         $listTwo[] = "<div class='comparison'>".
                         "<div class='comp-answer'>{$comparison->AnswerTwo->answer}</div>".
-                        "<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][2][]' value='{$comparison->AnswerTwo->id}' />".
                     "</div>";
     }
     

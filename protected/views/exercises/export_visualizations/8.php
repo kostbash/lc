@@ -7,7 +7,7 @@ if($text && $spaces)
 {
     foreach($spaces as $space)
     {
-        $html = "<div class='answer-droppable'><input class='hidden-answer' type='hidden' name='Exercises[$key][answers][number_spaces][]' value='$space' /></div>";
+        $html = "<input type='text' />";
         $text = preg_replace("/sp{$space}/ui", $html, $text);
     }             
 }
@@ -18,8 +18,9 @@ if($text && $spaces)
         <?php echo $text; ?>
     </div>
     <div class="words">
-        <?php foreach($rightAnswers as $answer) : ?>
-        <div class="word"><input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][answer][]" value="<?php echo $answer->id; ?>" /><?php echo $answer->answer; ?></div>
+        Варианты ответа:
+        <?php foreach($rightAnswers as $n => $answer) : $n++;?>
+        <div class="word"><?php echo  "$n.$answer->answer"; ?></div>
         <?php endforeach; ?>
     </div>
 </div>

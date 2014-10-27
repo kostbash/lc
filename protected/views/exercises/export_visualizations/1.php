@@ -1,5 +1,5 @@
 <div class="accurate-answer">
-    <div class='field'>                                                             </div>
+    <input class="field" type="text" />
 </div>
 
 <?php if($with_right) : ?>

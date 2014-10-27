@@ -28,9 +28,14 @@ img
     max-width: 774px;
 }
 
+p {
+    display: inline-block;
+}
+
 .course-name
 {
-    font-size: 30px;
+    font-size: 32px;
+    border-bottom: 1px solid #000;
     margin: 0 0 14px 0;
 }
 
@@ -47,7 +52,7 @@ img
 
 .lesson .lesson-name
 {
-    font-size: 26px;
+    font-size: 28px;
     margin: 0 0 10px 0;
 }
 
@@ -79,6 +84,44 @@ img
     margin: 10px 0;
 }
 
+.block-skills
+{
+    font-style: italic;
+    font-size: 12px;
+}
+
+.block-skills td
+{
+    padding: 4px 8px;
+}
+
+.blocks
+{
+    font-style: normal;
+    font-size: 14px;
+}
+
+.blocks td
+{
+    border: none;
+    padding: 4px 8px;
+}
+
+.blocks .type-block
+{
+    font-style: italic;
+}
+
+.block-skills td
+{
+    border: none;
+}
+
+.lessons td
+{
+    border: none;
+}
+
 .exercise-header
 {
     font-size: 20px;
@@ -91,20 +134,29 @@ img
     padding: 0 0 10px 0;
 }
 
+.exercise .exercise-main-td table td
+{
+    border: none;
+}
+
+.exercise .exercise-main-td table td
+{
+    border: none;
+}
+
 .exercise .number
 {
     font-weight: bold;
-    width: 16%;
 }
 
 .exercise .condition
 {
-    width: 84%;
+    border-bottom: 1px solid #000 !important;
 }
 
 .exercise .answer
 {
-    text-align: center;
+    text-align: left;
 }
 
 .not-exercises
@@ -119,12 +171,45 @@ img
 
 .field
 {
-    display: inline-block;
-    height: 24px;
-    border: 1px solid #000;
+    margin-top: 4px;
+    width: 200px;
+}
+
+.answer-head
+{
+    margin-bottom: 10px;
 }
 
 .accurate-answer
 {
-    text-align: center;
+
+}
+
+.list-one
+{
+    float: left;
+    width: 45%;
+}
+
+.list-two
+{
+    float: right;
+    width: 45%;
+}
+
+.comparison
+{
+    margin: 4px 0;
+    border: 1px solid #000;
+}
+
+.comparisons .comparison p
+{
+    margin: 2px 0;
+    padding: 2px 4px;
+}
+
+.bag
+{
+    border: 1px solid #000;
 }

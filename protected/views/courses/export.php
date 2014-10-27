@@ -26,36 +26,11 @@
             <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
                 <h3 class='theme-header'><?php echo "Тема $groupNum: \"$lessonGroup->name\""; ?></h3>
                 <table class="lessons">
-                    <thead>
-                        <tr>
-                            <th>Название урока</th>
-                            <th>Состояние</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <?php if ($lessonGroup->LessonsRaw) : ?>
                             <?php foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson) : if($groupNum==1 && $keyLesson == 0 && $pos==1) continue; ?>
                                 <tr>
                                     <td><?php echo "Урок $pos : \"$lesson->name\""; ?></td>
-                                    <td>
-                                        <?php
-                                            if($userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id))
-                                            {
-                                                if($userAndLesson->LessonProgress == 100)
-                                                {
-                                                    echo "Пройден";
-                                                }
-                                                else
-                                                {
-                                                    echo "$userAndLesson->LessonProgress%";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                echo "Не пройден";
-                                            }
-                                        ?>
-                                    </td>
                                 </tr>
                                 <?php 
                                     $lessonContainerContent .= $this->renderPartial("//lessons/export_lesson", array('lesson'=>$lesson, 'pos'=>$pos, 'inner'=>true, 'with_right'=>$with_right), true);
@@ -64,7 +39,7 @@
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="2">Нет уроков</td>
+                                <td>Нет уроков</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
