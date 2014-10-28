@@ -1,23 +1,34 @@
 <div class="hotmap-ordering">
     <?php
         $rightAnswers = $model->rightAnswers;
+        $shuffleRights = $rightAnswers;
+        shuffle($shuffleRights);
+        
     ?>
     <div class="areas">
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
         <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>
     </div>
-    <div class="bag">
-        <div class="head">Перенесите сюда</div>
-        <div class="bag-drop">
-            <div class="dropped-items"></div>
-        </div>
-    </div>
     <div class="items">
-        <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item" data-area="<?php echo $answer->id_area; ?>">
-                <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <?php echo $answer->name; ?>
-            </div>
-        <?php endforeach; ?>
+        <b>Области :</b>
+        <?php
+            foreach($shuffleRights as $shuffleRight)
+            {
+                echo "<div>$shuffleRight->name</div>";
+            }
+        ?>
     </div>
 </div>
+
+<?php if($with_right) : ?>
+<div class='right-answer'>
+        <b>Правильный ответ :</b>
+        <?php
+            foreach($rightAnswers as $n => $rightAnswer)
+            {
+                $n++;
+                echo "<div>$n. $rightAnswer->name</div>";
+            }
+        ?>
+</div>
+<?php endif; ?>

@@ -166,13 +166,19 @@ p {
 
 .right-answer
 {
-    padding-top: 20px;
+    margin-top: 20px;
 }
 
 .field
 {
     margin-top: 4px;
     width: 200px;
+}
+
+.full-field
+{
+    margin-top: 10px;
+    width: 100%;
 }
 
 .answer-head
@@ -200,6 +206,7 @@ p {
 .comparison
 {
     margin: 4px 0;
+    width: 100%;
     border: 1px solid #000;
 }
 
@@ -207,9 +214,4 @@ p {
 {
     margin: 2px 0;
     padding: 2px 4px;
-}
-
-.bag
-{
-    border: 1px solid #000;
 }

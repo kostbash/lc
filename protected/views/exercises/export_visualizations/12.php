@@ -7,12 +7,12 @@
         <?php
             $rightAnswers = $model->rightAnswers;
             shuffle($rightAnswers);
+            $clearRight = array();
         ?>
         <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item not-hide">
-                <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <?php echo $answer->name; ?>
+                <?php $clearRight[] = "\"$answer->name\""; ?>
             </div>
         <?php endforeach; ?>
+        Предметы : <?php echo implode(', ', $clearRight); ?>
     </div>
 </div>

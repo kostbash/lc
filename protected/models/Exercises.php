@@ -428,7 +428,7 @@ class Exercises extends CActiveRecord
                 $criteria = new CDbCriteria;
                 $criteria->compare('id_exercise', $this->id);
                 $criteria->compare('is_right', 1);
-                $criteria->order = 'reg_exp ASC';
+                $criteria->order = 'reg_exp ASC, id ASC';
                 return ExercisesListOfAnswers::model()->findAll($criteria);
             }
             return array();

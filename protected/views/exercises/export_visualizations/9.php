@@ -16,7 +16,7 @@ if($text && $spaces)
 </div>
 <div class="words">
     Варианты ответа:
-        <?php foreach($spaces as $n => $space) : 
+        <?php foreach($spaces as $n => $space) : $n++;
             $answers = $model->AnswersBySpace($space);
             $answersBySpace = array();
             foreach($answers as $answer)
@@ -25,5 +25,5 @@ if($text && $spaces)
             }
         ?>
         <div class="word"><?php echo "Пробел $n : "; echo implode(", ", $answersBySpace);?></div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
 </div>
