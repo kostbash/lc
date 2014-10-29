@@ -197,6 +197,7 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'exercises-form',
 	'enableAjaxValidation'=>false,
+        'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
     
 <?php if(!$model->isNewRecord) : ?>

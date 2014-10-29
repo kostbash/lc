@@ -175,13 +175,23 @@ class ExercisesController extends Controller
                     {
                         if($_POST['Exercises']['answers'])
                         {
-                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            foreach($_POST['Exercises']['answers'] as $id_answer => $answerAttrs)
                             {
                                 $exercisesAnswers = new ExercisesListOfAnswers;
-                                $exercisesAnswers->attributes = $answerAttr;
+                                $exercisesAnswers->attributes = $answerAttrs;
+                                $exercisesAnswers->imageFile = CUploadedFile::getInstanceByName("Exercises[answers][$id_answer][imageFile]");
                                 $exercisesAnswers ->is_right = 1;
                                 $exercisesAnswers ->id_exercise = $model->id;
-                                $exercisesAnswers->save();
+                                if($exercisesAnswers->validate())
+                                {
+                                    if($exercisesAnswers->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id) .".". $exercisesAnswers->imageFile->extensionName;
+                                        $exercisesAnswers->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        $exercisesAnswers->image = $physicName;
+                                    }
+                                    $exercisesAnswers->save(false);
+                                }
                             }
                         }
                     }
@@ -190,21 +200,29 @@ class ExercisesController extends Controller
                         $saveBags = array();
                         if($_POST['Bags'] && is_array($_POST['Bags']))
                         {
-                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            foreach($_POST['Bags'] as $id_bag => $bagAttrs)
                             {
                                 $bag = new ExercisesBags;
                                 $bag->attributes = $bagAttrs;
+                                $bag->imageFile = CUploadedFile::getInstanceByName("Bags[$id_bag][imageFile]");
                                 $bag->id_exercise = $model->id;
-                                if($bag->save())
+                                if($bag->validate())
                                 {
-                                    $saveBags[$index] = $bag->id;
+                                    if($bag->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id.'bag-image') .".". $bag->imageFile->extensionName;
+                                        $bag->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        $bag->image = $physicName;
+                                    }
+                                    $bag->save(false);
+                                    $saveBags[$id_bag] = $bag->id;
                                 }
                             }
                         }
                         
                         if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
                         {
-                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            foreach($_POST['Exercises']['answers'] as $id_answer => $answerAttrs)
                             {
                                 $bag_id = $saveBags[$answerAttrs['answer']];
                                 if($bag_id)
@@ -212,9 +230,19 @@ class ExercisesController extends Controller
                                     $exercisesAnswers = new ExercisesListOfAnswers;
                                     $exercisesAnswers->attributes = $answerAttrs;
                                     $exercisesAnswers->answer = $bag_id;
+                                    $exercisesAnswers->imageFile = CUploadedFile::getInstanceByName("Exercises[answers][$id_answer][imageFile]");
                                     $exercisesAnswers ->is_right = 1;
                                     $exercisesAnswers ->id_exercise = $model->id;
-                                    $exercisesAnswers->save();
+                                    if($exercisesAnswers->validate())
+                                    {
+                                        if($exercisesAnswers->imageFile)
+                                        {
+                                            $physicName = md5(uniqid().$model->id) .".". $exercisesAnswers->imageFile->extensionName;
+                                            $exercisesAnswers->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                            $exercisesAnswers->image = $physicName;
+                                        }
+                                        $exercisesAnswers->save(false);
+                                    }
                                 }
                             }
                         }
@@ -224,14 +252,22 @@ class ExercisesController extends Controller
                         $saveBags = array();
                         if($_POST['Bags'] && is_array($_POST['Bags']))
                         {
-                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            foreach($_POST['Bags'] as $id_bag => $bagAttrs)
                             {
                                 $bag = new ExercisesBags;
                                 $bag->attributes = $bagAttrs;
+                                $bag->imageFile = CUploadedFile::getInstanceByName("Bags[$id_bag][imageFile]");
                                 $bag->id_exercise = $model->id;
-                                if($bag->save())
+                                if($bag->validate())
                                 {
-                                    $saveBags[$index] = $bag->id;
+                                    if($bag->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id.'bag-image') .".". $bag->imageFile->extensionName;
+                                        $bag->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        $bag->image = $physicName;
+                                    }
+                                    $bag->save(false);
+                                    $saveBags[$id_bag] = $bag->id;
                                 }
                             }
                         }
@@ -470,71 +506,201 @@ class ExercisesController extends Controller
                     }
                     elseif($model->id_visual==12)
                     {
+                        $notDeleteAnswers = array();
                         if($_POST['Exercises']['answers'])
                         {
-                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
-                            foreach($_POST['Exercises']['answers'] as $answerAttr)
+                            foreach($_POST['Exercises']['answers'] as $id_answer => $answerAttrs)
                             {
-                                $exercisesAnswers = new ExercisesListOfAnswers;
-                                $exercisesAnswers->attributes = $answerAttr;
-                                $exercisesAnswers ->is_right = 1;
-                                $exercisesAnswers ->id_exercise = $model->id;
-                                $exercisesAnswers->save();
+                                $exercisesAnswers = ExercisesListOfAnswers::model()->findByAttributes(array('id_exercise'=>$model->id, 'id'=>$id_answer));
+                                if(!$exercisesAnswers)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                }
+                                $exercisesAnswers->attributes = $answerAttrs;
+                                $exercisesAnswers->imageFile = CUploadedFile::getInstanceByName("Exercises[answers][$id_answer][imageFile]");
+                                $exercisesAnswers->is_right = 1;
+                                $exercisesAnswers->id_exercise = $model->id;
+                                if($exercisesAnswers->validate())
+                                {
+                                    if($exercisesAnswers->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id) .".". $exercisesAnswers->imageFile->extensionName;
+                                        $exercisesAnswers->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        if($exercisesAnswers->image)
+                                        {
+                                            @unlink(Yii::app()->params['WordsImagesPath']."/".$exercisesAnswers->image);
+                                        }
+                                        $exercisesAnswers->image = $physicName;
+                                    }
+                                    elseif($exercisesAnswers->deleteImage && $exercisesAnswers->image)
+                                    {
+                                        @unlink(Yii::app()->params['WordsImagesPath']."/".$exercisesAnswers->image);
+                                        $exercisesAnswers->image = null;
+                                    }
+                                    $exercisesAnswers->save(false);
+                                    $notDeleteAnswers[] = $exercisesAnswers->id;
+                                }
                             }
+                        }
+                            
+                        // удаляем ответы которые удалил пользователь(тоесть, которых нет)
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id', $notDeleteAnswers);
+                        $criteria->compare('id_exercise', $model->id);
+                        $deletingAnswers = ExercisesListOfAnswers::model()->findAll($criteria);
+                        foreach($deletingAnswers as $deletingAnswer)
+                        {
+                            $deletingAnswer->delete();
                         }
                     }
                     elseif($model->id_visual==13)
                     {
-                        $saveBags = array();
+                        $saveBags = array();;
                         if($_POST['Bags'] && is_array($_POST['Bags']))
                         {
-                            foreach($model->Bags as $eBag) $eBag->delete();
-                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            foreach($_POST['Bags'] as $id_bag => $bagAttrs)
                             {
-                                $bag = new ExercisesBags;
-                                $bag->attributes = $bagAttrs;
-                                $bag->id_exercise = $model->id;
-                                if($bag->save())
+                                $bag = ExercisesBags::model()->findByAttributes(array('id_exercise'=>$model->id, 'id'=>$id_bag));
+                                if(!$bag)
                                 {
-                                    $saveBags[$index] = $bag->id;
+                                    $bag = new ExercisesBags;
+                                }
+                                
+                                $bag->attributes = $bagAttrs;
+                                $bag->imageFile = CUploadedFile::getInstanceByName("Bags[$id_bag][imageFile]");
+                                $bag->id_exercise = $model->id;
+                                if($bag->validate())
+                                {
+                                    if($bag->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id.'bag-image') .".". $bag->imageFile->extensionName;
+                                        $bag->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        if($bag->image)
+                                        {
+                                            @unlink(Yii::app()->params['WordsImagesPath']."/".$bag->image);
+                                        }
+                                        $bag->image = $physicName;
+                                    }
+                                    elseif($bag->deleteImage && $bag->image)
+                                    {
+                                        @unlink(Yii::app()->params['WordsImagesPath']."/".$bag->image);
+                                        $bag->image = null;
+                                    }
+                                    $bag->save(false);
+                                    $saveBags[$id_bag] = $bag->id;
                                 }
                             }
                         }
-                        
-                        if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))
+                            
+                        // удаляем мешки которые удалил пользователь(тоесть, которых нет в post)
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id', $saveBags);
+                        $criteria->compare('id_exercise', $model->id);
+                        $deletingBags = ExercisesBags::model()->findAll($criteria);
+                        foreach($deletingBags as $deletingBag)
                         {
-                            foreach($model->Answers as $eAnswer) $eAnswer->delete();
-                            foreach($_POST['Exercises']['answers'] as $answerAttrs)
+                            $deletingBag->delete();
+                        }
+                        
+                        $notDeleteAnswers = array();
+                        if($_POST['Exercises']['answers'])
+                        {
+                            foreach($_POST['Exercises']['answers'] as $id_answer => $answerAttrs)
                             {
                                 $bag_id = $saveBags[$answerAttrs['answer']];
                                 if($bag_id)
                                 {
-                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers = ExercisesListOfAnswers::model()->findByAttributes(array('id_exercise'=>$model->id, 'id'=>$id_answer));
+                                    if(!$exercisesAnswers)
+                                    {
+                                        $exercisesAnswers = new ExercisesListOfAnswers;
+                                    }
                                     $exercisesAnswers->attributes = $answerAttrs;
                                     $exercisesAnswers->answer = $bag_id;
-                                    $exercisesAnswers ->is_right = 1;
-                                    $exercisesAnswers ->id_exercise = $model->id;
-                                    $exercisesAnswers->save();
+                                    $exercisesAnswers->imageFile = CUploadedFile::getInstanceByName("Exercises[answers][$id_answer][imageFile]");
+                                    $exercisesAnswers->is_right = 1;
+                                    $exercisesAnswers->id_exercise = $model->id;
+                                    if($exercisesAnswers->validate())
+                                    {
+                                        if($exercisesAnswers->imageFile)
+                                        {
+                                            $physicName = md5(uniqid().$model->id) .".". $exercisesAnswers->imageFile->extensionName;
+                                            $exercisesAnswers->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                            if($exercisesAnswers->image)
+                                            {
+                                                @unlink(Yii::app()->params['WordsImagesPath']."/".$exercisesAnswers->image);
+                                            }
+                                            $exercisesAnswers->image = $physicName;
+                                        }
+                                        elseif($exercisesAnswers->deleteImage && $exercisesAnswers->image)
+                                        {
+                                            @unlink(Yii::app()->params['WordsImagesPath']."/".$exercisesAnswers->image);
+                                            $exercisesAnswers->image = null;
+                                        }
+                                        $exercisesAnswers->save(false);
+                                        $notDeleteAnswers[] = $exercisesAnswers->id;
+                                    }
                                 }
                             }
+                        }
+                            
+                        // удаляем ответы которые удалил пользователь(тоесть, которых нет)
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id', $notDeleteAnswers);
+                        $criteria->compare('id_exercise', $model->id);
+                        $deletingAnswers = ExercisesListOfAnswers::model()->findAll($criteria);
+                        foreach($deletingAnswers as $deletingAnswer)
+                        {
+                            $deletingAnswer->delete();
                         }
                     }
                     elseif($model->id_visual==14)
                     {
-                        $saveBags = array();
+                        $saveBags = array();;
                         if($_POST['Bags'] && is_array($_POST['Bags']))
                         {
-                            foreach($model->Bags as $eBag) $eBag->delete();
-                            foreach($_POST['Bags'] as $index => $bagAttrs)
+                            foreach($_POST['Bags'] as $id_bag => $bagAttrs)
                             {
-                                $bag = new ExercisesBags;
-                                $bag->attributes = $bagAttrs;
-                                $bag->id_exercise = $model->id;
-                                if($bag->save())
+                                $bag = ExercisesBags::model()->findByAttributes(array('id_exercise'=>$model->id, 'id'=>$id_bag));
+                                if(!$bag)
                                 {
-                                    $saveBags[$index] = $bag->id;
+                                    $bag = new ExercisesBags;
+                                }
+                                
+                                $bag->attributes = $bagAttrs;
+                                $bag->imageFile = CUploadedFile::getInstanceByName("Bags[$id_bag][imageFile]");
+                                $bag->id_exercise = $model->id;
+                                if($bag->validate())
+                                {
+                                    if($bag->imageFile)
+                                    {
+                                        $physicName = md5(uniqid().$model->id.'bag-image') .".". $bag->imageFile->extensionName;
+                                        $bag->imageFile->saveAs(Yii::app()->params['WordsImagesPath']."/".$physicName);
+                                        if($bag->image)
+                                        {
+                                            @unlink(Yii::app()->params['WordsImagesPath']."/".$bag->image);
+                                        }
+                                        $bag->image = $physicName;
+                                    }
+                                    elseif($bag->deleteImage && $bag->image)
+                                    {
+                                        @unlink(Yii::app()->params['WordsImagesPath']."/".$bag->image);
+                                        $bag->image = null;
+                                    }
+                                    $bag->save(false);
+                                    $saveBags[$id_bag] = $bag->id;
                                 }
                             }
+                        }
+                            
+                        // удаляем мешки которые удалил пользователь(тоесть, которых нет в post)
+                        $criteria = new CDbCriteria;
+                        $criteria->addNotInCondition('id', $saveBags);
+                        $criteria->compare('id_exercise', $model->id);
+                        $deletingBags = ExercisesBags::model()->findAll($criteria);
+                        foreach($deletingBags as $deletingBag)
+                        {
+                            $deletingBag->delete();
                         }
                         
                         if($_POST['Exercises']['answers'] && is_array($_POST['Exercises']['answers']))

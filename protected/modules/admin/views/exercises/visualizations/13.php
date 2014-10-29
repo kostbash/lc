@@ -139,6 +139,46 @@
             checkBag(this);
             return false;
         });
+        
+        $('.update-bag .no-image').live('click', function(){
+            current = $(this);
+            current.siblings('input[type=file]').removeClass('hide');
+            current.remove();
+            return false;
+        });
+        
+        $('.update-bag .remove-image').live('click', function(){
+            current = $(this);
+            if(confirm("Картинка будет удалена при сохранении задания, продолжить ?"))
+            {   
+                id_bag = current.closest('.update-bag').data('index');
+                current.after('<input type="hidden" name="Bags['+id_bag+'][deleteImage]" value="1">');
+                current.siblings('input[type=file]').removeClass('hide');
+                current.siblings('a').remove();
+                current.remove();
+            }
+            return false;
+        });
+        
+        $('.update-item .no-image').live('click', function(){
+            current = $(this);
+            current.siblings('input[type=file]').removeClass('hide');
+            current.remove();
+            return false;
+        });
+        
+        $('.update-item .remove-image').live('click', function(){
+            current = $(this);
+            if(confirm("Картинка будет удалена при сохранении задания, продолжить ?"))
+            {   
+                id_answer = current.closest('.update-item').data('index');
+                current.after('<input type="hidden" name="Exercises[answers]['+id_answer+'][deleteImage]" value="1">');
+                current.siblings('input[type=file]').removeClass('hide');
+                current.siblings('a').remove();
+                current.remove();
+            }
+            return false;
+        });
     });
     
     function createItem(index, name, id_item)
@@ -154,6 +194,7 @@
                 item += $(option).prop('outerHTML');
             });
             item += '</select><div class="errorMessage"></div></td>';
+            item += '<td><input class="" type="file" name="Exercises[answers]['+index+'][imageFile]"></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
@@ -163,6 +204,7 @@
     {
         item = '<tr class="update-bag" data-index="'+index+'">';
             item += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"><div class="errorMessage"></div></td>';
+            item += '<td><input class="" type="file" name="Bags['+index+'][imageFile]"></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
@@ -225,6 +267,7 @@
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
+                        <th width="10%">Изображение</th>
                         <th width="10%" class="button-column">&nbsp;</th>
                     </tr>
                 </thead>
@@ -235,6 +278,9 @@
                             <td>
                                 <input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
                                 <div class="errorMessage"></div>
+                            </td>
+                            <td>
+                                <?php echo $bag->imageContainer; ?>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -252,7 +298,8 @@
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
-                        <th width="40%">Мешок</th>
+                        <th width="30%">Мешок</th>
+                        <th width="10%">Изображение</th>
                         <th width="10%" class="button-column">&nbsp;</th>
                     </tr>
                 </thead>
@@ -265,6 +312,10 @@
                             </td>
                             <td>
                                 <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $listDataBags, array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
+                                <div class="errorMessage"></div>
+                            </td>
+                            <td>
+                                <?php echo $answer->imageContainer; ?>
                                 <div class="errorMessage"></div>
                             </td>
                             <td>

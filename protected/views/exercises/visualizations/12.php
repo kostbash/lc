@@ -32,7 +32,14 @@
         <?php foreach($rightAnswers as $answer) : ?>
             <div class="item not-hide">
                 <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <?php echo $answer->name; ?>
+                <div class="name"><?php echo $answer->name; ?></div>
+                <?php if($answer->image) : ?>
+                    <div class="image">
+                        <?php
+                            echo "<img src='/".Yii::app()->params['WordsImagesPath']."/$answer->image' />";
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>

@@ -56,6 +56,24 @@ html, body {
     font: 14px/18px Arial, Tahoma, Verdana, sans-serif;
 }
 
+.answer-image
+{
+    text-align: center;
+}
+
+hotmap-items .update-item, .update-bag
+{
+    text-align: center;
+}
+
+.answer-image .remove-image i,
+.bag-image .remove-image i
+{
+    top: 2px;
+    left: 3px;
+    color: #d9534f;
+}
+
 .course-info,  .lesson-header
 {
     background-color: white;
@@ -2837,7 +2855,18 @@ z-index:10000000;
     text-align: center;
     line-height: normal;
     vertical-align: top;
+    overflow: hidden;
+    max-width: 300px;
+}
+
+#lesson-page .hotmap-items .items .item .name
+{
     padding: 2px 30px;
+}
+
+#lesson-page .hotmap-items .items .item .image img
+{
+    width: 100%;
 }
 
 #lesson-page .hotmap-items .areas svg {
@@ -2888,7 +2917,19 @@ z-index:10000000;
     text-align: center;
     line-height: normal;
     vertical-align: top;
+    max-width: 220px;
+    overflow: hidden;
+    z-index: 4;
+}
+
+#lesson-page .bags-type .items .item .name
+{
     padding: 2px 30px;
+}
+
+#lesson-page .bags-type .items .item .image img
+{
+    width: 100%;
 }
 
 #lesson-page .bags-type .head
@@ -2927,16 +2968,42 @@ z-index:10000000;
 
 #lesson-page .bags-type .bag-drop
 {
-    padding: 8px;
+    position: relative;
     min-height: 121px;
 }
+
+#lesson-page .bags-type .bag-drop > .image
+{
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+}
+
+#lesson-page .bags-type .bag-drop .white-back
+{
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.4;
+}
+
+#lesson-page .bags-type .bag-drop > .image img
+{
+    max-width: 100%;
+    vertical-align: middle;
+}
+
 #lesson-page .bags-type .bag-drop .item
 {
     border: 1px solid #ccc;
     border-radius: 4px;
     display: inline-block;
     color: #b5486d;
-    width: 100%;
+    width: 222px;
+    z-index: 3;
+    background: #fff;
     margin-bottom: 8px;
     font-family: 'PT Sans';
     font-weight: bold;
@@ -2944,7 +3011,17 @@ z-index:10000000;
     text-align: center;
     line-height: normal;
     vertical-align: top;
+    margin: 4px 8px 4px 8px;
+}
+
+#lesson-page .bags-type .bag-drop .item .name
+{
     padding: 2px 30px;
+}
+
+#lesson-page .bags-type .bag-drop .item .image img
+{
+    width: 100%;
 }
 
 /*---------------------- 14.Hotmap-bags ----------------------*/
@@ -3017,9 +3094,31 @@ z-index:10000000;
 
 #lesson-page .hotmap-bags .bag-drop
 {
-    padding: 8px;
+    position: relative;
     min-height: 121px;
 }
+
+#lesson-page .hotmap-bags .bag-drop .image
+{
+    position: absolute;
+    text-align: center;
+}
+
+#lesson-page .hotmap-bags .bag-drop .white-back
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.4;
+}
+
+#lesson-page .hotmap-bags .bag-drop .image img
+{
+    max-width: 100%;
+    vertical-align: middle;
+}
+
 #lesson-page .hotmap-bags .bag-drop .item
 {
     position: relative;
@@ -3027,8 +3126,8 @@ z-index:10000000;
     border-radius: 4px;
     display: inline-block;
     color: #b5486d;
+    width: 222px;
     background: #fff;
-    width: 100%;
     margin-bottom: 8px;
     font-family: 'PT Sans';
     font-weight: bold;
@@ -3037,6 +3136,7 @@ z-index:10000000;
     line-height: normal;
     vertical-align: top;
     padding: 2px 30px;
+    margin: 4px 8px 4px 8px;
 }
 
 #lesson-page .hotmap-bags .areas

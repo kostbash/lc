@@ -101,12 +101,33 @@
         $('.update-area').live('change', function(){
             checkArea(this);
         });
+        
+        $('.update-bag .no-image').live('click', function(){
+            current = $(this);
+            current.siblings('input[type=file]').removeClass('hide');
+            current.remove();
+            return false;
+        });
+        
+        $('.update-bag .remove-image').live('click', function(){
+            current = $(this);
+            if(confirm("Картинка будет удалена при сохранении задания, продолжить ?"))
+            {   
+                id_bag = current.closest('.update-bag').data('index');
+                current.after('<input type="hidden" name="Bags['+id_bag+'][deleteImage]" value="1">');
+                current.siblings('input[type=file]').removeClass('hide');
+                current.siblings('a').remove();
+                current.remove();
+            }
+            return false;
+        });
     });
     
     function createBag(index, name)
     {
         area = '<tr class="update-bag" data-index="'+index+'">';
             area += '<td><input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="'+name+'" name="Bags['+index+'][name]"><div class="errorMessage"></div></td>';
+            area += '<td><input class="" type="file" name="Bags['+index+'][imageFile]"></td>';
             area += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         area += '</tr>';
         return area;
@@ -194,6 +215,7 @@
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
+                        <th width="40%" class="button-column">Изображение</th>
                         <th width="10%" class="button-column">&nbsp;</th>
                     </tr>
                 </thead>
@@ -204,6 +226,9 @@
                             <td>
                                 <input class="form-control input-sm name" placeholder="Введите название мешка" type="text" value="<?php echo $bag->name; ?>" name="Bags[<?php echo $bag->id; ?>][name]">
                                 <div class="errorMessage"></div>
+                            </td>
+                            <td>
+                                <?php echo $bag->imageContainer; ?>
                             </td>
                             <td>
                                 <a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a>
@@ -247,7 +272,7 @@
                         <?php foreach($model->Answers as $answer) : ?>
                             <tr class="update-area" data-index="<?php echo $answer->id; ?>">
                                 <td>
-                                    <input class="form-control input-sm" placeholder="Введите название области" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
+                                    <input class="form-control input-sm name" placeholder="Введите название области" type="text" value="<?php echo $answer->name; ?>" name="Exercises[answers][<?php echo $answer->id ?>][name]">
                                     <input class="form-control input-sm" type="hidden" value="<?php echo $answer->id_area; ?>" name="Exercises[answers][<?php echo $answer->id ?>][id_area]">
                                     <div class="errorMessage"></div>
                                 </td>

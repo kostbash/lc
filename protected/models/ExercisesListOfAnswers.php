@@ -10,9 +10,9 @@
  */
 class ExercisesListOfAnswers extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
+    public $imageFile;
+    public $deleteImage = false;
+    
 	public function tableName()
 	{
 		return 'oed_exercises_list_of_answers';
@@ -30,6 +30,8 @@ class ExercisesListOfAnswers extends CActiveRecord
                     array('answer', 'requiredSpacePass'),
                     array('name', 'length', 'max'=>255),
                     array('id_exercise, is_right, reg_exp, number_space, id_question, id_area', 'numerical', 'integerOnly'=>true),
+                    array('imageFile', 'file', 'types'=>'jpg,jpeg, png, gif', 'allowEmpty'=>true),
+                    array('deleteImage', 'boolean'),
                     array('id, id_exercise, answer', 'safe', 'on'=>'search'),
 		);
 	}
@@ -84,4 +86,28 @@ class ExercisesListOfAnswers extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        public function getImageContainer()
+        {
+            $res = '';
+            $res .= "<div class='answer-image'>";
+                if($this->image)
+                {
+                    $res .= CHtml::link('Есть', "/".Yii::app()->params['WordsImagesPath']."/".$this->image, array('target'=>'_blank'));
+                    $res .= CHtml::link('<i class="glyphicon glyphicon-remove"></i>', '#', array('class'=>'remove-image'));
+                } else {
+                    $res .= " <a href='#' class='no-image'>Нет</a>";
+                }
+                $res .= "<input class='hide' type='file' name='Exercises[answers][$this->id][imageFile]' />";
+            $res .= "</div>";
+            return $res;
+        }
+        
+        public function afterDelete() {
+            if($this->image)
+            {
+                @unlink(Yii::app()->params['WordsImagesPath']."/".$this->image);
+            }
+            parent::afterDelete();
+        }
 }

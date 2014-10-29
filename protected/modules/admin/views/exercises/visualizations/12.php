@@ -72,6 +72,26 @@
             }
             return false;
         });
+        
+        $('.update-item .no-image').live('click', function(){
+            current = $(this);
+            current.siblings('input[type=file]').removeClass('hide');
+            current.remove();
+            return false;
+        });
+        
+        $('.update-item .remove-image').live('click', function(){
+            current = $(this);
+            if(confirm("Картинка будет удалена при сохранении задания, продолжить ?"))
+            {   
+                id_answer = current.closest('.update-item').data('index');
+                current.after('<input type="hidden" name="Exercises[answers]['+id_answer+'][deleteImage]" value="1">');
+                current.siblings('input[type=file]').removeClass('hide');
+                current.siblings('a').remove();
+                current.remove();
+            }
+            return false;
+        });
     });
     
     function createItem(index, name, id_item)
@@ -87,6 +107,7 @@
                 item += $(option).prop('outerHTML');
             });
             item += '</select><div class="errorMessage"></div></td>';
+            item += '<td><input class="" type="file" name="Exercises[answers]['+index+'][imageFile]"></td>';
             item += '<td><a class="delete" title="Удалить"><img src="/images/grid-delete.png" alt="Удалить"></a></td>';
         item += '</tr>';
         return item;
@@ -162,7 +183,8 @@
                 <thead>
                     <tr>
                         <th width="50%">Название</th>
-                        <th width="40%">Область</th>
+                        <th width="30%">Область</th>
+                        <th width="10%">Изображение</th>
                         <th width="10%" class="button-column">&nbsp;</th>
                     </tr>
                 </thead>
@@ -175,6 +197,10 @@
                             </td>
                             <td>
                                 <?php echo CHtml::dropDownList("Exercises[answers][$answer->id][answer]", $answer->answer, $dataAreas, array('class'=>'form-control input-sm id_area', 'empty'=>'Выберите область')); ?>
+                                <div class="errorMessage"></div>
+                            </td>
+                            <td>
+                                <?php echo $answer->imageContainer; ?>
                                 <div class="errorMessage"></div>
                             </td>
                             <td>
