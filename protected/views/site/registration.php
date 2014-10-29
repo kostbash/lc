@@ -5,7 +5,14 @@
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,
         ),
-)); ?>
+));
+$model->rememberMe = true;
+?>
+<script>
+$('#reg-form').on('shown.bs.modal', function (e) {
+  $('#Users_email').focus();
+});
+</script>
 <div class="modal fade" id="regModel" tabindex="-1" role="dialog" aria-labelledby="regModelLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -47,7 +54,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">закрыть</button>
-        <?php echo CHtml::submitButton('Перейти к курсу', array("class"=>"btn btn-primary")); ?>
+        <?php echo CHtml::submitButton('Зарегистрироваться', array("class"=>"btn btn-primary")); ?>
       </div>
     </div>
   </div>

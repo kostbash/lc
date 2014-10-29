@@ -5,7 +5,14 @@
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,
         ),
-)); ?>
+));
+$model->rememberMe = true;
+?>
+<script>
+$('#login-form').on('shown.bs.modal', function (e) {
+  $('#LoginForm_username').focus();
+});
+</script>
 <div class="modal fade" id="loginForm" tabindex="-1" role="dialog" aria-labelledby="loginFormLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

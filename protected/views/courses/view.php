@@ -39,6 +39,14 @@
     </div>
 </div><!-- end-header-->
 
+<script>
+    $(function(){
+        $('.begin-learning').click(function(){
+            $('#user-role-student').attr('checked', 'checked');
+        });
+    });
+</script>
+
 <div id="container">
     <div id="course-view-page">
         <h2 class="main-title"><?php echo $course->name; ?></h2>

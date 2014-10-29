@@ -82,7 +82,7 @@ class SiteController extends Controller
             }
             
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
-            
+
             $this->render('index', array(
                 'loginForm' => $loginForm,
                 'user' => $user,
