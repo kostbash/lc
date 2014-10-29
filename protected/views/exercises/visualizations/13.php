@@ -7,7 +7,6 @@
         <?php foreach($rightAnswers as $answer) : ?>
             <div class="item">
                 <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <div class="name"><?php echo $answer->name; ?></div>
                 <?php if($answer->image) : ?>
                     <div class="image">
                         <?php
@@ -15,6 +14,7 @@
                         ?>
                     </div>
                 <?php endif; ?>
+                <div class="name"><?php echo $answer->name; ?></div>
             </div>
         <?php endforeach; ?>
     </div>

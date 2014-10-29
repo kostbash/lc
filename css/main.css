@@ -2869,6 +2869,11 @@ z-index:10000000;
     width: 100%;
 }
 
+#lesson-page .hotmap-items .items .item .image
+{
+    border-bottom: 1px solid #a4c8e2;
+}
+
 #lesson-page .hotmap-items .areas svg {
     position: absolute;
     top: 0;
@@ -2930,6 +2935,11 @@ z-index:10000000;
 #lesson-page .bags-type .items .item .image img
 {
     width: 100%;
+}
+
+#lesson-page .bags-type .items .item .image
+{
+    border-bottom: 1px solid #a4c8e2;
 }
 
 #lesson-page .bags-type .head
@@ -3022,6 +3032,11 @@ z-index:10000000;
 #lesson-page .bags-type .bag-drop .item .image img
 {
     width: 100%;
+}
+
+#lesson-page .bags-type .bag-drop .item .image
+{
+    border-bottom: 1px solid #a4c8e2;
 }
 
 /*---------------------- 14.Hotmap-bags ----------------------*/
