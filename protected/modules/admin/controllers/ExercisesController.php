@@ -67,15 +67,6 @@ class ExercisesController extends Controller
                     }
                     $model->Answers = $answers;
                 }
-                
-                if(!$id_group && $sessionParams['id_group'])
-                {
-                    $id_group = (int) $sessionParams['id_group'];
-                }
-                if(!$id_part && $sessionParams['id_part'])
-                {
-                    $id_part = (int) $_GET['id_part'];
-                }
             }
             
             $model->id_map = $id_map && Maps::existMapById($id_map) ? $id_map : null;
@@ -875,13 +866,15 @@ class ExercisesController extends Controller
         
         public function actionGetHtmlVisual() {
             $id_visual = (int) $_POST['id_visual'];
+            $id_group = (int) $_POST['id_group'];
+            $id_part = (int) $_POST['id_part'];
             $result = array();
             if($id_visual && ExercisesVisuals::model()->exists('id=:id', array('id'=>$id_visual)))
             {
                 $result['success'] = 1;
                 $exercise = new Exercises;
                 $exercise->id_visual = $id_visual;
-                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> $exercise), true);
+                $result['html'] = $this->renderPartial("visualizations/{$id_visual}", array('model'=> $exercise, 'id_group'=>$id_group, 'id_part'=>$id_part), true);
             } else {
                 $result['success'] = 0;
             }
