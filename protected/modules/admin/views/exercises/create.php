@@ -2,4 +2,4 @@
     <h2>Создание задания</h2>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Создать', '#', array('class'=>'btn btn-success btn-icon','onclick'=>"$('#exercises-form').submit(); return false;")); ?>
 </div>
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'id_group'=>$id_group, 'id_part'=>$id_part, 'id_map'=>$id_map)); ?>

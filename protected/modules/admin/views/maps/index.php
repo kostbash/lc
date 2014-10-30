@@ -68,6 +68,24 @@ $(function(){
 <?php 
     if($visual)
     {
-        echo CHtml::link('Выбрать', array('exercises/create', 'id_type'=>$visual->id_type, 'id_visual'=>$visual->id), array('id'=>'pick-map', 'class'=>'btn btn-sm btn-success btn-icon-right'));
+        $linkAttrs = array('exercises/create', 'id_type'=>$visual->id_type, 'id_visual'=>$visual->id);
     }
+    
+    if($exercise)
+    {
+        $linkAttrs = array('exercises/update', 'id'=>$exercise->id);
+    }
+    
+    if($id_group)
+    {
+        $linkAttrs['id_group'] = $id_group;
+    }
+    
+    if($id_part)
+    {
+        $linkAttrs['id_part'] = $id_part;
+    }
+    
+    if($visual or $exercise)
+        echo CHtml::link('Выбрать', $linkAttrs, array('id'=>'pick-map', 'class'=>'btn btn-sm btn-success btn-icon-right'));
 ?>

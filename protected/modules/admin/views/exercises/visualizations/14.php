@@ -121,6 +121,23 @@
             }
             return false;
         });
+        
+        <?php if($model->isNewRecord) : ?>
+            $('.pick-map a').click(function(){
+                $.ajax({
+                    url: '<?php echo Yii::app()->createUrl('/admin/exercises/saveParams', array('id_visual'=>$model->id_visual)); ?>',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $('#exercises-form').serialize(),
+                    success: function(result) {
+                        if(result.success)
+                        {
+                            //alert(result.html);
+                        }
+                    }
+                });
+            });
+        <?php endif; ?>
     });
     
     function createBag(index, name)
@@ -199,14 +216,38 @@
             ?>
         </div>
     </div>
-    <?php if($model->isNewRecord) : ?>
-        <div class="row">
-            <div class="col-lg-offset-3 col-md-offset-3 col-lg-5 col-md-5">
-                <?php echo CHtml::link('Выбрать карту<i class="glyphicon glyphicon-arrow-right"></i>', array('maps/index', 'id_visual'=>$model->id_visual), array('class'=>'btn btn-sm btn-success btn-icon-right')); ?>
-                <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Создать новую карту', array('maps/create'), array('class'=>'btn btn-sm btn-success btn-icon')); ?>
-            </div>
+    <div class="row">
+        <div class="col-lg-offset-3 col-md-offset-3 col-lg-5 col-md-5 pick-map">
+            <?php
+                $pickMapAttrs = array('maps/index');
+                $createMapAttrs = array('maps/create');
+                if($model->isNewRecord)
+                {
+                    $pickMapAttrs['id_visual'] = $model->id_visual;
+                    $createMapAttrs['id_visual'] = $model->id_visual;
+                }
+                else
+                {
+                    $pickMapAttrs['id_exercise'] = $model->id;
+                    $createMapAttrs['id_exercise'] = $model->id;
+                }
+
+                if($id_group)
+                {
+                    $pickMapAttrs['id_group'] = $id_group;
+                    $createMapAttrs['id_group'] = $id_group;
+                }
+
+                if($id_part)
+                {
+                    $pickMapAttrs['id_part'] = $id_part;
+                    $createMapAttrs['id_part'] = $id_part;
+                }
+            ?>
+            <?php echo CHtml::link('Выбрать карту<i class="glyphicon glyphicon-arrow-right"></i>', $pickMapAttrs, array('class'=>'btn btn-sm btn-success btn-icon-right')); ?>
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Создать новую карту', $createMapAttrs, array('class'=>'btn btn-sm btn-success btn-icon')); ?>
         </div>
-    <?php endif; ?>
+    </div>
     
     <div class="row">
         <div id="bags-table" class="col-lg-6 col-md-6">
@@ -251,7 +292,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($model->isNewRecord) : ?>
+                    <?php if($id_map) : ?>
                         <?php foreach($model->Map->Areas as $index => $area) : ?>
                             <tr class="update-area" data-index="<?php echo $index; ?>">
                                 <td>
@@ -260,7 +301,7 @@
                                     <div class="errorMessage"></div>
                                 </td>
                                 <td>
-                                    <?php echo CHtml::dropDownList("Exercises[answers][$index][answer]", '', '', array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
+                                    <?php echo CHtml::dropDownList("Exercises[answers][$index][answer]", '', $listDataBags, array('class'=>'form-control input-sm id_bag', 'empty'=>'Выберите мешок')); ?>
                                     <div class="errorMessage"></div>
                                 </td>
                                 <td>

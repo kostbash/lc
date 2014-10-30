@@ -18,7 +18,7 @@ class ExercisesController extends Controller
 	{
             return array(
                     array('allow',
-                            'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmlvariant'),
+                            'actions'=>array('create','update', 'updatebyajax', 'delete','index', 'savechange', 'skillsbyajax', 'skillsnotidsajax', 'skillsbyidsajax', 'createfromgroup','SWFUpload','massdelete', 'gethtmlvisual', 'gethtmlvariant', 'saveParams'),
                             'roles'=>array('editor'),
                     ),
                     array('deny',  // deny all users
@@ -35,6 +35,49 @@ class ExercisesController extends Controller
             $id_visual = (int) $_GET['id_visual'];
             $id_map = (int) $_GET['id_map'];
 
+            $sessionParams = $_SESSION['ExerciseParams'][$id_visual];
+            if($sessionParams)
+            {
+                //print_r($sessionParams);
+                $model->attributes = $sessionParams['Exercises'];
+                $model->Skills = Skills::model()->findAllByPk($sessionParams['Skills']['ids']);
+                
+                if($sessionParams['Bags'] && is_array($sessionParams['Bags']))
+                {
+                    $bags = array();
+                    foreach($sessionParams['Bags'] as $index => $bagAttrs)
+                    {
+                        $bag = new ExercisesBags;
+                        $bag->attributes = $bagAttrs;
+                        $bag->id = $index;
+                        $bags[$index] = $bag;
+                    }
+                    $model->Bags = $bags;
+                }
+                
+                if($sessionParams['Exercises']['answers'] && is_array($sessionParams['Exercises']['answers']))
+                {
+                    $answers = array();
+                    foreach($sessionParams['Exercises']['answers'] as $index => $answerAttrs)
+                    {
+                        $answer = new ExercisesListOfAnswers();
+                        $answer->attributes = $answerAttrs;
+                        $answer->id = $index;
+                        $answers[$index] = $answer;
+                    }
+                    $model->Answers = $answers;
+                }
+                
+                if(!$id_group && $sessionParams['id_group'])
+                {
+                    $id_group = (int) $sessionParams['id_group'];
+                }
+                if(!$id_part && $sessionParams['id_part'])
+                {
+                    $id_part = (int) $_GET['id_part'];
+                }
+            }
+            
             $model->id_map = $id_map && Maps::existMapById($id_map) ? $id_map : null;
             
             // не даем возможность добавлять тесту тип контент т.к. у него нету ответа
@@ -342,6 +385,11 @@ class ExercisesController extends Controller
                         }
                     }
                     
+                    if(isset($sessionParams))
+                    {
+                        unset($_SESSION['ExerciseParams'][$id_visual]);
+                    }
+                    
                     if($groupExercise)
                     {
                         $groupExercise->change_date = date('Y-m-d H:i:s');
@@ -369,11 +417,14 @@ class ExercisesController extends Controller
                     } else {
                         $this->redirect(array('/admin/exercises/index'));
                     }
+                    
                 }
             }
             
             $this->render('create', array(
                 'model'=>$model,
+                'id_group' => $id_group,
+                'id_part' => $id_part,
             ));
 	}
         
@@ -382,6 +433,17 @@ class ExercisesController extends Controller
             $model = $this->loadModel($id);
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
+            $id_map = (int) $_GET['id_map'];
+            
+            if($id_map && Maps::existMapById($id_map))
+            {
+                $model->id_map = $id_map;
+            }
+            else
+            {
+                $id_map = 0;
+            }
+            
             if($id_part) {
                 $part = PartsOfTest::model()->findByPk($id_part);
             } elseif($id_group) {
@@ -797,6 +859,9 @@ class ExercisesController extends Controller
             
             $this->render('update', array(
                 'model'=>$model,
+                'id_group' => $id_group,
+                'id_part' => $id_part,
+                'id_map'=>$id_map,
             ));
 	}
         
@@ -1331,5 +1396,13 @@ class ExercisesController extends Controller
                     echo "<script>alert('".(($x==$y && $x > 0)?"Импорт успешно выполнен! ":"")."Импортировано $x записей из $y.');location.reload();</script>";
                 }
             }
+        }
+        
+        public function actionSaveParams($id_visual)
+        {
+            $res = array('success'=>1);
+            $_SESSION['ExerciseParams'][$id_visual] = $_POST;
+            $res['html'] = print_r($_POST, 1);;
+            echo CJSON::encode($res);
         }
 }

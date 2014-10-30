@@ -106,7 +106,7 @@
             idVisual = $(this).val();
             $.ajax({
                 url: '<?php echo Yii::app()->createUrl('admin/exercises/gethtmlvisual'); ?>',
-                data: { id_visual: idVisual },
+                data: { id_visual: idVisual, id_group: $('#idGroup').val(), id_part: $('#idPart').val() },
                 type: 'POST',
                 dataType: 'json',
                 success: function(result) {
@@ -210,7 +210,16 @@
         </div>
     </div>
 <?php endif; ?>
-    
+<?php
+    if($id_group)
+    {
+        echo CHtml::hiddenField('id_group', $id_group, array('id'=>'idGroup'));
+    }
+    elseif($id_part)
+    {
+        echo CHtml::hiddenField('id_part', $id_part, array('id'=>'idPart'));
+    }
+?>
 <div class="row">
     <div class="col-lg-3 col-md-3">
         <?php echo CHtml::label('Умения', ''); ?>
@@ -281,7 +290,7 @@
     
 <div class="section<?php if(!$model->id_visual) echo ' hide'; ?>" id='visualization' data-visual="<?php echo $model->id_visual; ?>">
     <h2>Визуализация</h2>
-    <?php if($model->id_visual) $this->renderPartial("visualizations/{$model->id_visual}", array('model'=>$model)); ?>
+    <?php if($model->id_visual) $this->renderPartial("visualizations/{$model->id_visual}", array('model'=>$model, 'id_group'=>$id_group, 'id_part'=>$id_part, 'id_map'=>$id_map)); ?>
 </div>
     
 <?php $this->endWidget(); ?>
