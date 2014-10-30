@@ -28,6 +28,20 @@ class MapsController extends Controller
     public function actionCreate()
     {
             $model=new Maps;
+            $id_visual = (int) $_GET['id_visual'];
+            $id_exercise = (int) $_GET['id_exercise'];
+            $id_group = (int) $_GET['id_group'];
+            $id_part = (int) $_GET['id_part'];
+            
+            if($id_visual)
+                $visual = ExercisesVisuals::model()->findByPk($id_visual);
+            else
+                $visual = null;
+
+            if($id_exercise)
+                $exercise = Exercises::model()->findByPk($id_exercise);
+            else
+                $exercise = null;
             
             if(isset($_POST['Maps']))
             {
@@ -71,7 +85,30 @@ class MapsController extends Controller
                     {
                         $imageFile->saveAs(Yii::app()->params['MapImagesPath']."/".$imageName.'.'.$imageFile->extensionName);
                     }
-                    $this->redirect(array('update', 'id'=>$model->id));
+                    
+                    if($visual)
+                    {
+                        $link = array('/admin/exercises/create', 'id_type'=>$visual->id_type, 'id_visual'=>$id_visual, 'id_map'=>$model->id);
+                    }
+                    elseif($exercise)
+                    {
+                        $link = array('/admin/exercises/update', 'id'=>$exercise->id, 'id_map'=>$model->id);
+                    }
+                    else
+                    {
+                        $link = array('update', 'id'=>$model->id);
+                    }
+                    
+                    if($id_group)
+                    {
+                        $link['id_group'] = $id_group;
+                    }
+                    if($id_part)
+                    {
+                        $link['id_group'] = $id_part;
+                    }
+                    
+                    $this->redirect($link);
                 }
             }
 
