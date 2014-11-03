@@ -43,13 +43,18 @@
     $(function(){
         $('.begin-learning').click(function(){
             $('#user-role-student').attr('checked', 'checked');
+            $('#reg-form input[type=submit]').val('Перейти к курсу');
         });
     });
 </script>
 
 <div id="container">
     <div id="course-view-page">
-        <h2 class="main-title"><?php echo $course->name; ?></h2>
+        <h2 class="main-title">
+            <?php echo CHtml::link('Курсы', array('site/index'), array('style'=>'color: #feffff;')); ?>
+            <i class="glyphicon glyphicon-arrow-right" style="top:4px;"></i>
+            <?php echo $course->name; ?>
+        </h2>
         <div id="top-buttons">
             <?php echo CHtml::link('Начать обучение', '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#regModel" )); ?>
             <?php echo CHtml::link('Проверить себя', array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>

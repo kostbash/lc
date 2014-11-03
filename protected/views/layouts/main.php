@@ -72,14 +72,17 @@
                                     $(function(){
                                         $('#reg-as-student').click(function(){
                                             $('#user-role-student').attr('checked', 'checked');
+                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
                                         });
 
                                         $('#reg-as-teacher').click(function(){
                                             $('#user-role-teacher').attr('checked', 'checked');
+                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
                                         });
 
                                         $('#reg-as-parent').click(function(){
                                             $('#user-role-parent').attr('checked', 'checked');
+                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
                                         });
                                     });
                                 </script>

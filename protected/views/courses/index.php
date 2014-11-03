@@ -38,7 +38,7 @@
                     <div class="course">
                         <div class="head">
                             <div class="info">
-                                <div class="status current">Текущий курс:</div>
+                                <div class="status current"><?php echo CHtml::link('Курсы', array('courses/list')); ?> <i class="glyphicon glyphicon-arrow-right" style="top:2px;"></i>Текущий курс:</div>
                                 <div class="name"><?php echo $course->name; ?></div>
                             </div>
                             <?php echo $course->stateButton(); ?>
