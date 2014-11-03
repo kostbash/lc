@@ -193,7 +193,7 @@ Yii::app()->clientScript->registerScript('exercises', "
     <h2>Задания <?php if($course) echo " курса \"$course->name\""; ?></h2>
 </div>
 
-<div class="modal fade" id="htmlEditor" tabindex="-1" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
+<div class="modal fade" id="htmlEditor" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

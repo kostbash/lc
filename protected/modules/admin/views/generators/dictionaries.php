@@ -456,7 +456,7 @@
 <script type="text/javascript" src="/js/uploader.js"></script>
 <script src="/js/jquery.html5_upload.js" type="text/javascript"></script>
 <div id="dictionary-page">
-    <div class="modal fade" id="htmlEditor" tabindex="-1" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
+    <div class="modal fade" id="htmlEditor" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

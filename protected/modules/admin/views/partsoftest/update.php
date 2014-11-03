@@ -193,7 +193,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
     <h2>Задания <?php echo "теста \"{$part->Group->name}\""; ?></h2>
 </div>
 
-<div class="modal fade" id="htmlEditor" tabindex="-1" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
+<div class="modal fade" id="htmlEditor" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
