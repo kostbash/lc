@@ -9,8 +9,7 @@
 <?php endif; ?>
     <div class="lesson">
         <h2 class="lesson-name"><?php echo "Урок $pos: \"$lesson->name\""; ?></h2>
-        
-        <h3 class="blocks-header">Блоки</h3>
+
         <table class="blocks">
             <tbody>
                 <?php if($lesson->ExercisesGroups) : ?>

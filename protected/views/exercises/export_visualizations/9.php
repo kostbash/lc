@@ -18,6 +18,10 @@ if($text && $spaces)
 ?>
 
 <div class="text-with-limits clearfix">
+    <div class="text">
+        <?php echo $text; ?>
+    </div>
+    
     <div class="words">
         <b>Варианты ответа: </b>
         <?php foreach($spaces as $space) :
@@ -30,11 +34,6 @@ if($text && $spaces)
         ?>
             <div class="space"><?php echo "Пробел $space : "; echo implode(", ", $answersBySpace);?></div>
         <?php endforeach; ?>
-    </div>
-    
-    <div class="answer-head">Ответ :</div>
-    <div class="text">
-        <?php echo $text; ?>
     </div>
     
     <?php if($with_right) : ?>

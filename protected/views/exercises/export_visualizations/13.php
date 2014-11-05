@@ -1,6 +1,6 @@
 <div class="bags-type">
     <div class="items">
-        <b>Предметы: </b>
+        <b>Для распределения: </b>
         <?php
             $rightAnswers = $model->rightAnswers;
             shuffle($rightAnswers);
@@ -9,8 +9,6 @@
             <div class="item"><?php echo $answer->name; ?></div>
         <?php endforeach; ?>
     </div>
-    
-    <div class="answer-head">Ответ :</div>
     
     <div class="bags clearfix">
         <?php 

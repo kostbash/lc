@@ -19,7 +19,6 @@ if($countComparisons)
 }
 ?>
 
-<div class="answer-head">Ответ :</div>
 <div class="comparisons clearfix">
     <?php for($i=0; $countComparisons > $i; $i++) : ?>
         <div class='comparison clearfix'>

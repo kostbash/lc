@@ -7,20 +7,6 @@
 <div id="empty-layout">
     <div class='course'>
         <h2 class='course-name'>Курс: <?php echo $course->name; ?></h2>
-        <table id="course-info">
-            <thead>
-                <tr>
-                    <th>Пройдено</th>
-                    <th>Средняя оценка</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><?php echo $course->countPassedLessons; ?> <span>из</span> <?php echo $course->countLessons; ?></td>
-                    <td><?php echo $course->averageByTests; ?> <span>%</span></td>
-                </tr>
-            </tbody>
-        </table>
 
         <?php if($course->LessonsGroups) : $lessonContainerContent = ''; ?>
             <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>

@@ -15,7 +15,6 @@ if($text && $spaces)
 }
 ?>
 
-<div class="answer-head">Ответ :</div>
 <div class="exact-answers-with-space clearfix">
     <div class="text">
         <?php echo $text; ?>

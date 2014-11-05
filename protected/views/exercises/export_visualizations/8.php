@@ -22,15 +22,15 @@ if($text && $spaces)
 ?>
         
 <div class="text-with-space clearfix">
+    <div class="text">
+        <?php echo $text; ?>
+    </div>
+    
     <div class="words">
         <b>Варианты ответа: </b>
         <?php foreach($rightAnswers as $n => $answer) : $n++;?>
         <div class="word"><?php echo  "$n.$answer->answer"; ?></div>
         <?php endforeach; ?>
-    </div>
-    <div class="answer-head">Ответ :</div>
-    <div class="text">
-        <?php echo $text; ?>
     </div>
     
     <?php if($with_right) : ?>

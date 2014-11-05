@@ -1,4 +1,3 @@
-<div class="answer-head">Ответ :</div>
 <div class="accurate-answer">
     <div class="full-field"></div>
     <?php if($with_right) : ?>

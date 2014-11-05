@@ -41,12 +41,15 @@ p {
     font-size: 32px;
     border-bottom: 1px solid #000;
     margin: 0 0 14px 0;
+    padding-bottom: 3px;
 }
 
 .theme-header
 {
     font-size: 20px;
     margin: 20px 0;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
 }
 
 .course .lesson .lesson-name
@@ -60,6 +63,8 @@ p {
 {
     font-size: 28px;
     margin: 0 0 10px 0;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
 }
 
 .lesson .blocks-header
@@ -84,21 +89,16 @@ p {
     margin: 0 0 10px 0;
 }
 
-.skill-header
-{
-    font-size: 20px;
-    margin: 10px 0;
-}
-
 .block-skills
 {
     font-style: italic;
     font-size: 14px;
+    margin-bottom: 14px;
 }
 
-.block-skills .block-skill
+.block-skills b
 {
-    padding: 4px 8px;
+    font-size: 16px;
 }
 
 .blocks
@@ -118,24 +118,12 @@ p {
     font-style: italic;
 }
 
-.block-skills td
-{
-    border: none;
-}
-
 .lessons td
 {
     border: none;
 }
 
 /*--------------------------- Exercise ---------------------------*/
-
-.exercise-header
-{
-    font-size: 20px;
-    margin: 20px 0;
-}
-
 
 .exercises .odd
 {
@@ -257,11 +245,6 @@ p {
     background: #fff;
     border: 1px solid #888;
     border-radius: 30px;
-}
-
-.answer-head
-{
-    margin-bottom: 10px;
 }
 
 .accurate-answer
@@ -423,7 +406,7 @@ p {
 
 .text-with-space .words
 {
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .text-with-space .word
@@ -440,7 +423,7 @@ p {
 
 .text-with-limits .words
 {
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .text-with-limits .words .space
@@ -486,7 +469,7 @@ p {
 
 .bags-type .items
 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .bags-type .items .item
@@ -539,7 +522,7 @@ p {
 
 .hotmap-bags .items
 {
-    margin: 10px 0;
+    margin: 10px 0 20px;
 }
 
 .hotmap-bags .items .item

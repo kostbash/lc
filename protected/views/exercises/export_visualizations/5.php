@@ -1,4 +1,3 @@
-<div class="answer-head">Ответ :</div>
 <div class="pick-blocks">
     <?php foreach($model->Answers as $answer) : ?>
         <div class="variant clearfix">

@@ -10,8 +10,6 @@
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
     </div>
     
-    <div class="answer-head">Ответ :</div>
-    
     <div class="items">
         <?php
             foreach($shuffleRights as $shuffleRight)

@@ -19,7 +19,6 @@ if(!empty($model->Answers))
 
 <div class="orderings clearfix">
     <div class="words"><b>Слова :</b> <?php echo implode(', ', $list); ?></div>
-    <div class="answer-head">Ответ :</div>
     <div class="full-field"></div>
     <?php if($with_right) : ?>
         <div class='right-answer'>

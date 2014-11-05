@@ -10,7 +10,6 @@
         <?php endforeach; ?>
         <b>Предметы :</b> <?php echo implode(', ', $clearRight); ?>
     </div>
-    <div class="answer-head">Ответ :</div>
     <div class="areas">
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
     </div>

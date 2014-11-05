@@ -1,4 +1,3 @@
-<div class="answer-head">Ответ :</div>
 <div class="radio-buttons">
     <?php foreach($model->Answers as $answer) : ?>
         <div class="variant clearfix">

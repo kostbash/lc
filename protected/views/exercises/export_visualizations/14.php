@@ -7,13 +7,11 @@
     </div>
     
     <div class="items">
-        <b>Предметы: </b>
+        <b>Для распределения: </b>
         <?php foreach($rightAnswers as $answer) : ?>
             <div class="item"><?php echo $answer->name; ?></div>
         <?php endforeach; ?>
     </div>
-    
-    <div class="answer-head">Ответ :</div>
     
     <div class="bags clearfix">
         <?php 
