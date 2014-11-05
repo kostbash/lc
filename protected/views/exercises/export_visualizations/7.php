@@ -16,16 +16,16 @@ if(!empty($model->Answers))
     shuffle($list);
 }
 ?>
-        
-<div class="orderings clearfix">
-    <b>Слова :</b> <?php echo implode(', ', $list); ?>
-    <div><input class="full-field" type="text" /></div>
-</div>
 
-<?php if($with_right) : ?>
-<div class='right-answer'>
-    <?php
-        echo "<b>Правильный ответ: </b>$rightAnswer";
-    ?>
+<div class="orderings clearfix">
+    <div class="words"><b>Слова :</b> <?php echo implode(', ', $list); ?></div>
+    <div class="answer-head">Ответ :</div>
+    <div class="full-field"></div>
+    <?php if($with_right) : ?>
+        <div class='right-answer'>
+            <?php
+                echo "<b>Правильный ответ: </b>$rightAnswer";
+            ?>
+        </div>
+    <?php endif; ?>
 </div>
-<?php endif; ?>

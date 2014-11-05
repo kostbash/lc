@@ -4,16 +4,16 @@
     ?>
     <div class="areas">
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
-        <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>
     </div>
+    
     <div class="items">
+        <b>Предметы: </b>
         <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item" data-area="<?php echo $answer->id_area; ?>">
-                <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <?php echo $answer->name; ?>
-            </div>
+            <div class="item"><?php echo $answer->name; ?></div>
         <?php endforeach; ?>
     </div>
+    
+    <div class="answer-head">Ответ :</div>
     
     <div class="bags clearfix">
         <?php 

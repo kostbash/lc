@@ -8,7 +8,7 @@ if($text && $spaces)
 {
     foreach($spaces as $space)
     {
-        $html = "<input type='text' />";
+        $html = "<textarea class='textarea'></textarea>";
         $text = preg_replace("/sp{$space}/ui", $html, $text);
         foreach($rightAnswers as $rightAnswer)
         {
@@ -22,26 +22,27 @@ if($text && $spaces)
 ?>
         
 <div class="text-with-space clearfix">
-    <div class="text">
-        <?php echo $text; ?>
-    </div>
     <div class="words">
-        Варианты ответа:
+        <b>Варианты ответа: </b>
         <?php foreach($rightAnswers as $n => $answer) : $n++;?>
         <div class="word"><?php echo  "$n.$answer->answer"; ?></div>
         <?php endforeach; ?>
     </div>
+    <div class="answer-head">Ответ :</div>
+    <div class="text">
+        <?php echo $text; ?>
+    </div>
+    
+    <?php if($with_right) : ?>
+        <div class='right-answer'>
+            <?php
+                $rightAnswers = array();
+                foreach($model->rightAnswers as $answer)
+                {
+                    $rightAnswers[] = "\"$answer->answer\"";
+                }
+                echo "<b>Правильный ответ: </b>".$rightText;
+            ?>
+        </div>
+    <?php endif; ?>
 </div>
-
-<?php if($with_right) : ?>
-<div class='right-answer'>
-    <?php
-        $rightAnswers = array();
-        foreach($model->rightAnswers as $answer)
-        {
-            $rightAnswers[] = "\"$answer->answer\"";
-        }
-        echo "<b>Правильный ответ: </b>".$rightText;
-    ?>
-</div>
-<?php endif; ?>

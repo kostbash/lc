@@ -9,12 +9,13 @@ if($text && $spaces)
         $answer = ExercisesListOfAnswers::model()->findByAttributes(array('id_exercise'=>$model->id, 'number_space'=>$space));
         $answerLength = mb_strlen($answer->answer, 'UTF-8');
         $width = $answerLength > 6 ? $answerLength : 6;
-        $html = "<input class='' size='$width' type='text' name='Exercises[$key][answers][number_spaces][$space]' />";
+        $html = "<textarea cols='$width' class='textarea'></textarea>";
         $text = preg_replace("/sp{$space}/ui", $html, $text);
     }             
 }
 ?>
-        
+
+<div class="answer-head">Ответ :</div>
 <div class="exact-answers-with-space clearfix">
     <div class="text">
         <?php echo $text; ?>

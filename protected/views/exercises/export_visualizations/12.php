@@ -1,8 +1,4 @@
 <div class="hotmap-items">
-    <div class="areas">
-        <img src="<?php echo $model->Map->mapImageLink; ?>" />
-        <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>
-    </div>
     <div class="items">
         <?php
             $rightAnswers = $model->rightAnswers;
@@ -11,8 +7,11 @@
         ?>
         <?php foreach($rightAnswers as $answer) : ?>
                 <?php $clearRight[] = "\"$answer->name\""; ?>
-            </div>
         <?php endforeach; ?>
-        Предметы : <?php echo implode(', ', $clearRight); ?>
+        <b>Предметы :</b> <?php echo implode(', ', $clearRight); ?>
+    </div>
+    <div class="answer-head">Ответ :</div>
+    <div class="areas">
+        <img src="<?php echo $model->Map->mapImageLink; ?>" />
     </div>
 </div>

@@ -1,11 +1,12 @@
 #empty-layout
 {
-    width: 792px;
+    width: 210mm;
     min-height: 297mm;
     margin: 0 auto;
     border: 1px #efefef solid;
-    padding: 10mm;
+    padding: 8mm;
     font-family: Arial;
+    font-size: 14px;
 }
 
 table
@@ -23,14 +24,17 @@ table th, table td
     font-size: 14px;
 }
 
+
 img
 {
-    max-width: 774px;
+    max-width: 100% !important;
 }
 
 p {
-    display: inline-block;
+    margin: 0;
 }
+
+/*--------------------------- Course ---------------------------*/
 
 .course-name
 {
@@ -49,6 +53,8 @@ p {
 {
     margin: 30px 0 20px 0;
 }
+
+/*--------------------------- Lesson ---------------------------*/
 
 .lesson .lesson-name
 {
@@ -87,10 +93,10 @@ p {
 .block-skills
 {
     font-style: italic;
-    font-size: 12px;
+    font-size: 14px;
 }
 
-.block-skills td
+.block-skills .block-skill
 {
     padding: 4px 8px;
 }
@@ -122,36 +128,63 @@ p {
     border: none;
 }
 
+/*--------------------------- Exercise ---------------------------*/
+
 .exercise-header
 {
     font-size: 20px;
     margin: 20px 0;
 }
 
-.exercise .exercise-main-td
+
+.exercises .odd
 {
-    border: none;
-    padding: 0 0 10px 0;
+    background: #f9f9f9;
 }
 
-.exercise .exercise-main-td table td
+.exercises .even
 {
-    border: none;
+    background: #e8f5e1;
 }
 
-.exercise .exercise-main-td table td
+.exercise
 {
-    border: none;
+    padding: 14px;
+    page-break-inside: avoid;
+    margin-bottom: 2px;
+}
+
+.exercise .head
+{
+    border-bottom: 1px solid #000;
+    text-align: left;
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+}
+
+.clearfix:after
+{
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .exercise .number
 {
+    float: left;
+    width: 6%;
+    font-size: 16px;
+    line-height: 18px;
     font-weight: bold;
+    font-family: Arial;
 }
 
 .exercise .condition
 {
-    border-bottom: 1px solid #000 !important;
+    width: 94%;
+    line-height: 18px;
+    vertical-align: middle;
+    float: left;
 }
 
 .exercise .answer
@@ -169,16 +202,61 @@ p {
     margin-top: 20px;
 }
 
+.right-answer .right-head
+{
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.variant .text
+{
+    line-height: 24px;
+}
+
+.full-field,
 .field
 {
-    margin-top: 4px;
+    height: 26px;
     width: 200px;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 3px;
+    vertical-align: middle;
 }
 
 .full-field
 {
-    margin-top: 10px;
     width: 100%;
+}
+
+.textarea
+{
+    height: 26px;
+    width: 200px;
+    background-color: #fff;
+    border: 1px solid #888;
+    border-color: #888;
+    border-radius: 3px;
+    vertical-align: middle;
+    resize: none;
+}
+
+.checkbox
+{
+    height: 25px;
+    width: 25px;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 3px;
+}
+
+.radio
+{
+    height: 25px;
+    width: 25px;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 30px;
 }
 
 .answer-head
@@ -191,27 +269,348 @@ p {
 
 }
 
-.list-one
+
+
+.dropdown-list
+{
+
+}
+
+.dropdown-list .variant
+{
+    margin: 5px 0;
+}
+
+.dropdown-list .checkbox-cont
 {
     float: left;
-    width: 45%;
+    width: 4%;
 }
 
-.list-two
+.dropdown-list .text
 {
     float: right;
-    width: 45%;
+    width: 94%;
 }
 
-.comparison
+
+
+.radio-buttons
 {
-    margin: 4px 0;
-    width: 100%;
-    border: 1px solid #000;
+
 }
 
-.comparisons .comparison p
+.radio-buttons .variant
+{
+    margin: 5px 0;
+}
+
+.radio-buttons .radio-cont
+{
+    float: left;
+    width: 4%;
+}
+
+.radio-buttons .text
+{
+    float: right;
+    width: 94%;
+}
+
+
+
+.checkboxes
+{
+
+}
+
+.checkboxes .variant
+{
+    margin: 5px 0;
+}
+
+.checkboxes .checkbox-cont
+{
+    float: left;
+    width: 4%;
+}
+
+.checkboxes .text
+{
+    float: right;
+    width: 94%;
+}
+
+
+
+.pick-blocks
+{
+
+}
+
+.pick-blocks .variant
+{
+    margin: 5px 0;
+}
+
+.pick-blocks .checkbox-cont
+{
+    float: left;
+    width: 4%;
+}
+
+.pick-blocks .text
+{
+    float: right;
+    width: 94%;
+}
+
+
+
+.comparisons
+{
+    
+}
+
+
+.comparisons .comparison
+{
+    margin-bottom: 6px;
+}
+
+.comparisons .comp-answer-left,
+.comparisons .comp-answer-right
+{
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+
+.comparisons .comp-answer-left
+{
+    float: left;
+    width: 40%;
+}
+
+.comparisons .comp-answer-right
+{
+    float: right;
+    width: 40%;
+}
+
+.orderings
+{
+    
+}
+
+.orderings .words
+{
+    margin-bottom: 10px;
+}
+
+.orderings .full-field
+{
+    height: 52px;
+}
+
+
+
+.text-with-space
+{
+    
+}
+
+.text-with-space .words
+{
+    margin-bottom: 10px;
+}
+
+.text-with-space .word
 {
     margin: 2px 0;
-    padding: 2px 4px;
+}
+
+
+
+.text-with-limits
+{
+    
+}
+
+.text-with-limits .words
+{
+    margin-bottom: 10px;
+}
+
+.text-with-limits .words .space
+{
+    margin: 2px 0;
+}
+
+.exact-answers-with-space
+{
+    
+}
+
+.exact-answers-with-space .textarea
+{
+    width: auto !important;
+}
+
+
+
+.pick-area
+{
+    
+}
+
+
+
+.hotmap-items
+{
+    
+}
+
+.hotmap-items .items
+{
+    margin-bottom: 10px;
+}
+
+
+
+.bags-type
+{
+    
+}
+
+.bags-type .items
+{
+    margin-bottom: 10px;
+}
+
+.bags-type .items .item
+{
+    border: 1px solid #888;
+    background: #fff;
+    border-radius: 3px;
+    width: 30%;
+    padding: 5px;
+    margin: 4px 0;
+}
+
+.bags-type .bags .bag
+{
+    float: left;
+    border-radius: 3px;
+    border: 1px solid #888;
+    width: 30%;
+    margin-left: 4%;
+    margin-bottom: 10px;
+}
+
+.bags-type .bags .bag .head
+{
+    text-align: center;
+    padding: 4px;
+    border-bottom: 1px solid #888;
+    background: #eee;
+    margin: 0;
+}
+
+.bags-type .bags .bag .bag-drop
+{
+    height: 80px;
+    background: #fff;
+}
+
+.bags-type .bags .first-in-line
+{
+    margin-left: 0;
+    clear: both;
+}
+
+
+
+.hotmap-bags
+{
+    
+}
+
+.hotmap-bags .items
+{
+    margin: 10px 0;
+}
+
+.hotmap-bags .items .item
+{
+    border: 1px solid #888;
+    background: #fff;
+    border-radius: 3px;
+    width: 30%;
+    padding: 5px;
+    margin: 4px 0;
+}
+
+.hotmap-bags .bags .bag
+{
+    float: left;
+    border-radius: 3px;
+    border: 1px solid #888;
+    width: 30%;
+    margin-left: 4%;
+    margin-bottom: 10px;
+}
+
+.hotmap-bags .bags .bag .head
+{
+    text-align: center;
+    padding: 4px;
+    border-bottom: 1px solid #888;
+    background: #eee;
+    margin: 0;
+}
+
+.hotmap-bags .bags .bag .bag-drop
+{
+    height: 80px;
+    background: #fff;
+}
+
+.hotmap-bags .bags .first-in-line
+{
+    margin-left: 0;
+    clear: both;
+}
+
+
+.hotmap-ordering
+{
+    
+}
+
+.hotmap-ordering .areas
+{
+    margin-bottom: 10px;
+}
+
+.hotmap-ordering .items
+{
+    margin: 10px 0;
+}
+
+.hotmap-ordering .item
+{
+    border: 1px solid #888;
+    background: #fff;
+    border-radius: 3px;
+    width: 30%;
+    padding: 5px;
+    padding-left: 30px;
+    margin: 4px 0;
+}
+
+.hotmap-ordering .right-answer .item
+{
+    padding: 5px;
 }

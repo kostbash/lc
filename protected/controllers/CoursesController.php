@@ -165,7 +165,7 @@ class CoursesController extends Controller
         // сделать pdf из страницы html+php
         public function createPDF($css, $html, $fileName, $output = 'F')
         {
-            include_once("protected/extensions/MPDF56/mpdf.php");
+            include_once("protected/extensions/MPDF/mpdf.php");
             $mpdf = new mPDF('', 'A4', '8', 'Arial', 10, 10, 10, 10, 10, 10); //* задаем формат, отступы и.т.д. /
             $mpdf->charset_in = 'utf-8'; //* не забываем про русский /
             $style = file_get_contents($css); //* подключаем css/

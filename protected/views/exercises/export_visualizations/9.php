@@ -6,7 +6,7 @@ if($text && $spaces)
 {
     foreach($spaces as $space)
     {
-        $html = "<input type='text' />";
+        $html = "<textarea class='textarea'>$space.</textarea>";
         $text = preg_replace("/sp{$space}/ui", $html, $text);
         if($answer = ExercisesListOfAnswers::model()->findByAttributes(array('number_space'=>$space, 'id_exercise'=>$model->id, 'is_right'=>1)))
         {
@@ -18,11 +18,9 @@ if($text && $spaces)
 ?>
 
 <div class="text-with-limits clearfix">
-    <?php echo $text; ?>
-</div>
-<div class="words">
-    Варианты ответа:
-        <?php foreach($spaces as $n => $space) : $n++;
+    <div class="words">
+        <b>Варианты ответа: </b>
+        <?php foreach($spaces as $space) :
             $answers = $model->AnswersBySpace($space);
             $answersBySpace = array();
             foreach($answers as $answer)
@@ -30,14 +28,20 @@ if($text && $spaces)
                 $answersBySpace[] = "\"$answer->answer\"";
             }
         ?>
-        <div class="word"><?php echo "Пробел $n : "; echo implode(", ", $answersBySpace);?></div>
+            <div class="space"><?php echo "Пробел $space : "; echo implode(", ", $answersBySpace);?></div>
         <?php endforeach; ?>
+    </div>
+    
+    <div class="answer-head">Ответ :</div>
+    <div class="text">
+        <?php echo $text; ?>
+    </div>
+    
+    <?php if($with_right) : ?>
+        <div class='right-answer'>
+            <?php
+                echo "<b>Правильный ответ: </b>".$rightText;
+            ?>
+        </div>
+    <?php endif; ?>
 </div>
-
-<?php if($with_right) : ?>
-<div class='right-answer'>
-    <?php
-        echo "<b>Правильный ответ: </b>".$rightText;
-    ?>
-</div>
-<?php endif; ?>

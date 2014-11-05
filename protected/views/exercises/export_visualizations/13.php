@@ -1,16 +1,16 @@
 <div class="bags-type">
     <div class="items">
+        <b>Предметы: </b>
         <?php
             $rightAnswers = $model->rightAnswers;
             shuffle($rightAnswers);
         ?>
         <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item">
-                <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
-                <?php echo $answer->name; ?>
-            </div>
+            <div class="item"><?php echo $answer->name; ?></div>
         <?php endforeach; ?>
     </div>
+    
+    <div class="answer-head">Ответ :</div>
     
     <div class="bags clearfix">
         <?php 
