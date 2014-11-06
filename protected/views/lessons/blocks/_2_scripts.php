@@ -31,9 +31,22 @@
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
+            items: '> .comp-answer',
+            connectWith: '.list-one',
             update: function(event, ui) {
+                current = $(this);
                 setDuration(this);
+                sender = $(ui.sender);
+                item = $(ui.item);
+                if(!sender.length)
+                {
+                    items = current.closest('.comparisons').find('.list-one .comp-answer');
+                    lists = current.closest('.comparisons').find('.list-one');
+                    lists.each(function(n, list){
+                        list = $(list);
+                        list.append(items.eq(n));
+                    });
+                }
             }
         });
 
@@ -41,9 +54,22 @@
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
+            items: '> .comp-answer',
+            connectWith: '.list-two',
             update: function(event, ui) {
+                current = $(this);
                 setDuration(this);
+                sender = $(ui.sender);
+                item = $(ui.item);
+                if(!sender.length)
+                {
+                    items = current.closest('.comparisons').find('.list-two .comp-answer');
+                    lists = current.closest('.comparisons').find('.list-two');
+                    lists.each(function(n, list){
+                        list = $(list);
+                        list.append(items.eq(n));
+                    });
+                }
             }
         });
 

@@ -46,10 +46,22 @@
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
+            connectWith: '.list-one',
+            items: '> .comp-answer',
             update: function(event, ui) {
                 current = $(this);
                 setDuration(current);
+                sender = $(ui.sender);
+                item = $(ui.item);
+                if(!sender.length)
+                {
+                    items = current.closest('.comparisons').find('.list-one .comp-answer');
+                    lists = current.closest('.comparisons').find('.list-one');
+                    lists.each(function(n, list){
+                        list = $(list);
+                        list.append(items.eq(n));
+                    });
+                }
                 resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({
@@ -70,10 +82,22 @@
             axis: 'y',
             cancel: null,
             cursor: 'move',
-            items: '> .comparison',
+            items: '> .comp-answer',
+            connectWith: '.list-two',
             update: function(event, ui) {
                 current = $(this);
                 setDuration(current);
+                sender = $(ui.sender);
+                item = $(ui.item);
+                if(!sender.length)
+                {
+                    items = current.closest('.comparisons').find('.list-two .comp-answer');
+                    lists = current.closest('.comparisons').find('.list-two');
+                    lists.each(function(n, list){
+                        list = $(list);
+                        list.append(items.eq(n));
+                    });
+                }
                 resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
                 $.ajax({

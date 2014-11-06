@@ -1509,16 +1509,15 @@ z-index:10000000;
 .courses .course
 {
     width: 290px;
-    height: 170px;
-    overflow: hidden;
+    min-height: 170px;
     float: left;
     border: 1px solid #dbdbda;
     margin: 8px 10px;
     border-radius: 8px;
+    background: #fefefe;
     -webkit-box-shadow: 0px 0px 7px 0px rgba(170, 158, 135, 0.45);
     -moz-box-shadow:    0px 0px 7px 0px rgba(170, 158, 135, 0.45);
     box-shadow:         0px 0px 7px 0px rgba(170, 158, 135, 0.45);
-    background: #fefefe;
 }
 
 .courses .course .head
@@ -1600,7 +1599,7 @@ z-index:10000000;
 
 .courses .course .foot
 {
-    height: 40px;
+    height: 36px;
     text-align: center;
     width: 100%;
     background: -moz-linear-gradient(top, #fffffd 0%, #efefed 100%);
@@ -1610,19 +1609,44 @@ z-index:10000000;
     background: linear-gradient(to bottom, #fffffd 0%, #efefed 100%);
 }
 
-.courses .course .foot .to-course
+.courses .course  .to-course
 {
     color: #0076c9;
-    display: inline-block;
+    display: block;
     font-family: 'Arial';
     font-size: 12px;
-    line-height: 36px;
-    text-decoration: underline;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
-.courses .course .foot .to-course:hover
+.courses .course .to-course .link-name
 {
-    text-decoration: none;
+    display: none;
+    line-height: 36px;
+    vertical-align: middle;
+}
+.courses .course .to-course:hover .link-name
+{
+    display: block;
+}
+
+.no-courses
+{
+    width: 290px;
+    min-height: 170px;
+    border: 1px solid #dbdbda;
+    border-radius: 8px;
+    font-family: 'a_FuturaOrto';
+    color: #0d1d56;
+    font-size: 16px;
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(170, 158, 135, 0.45);
+    -moz-box-shadow:    0px 0px 7px 0px rgba(170, 158, 135, 0.45);
+    box-shadow:         0px 0px 7px 0px rgba(170, 158, 135, 0.45);
+    margin: 22px 35px;
+    text-align: center;
+    padding: 14px;
+    background: #f8f8f8;
 }
 
 .main-title
@@ -2784,28 +2808,48 @@ z-index:10000000;
 
 /*---------------------- 10.text-with-space-field ----------------------*/
 
-.comparisons .list-one
+.comparisons
 {
-    float: left;
-    width: 48%;
-}
-
-.comparisons .list-two
-{
-    float: right;
-    width: 48%;
+    display: table;
+    border-collapse: separate;
+    width: 100%;
 }
 
 .comparisons .comparison  {
+    display: table-row;
+    width: 100%;
+}
+
+.comparisons .comparison .ui-sortable-placeholder  {
+    height: 10px;
+}
+
+.comparisons .comp-answer
+{
     border: 1px solid #b3d3e0;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    margin: 4px 0;
     background: #fff;
     min-height: 32px;
     word-break: break-all;
     padding: 6px 12px;
+}
+
+.comparisons .list-one
+{
+    width: 50%;
+    vertical-align: middle;
+    display: table-cell;
+    padding: 4px 10px 0 0;
+}
+
+.comparisons .list-two
+{
+    width: 50%;
+    vertical-align: middle;
+    padding: 4px 0 0 10px;
+    display: table-cell;
 }
 
 /*---------------------- 11.pick-area ----------------------*/
@@ -4108,9 +4152,10 @@ z-index:10000000;
     font-size: 14px;
 }
 
-#courses-page #courses-tabs .course .foot .to-course
+#courses-page #courses-tabs .course .foot .link-name
 {
     float: right;
+    text-decoration: underline;
     margin-right: 12px;
 }
 

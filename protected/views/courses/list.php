@@ -132,35 +132,39 @@
                             {
                                 $number = $n+1;
                                 $tabs .="<div class='course'>
-                                            <div class='head'>
-                                                <div class='number'>$number</div>
-                                                <div class='name'>$subjectCourse->name</div>
-                                            </div>
-                                            <div class='content clearfix'>
-                                                <div class='class'>
-                                                    <h4>Класс:</h4>
-                                                    <div class='value'>$subjectCourse->className</div>
+                                            <a class='to-course' href='".Yii::app()->createUrl('courses/index', array('id'=>$subjectCourse->id))."'>
+                                                <div class='head'>
+                                                    <div class='number'>$number</div>
+                                                    <div class='name'>$subjectCourse->name</div>
                                                 </div>
-                                                <div class='difficulty'>
-                                                    <h4>Сложность:</h4>
-                                                    <div class='value'>$subjectCourse->difficulty</div>
+                                                <div class='content clearfix'>
+                                                    <div class='class'>
+                                                        <h4>Класс:</h4>
+                                                        <div class='value'>$subjectCourse->className</div>
+                                                    </div>
+                                                    <div class='difficulty'>
+                                                        <h4>Сложность:</h4>
+                                                        <div class='value'>$subjectCourse->difficulty</div>
+                                                    </div>
+                                                    <div class='count-lessons'>
+                                                        <h4>Уроков:</h4>
+                                                        <div class='value'>$subjectCourse->countLessons</div>
+                                                    </div>
                                                 </div>
-                                                <div class='count-lessons'>
-                                                    <h4>Уроков:</h4>
-                                                    <div class='value'>$subjectCourse->countLessons</div>
+                                                <div class='foot'>
+                                                    <div class='status'>$subjectCourse->userStatus</div>
+                                                    <div class='link-name'>узнать больше</div>
                                                 </div>
-                                            </div>
-                                            <div class='foot'>
-                                                <div class='status'>$subjectCourse->userStatus</div>
-                                                <a class='to-course' href='".Yii::app()->createUrl('courses/index', array('id'=>$subjectCourse->id))."'>узнать больше</a>
-                                            </div>
+                                            </a>
                                         </div>";
                             }
                         $tabs .= "</div>";
                     }
                     else
                     {
-                        $tabs .= '<p style="margin-top:20px; margin-left: 10px">Курсов пока нет, они в разработке. В ближайшее время появятся :)</p>';
+                        $tabs .="<div class='no-courses'>";
+                            $tabs .= 'Курсы по данной теме появятся в ближайшее время';
+                        $tabs .= "</div>";
                     }
                 $tabs .= "</div>";
             }

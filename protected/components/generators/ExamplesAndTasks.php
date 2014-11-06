@@ -95,6 +95,7 @@ class ExampleAndTasks
                     $exerciseModel = new Exercises;
                     $exerciseModel->condition = $convertedTemplate;
                     $exerciseModel->number = $count;
+                    $exerciseModel->difficulty = Exercises::$defaultDifficulty;
                     $exercises[$count] = $exerciseModel;
 
                     // получием список неправильных ответов задания

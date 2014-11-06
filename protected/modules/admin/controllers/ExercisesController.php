@@ -30,6 +30,7 @@ class ExercisesController extends Controller
 	public function actionCreate($id_type)
 	{
             $model=new Exercises;
+            $model->difficulty = Exercises::$defaultDifficulty;
             $id_group = (int) $_GET['id_group'];
             $id_part = (int) $_GET['id_part'];
             $id_visual = (int) $_GET['id_visual'];
