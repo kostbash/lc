@@ -9,16 +9,28 @@
 $model->rememberMe = true;
 ?>
 <script>
-$('#reg-form').on('shown.bs.modal', function (e) {
-  $('#Users_email').focus();
-});
+    $('#reg-form').on('shown.bs.modal', function (e) {
+      $('#Users_email').focus();
+    });
+    $('#reg-form').on('hidden.bs.modal', function (e) {
+        $('.or-login').addClass('hide');
+    });
+    $(function(){
+        $('.or-login').click(function(){
+            $('#loginForm').modal('show');
+            $('#regModel').modal('hide');
+        });
+    });
 </script>
 <div class="modal fade" id="regModel" tabindex="-1" role="dialog" aria-labelledby="regModelLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="regModelLabel">Регистрация</h4>
+        <h4 class="modal-title" id="regModelLabel">
+            Регистрация
+            <a class="or-login hide" href="#">или войдите</a>
+        </h4>
       </div>
       <div class="modal-body clearfix">
 	<div class="row">

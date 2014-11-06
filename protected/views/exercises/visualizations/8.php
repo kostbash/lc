@@ -19,7 +19,7 @@ if($text && $spaces)
     </div>
     <div class="words">
         <?php foreach($rightAnswers as $answer) : ?>
-        <div class="word"><input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][answer][]" value="<?php echo $answer->id; ?>" /><?php echo $answer->answer; ?></div>
+        <div class="word"><input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][answer][]" value="<?php echo $answer->answer; ?>" /><?php echo $answer->answer; ?></div>
         <?php endforeach; ?>
     </div>
 </div>

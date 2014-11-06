@@ -44,6 +44,7 @@
         $('.begin-learning').click(function(){
             $('#user-role-student').attr('checked', 'checked');
             $('#reg-form input[type=submit]').val('Перейти к курсу');
+            $('.or-login').removeClass('hide');
         });
     });
 </script>

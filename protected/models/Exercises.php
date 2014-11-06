@@ -291,8 +291,8 @@ class Exercises extends CActiveRecord
                         {
                             foreach($answers['number_spaces'] as $index => $space)
                             {
-                                $attrs = array('id_exercise'=>$exercise->id, 'id'=>$answers['answer'][$index], 'space'=>(int)$space);
-                                if(!ExercisesListOfAnswers::model()->exists('id_exercise=:id_exercise AND id=:id AND number_space=:space AND is_right=1', $attrs))
+                                $attrs = array('id_exercise'=>$exercise->id, 'answer'=>$answers['answer'][$index], 'space'=>(int)$space);
+                                if(!ExercisesListOfAnswers::model()->exists('id_exercise=:id_exercise AND answer=:answer AND number_space=:space AND is_right=1', $attrs))
                                 {
                                     return false;
                                 }

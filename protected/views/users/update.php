@@ -16,6 +16,6 @@
 
 <div id="container">
     <div class="widget" style="padding-top: 10px">
-    <?php $this->renderPartial('_form', array('model'=>$model)); ?>
+        <?php $this->renderPartial('_form', array('model'=>$model)); ?>
     </div>
 </div>

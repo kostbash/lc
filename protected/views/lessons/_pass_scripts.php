@@ -1,6 +1,14 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <script type="text/javascript">
     $(function(){
+        $(document).bind('keyup keydown keypress', function (e) {
+            focused = $("input[type='text']:focus");
+            if(!focused.length && e.which === 8)
+            {
+                return false;
+            }
+        });
+        
         $('.with-right').change(function(){
             current = $(this);
             links = current.closest('.export-button').find('.dropdown-menu li a');
@@ -44,6 +52,8 @@
             });
             $('#skills').popover();
         });
+        
+        $('#exercise_0 [tabindex=1]').focus();
         
 
         $('.next-button, .send-result-button').click(function() {
@@ -420,4 +430,5 @@
         ++seconds;
     }
     setInterval('countTime()', 1000);
+
 </script>
