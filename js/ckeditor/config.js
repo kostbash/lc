@@ -7,7 +7,16 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+        config.extraPlugins = 'youtube';
+        config.youtube_width = '320';
 
+        config.youtube_height = '240';
+
+        config.youtube_related = true;
+
+        config.youtube_older = false;
+
+config.youtube_privacy = false;
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
