@@ -9,8 +9,15 @@
 		'name',
                 'countLessons',
 		array(
-			'class'=>'CButtonColumn',
-                        'template'=>'{update}{delete}',
+                    'class'=>'CButtonColumn',
+                    'template'=>'{update}{params}{delete}',
+                    'buttons' => array(
+                        'params' => array(
+                            'label'=>'',
+                            'url'=>'Yii::app()->createUrl("/admin/courses/params", array("id_course"=>"$data->id"))',
+                            'options'=>array('class'=>'course-params-icon', 'title'=>'Параметры курса'),
+                        ),
+                    ),
 		),
 	),
         'itemsCssClass'=>'table table-hover',

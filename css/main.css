@@ -61,6 +61,19 @@ html, body {
     text-align: center;
 }
 
+.info-page
+{
+    width: 100%;
+    margin: 38px 0 24px;
+    border-radius: 6px;
+    background: #fff;
+    min-height: 200px;
+    padding: 18px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
 hotmap-items .update-item, .update-bag
 {
     text-align: center;
@@ -170,6 +183,16 @@ h2{
     height: 16px;
     vertical-align: bottom;
     margin-right: 4px;
+}
+
+.course-params-icon
+{
+    display: inline-block;
+    background: url(../images/course-params-icon.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+    margin: 0 4px;
 }
 
 #container {

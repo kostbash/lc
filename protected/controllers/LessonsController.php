@@ -240,11 +240,12 @@ class LessonsController extends Controller
             }
             
             $this->render('check',array(
-                    'checkLesson'=>$checkLesson,
-                    'exercises'=>$exercises,
-                    'nextGroup'=>$nextGroup,
-                    'number'=>$number,
-                    'leftStep'=>$leftStep,
+                'course'=>$course,
+                'checkLesson'=>$checkLesson,
+                'exercises'=>$exercises,
+                'nextGroup'=>$nextGroup,
+                'number'=>$number,
+                'leftStep'=>$leftStep,
             ));
         }
         

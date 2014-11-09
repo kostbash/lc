@@ -1,3 +1,4 @@
+<?php $this->pageTitle="<$course->name>. ".Yii::app()->name."."; ?>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>

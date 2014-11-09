@@ -1,4 +1,4 @@
-<?php $this->pageTitle=Yii::app()->name; ?>
+<?php $this->pageTitle=Yii::app()->name." - Обучающие курсы для школьников"; ?>
 <?php if($showRegModal) : ?>
     <script type="text/javascript">
         $(function() {

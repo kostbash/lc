@@ -17,7 +17,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf'),
+				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf', 'congratulation'),
 				'roles'=>array('student'),
 			),
 			array('allow',
@@ -52,7 +52,34 @@ class CoursesController extends Controller
                 }
                 $this->redirect(array('/courses/index', 'id'=>$course->id));
             }
+        }
+        
+        public function actionCongratulation($id)
+        {
+            $course = $this->loadModel($id);
+            $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>Yii::app()->user->id, 'status'=>1));
+            if($course->canComplete() && $courseUser)
+            {
+                $courseUser->passed_date = date('Y-m-d H:i:s');
+                $courseUser->status = 2;
+                $courseUser->save();
+                
+                $courseLog = new UserCoursesLogs;
+                $courseLog->id_user = Yii::app()->user->id;
+                $courseLog->id_course = $course->id;
+                $courseLog->date = date('Y-m-d');
+                $courseLog->time = date('H:i:s');
+                $courseLog->duration = $course->userDuration;
+                $courseLog->save();
             
+                $this->render('congratulation', array(
+                    'course'=>$course,
+                ));
+            }
+            else
+            {
+                $this->redirect(array('/courses/index', 'id'=>$course->id));
+            }
         }
 
 	public function actionIndex($id, $lesson=null)
@@ -80,7 +107,7 @@ class CoursesController extends Controller
                 $courseUser->save();
             }
 
-            $index = $user->role==1 ? 0 : 1;
+            $index = 1;
 
             if($lesson)
             {

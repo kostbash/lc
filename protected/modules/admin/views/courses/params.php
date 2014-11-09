@@ -1,3 +1,4 @@
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/ckeditor/ckeditor.js"); ?>
 <script>
     $(function(){
         $('#new-needknows').click(function(){
@@ -206,12 +207,21 @@ $form=$this->beginWidget('CActiveForm', array(
             ));?>
         </div>
     </div>
+    
     <div class="row">
         <div class="col-lg-offset-2 col-md-offset-2 col-lg-4 col-md-4">
             <input id="new-yougets-field" class="form-control" type="text" value="" placeholder="Введите новую строку" />
         </div>
         <div class="col-lg-2 col-md-2" style="text-align: right;">
             <a id="new-yougets" class="btn btn-success" href="#">Добавить строку</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'congratulation'); ?></div>
+        <div class="col-lg-10 col-md-10">
+            <?php echo $form->textArea($model,'congratulation',array('class'=>'form-control ckeditor', 'placeholder'=>'Введите текст отображаемый на странице завершения курса', 'rows'=>10)); ?>
+            <?php echo $form->error($model,'congratulation'); ?>
         </div>
     </div>
 </div>

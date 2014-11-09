@@ -57,11 +57,16 @@ class SiteController extends Controller
                         unset($_SESSION['id_course']);
                         if(Courses::model()->exists('id=:id_course', array('id_course'=>$id_course)))
                         {
-                            $this->redirect(array('courses/index', 'id'=>$id_course));
+                            $link = array('courses/index', 'id'=>$id_course);
                         }
                     }
                     
-                    $this->redirect(array('courses/list'));
+                    $link = array('courses/list');
+                    $this->render('look_pass', array(
+                        'user'=>$user,
+                        'link'=>$link,
+                    ));
+                    die;
                 } else {
                     $showRegModal = true;
                 }

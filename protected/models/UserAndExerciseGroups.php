@@ -396,7 +396,7 @@ class UserAndExerciseGroups extends CActiveRecord
             {
                 return CHtml::link('К следующему уроку', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
             } else {
-                return CHtml::link('Завершить курс', array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson), $attrs);
+                return CHtml::link('Завершить курс', array('courses/congratulation', 'id'=>$this->UserAndLesson->id_course), $attrs);
             }
         }
         

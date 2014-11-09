@@ -56,7 +56,7 @@ class Courses extends CActiveRecord
 		return array(
 			array('name', 'required'),
 			array('name, learning_time', 'length', 'max'=>255),
-			array('description', 'safe'),
+			array('description, congratulation', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
                         array('difficulty', 'numerical'),
                         array('id_editor', 'numerical', 'on'=>'create'),
@@ -97,8 +97,17 @@ class Courses extends CActiveRecord
                     'description' => 'Описание',
                     'countLessons' => 'Число уроков',
                     'learning_time' => 'Предполагаемое время обучения',
+                    'congratulation' => 'Страница завершения курса',
 		);
 	}
+        
+        public function getUserDuration()
+        {
+            $id_user = (int) Yii::app()->user->id;
+            $query = "SELECT SUM(duration) as duration FROM `oed_user_lessons_logs` WHERE id_user=$id_user AND id_course=$this->id";
+            $result = Yii::app()->db->createCommand($query)->queryAll();
+            return $result[0]['duration'];
+        }
 
 	public function search()
 	{
@@ -164,7 +173,8 @@ class Courses extends CActiveRecord
             $mass = array();
             foreach($this->LessonsGroups as $group)
                 $mass[] = $group->id;
-            return GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
+            $countLessons = GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
+            return $countLessons ? $countLessons-1 : 0;
         }
         
         public function getCountBlocks($type=1)
@@ -427,6 +437,17 @@ class Courses extends CActiveRecord
                 $ids[] = $class['id_class'];
             }
             return $ids;
+        }
+        
+        public function canComplete()
+        {
+            $id_user = (int) Yii::app()->user->id;
+            $query = "SELECT lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons "
+                    ."WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=$this->id AND "
+                    ."NOT EXISTS(SELECT * FROM `oed_user_and_lessons` WHERE id_user=$id_user AND id_course=course.id AND id_group=themes.id_group_lesson AND id_lesson=lessons.id_lesson AND passed=1)"
+                    ." ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 18446744073709551615";
+            $didntPassLesson = Yii::app()->db->createCommand($query)->queryAll();
+            return $didntPassLesson ? false : true;
         }
                  
 }
