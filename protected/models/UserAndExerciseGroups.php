@@ -410,7 +410,7 @@ class UserAndExerciseGroups extends CActiveRecord
             {
                 $link = array('courses/nextlesson', 'id_user_lesson'=>$this->id_user_and_lesson);
             } else {
-                $link = '/';
+                $link = array('courses/congratulation', 'id'=>$this->UserAndLesson->id_course);
             }
             return $link;
         }
