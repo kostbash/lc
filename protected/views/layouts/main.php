@@ -122,9 +122,9 @@
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
             var yaParams = {
-                login: <?php echo ((!Yii::app()->user->isGuest)?Yii::app()->user->name:'Guest')?>,
-                course: <?php echo isset($course)?$course->id:0 ?>,
-                block: <?php echo isset($currentExerciseGroup)?$currentExerciseGroup->id:0 ?>
+                login: '<?php echo ((!Yii::app()->user->isGuest)?Yii::app()->user->name:'Guest')?>',
+                course: '<?php echo isset($course)?$course->id:0 ?>',
+                block: '<?php echo isset($currentExerciseGroup)?$currentExerciseGroup->id:0 ?>'
             };
             (function (d, w, c) 
             { 
