@@ -119,6 +119,30 @@
             </div>
         </div>
     </div>
-    <!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter26929302 = new Ya.Metrika({id:26929302, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/26929302" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript">
+            var yaParams = {
+                login: '<?php echo ((!Yii::app()->user->isGuest)?Yii::app()->user->name:'Guest')?>',
+                course: '<?php echo isset($course)?$course->id:0 ?>',
+                block: '<?php echo isset($currentExerciseGroup)?$currentExerciseGroup->id:0 ?>'
+            };
+            (function (d, w, c) 
+            { 
+                (w[c] = w[c] || []).push(function() { 
+                    try { 
+                        w.yaCounter26929302 = new Ya.Metrika({id:26929302, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, params:window.yaParams}); 
+                    } catch(e) { } }); 
+                    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; 
+                    s.type = "text/javascript"; 
+                    s.async = true; 
+                    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; 
+                    if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
+        </script>
+        <noscript>
+            <div>
+                <img src="//mc.yandex.ru/watch/26929302" style="position:absolute; left:-9999px;" alt="" />
+            </div>
+        </noscript>
+        <!-- /Yandex.Metrika counter -->
 </body>
 </html>
