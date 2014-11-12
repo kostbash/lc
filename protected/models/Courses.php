@@ -45,6 +45,11 @@ class Courses extends CActiveRecord
             9 => 9,
             10 => 10,
         );
+        
+        public static $visibleValues = array(
+            1 => 'Всем ученикам кроме',
+            2 => 'Только ученикам из списка',
+        );
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -58,7 +63,7 @@ class Courses extends CActiveRecord
 			array('name, learning_time', 'length', 'max'=>255),
 			array('description, congratulation', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
-                        array('difficulty', 'numerical'),
+                        array('difficulty, visible', 'numerical'),
                         array('id_editor', 'numerical', 'on'=>'create'),
 			array('id, name, description', 'safe', 'on'=>'search'),
 		);
@@ -98,6 +103,7 @@ class Courses extends CActiveRecord
                     'countLessons' => 'Число уроков',
                     'learning_time' => 'Предполагаемое время обучения',
                     'congratulation' => 'Страница завершения курса',
+                    'visible'=> 'Виден',
 		);
 	}
         
@@ -370,6 +376,44 @@ class Courses extends CActiveRecord
             return Courses::model()->exists('`id`=:id AND id_editor=:id_editor', array('id'=>$id, 'id_editor'=>Yii::app()->user->id));
         }
         
+        public function getHaveAccess()
+        {
+            $id_user = (int) Yii::app()->user->id;
+            
+            if($this->id_editor==$id_user) // даем создателю курса доступ
+            {
+                return true;
+            }
+
+            $inList = CourseUserList::model()->exists('`id_course`=:id_course AND id_student=:id_student', array('id_course'=>$this->id, 'id_student'=>$id_user));
+
+            if($this->visible==1) // виден всем кроме тех кто в списке
+            {
+                if($inList)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            if($this->visible==2) // виден только людям из списка
+            {
+                if($inList)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+            return false;
+        }
+        
         public function getClassName()
         {
             $result = '';
@@ -448,6 +492,12 @@ class Courses extends CActiveRecord
                     ." ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 18446744073709551615";
             $didntPassLesson = Yii::app()->db->createCommand($query)->queryAll();
             return $didntPassLesson ? false : true;
+        }
+        
+        public function getStudentList()
+        {
+            $sql = "SELECT * FROM `oed_students_of_teacher` as sot, `oed_course_user_list` as cul WHERE sot.id_student=cul.id_student AND cul.id_course=:id_course AND sot.id_teacher=:id_teacher AND sot.status=1";
+            return StudentsOfTeacher::model()->findAllBySql($sql, array('id_course'=>$this->id, 'id_teacher'=>Yii::app()->user->id));
         }
                  
 }

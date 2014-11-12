@@ -1546,9 +1546,6 @@ z-index:10000000;
     margin: 8px 10px;
     border-radius: 8px;
     background: #fefefe;
-    -webkit-box-shadow: 0px 0px 7px 0px rgba(170, 158, 135, 0.45);
-    -moz-box-shadow:    0px 0px 7px 0px rgba(170, 158, 135, 0.45);
-    box-shadow:         0px 0px 7px 0px rgba(170, 158, 135, 0.45);
 }
 
 .courses .course .head
@@ -1649,6 +1646,9 @@ z-index:10000000;
     text-decoration: none;
     overflow: hidden;
     border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(170, 158, 135, 0.45);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(170, 158, 135, 0.45);
+    box-shadow: 0px 0px 10px 0px rgba(170, 158, 135, 0.45);
 }
 
 .courses .course .to-course .link-name
@@ -1657,6 +1657,13 @@ z-index:10000000;
     line-height: 36px;
     vertical-align: middle;
 }
+.courses .course .to-course:hover
+{
+    -webkit-box-shadow: 0px 0px 18px 0px rgba(170, 158, 135, 0.7);
+    -moz-box-shadow: 0px 0px 18px 0px rgba(170, 158, 135, 0.7);
+    box-shadow: 0px 0px 18px 0px rgba(170, 158, 135, 0.7);
+}
+
 .courses .course .to-course:hover .link-name
 {
     display: block;

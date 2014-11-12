@@ -86,6 +86,20 @@ class CoursesController extends Controller
                                 }
                             }
                             
+                            if($_POST['Students'] && is_array($_POST['Students']))
+                            {
+                                foreach($_POST['Students'] as $id_student)
+                                {
+                                    if(CourseUserList::canAdd($model->id, $id_student, false))
+                                    {
+                                        $userList = new CourseUserList;
+                                        $userList->id_course = $model->id;
+                                        $userList->id_student = $id_student;
+                                        $userList->save();
+                                    }
+                                }
+                            }
+                            
                             $this->redirect(array('update','id'=>$model->id));
                         }
 		}
@@ -180,6 +194,29 @@ class CoursesController extends Controller
                         else
                         {
                             CoursesAndClasses::model()->deleteAllByAttributes(array('id_course'=>$id_course));
+                        }
+                        
+                        if($_POST['Students'] && is_array($_POST['Students']))
+                        {
+                            foreach($_POST['Students'] as $id_student)
+                            {
+                                if(CourseUserList::canAdd($id_course, $id_student))
+                                {
+                                    $userList = new CourseUserList;
+                                    $userList->id_course = $id_course;
+                                    $userList->id_student = $id_student;
+                                    $userList->save();
+                                }
+                            }
+                            
+                            $criteria = new CDbCriteria;
+                            $criteria->compare('id_course', $id_course);
+                            $criteria->addNotInCondition('id_student', $_POST['Students']);
+                            CourseUserList::model()->deleteAll($criteria);
+                        }
+                        else
+                        {
+                            CourseUserList::model()->deleteAllByAttributes(array('id_course'=>$id_course));
                         }
                         
                         $this->redirect(array('/admin/courses/update', 'id'=>$model->id));
