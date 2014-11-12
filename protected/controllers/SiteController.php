@@ -78,8 +78,9 @@ class SiteController extends Controller
                     $loginForm->attributes=$_POST['LoginForm'];
                     if($loginForm->validate() && $loginForm->login()) {
                         $loggedUser = Users::model()->findByPk(Yii::app()->user->id);
-                        if($loggedUser->role == 1)
-                            $this->redirect(array('admin/courses/index'));
+                        $id_course = (int) $_SESSION['id_course'];
+                        if($id_course)
+                            $this->redirect(array('courses/index', 'id'=>$id_course));
                         else
                             $this->redirect(array('courses/list'));
                     } else
