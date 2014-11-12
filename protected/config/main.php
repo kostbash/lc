@@ -51,7 +51,6 @@ return array(
 			'urlFormat'=>'path',
                         'baseUrl' => 'http://education.loc',
                         'showScriptName' => false,
-                        'caseSensitive'=>false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -78,6 +77,7 @@ return array(
 			'charset' => 'utf8',
                         'enableProfiling'=>true,
 		),
+            
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',

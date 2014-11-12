@@ -41,7 +41,7 @@ class CourseSubjects extends CActiveRecord
 	public function relations()
 	{
             return array(
-                'Courses'=>array(self::MANY_MANY, 'Courses', 'oed_courses_and_subjects(id_subject, id_course)'),
+                'allCourses'=>array(self::MANY_MANY, 'Courses', 'oed_courses_and_subjects(id_subject, id_course)'),
             );
 	}
 
@@ -77,6 +77,21 @@ class CourseSubjects extends CActiveRecord
             $data->setData($data2);
             return $data;
 	}
+        
+        public function getCourses()
+        {
+            $courses = $this->allCourses;
+            $accessCourses = array();
+            foreach($courses as $course)
+            {
+                if($course->haveAccess)
+                {
+                    $accessCourses[] = $course;
+                }
+            }
+            
+            return $accessCourses;
+        }
         
         public static function listData()
         {

@@ -253,7 +253,7 @@ class CoursesController extends Controller
 	public function loadModel($id)
 	{
 		$model=Courses::model()->findByPk($id);
-		if($model===null)
+		if($model===null or !$model->haveAccess)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}

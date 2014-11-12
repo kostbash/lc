@@ -32,7 +32,7 @@ class StudentsOfTeacherController extends Controller
                             'users'=>array('*'),
                     ),
                     array('allow',
-                            'actions'=>array('index', 'view', 'delete', 'create', 'update'),
+                            'actions'=>array('index', 'view', 'delete', 'create', 'update', 'studentsByAjax'),
                             'roles'=>array('teacher'),
                     ),
                     array('deny',  // deny all users
@@ -268,5 +268,34 @@ class StudentsOfTeacherController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+        
+	public function actionStudentsByAjax()
+	{
+            $result = array('success'=>1);
+            $result['html'] = "";
+            $criteria = new CDbCriteria;
+            if($_POST['term']) // если переданы символы
+            {
+                $criteria->compare('student_name', $_POST['term'], true, 'OR');
+                $criteria->compare('student_surname', $_POST['term'], true, 'OR');
+            }
+
+            $criteria->compare('id_teacher', Yii::app()->user->id);
+            $criteria->compare('status', 1);
+            $criteria->limit = 10;
+            $students = StudentsOfTeacher::model()->findAll($criteria);
+            if($students)
+            {
+                foreach ($students  as $student)
+                {
+                    $result['html'] .= "<li data-id='$student->id_student' data-name='$student->student_name' data-surname='$student->student_surname'><a href='#'>$student->student_name $student->student_surname</a></li>";
+                }
+            }
+            else
+            {
+                $result['html'] = '<li><a href="#">Результатов нет</a></li>';
+            }
+            echo CJSON::encode($result);
 	}
 }
