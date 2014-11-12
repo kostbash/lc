@@ -431,4 +431,8 @@
     }
     setInterval('countTime()', 1000);
 
+    function reachGoal(goal)
+    {
+        yaCounter26929302.reachGoal(goal);
+    }
 </script>

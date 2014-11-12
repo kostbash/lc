@@ -58,7 +58,8 @@ class LessonsController extends Controller
         }
 
         public function actionPass($id, $group=null)
-        {
+        {   
+            
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
             if(!$userAndLesson)
                 $this->redirect('/');
@@ -153,6 +154,8 @@ class LessonsController extends Controller
                 }
             }
             
+            $this->_lesson = $userAndLesson->Lesson->id;
+            $this->_block = $group;
             $this->render('pass',array(
                     'userLesson'=>$userAndLesson,
                     'userAndExerciseGroup'=>$userAndExerciseGroup,

@@ -64,13 +64,17 @@
                 }
                 resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                reachGoal('SentAnswer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                     type: 'POST',
                     data: hiddenAnswer.serialize(),
                     success: function(result) {
                         if (result == 1)
+                        {
+                            reachGoal('CorrectAnswer');
                             resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                        }
                         else if (result == 0)
                             resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
@@ -100,13 +104,17 @@
                 }
                 resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                reachGoal('SentAnswer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                     type: 'POST',
                     data: hiddenAnswer.serialize(),
                     success: function(result) {
                         if (result == 1)
+                        {
+                            reachGoal('CorrectAnswer');
                             resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                        }
                         else if (result == 0)
                             resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
@@ -125,13 +133,17 @@
                 setDuration(current);
                 resultAnswer = current.closest('.exercise').find('> .head .result');
                 hiddenAnswer = current.closest('.answer').find('.hidden-answer');
+                reachGoal('SentAnswer');
                 $.ajax({
                     url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                     type: 'POST',
                     data: hiddenAnswer.serialize(),
                     success: function(result) {
                         if (result == 1)
+                        {
+                            reachGoal('CorrectAnswer');
                             resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                        }
                         else if (result == 0)
                             resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     }
@@ -163,13 +175,17 @@
                 hiddenAnswer = cont.closest('.text').find('.hidden-answer');
                 if (!words.find('.word').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: hiddenAnswer.serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                             else
@@ -217,13 +233,17 @@
             hiddenAnswer.val(answer.data('val'));
 
             resultAnswer = answer.closest('.exercise').find('> .head .result');
+            reachGoal('SentAnswer');
             $.ajax({
                 url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                 type: 'POST',
                 data: hiddenAnswer.serialize(),
                 success: function(result) {
                     if (result == 1)
+                    {
+                        reachGoal('CorrectAnswer');
                         resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                    }
                     else if (result == 0)
                         resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     else
@@ -264,13 +284,17 @@
                 allAnswers = item.closest('.items').find('.hidden-answer');
                 if (!item.closest('.items').find('.item.not-hide').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: allAnswers.serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                             else
@@ -310,13 +334,17 @@
                 hiddenAnswer.val(cont.closest('.bag').data('index'));
                 if (!items.find('.item').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: bags.find('.hidden-answer').serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                             else
@@ -382,13 +410,17 @@
                 hiddenAnswer.val(cont.closest('.bag').data('index'));
                 if (!items.find('.item').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: bags.find('.hidden-answer').serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                             else
@@ -445,13 +477,17 @@
                 items = current.closest('.hotmap-ordering').find('.items');
                 if (!items.find('.item').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: hiddenAnswer.serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                         }
@@ -482,13 +518,17 @@
                 hiddenAnswer = answer.find('.hidden-answer').val(1);
                 if (!items.find('.item').length)
                 {
+                    reachGoal('SentAnswer');
                     $.ajax({
                         url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                         type: 'POST',
                         data: bag.find('.hidden-answer').serialize(),
                         success: function(result) {
                             if (result == 1)
+                            {
+                                reachGoal('CorrectAnswer');
                                 resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                            }
                             else if (result == 0)
                                 resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                             else
@@ -534,13 +574,17 @@
         
         if(send)
         {
+            reachGoal('SentAnswer');
             $.ajax({
                 url: '<?php echo $this->createUrl('/exercises/right'); ?>',
                 type: 'POST',
                 data: answers.serialize(),
                 success: function(result) {
                     if (result == 1)
+                    {
+                        reachGoal('CorrectAnswer');
                         resultAnswer.removeClass('unright').addClass('right').html('ВЕРНО !');
+                    }
                     else if (result == 0)
                         resultAnswer.removeClass('right').addClass('unright').html('НЕ ВЕРНО !');
                     else

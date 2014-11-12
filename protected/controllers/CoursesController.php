@@ -34,6 +34,7 @@ class CoursesController extends Controller
             $course = $this->loadModel($id);
             $themesLessons = $course->themesLessons;
             $_SESSION['id_course'] = $id;
+            $this->_course = $id;
             $this->render('view',array(
                 'course'=>$course,
                 'themesLessons'=>$themesLessons,
@@ -41,6 +42,7 @@ class CoursesController extends Controller
         }
         
         public function actionAdd($id) {
+            $this->_course = $id;
             $course = $this->loadModel($id);
             $user = Users::model()->findByPk(Yii::app()->user->id);
             if($user) {
@@ -56,6 +58,7 @@ class CoursesController extends Controller
         
         public function actionCongratulation($id)
         {
+            $this->_course = $id;
             $course = $this->loadModel($id);
             $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>Yii::app()->user->id, 'status'=>1));
             if($course->canComplete() && $courseUser)
@@ -84,6 +87,7 @@ class CoursesController extends Controller
 
 	public function actionIndex($id, $lesson=null)
 	{
+            $this->_course = $id;
             $course = $this->loadModel($id);
             $user = Users::model()->findByPk(Yii::app()->user->id);
 

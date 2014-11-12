@@ -20,6 +20,43 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+        
+        public $_course;
+        public $_lesson;
+        public $_block;
+        
+        public function getCourse()
+        {
+            $id = null;
+            if($this->_lesson)
+            {
+                $id = Lessons::model()->findByPk($this->_lesson)->course_creator_id;
+            }
+            elseif($this->_course)
+            {
+                $id = $this->_course;
+            }
+            if($id)
+                return "Курс [$id] ".Courses::model()->findByPk($id)->name;
+            else
+                return null;
+        }
+        
+        public function getLesson()
+        {
+            if($this->_lesson)
+                return "Урок [$this->_lesson] ".Lessons::model()->findByPk($this->_lesson)->name;
+            else 
+                return null;
+        }
+        
+        public function getBlock()
+        {
+            if($this->_block)
+                return "Блок [$this->_block] ".GroupOfExercises::model()->findByPk($this->_block)->name;
+            else
+                return null;
+        }
 }
 
 if(Yii::app()->user->id)
