@@ -89,7 +89,7 @@
             current = $(this);
             current.addClass('disabled');
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/generatorsTemplatesConditions/getHtmlCondition'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/generatorstemplatesconditions/getHtmlCondition'); ?>',
                 type: 'POST',
                 data: { lastNum: $('.condition:last-child').data('num') },
                 dataType: 'json',
