@@ -9,7 +9,7 @@ if(!($model->isNewRecord && empty($model->Comparisons)))
 }
 else
 {
-    $this->renderPartial('visualizations/6_variant', array('model'=>$model, 'comparison'=>new Exercisescomparisons, 'index'=>1));
+    $this->renderPartial('visualizations/6_variant', array('model'=>$model, 'comparison'=>new ExercisesComparisons(), 'index'=>1));
 }
 ?>
 
