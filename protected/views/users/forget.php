@@ -19,21 +19,32 @@
                 'id'=>'users-form',
                 'enableAjaxValidation'=>false,
         )); ?>
-            <div class="row">
-                <div class="col-lg-2 col-md-2">
-                    <?php echo CHtml::label('Введите ваш email', 'email'); ?>
+            <div class="row row-attr">
+                <div class="col-lg-4 col-md-4">
+                    <?php echo CHtml::label('Введите Ваш псевдоним', 'username'); ?>
                 </div>
-                <div class="col-lg-3 col-md-3">
-                    <?php echo CHtml::textField('email', $email, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш email')); ?>
+                <div class="col-lg-6 col-md-6">
+                    <?php echo CHtml::textField('username', $username, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш логин')); ?>
+                    <div class="errorMessage"><?php echo $errorUsername; ?></div>
                 </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="errorMessage"><?php echo $error; ?></div>
+            </div>
+        
+            <div class="row row-attr">
+                <div class="col-lg-4 col-md-4">
+                    <?php echo CHtml::label('Введите Ваш ответ на контрольный вопрос', 'recovery_answer'); ?>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <?php echo CHtml::textField('recovery_answer', $recoveryAnswer, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш ответ на вопрос')); ?>
+                    <div class="errorMessage"><?php echo $errorRecoveryAnswer; ?></div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
+            <div class="row row-attr">
+                <div class="col-lg-4 col-md-4">
                     <?php echo CHtml::submitButton('Восстановить', array('class'=>'btn btn-primary')); ?>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="errorMessage"><?php echo $error; ?></div>
                 </div>
             </div>
         <?php $this->endWidget(); ?>

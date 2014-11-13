@@ -15,7 +15,6 @@ class LoginForm extends CFormModel
 			array('username, password', 'required'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
-			array('username', 'email'),
 			// password needs to be authenticated
 			array('password', 'authenticate'),
 		);

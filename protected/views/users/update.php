@@ -5,7 +5,7 @@
         <div id="header-bottom">
             <div id="head-full-column" class="head-column">
                 <div class="content-mini">
-                    <div class="head">Профиль пользователя "<?php echo $user->email; ?>"</div>
+                    <div class="head">Профиль пользователя "<?php echo $user->username; ?>"</div>
                     <div class="foot">
                     </div>
                 </div>

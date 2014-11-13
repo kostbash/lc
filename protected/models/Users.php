@@ -42,6 +42,12 @@ class Users extends CActiveRecord
             3 => 'third-place.png',
         );
         
+        public static $recoveryQuestions = array(
+            1 => 'Девичья фамилия матери',
+            2 => 'Имя любимого животного',
+            3 => 'Любимое блюдо',
+        );
+        
     
 	public function tableName()
 	{
@@ -56,17 +62,20 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, password, checkPassword, role', 'required'),
-			array('role', 'numerical', 'integerOnly'=>true),
-			array('email', 'length', 'max'=>100),
+			array('username, password, checkPassword, role, id_recovery_question, recovery_answer', 'required'),
+			array('role, id_recovery_question', 'numerical', 'integerOnly'=>true),
+			array('username', 'length', 'max'=>100),
 			array('role', 'in', 'range'=>array(1,2,3,4)),
-			array('email', 'email', 'message'=>'Проверьте правильность введения адреса почты'),
+			//array('email', 'email', 'message'=>'Проверьте правильность введения адреса почты'),
                         array('sendOnMail, rememberMe, send_notifications', 'boolean'),
 			array('password, temporary_password', 'length', 'max'=>32),
+			array('recovery_answer', 'length', 'max'=>100),
 			array('progress_key', 'length', 'max'=>25),
-                    	array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
+                    	//array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
+                    	array('username', 'unique', 'message'=>'Указанный логин уже используется'),
+                    	array('username', 'match', 'pattern'=>'/^[\w\d_.@]{5,}$/i', 'message'=>'Логин должен быть не менее 5 символов и состоять из латинских букв, цифр, знака подчеркивания, точки и @'),
                         array('checkPassword', 'compare', 'compareAttribute'=>'password'),
-			array('id, email, password, role', 'safe', 'on'=>'search'),
+			array('id, username, password, role', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,6 +97,7 @@ class Users extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'email' => 'E-mail',
+			'username' => 'Логин',
 			'password' => 'Пароль',
 			'checkPassword' => 'Повторите пароль',
                         'registration_day' => 'Дата регистрации',
@@ -98,6 +108,8 @@ class Users extends CActiveRecord
                         'countPassLessons' => 'Число пройденных уроков',
                         'rememberMe' => 'Узнавать меня на этом устройстве',
                         'send_notifications'=>'Отправлять на e-mail оповещения учеников',
+                        'id_recovery_question'=>'Выберите контрольный вопрос',
+                        'recovery_answer'=>'Ваш ответ на контрольный вопрос',
 		);
 	}
 
@@ -120,7 +132,7 @@ class Users extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('email',$this->email,true);
+		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->addNotInCondition('role', array(1));
 
@@ -145,7 +157,7 @@ class Users extends CActiveRecord
             $admins = Users::model()->findAllByAttributes(array('role'=>1));
             $mass = array();
             foreach($admins as $admin) {
-                $mass[] = $admin->email;
+                $mass[] = $admin->username;
             }
             return $mass;
         }
@@ -231,7 +243,7 @@ class Users extends CActiveRecord
         public function getProgressKey() {
             if($this->progress_key)
                 return $this->progress_key;
-            $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->email.Yii::app()->params['endSalt']), 0, 25);
+            $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->username.Yii::app()->params['endSalt']), 0, 25);
             $this->save(false);
             return $this->progress_key;
         }
@@ -275,30 +287,30 @@ class Users extends CActiveRecord
             if($validate)
             {
                 $this->password = md5(Yii::app()->params['beginSalt'].$this->password.Yii::app()->params['endSalt']);
-                $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->email.Yii::app()->params['endSalt']), 0, 25);
+                $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->username.Yii::app()->params['endSalt']), 0, 25);
                 //$user->confirm_key = md5(Yii::app()->params['beginSalt'].uniqid().Yii::app()->params['endSalt']);
                 $this->registration_day = date('Y-m-d');
                 $this->save(false);
 
-                CMailer::send(
-                    array(
-                        'email' => $this->email,
-                        'name' => $this->email,
-                    ),
-                    array(
-                        'email' => 'registration@cursys.ru',
-                        'name' => 'Cursys.ru'
-                    ),
-                    Yii::app()->name,
-                    array(
-                        'template' => 'member_register',
-                        'vars' => array(
-                            'activate_link' => CHtml::link('Подтвердите профиль и перейдите к курсу', array('users/activate', 'key' => $this->confirm_key)),
-                            'temporary_password' => $this->temporary_password,
-                            'site_name'=>Yii::app()->name,
-                        ),
-                    )
-                );
+//                CMailer::send(
+//                    array(
+//                        'email' => $this->email,
+//                        'name' => $this->email,
+//                    ),
+//                    array(
+//                        'email' => 'registration@cursys.ru',
+//                        'name' => 'Cursys.ru'
+//                    ),
+//                    Yii::app()->name,
+//                    array(
+//                        'template' => 'member_register',
+//                        'vars' => array(
+//                            'activate_link' => CHtml::link('Подтвердите профиль и перейдите к курсу', array('users/activate', 'key' => $this->confirm_key)),
+//                            'temporary_password' => $this->temporary_password,
+//                            'site_name'=>Yii::app()->name,
+//                        ),
+//                    )
+//                );
             }
             return $validate;
         }

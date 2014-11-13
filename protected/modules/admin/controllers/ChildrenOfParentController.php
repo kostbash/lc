@@ -194,8 +194,8 @@ class ChildrenOfParentController extends Controller
                                     'template' => 'deal_from_parent',
                                     'vars' => array(
                                         'email_parent'=> $model->Parent->email,
-                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/childrenofparent/confirmdeal', 'deal' => $model->confirm)),
-                                        'regect_link' => CHtml::link('Отклонить', array('/admin/childrenofparent/regectdeal', 'deal' => $model->regect)),
+                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/childrenOfParent/confirmdeal', 'deal' => $model->confirm)),
+                                        'regect_link' => CHtml::link('Отклонить', array('/admin/childrenOfParent/regectdeal', 'deal' => $model->regect)),
                                         'site_name'=>Yii::app()->name,
                                     ),
                                 )

@@ -46,7 +46,7 @@ class SiteController extends Controller
             {
                 if($user->registration($_POST['Users']))
                 {
-                    $loginForm->username = $user->email;
+                    $loginForm->username = $user->username;
                     $loginForm->password = $user->temporary_password;
                     $loginForm->rememberMe = $user->rememberMe;
                     $loginForm->login();

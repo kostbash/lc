@@ -49,13 +49,13 @@
 )); ?>
 	<div class="row">
             <div class="col-lg-2 col-md-2">
-		<?php echo CHtml::label('Новый email','Users[email]'); ?>
+		<?php echo CHtml::label('Новый username','Users[username]'); ?>
             </div>
             <div class="col-lg-3 col-md-3">
-		<?php echo CHtml::textField('Users[email]', '', array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите новый email')); ?>
+		<?php echo CHtml::textField('Users[username]', '', array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите новый username')); ?>
             </div>
             <div class="col-lg-3 col-md-3">
-		<?php echo $form2->error($model,'email'); ?>
+		<?php echo $form2->error($model,'username'); ?>
             </div>
 	</div>
 

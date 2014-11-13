@@ -183,8 +183,8 @@ class StudentsOfTeacherController extends Controller
                                     'template' => 'deal_from_teacher',
                                     'vars' => array(
                                         'email_teacher'=> $model->Teacher->email,
-                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/studentsofteacher/confirmdeal', 'deal' => $model->confirm)),
-                                        'regect_link' => CHtml::link('Отклонить', array('/admin/studentsofteacher/regectdeal', 'deal' => $model->regect)),
+                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/studentsOfTeacher/confirmdeal', 'deal' => $model->confirm)),
+                                        'regect_link' => CHtml::link('Отклонить', array('/admin/studentsOfTeacher/regectdeal', 'deal' => $model->regect)),
                                         'site_name'=>Yii::app()->name,
                                     ),
                                 )

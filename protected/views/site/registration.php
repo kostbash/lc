@@ -10,7 +10,7 @@ $model->rememberMe = true;
 ?>
 <script>
     $('#reg-form').on('shown.bs.modal', function (e) {
-      $('#Users_email').focus();
+      $('#Users_username').focus();
     });
     $('#reg-form').on('hidden.bs.modal', function (e) {
         $('.or-login').addClass('hide');
@@ -38,10 +38,10 @@ $model->rememberMe = true;
                 <h4 style="margin-top: 0;">Укажите адрес Вашей электронной почты</h4>
                 <div>На этот адрес будет отослано письмо, содержащее пароль доступа к вашей учетной записи в Курсис.</div>
             </div>
-            <?php echo $form->labelEx($model,'email'); ?>
+            <?php echo $form->labelEx($model,'username'); ?>
             <div class="body-input">
-		<?php echo $form->textField($model,'email', array('class'=>'form-control', 'placeholder'=>'Введите email')); ?>
-		<?php echo $form->error($model,'email'); ?>
+		<?php echo $form->textField($model,'username', array('class'=>'form-control', 'placeholder'=>'Введите логин')); ?>
+		<?php echo $form->error($model,'username'); ?>
             </div>
 	</div>
         <div class="row" id="reg-roles">
@@ -62,6 +62,24 @@ $model->rememberMe = true;
             <?php echo $form->label($model,'rememberMe'); ?>
             <?php echo $form->checkBox($model,'rememberMe'); ?>
             <?php echo $form->error($model,'rememberMe'); ?>
+	</div>
+        <hr />
+	<div class="row">
+            <div style="margin-bottom: 10px; text-align: left;">
+                <h4 style="margin-top: 0;">Восстановление пароля</h4>
+            </div>
+            <?php echo $form->labelEx($model,'id_recovery_question'); ?>
+            <div class="body-input">
+		<?php echo $form->dropDownList($model,'id_recovery_question', Users::$recoveryQuestions, array('class'=>'form-control', 'empty'=>'Выберите вопрос')); ?>
+		<?php echo $form->error($model,'id_recovery_question'); ?>
+            </div>
+	</div>
+	<div class="row">
+            <?php echo $form->labelEx($model,'recovery_answer'); ?>
+            <div class="body-input">
+		<?php echo $form->textField($model,'recovery_answer', array('class'=>'form-control', 'placeholder'=>'Введите ответ')); ?>
+		<?php echo $form->error($model,'recovery_answer'); ?>
+            </div>
 	</div>
       </div>
       <div class="modal-footer">

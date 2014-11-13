@@ -55,7 +55,7 @@ class UsersController extends Controller
             if(isset($_POST['Users']))
             {
                  $model->attributes=$_POST['Users'];;
-                 if($_POST['Users']['email'] or isset($_POST['Users']['send_notifications']))
+                 if($_POST['Users']['username'] or isset($_POST['Users']['send_notifications']))
                      $model->checkPassword = $model->password;
                  if($model->validate())
                  {
@@ -63,31 +63,31 @@ class UsersController extends Controller
                          $model->password = md5(Yii::app()->params['beginSalt'].$model->password.Yii::app()->params['endSalt']);
                      if($model->sendOnMail)
                      {
-                         CMailer::send(
-                             array(
-                                 'email' => $model->email,
-                                 'name' => $model->email,
-                             ),
-                             array(
-                                 'email' => Yii::app()->params['adminEmail'],
-                                 'name' => Yii::app()->name
-                             ),
-                             Yii::app()->name,
-                             array(
-                                 'template' => 'change_password',
-                                 'vars' => array(
-                                     'site_name'=>Yii::app()->name,
-                                     'password'=> $_POST['Users']['password'],
-                                 ),
-                             )
-                         );
+//                        CMailer::send(
+//                             array(
+//                                 'email' => $model->email,
+//                                 'name' => $model->email,
+//                             ),
+//                             array(
+//                                 'email' => Yii::app()->params['adminEmail'],
+//                                 'name' => Yii::app()->name
+//                             ),
+//                             Yii::app()->name,
+//                             array(
+//                                 'template' => 'change_password',
+//                                 'vars' => array(
+//                                     'site_name'=>Yii::app()->name,
+//                                     'password'=> $_POST['Users']['password'],
+//                                 ),
+//                             )
+//                        );
                      }
 
                      $model->save(false);
 
-                     if($_POST['Users']['email'])
+                     if($_POST['Users']['username'])
                      {
-                        $auth = new UserIdentity($model->email, $model->password);
+                        $auth = new UserIdentity($model->username, $model->password);
                         $auth->authenticate(true);
                         Yii::app()->user->login($auth, 0);
                      }
@@ -106,7 +106,7 @@ class UsersController extends Controller
                 if($user) {
                     $user->confirm_key = NULL;
                     $user->save(false);
-                    $auth = new UserIdentity($user->email, $user->password);
+                    $auth = new UserIdentity($user->username, $user->password);
                     $auth->authenticate(true);
                     Yii::app()->user->login($auth, 0);
                     //$this->redirect(array('users/update'));
@@ -145,7 +145,7 @@ class UsersController extends Controller
                             $user->password = md5(Yii::app()->params['beginSalt'].$user->password.Yii::app()->params['endSalt']);
                             $user->password_recovery_key = NULL;
                             $user->save(false);
-                            $auth = new UserIdentity($user->email, $user->password);
+                            $auth = new UserIdentity($user->username, $user->password);
                             $auth->authenticate(true);
                             Yii::app()->user->login($auth, 0);
                             $this->redirect(Users::getLogoLink());
@@ -163,59 +163,81 @@ class UsersController extends Controller
         
         public function actionForget() {
             $model = new Users;
+
+            $username = '';
+            $errorUsername = '';
+            $recoveryAnswer = '';
+            $errorRecoveryAnswer = '';
             $error = '';
-            $email = '';
+            $checkMain = true;
+            
             if($_POST)
             {
-                $email = $_POST['email'];
-                if($email!='')
+                $username = $_POST['username'];
+                $recoveryAnswer = $_POST['recovery_answer'];
+                
+                if($username=='')
                 {
-                    $user = Users::model()->findByAttributes(array('email'=>$email));
+                    $errorUsername = 'Введите ваш логин';
+                    $checkMain = false;
+                }
+                
+                if($recoveryAnswer=='')
+                {
+                    $errorRecoveryAnswer = 'Введите ответ для восстановления';
+                    $checkMain = false;
+                }
+                
+                if($checkMain)
+                {
+                    $user = Users::model()->findByAttributes(array('username'=>$username, 'recovery_answer'=>$recoveryAnswer));
                     if($user)
                     {
                         $user->password_recovery_key = md5('polux'.uniqid().$user->id.'sun');
                         $user->save(false);
                         $url = CHtml::link('восстановить пароль', array('users/recovery', 'key'=>$user->password_recovery_key));
 
-                        CMailer::send(
-                            array(
-                                'email' => $user->email,
-                                'name' => $user->email,
-                            ),
-                            array(
-                                'email' => 'registration@cursys.ru',
-                                'name' => 'Cursys.ru'
-                            ),
-                            Yii::app()->name,
-                            array(
-                                'template' => 'password_recovery',
-                                'vars' => array(
-                                    'url'=>$url,
-                                    'email' => $user->email,
-                                    'site_name'=>Yii::app()->name,
-                                ),
-                            )
-                        );
-                        $this->render('successForget', array(
-                            'user'=>$user,
-                        ));
-                        die;
+//                        CMailer::send(
+//                            array(
+//                                'email' => $user->email,
+//                                'name' => $user->email,
+//                            ),
+//                            array(
+//                                'email' => 'registration@cursys.ru',
+//                                'name' => 'Cursys.ru'
+//                            ),
+//                            Yii::app()->name,
+//                            array(
+//                                'template' => 'password_recovery',
+//                                'vars' => array(
+//                                    'url'=>$url,
+//                                    'email' => $user->email,
+//                                    'site_name'=>Yii::app()->name,
+//                                ),
+//                            )
+//                        );
+                        
+                        $this->redirect(array('users/recovery', 'key'=> $user->password_recovery_key));
+//                        
+//                        $this->render('successForget', array(
+//                            'user'=>$user,
+//                        ));
+//                        die;
                     }
                     else
                     {
-                        $error = 'Такой электронный адрес не зарегистрирован в системе. Проверьте правильность введенного вами электронного адреса';
+                        $error = 'Логин или ответ на вопрос не верен. Проверьте правильность введенных вами данных.';
                     }
-                }
-                else
-                {
-                    $error = 'Введите электронный адрес';
                 }
             }
             
             $this->render('forget', array(
                 'model'=>$model,
+                'errorUsername'=>$errorUsername,
+                'username'=>$username,
+                'recoveryAnswer'=>$recoveryAnswer,
+                'errorRecoveryAnswer'=>$errorRecoveryAnswer,
                 'error'=>$error,
-                'email'=>$email,
             ));
         }
         

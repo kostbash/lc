@@ -7,7 +7,7 @@
                 <div class="content-mini">
                     <div class="head">Восстановление пароля</div>
                     <div class="foot">
-                        Восстановление доступа к аккаунту <b><?php echo $user->email; ?></b>.
+                        Восстановление доступа к аккаунту <b><?php echo $user->username; ?></b>.
                         Введите новый пароль
                     </div>
                 </div>
