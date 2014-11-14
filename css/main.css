@@ -2930,25 +2930,34 @@ z-index:10000000;
 #lesson-page .hotmap-items .items .item
 {
     margin: 4px 6px;
-    border: 1px solid #ccc;
     border-radius: 4px;
     display: inline-block;
     font-size: 24px;
     color: #b5486d;
     font-family: 'PT Sans';
     font-weight: bold;
-    border: 1px solid #a4c8e2;
-    background: #fff;
+    border: 2px solid #a4c8e2;
+    background: #eee;
     text-align: center;
     line-height: normal;
     vertical-align: top;
     overflow: hidden;
-    max-width: 300px;
+    max-width: 220px;
+}
+
+#lesson-page .hotmap-items .items .item.without-area
+{
+    background: #fff;
 }
 
 #lesson-page .hotmap-items .items .item .name
 {
     padding: 2px 30px;
+}
+
+#lesson-page .hotmap-items .items .item.ui-draggable-dragging .image
+{
+    //display: none;
 }
 
 #lesson-page .hotmap-items .items .item .image img
@@ -2958,7 +2967,8 @@ z-index:10000000;
 
 #lesson-page .hotmap-items .items .item .image
 {
-    border-bottom: 1px solid #a4c8e2;
+    border-bottom: 2px solid;
+    border-color: inherit;
 }
 
 #lesson-page .hotmap-items .areas svg {
@@ -2981,10 +2991,14 @@ z-index:10000000;
     fill: transparent;
 }
 
+#lesson-page .hotmap-items .areas svg g
+{
+    stroke-width: 0;
+}
+
 #lesson-page .hotmap-items .areas svg g.mouseover
 {
     stroke-width: 2px;
-    stroke: #00F;
 }
 
 /*---------------------- 13.bags ----------------------*/
@@ -3286,20 +3300,42 @@ z-index:10000000;
     fill: transparent;
 }
 
-#lesson-page .hotmap-bags .areas svg g,
-#lesson-page .hotmap-bags .areas svg g.visible
+#lesson-page .hotmap-bags .areas svg g
 {
     stroke-width: 2px;
     stroke: #00F;
 }
 
+#lesson-page .hotmap-bags .areas svg g.visible
+{
+    stroke: #333;
+}
+
 #lesson-page .hotmap-bags .areas svg g.disable
 {
-    stroke: none;
+    stroke: #333;
+}
+
+#lesson-page .hotmap-bags .areas svg g.disable polygon,
+#lesson-page .hotmap-bags .areas svg g.disable rect,
+#lesson-page .hotmap-bags .areas svg g.disable circle
+{
+    fill: #888;
+    opacity: 0.7;
 }
 
 
 /*---------------------- 15.Hotmap-ordering ----------------------*/
+
+
+#lesson-page .hotmap-ordering .left
+{
+    text-align: right;
+    font-size: 13px;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    font-weight: bold;
+}
 
 #lesson-page .hotmap-ordering .areas
 {
@@ -3326,16 +3362,28 @@ z-index:10000000;
     fill: transparent;
 }
 
-#lesson-page .hotmap-ordering .areas svg g,
-#lesson-page .hotmap-ordering .areas svg g.visible
+#lesson-page .hotmap-ordering .areas svg g
 {
     stroke-width: 2px;
     stroke: #00F;
 }
 
+#lesson-page .hotmap-ordering .areas svg g.visible
+{
+    stroke: #333;
+}
+
 #lesson-page .hotmap-ordering .areas svg g.disable
 {
-    stroke: none;
+    stroke: #333;
+}
+
+#lesson-page .hotmap-ordering .areas svg g.disable polygon,
+#lesson-page .hotmap-ordering .areas svg g.disable rect,
+#lesson-page .hotmap-ordering .areas svg g.disable circle
+{
+    fill: #888;
+    opacity: 0.7;
 }
 
 #lesson-page .hotmap-ordering .items .item

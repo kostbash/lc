@@ -417,6 +417,7 @@ class ExercisesController extends Controller
                 'model'=>$model,
                 'id_group' => $id_group,
                 'id_part' => $id_part,
+                'id_map' => $id_map,
             ));
 	}
         

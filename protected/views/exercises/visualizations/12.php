@@ -19,7 +19,8 @@
                     {
                        $shape = "<polygon points='{$coords['points']}'></polygon>";
                     }
-                    echo "<g data-id='$area->id' class='area' data-key='$key'>$shape</g>";
+                    $color = rand(50, 200).",".rand(50, 200).",".rand(50, 200);
+                    echo "<g data-color='rgb($color)' style='stroke: rgb($color);' data-id='$area->id' class='area' data-key='$key'>$shape</g>";
                 }
             ?>
         </svg>
@@ -30,7 +31,7 @@
             shuffle($rightAnswers);
         ?>
         <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item not-hide">
+            <div class="item without-area">
                 <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
                 <?php if($answer->image) : ?>
                     <div class="image">

@@ -146,6 +146,16 @@
         
         $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
         
+        $('.hotmap-items  .item').dblclick(function(){
+            current = $(this);
+            if(!current.hasClass('without-area'))
+            {
+                current.addClass('without-area');
+                current.css('color', '').css('borderColor', '');
+                current.find('.hidden-answer').val('');
+            }
+        });
+        
         $('.hotmap-items svg g').mouseover(function(){
             current = $(this);
             current.attr('class', 'area mouseover');
@@ -168,9 +178,12 @@
                 area = $(this);
                 setDuration(area);
                 id_area = area.data('id');
+                area_color = area.data('color');
                 hiddenAnswer = item.find('.hidden-answer');
                 hiddenAnswer.val(id_area);
-                item.removeClass('not-hide').addClass('hide');
+                
+                item.css('color', area_color).css('borderColor', area_color).removeClass('without-area');
+                area.css('strokeWidth', 2);
                 if(area.closest('.exercise').hasClass('without-answer'))
                 {
                     checkHotmapItems(area.closest('.hotmap-items'));
@@ -266,6 +279,18 @@
             area.attr('class', 'area disable');
         });
         
+        $('.hotmap-bags .bag-drop .item').live('dblclick', function() {
+            current = $(this);
+            items = cont.closest('.hotmap-bags').find('.items');
+            current.find('.hidden-answer').val('');
+            items.append(current);
+            area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
+            area.attr('class', 'area');
+            area.draggable('enable');
+            count = current.closest('.hotmap-bags').find('> .left .count');
+            count.html(parseInt(count.html(), 10)+1);
+        });
+        
         $('.hotmap-ordering .area').draggable({
             cursor: 'move',
             drag:function (event, ui){
@@ -311,6 +336,8 @@
                 area.draggable("disable");
                 area.attr('class', 'area disable');
                 cont.find('.dropped-items').append(answer.css('left', 0).css('top',0));
+                count = cont.closest('.hotmap-ordering').find('> .left .count');
+                count.html(parseInt(count.html(), 10)-1);
                 if(cont.closest('.exercise').hasClass('without-answer'))
                 {
                     checkHotmapOrdering(cont.closest('.hotmap-ordering'));

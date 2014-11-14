@@ -254,6 +254,16 @@
         });
         
         $('.hotmap-items  .item').draggable({cursor: 'move', revert: true});
+        
+        $('.hotmap-items  .item').dblclick(function(){
+            current = $(this);
+            if(!current.hasClass('without-area'))
+            {
+                current.addClass('without-area');
+                current.css('color', '').css('borderColor', '');
+                current.find('.hidden-answer').val('');
+            }
+        });
 
         $('.hotmap-items svg g').mouseover(function() {
             current = $(this);
@@ -277,12 +287,18 @@
                 area = $(this);
                 setDuration(area);
                 id_area = area.data('id');
+                area_color = area.data('color');
                 resultAnswer = item.closest('.exercise').find('> .head .result');
                 hiddenAnswer = item.find('.hidden-answer');
                 hiddenAnswer.val(id_area);
-                item.removeClass('not-hide').addClass('hide');
+                
                 allAnswers = item.closest('.items').find('.hidden-answer');
-                if (!item.closest('.items').find('.item.not-hide').length)
+                
+                item.css('color', area_color).css('borderColor', area_color).removeClass('without-area');
+                
+                area.css('strokeWidth', 2);
+                
+                if (!item.closest('.items').find('.item.without-area').length)
                 {
                     reachGoal('SentAnswer');
                     $.ajax({
@@ -301,6 +317,7 @@
                                 alert(result);
                         }
                     });
+                    
                     if(area.closest('.exercise').hasClass('without-answer'))
                     {
                         checkHotmapItems(area.closest('.hotmap-items'));
@@ -441,6 +458,19 @@
             area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area visible');
         });
+        
+        $('.hotmap-bags .bag-drop .item').live('dblclick', function() {
+            current = $(this);
+            items = cont.closest('.hotmap-bags').find('.items');
+            current.find('.hidden-answer').val('');
+            items.append(current);
+            area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
+            area.attr('class', 'area');
+            area.draggable('enable');
+            count = current.closest('.hotmap-bags').find('> .left .count');
+            count.html(parseInt(count.html(), 10)+1);
+        });
+        
         $('.hotmap-bags .bag-drop .item').live('mouseleave', function() {
             current = $(this);
             area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
@@ -516,6 +546,9 @@
                 bag = cont.closest('.hotmap-ordering').find('.bag');
                 resultAnswer = cont.closest('.exercise').find('> .head .result');
                 hiddenAnswer = answer.find('.hidden-answer').val(1);
+                
+                count = cont.closest('.hotmap-ordering').find('> .left .count');
+                count.html(parseInt(count.html(), 10)-1);
                 if (!items.find('.item').length)
                 {
                     reachGoal('SentAnswer');
