@@ -9,7 +9,7 @@
                     <div class="foot">
                         Ваш пароль отправлен на указанный e-mail, но также вы можете записать его на бумагу.
                         <div style="text-align: center; margin-top: 15px;">
-                            <?php echo CHtml::link('Начать работу с сайтом', $link, array('class'=>'next-button')); ?>
+                            <?php echo CHtml::link('Начать работу с сайтом', $link, array('class'=>'next-button', 'onclick'=>"reachGoal(RegisterStudentFinish')")); ?>
                         </div>
                     </div>
                 </div>
