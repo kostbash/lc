@@ -1,6 +1,7 @@
 <div class="hotmap-ordering">
     <?php
         $rightAnswers = $model->rightAnswers;
+        $mapsColors = array();
     ?>
     <div class="left">Осталось: <span class="count"><?php echo count($rightAnswers); ?></span></div>
     <div class="areas">
@@ -24,7 +25,8 @@
                     {
                        $shape = "<polygon points='{$coords['points']}'></polygon>";
                     }
-                    echo "<g data-id='$area->id' class='area' data-key='$key'>$shape</g>";
+                    $mapsColors[$answer->id_area] = $color = rand(60, 190).",".rand(60, 190).",".rand(60, 190);
+                    echo "<g data-color='rgb($color)' style='stroke: rgb($color); fill: rgba($color, 0.4); ' data-id='$area->id' class='area' data-key='$key'>$shape</g>";
                 }
             ?>
         </svg>
@@ -37,7 +39,7 @@
     </div>
     <div class="items">
         <?php foreach($rightAnswers as $answer) : ?>
-            <div class="item" data-area="<?php echo $answer->id_area; ?>">
+            <div class="item" data-area="<?php echo $answer->id_area; ?>" style="color: rgb(<?php echo $mapsColors[$answer->id_area]; ?>); border-color: rgb(<?php echo $mapsColors[$answer->id_area]; ?>);">
                 <input class='hidden-answer' type="hidden" name="Exercises[<?php echo $key; ?>][answers][<?php echo $answer->id; ?>]" value="" />
                 <?php echo $answer->name; ?>
             </div>

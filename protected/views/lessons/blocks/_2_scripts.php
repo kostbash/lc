@@ -150,9 +150,18 @@
             current = $(this);
             if(!current.hasClass('without-area'))
             {
+                hiddenAnswer = current.find('.hidden-answer');
                 current.addClass('without-area');
                 current.css('color', '').css('borderColor', '');
-                current.find('.hidden-answer').val('');
+                id_area = hiddenAnswer.val();
+                hiddenAnswer.val('');
+                itemsWithArea = current.closest('.items').find('.hidden-answer[value="'+id_area+'"]');
+                if(!itemsWithArea.length)
+                {
+                    area = current.closest('.hotmap-items').find('.area[data-id="'+id_area+'"]');
+                    area.attr('class', 'area');
+                    area.removeAttr('data-hasitems');
+                }
             }
         });
         
@@ -160,9 +169,16 @@
             current = $(this);
             current.attr('class', 'area mouseover');
         });
-        $('.hotmap-items svg g').mouseleave(function(){
+        $('.hotmap-items svg g').mouseleave(function() {
             current = $(this);
-            current.attr('class', 'area');
+            if(current.attr('data-hasitems')=="true")
+            {
+                current.attr('class', 'area visible');
+            }
+            else
+            {
+                current.attr('class', 'area');
+            }
         });
         
         $('.hotmap-items svg g').droppable({
@@ -183,7 +199,7 @@
                 hiddenAnswer.val(id_area);
                 
                 item.css('color', area_color).css('borderColor', area_color).removeClass('without-area');
-                area.css('strokeWidth', 2);
+                area.attr('data-hasitems', true);
                 if(area.closest('.exercise').hasClass('without-answer'))
                 {
                     checkHotmapItems(area.closest('.hotmap-items'));
@@ -291,6 +307,16 @@
             count.html(parseInt(count.html(), 10)+1);
         });
         
+        $('.hotmap-bags svg g[aria-disabled=true]').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area');
+        });
+        
+        $('.hotmap-bags svg g[aria-disabled=true]').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
+        });
+        
         $('.hotmap-ordering .area').draggable({
             cursor: 'move',
             drag:function (event, ui){
@@ -355,6 +381,16 @@
             current = $(this);
             area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
             area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-ordering svg g[aria-disabled=true]').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area');
+        });
+        
+        $('.hotmap-ordering svg g[aria-disabled=true]').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
         });
     });
 </script>

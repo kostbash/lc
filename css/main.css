@@ -2937,7 +2937,7 @@ z-index:10000000;
     font-family: 'PT Sans';
     font-weight: bold;
     border: 2px solid #a4c8e2;
-    background: #eee;
+    background: #ccc;
     text-align: center;
     line-height: normal;
     vertical-align: top;
@@ -2979,16 +2979,21 @@ z-index:10000000;
     display: block;
 }
 
-#lesson-page .hotmap-items .areas svg rect {
+#lesson-page .hotmap-items .areas svg rect,
+#lesson-page .hotmap-items .areas svg circle,
+#lesson-page .hotmap-items .areas svg polygon
+{
     fill: transparent;
 }
 
-#lesson-page .hotmap-items .areas svg circle {
-    fill: transparent;
-}
-
-#lesson-page .hotmap-items .areas svg polygon {
-    fill: transparent;
+#lesson-page .hotmap-items .areas svg g.mouseover rect,
+#lesson-page .hotmap-items .areas svg g.mouseover circle,
+#lesson-page .hotmap-items .areas svg g.mouseover polygon,
+#lesson-page .hotmap-items .areas svg g.visible rect,
+#lesson-page .hotmap-items .areas svg g.visible circle,
+#lesson-page .hotmap-items .areas svg g.visible polygon
+{
+    fill: inherit;
 }
 
 #lesson-page .hotmap-items .areas svg g
@@ -2996,7 +3001,8 @@ z-index:10000000;
     stroke-width: 0;
 }
 
-#lesson-page .hotmap-items .areas svg g.mouseover
+#lesson-page .hotmap-items .areas svg g.mouseover,
+#lesson-page .hotmap-items .areas svg g.visible
 {
     stroke-width: 2px;
 }
@@ -3288,39 +3294,15 @@ z-index:10000000;
     display: block;
 }
 
-#lesson-page .hotmap-bags .areas svg rect {
-    fill: transparent;
-}
-
-#lesson-page .hotmap-bags .areas svg circle {
-    fill: transparent;
-}
-
-#lesson-page .hotmap-bags .areas svg polygon {
-    fill: transparent;
-}
-
 #lesson-page .hotmap-bags .areas svg g
 {
     stroke-width: 2px;
-    stroke: #00F;
-}
-
-#lesson-page .hotmap-bags .areas svg g.visible
-{
-    stroke: #333;
 }
 
 #lesson-page .hotmap-bags .areas svg g.disable
 {
-    stroke: #333;
-}
-
-#lesson-page .hotmap-bags .areas svg g.disable polygon,
-#lesson-page .hotmap-bags .areas svg g.disable rect,
-#lesson-page .hotmap-bags .areas svg g.disable circle
-{
-    fill: #888;
+    stroke: #333 !important;
+    fill: #888 !important;
     opacity: 0.7;
 }
 
@@ -3350,39 +3332,15 @@ z-index:10000000;
     display: block;
 }
 
-#lesson-page .hotmap-ordering .areas svg rect {
-    fill: transparent;
-}
-
-#lesson-page .hotmap-ordering .areas svg circle {
-    fill: transparent;
-}
-
-#lesson-page .hotmap-ordering .areas svg polygon {
-    fill: transparent;
-}
-
 #lesson-page .hotmap-ordering .areas svg g
 {
     stroke-width: 2px;
-    stroke: #00F;
-}
-
-#lesson-page .hotmap-ordering .areas svg g.visible
-{
-    stroke: #333;
 }
 
 #lesson-page .hotmap-ordering .areas svg g.disable
 {
-    stroke: #333;
-}
-
-#lesson-page .hotmap-ordering .areas svg g.disable polygon,
-#lesson-page .hotmap-ordering .areas svg g.disable rect,
-#lesson-page .hotmap-ordering .areas svg g.disable circle
-{
-    fill: #888;
+    stroke: #333 !important;
+    fill: #888 !important;
     opacity: 0.7;
 }
 

@@ -19,8 +19,8 @@
                     {
                        $shape = "<polygon points='{$coords['points']}'></polygon>";
                     }
-                    $color = rand(50, 200).",".rand(50, 200).",".rand(50, 200);
-                    echo "<g data-color='rgb($color)' style='stroke: rgb($color);' data-id='$area->id' class='area' data-key='$key'>$shape</g>";
+                    $color = rand(60, 190).",".rand(60, 190).",".rand(60, 190);
+                    echo "<g data-color='rgb($color)' style='stroke: rgb($color); fill: rgba($color, 0.4); ' data-id='$area->id' class='area' data-key='$key'>$shape</g>";
                 }
             ?>
         </svg>
