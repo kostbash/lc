@@ -296,7 +296,7 @@ class Courses extends CActiveRecord
                   $text = "Начать урок $number";
             }
             if($lastLesson)
-                return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'course-state-button'));
+                return CHtml::link($text, array('lessons/pass', 'id'=>$lastLesson->id), array('class'=>'course-state-button', 'onclick'=>"reachGoal('AnyCourseLessonStartLast')"));
             return false;
         }
         

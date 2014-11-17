@@ -26,7 +26,7 @@ $model->rememberMe = true;
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="reachGoal('RegisterClose')">&times;</button>
         <h4 class="modal-title" id="regModelLabel">
             Регистрация
             <a class="or-login hide" href="#">или войдите</a>
@@ -83,7 +83,7 @@ $model->rememberMe = true;
 	</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">закрыть</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="reachGoal('RegisterClose')">закрыть</button>
         <?php echo CHtml::submitButton('Зарегистрироваться', array("class"=>"btn btn-primary")); ?>
       </div>
     </div>

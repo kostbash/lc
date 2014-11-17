@@ -12,7 +12,7 @@
                                 <div class="status last-active">Последний активный курс:</div>
                                 <div class="name"><?php echo $lastActiveCourse->name; ?></div>
                             </div>
-                            <?php echo CHtml::link('Продолжить', array('courses/index', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button')); ?>
+                            <?php echo CHtml::link('Продолжить', array('courses/index', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button', 'onclick'=>"reachGoal('HomeLastLesson')")); ?>
                         </div>
                         <div class="content clearfix">
                             <div class="passed-lessons">

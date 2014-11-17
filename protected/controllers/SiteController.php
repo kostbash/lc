@@ -62,6 +62,8 @@ class SiteController extends Controller
                     }
                     
                     $link = array('courses/list');
+                    if($user->role == 2)
+                        $_SESSION['goals'][] = 'RegisterStudent';
                     $this->render('look_pass', array(
                         'user'=>$user,
                         'link'=>$link,
@@ -79,6 +81,8 @@ class SiteController extends Controller
                     if($loginForm->validate() && $loginForm->login()) {
                         $loggedUser = Users::model()->findByPk(Yii::app()->user->id);
                         $id_course = (int) $_SESSION['id_course'];
+                        if($loggedUser->role == 2)
+                            $_SESSION['goals'][] = 'LoginStudent';
                         if($id_course)
                             $this->redirect(array('courses/index', 'id'=>$id_course));
                         else
@@ -89,6 +93,8 @@ class SiteController extends Controller
             
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
 
+            $_SESSION['goals'][] = 'HomeGuest';
+            
             $this->render('index', array(
                 'loginForm' => $loginForm,
                 'user' => $user,

@@ -57,8 +57,8 @@
                     <div id="login">
                         <div id="logining" class="clearfix">
                             <?php if(Yii::app()->user->isGuest) : ?>
-                                <div id="reg-as-student" data-toggle="modal" data-target="#regModel"><a href="#">Зарегистрируйтесь</a></div>
-                                <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#">Войдите</a></div>
+                                <div id="reg-as-student" data-toggle="modal" data-target="#regModel"><a href="#" onclick="reachGoal('RegisterStart')">Зарегистрируйтесь</a></div>
+                                <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#" onclick="reachGoal('HomeLoginStart')">Войдите</a></div>
                                 <?php
                                     $controller = Yii::app()->getController();
                                     $isHome = (($controller->id === Yii::app()->defaultController) && ($controller->action->id === $controller->defaultAction)) ? true : false;
@@ -138,6 +138,21 @@
                     s.async = true; 
                     s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; 
                     if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
+                
+            function reachGoal(goal)
+            {
+                yaCounter26929302.reachGoal(goal);
+            }     
+            <?php
+                if(isset($_SESSION['goals'])&&  is_array($_SESSION['goals']) && count($_SESSION['goals']))
+                {
+                    foreach($_SESSION['goals'] as $goal)
+                    {
+                        echo "reachGoal('$goal');";
+                    }
+                    unset($_SESSION['goals']);
+                }
+            ?>
         </script>
         <noscript>
             <div>

@@ -143,13 +143,15 @@ class StudentsOfTeacherController extends Controller
 	{
             $model=new StudentsOfTeacher;
             
-            if(isset($_POST['StudentsOfTeacher']) && isset($_POST['Users']['email']))
+            if(isset($_POST['StudentsOfTeacher']) && isset($_POST['Users']['username']))
             {
-                $user = Users::model()->findByAttributes(array('email'=>$_POST['Users']['email']));
+                $user = Users::model()->findByAttributes(array('username'=>$_POST['Users']['username']));
                 if(!$user)
                 {
                     $user=new Users;
                     $_POST['Users']['role'] = 2;
+                    $_POST['Users']['id_recovery_question'] = 1;
+                    $_POST['Users']['recovery_answer'] = '-';
                     $user->registration($_POST['Users']);
                 }
                 

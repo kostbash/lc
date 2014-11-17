@@ -124,7 +124,7 @@
                                         </td>
                                         <td style="text-align: center;">
                                             <?php $imageName = $userAndLesson->repeatLesson ? 'repeat' : 'play'; ?>
-                                            <?php echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson')); ?>
+                                            <?php echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson', 'onclick'=>"reachGoal('AnyCourseLessonStartIndex')")); ?>
                                         </td>
                                         <td style="text-align: center;">
                                             <div class="export-button">

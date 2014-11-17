@@ -17,7 +17,7 @@ $('#login-form').on('shown.bs.modal', function (e) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="reachGoal('LoginClose')">&times;</button>
         <h4 class="modal-title" id="loginFormLabel">Войти</h4>
       </div>
       <div class="modal-body">
@@ -48,7 +48,7 @@ $('#login-form').on('shown.bs.modal', function (e) {
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">закрыть</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="reachGoal('LoginClose')">закрыть</button>
         <?php echo CHtml::submitButton('Войти', array("class"=>"btn btn-primary")); ?>
       </div>
     </div>

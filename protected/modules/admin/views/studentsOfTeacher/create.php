@@ -10,11 +10,11 @@
 )); ?>
 	<div class="row form-field">
             <div class="col-lg-3 col-md-3">
-                <?php echo $form->labelEx($user,'email'); ?>
+                <?php echo $form->labelEx($user,'username'); ?>
             </div>
             <div class="col-lg-4 col-md-4">
-		<?php echo $form->textField($user, 'email', array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите email ученика')); ?>
-		<?php echo $form->error($user,'email'); ?>
+		<?php echo $form->textField($user, 'username', array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите логин ученика')); ?>
+		<?php echo $form->error($user,'username'); ?>
             </div>
 	</div>
 	<div class="row form-field">
