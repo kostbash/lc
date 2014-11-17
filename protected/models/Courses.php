@@ -370,15 +370,18 @@ class Courses extends CActiveRecord
         
         public function getHaveAccess()
         {
-            $id_user = (int) Yii::app()->user->id;
-            
-            if($this->id_editor==$id_user) // даем создателю курса доступ
+            $inList = 0;
+            if(!Yii::app()->isGuest)
             {
-                return true;
+                $id_user = (int) Yii::app()->user->id;
+
+                if($this->id_editor==$id_user) // даем создателю курса доступ
+                {
+                    return true;
+                }
+                $inList = CourseUserList::model()->exists('`id_course`=:id_course AND id_student=:id_student', array('id_course'=>$this->id, 'id_student'=>$id_user));
             }
-
-            $inList = CourseUserList::model()->exists('`id_course`=:id_course AND id_student=:id_student', array('id_course'=>$this->id, 'id_student'=>$id_user));
-
+            
             if($this->visible==1) // виден всем кроме тех кто в списке
             {
                 if($inList)
