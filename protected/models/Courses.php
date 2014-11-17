@@ -371,7 +371,7 @@ class Courses extends CActiveRecord
         public function getHaveAccess()
         {
             $inList = 0;
-            if(!Yii::app()->isGuest)
+            if(!Yii::app()->user->isGuest)
             {
                 $id_user = (int) Yii::app()->user->id;
 
