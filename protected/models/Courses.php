@@ -289,8 +289,7 @@ class Courses extends CActiveRecord
             }
             else
             {
-                $key = Users::UserType() == 1 ? 0 : 1;
-                if($lastLesson->id_lesson == $this->LessonsGroups[0]->LessonsRaw[$key]->id)
+                if($lastLesson->id_lesson == $this->nearestAvailableLesson->id)
                   $text = 'Начать первый урок';
                 else
                   $text = "Начать урок $number";
@@ -301,21 +300,14 @@ class Courses extends CActiveRecord
         }
         
         // последний урок, до которого дошел пользователь
-        public function getLastUserLesson() {
-            foreach($this->LessonsGroups as $groupKey => $lessonGroup)
-                foreach($lessonGroup->LessonsRaw as $lessonKey => $lesson)
-                {
-                    if($groupKey == 0 && $lessonKey == 0 && Users::UserType() != 1)
-                        continue;
-                    $lesson = UserAndLessons::model()->findByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id, 'id_group'=>$lessonGroup->id, 'id_lesson'=>$lesson->id));
-                    if($lesson)
-                        $lastLesson = $lesson;
-                    else
-                        break 2;
-                }
-            if($lastLesson)
-                return $lastLesson;
-            return null;
+        public function getLastUserLesson()
+        {
+            $id_user = (int) Yii::app()->user->id;
+            $query = "SELECT userles.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_user_and_lessons` userles
+                    WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=:id_course AND
+                    userles.id_user=:id_user AND userles.id_course=course.id AND userles.id_group=themes.id_group_lesson AND userles.id_lesson=lessons.id_lesson
+                    ORDER BY themes.order DESC, lessons.order DESC LIMIT 1";
+            return UserAndLessons::model()->findBySql($query, array('id_user'=>$id_user, 'id_course'=>$this->id));
         }
         
         public function afterDelete() {
@@ -492,6 +484,12 @@ class Courses extends CActiveRecord
                     ." ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 18446744073709551615";
             $didntPassLesson = Yii::app()->db->createCommand($query)->queryAll();
             return $didntPassLesson ? false : true;
+        }
+        
+        public function getNearestAvailableLesson()
+        {
+            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 1";
+            return Lessons::model()->findBySql($query);
         }
         
         public function getStudentList()

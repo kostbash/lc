@@ -144,7 +144,31 @@
             checkPickArea(answer.closest('.pick-area'));
         });
         
-        $('.hotmap-items .item').draggable({cursor: 'move', revert:true});
+        $('.hotmap-items  .item').draggable({
+            cursor: 'move',
+            revert: true,
+            drag: function(event, ui) {
+                item = $(this);
+                image = item.find('.image');
+                if(image.length)
+                {
+                    if(image.css('display')==='block')
+                    {
+                        item.width(item.width());
+                        image.hide(300);
+                    }
+                    ui.position.top += (event.pageY-ui.offset.top)-10;
+                }
+            },
+            stop: function(event, ui) {
+                item = $(this);
+                image = item.find('.image');
+                if(image.length)
+                {
+                    image.show(300);
+                }
+            }
+        });
         
         $('.hotmap-items  .item').dblclick(function(){
             current = $(this);
@@ -299,6 +323,7 @@
             current = $(this);
             items = cont.closest('.hotmap-bags').find('.items');
             current.find('.hidden-answer').val('');
+            current.css('display', 'none');
             items.append(current);
             area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area');
@@ -381,6 +406,16 @@
             current = $(this);
             area = current.closest('.hotmap-ordering').find('.area[data-id='+current.data('area')+']');
             area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-ordering svg g:not(.aria-disabled)').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-ordering svg g:not(.aria-disabled)').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area');
         });
         
         $('.hotmap-ordering svg g[aria-disabled=true]').live('mouseover', function() {

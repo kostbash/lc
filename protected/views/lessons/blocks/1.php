@@ -261,9 +261,12 @@
                 image = item.find('.image');
                 if(image.length)
                 {
-                    image.hide();
-                    item.css('left', event.pageX);
-                    item.css('top', event.pageY);
+                    if(image.css('display')==='block')
+                    {
+                        item.width(item.width());
+                        image.hide(300);
+                    }
+                    ui.position.top += (event.pageY-ui.offset.top)-10;
                 }
             },
             stop: function(event, ui) {
@@ -271,7 +274,7 @@
                 image = item.find('.image');
                 if(image.length)
                 {
-                    image.show();
+                    image.show(300);
                 }
             }
         });
@@ -501,6 +504,7 @@
             items = cont.closest('.hotmap-bags').find('.items');
             current.find('.hidden-answer').val('');
             items.append(current);
+            current.css('display', 'none');
             area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area');
             area.draggable('enable');
@@ -633,6 +637,16 @@
             current = $(this);
             area = current.closest('.hotmap-ordering').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-ordering svg g:not(.aria-disabled)').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-ordering svg g:not(.aria-disabled)').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area');
         });
         
         $('.hotmap-ordering svg g[aria-disabled=true]').live('mouseover', function() {

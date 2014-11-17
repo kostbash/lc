@@ -155,7 +155,7 @@
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="3">Нет уроков</td>
+                                <td colspan="4">Нет уроков</td>
                             </tr>
                         <?php endif; ?>
                     </table>

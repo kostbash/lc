@@ -123,13 +123,13 @@ class CoursesController extends Controller
                 // если не сущесвует связи
                 if(!$userAndLesson)
                 {
-                    if($course->LessonsGroups[0]->LessonsRaw[$index])
+                    if($lesson = $course->nearestAvailableLesson)
                     {
                         $userAndLesson = new UserAndLessons;
                         $userAndLesson->id_course = $id;
                         $userAndLesson->id_user = $user->id;
-                        $userAndLesson->id_group = $course->LessonsGroups[0]->id;
-                        $userAndLesson->id_lesson = $course->LessonsGroups[0]->LessonsRaw[$index]->id;
+                        $userAndLesson->id_group = $lesson->Groups[0]->id;
+                        $userAndLesson->id_lesson = $lesson->id;
                         $userAndLesson->save(false);
                     }
                 }
