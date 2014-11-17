@@ -32,26 +32,26 @@
                 });
                 current.val(1);
             }
-            
-            $('[name*=answers]').keydown(function(e){
-                nextTab = null;
-                current = $(this);
-                if(e.keyCode==13){
-                  $('[tabindex]').each(function(n, tabElement){
-                      tab = $(tabElement);
-                      if( parseInt(tab.attr('tabindex')) > current.attr('tabindex') )
-                      {
-                          if(!nextTab)
-                              nextTab = tab;
-                      }   
-                  });
-                  if(nextTab)
-                      nextTab.focus();
-                  return false;
-                }
-            });
-            $('#skills').popover();
         });
+        
+        $('[tabindex]').keydown(function(e){
+            nextTab = null;
+            current = $(this);
+            if(e.keyCode==13){
+              $('[tabindex]').each(function(n, tabElement){
+                  tab = $(tabElement);
+                  if( parseInt(tab.attr('tabindex')) > current.attr('tabindex') )
+                  {
+                      if(!nextTab)
+                          nextTab = tab;
+                  }   
+              });
+              if(nextTab)
+                  nextTab.focus();
+              return false;
+            }
+        });
+        $('#skills').popover();
         
         $('#exercise_0 [tabindex=1]').focus();
         

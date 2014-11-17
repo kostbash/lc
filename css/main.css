@@ -1746,7 +1746,6 @@ z-index:10000000;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
     -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.25);
     box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
     border-collapse: separate !important;
     table-layout: fixed;
 }
@@ -1782,9 +1781,9 @@ z-index:10000000;
 #course-page .lessons-table thead .export
 {
     background: #a1c7f1;
-    -moz-border-radius: 0 0 0 6px;
-    -webkit-border-radius: 0 0 0 6px;
-    border-radius: 0 0 0 6px;
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
 }
 
 #course-page .lessons-table td

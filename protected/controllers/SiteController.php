@@ -52,6 +52,9 @@ class SiteController extends Controller
                     $loginForm->login();
                     
                     $id_course = (int) $_SESSION['id_course'];
+                    
+                    $link = array('courses/list');
+                    
                     if($id_course)
                     {
                         unset($_SESSION['id_course']);
@@ -61,7 +64,6 @@ class SiteController extends Controller
                         }
                     }
                     
-                    $link = array('courses/list');
                     if($user->role == 2)
                         $_SESSION['goals'][] = 'RegisterStudent';
                     $this->render('look_pass', array(
