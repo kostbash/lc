@@ -332,6 +332,16 @@
             count.html(parseInt(count.html(), 10)+1);
         });
         
+        $('.hotmap-bags svg g:not(.aria-disabled)').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-bags svg g:not(.aria-disabled)').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area');
+        });
+        
         $('.hotmap-bags svg g[aria-disabled=true]').live('mouseover', function() {
             current = $(this);
             current.attr('class', 'area');

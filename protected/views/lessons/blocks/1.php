@@ -333,9 +333,7 @@
                 hiddenAnswer.val(id_area);
                 
                 allAnswers = item.closest('.items').find('.hidden-answer');
-                
                 item.css('color', area_color).css('borderColor', area_color).removeClass('without-area');
-                
                 area.attr('data-hasitems', true);
                 
                 if (!item.closest('.items').find('.item.without-area').length)
@@ -516,6 +514,16 @@
             current = $(this);
             area = current.closest('.hotmap-bags').find('.area[data-id=' + current.data('area') + ']');
             area.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-bags svg g:not(.aria-disabled)').live('mouseover', function() {
+            current = $(this);
+            current.attr('class', 'area disable');
+        });
+        
+        $('.hotmap-bags svg g:not(.aria-disabled)').live('mouseleave', function() {
+            current = $(this);
+            current.attr('class', 'area');
         });
         
         $('.hotmap-bags svg g[aria-disabled=true]').live('mouseover', function() {

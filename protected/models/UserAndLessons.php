@@ -106,7 +106,7 @@ class UserAndLessons extends CActiveRecord
         public function getPosition() {
             $courseGroups = CourseAndLessonGroup::model()->findAll("`id_course`=$this->id_course ORDER BY `order` ASC");
             $user = Users::model()->findByPk(Yii::app()->user->id);
-            $count = $user->role==1 ? 0 : 1;
+            $count = 1;
             foreach($courseGroups as $courseGroup) {
                 foreach($courseGroup->GroupAndLessons as $key => $lessonGroup)
                 {

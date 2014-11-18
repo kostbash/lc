@@ -3180,9 +3180,9 @@ z-index:10000000;
 
 #lesson-page .hotmap-bags .left
 {
-    text-align: right;
+    text-align: left;
     font-size: 13px;
-    margin-bottom: 3px;
+    margin-top: 8px;
     margin-right: 3px;
     font-weight: bold;
 }
@@ -3295,6 +3295,7 @@ z-index:10000000;
 
 #lesson-page .hotmap-bags .areas svg g
 {
+    position: static !important;
     stroke-width: 2px;
 }
 

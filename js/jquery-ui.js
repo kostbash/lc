@@ -15013,7 +15013,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
     }
 
     //Fix droppable
-    if (droppable.proportions && droppable.proportions.width === 0 && droppable.proportions.height === 0) {
+    if (droppable.proportions && !droppable.proportions.width && !droppable.proportions.height) {
         droppable.proportionsBBox = droppable.proportionsBBox || $(droppable.element).get(0).getBBox();
         droppable.proportions = droppable.proportionsBBox;
     }

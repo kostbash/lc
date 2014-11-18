@@ -1,4 +1,5 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery.svg.min.js"); ?>
 <script type="text/javascript">
     $(function(){
         $(document).bind('keyup keydown keypress', function (e) {

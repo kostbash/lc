@@ -3,7 +3,6 @@
         $rightAnswers = $model->rightAnswers;
         $mapsColors = array();
     ?>
-    <div class="left">Осталось: <span class="count"><?php echo count($rightAnswers); ?></span></div>
     <div class="areas">
         <img src="<?php echo $model->Map->mapImageLink; ?>" />
         <?php $imageSize = getimagesize($model->Map->getMapImageLink(true)); ?>
@@ -31,6 +30,7 @@
             ?>
         </svg>
     </div>
+    <div class="left">Осталось распределить: <span class="count"><?php echo count($rightAnswers); ?></span></div>
     <div class="items">
         <?php foreach($rightAnswers as $answer) : ?>
             <div class="item" data-area="<?php echo $answer->id_area; ?>" style="color: rgb(<?php echo $mapsColors[$answer->id_area]; ?>); border-color: rgb(<?php echo $mapsColors[$answer->id_area]; ?>);">
