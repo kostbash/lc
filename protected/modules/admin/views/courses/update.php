@@ -655,7 +655,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
         <div class="col-lg-7 col-md-7">
              <h2>Редактирование курса: "<?php echo $model->name; ?>"</h2>   
         </div>
-        <div class="col-lg-5 col-md-5">
+        <div class="col-lg-5 col-md-5"><?php /* ?>
             <div class="export-button">
                 <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт курса<span class="caret"></span></button>
                 <ul class="dropdown-menu pull-right" role="menu">
@@ -665,7 +665,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
                 <input id='with-right' type='checkbox' class='with-right' name value='0' />
                 <label for='with-right'>С ответами</label>
             </div>
-            <?php echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Сохранить', '#', array('class'=>'btn btn-success btn-icon', 'onclick'=>"$('#courses-form').submit(); return false;")); ?>
+            <?php */ echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Сохранить', '#', array('class'=>'btn btn-success btn-icon', 'onclick'=>"$('#courses-form').submit(); return false;")); ?>
         </div>        
     </div>
 </div>
