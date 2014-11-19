@@ -87,7 +87,7 @@
 
 <div id="container">
     <div id='course-page'>
-        <?php if ($course->LessonsGroups) : ?>
+        <?php if ($course->LessonsGroups) : $posLesson = 1; $isSkipLesson = false; ?>
             <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
                 <h1 class='theme-name'><?php echo "Тема $groupNum: \"$lessonGroup->name\""; ?></h1>
                     <table class='lessons-table'>
@@ -104,13 +104,21 @@
                                 <th class="export">Экспорт урока</th>
                             </tr>
                         </thead>
-                        <?php if ($lessonGroup->LessonsRaw) : ?>
-                            <?php foreach ($lessonGroup->LessonsRaw as $keyLesson => $lesson) : ?>
-                                <?php if($groupNum==1 && $keyLesson == 0 && $pos==1) { continue; } ?>
+                        
+                        <?php
+                            $themeLessons = $lessonGroup->LessonsRaw;
+                            if(!$isSkipLesson && $posLesson==1) {
+                                $isSkipLesson=true;
+                                unset($themeLessons[0]);
+                            }
+                        ?>
+                        
+                        <?php if ($themeLessons) : ?>
+                            <?php foreach ($themeLessons as $keyLesson => $lesson) : ?>
                                 <?php if($userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id)) : ?>
                                     <tr>
                                         <td>
-                                            <?php echo CHtml::link("Урок $pos : ".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
+                                            <?php echo CHtml::link("Урок $posLesson : ".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
                                         </td>
                                         <td style="text-align: center;">
                                             <?php if ($userAndLesson->LessonProgress == 100) : ?>
@@ -135,8 +143,8 @@
                                                 </ul>
                                                 <?php if(Yii::app()->user->checkAccess('editor')) : ?>
                                                     <div class='with-right-cont'>
-                                                        <input id='with-right-<?php echo $pos; ?>' type='checkbox' class='with-right' name value='0' />
-                                                        <label for='with-right-<?php echo $pos; ?>'>С ответами</label>
+                                                        <input id='with-right-<?php echo $posLesson; ?>' type='checkbox' class='with-right' name value='0' />
+                                                        <label for='with-right-<?php echo $posLesson; ?>'>С ответами</label>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -144,18 +152,18 @@
                                     </tr>
                                 <?php else : ?>
                                     <tr>
-                                        <td><?php echo "Урок $pos : $lesson->name"; ?></td>
+                                        <td><?php echo "Урок $posLesson : $lesson->name"; ?></td>
                                         <td style="text-align: center;">
                                             <p class="unaccess">Не пройден</p>
                                         </td> 
                                         <td></td> 
                                         <td></td> 
                                     </tr>
-                                <?php endif; ++$pos; ?>
+                                <?php endif; ++$posLesson; ?>
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="4">Нет уроков</td>
+                                <td class="no-lessons" colspan="4">Нет уроков</td>
                             </tr>
                         <?php endif; ?>
                     </table>

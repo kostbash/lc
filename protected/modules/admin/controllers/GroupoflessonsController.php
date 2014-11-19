@@ -156,16 +156,18 @@ class GroupoflessonsController extends Controller
             $id_theme = (int) $_POST['id_theme'];
             $id_course = (int) $_POST['id_course'];
             $course = Courses::existCourseById($id_course);
+            
             if($id_theme && $course)
             {
                 if($_POST['positions'])
                 {
+                    $criteria = new CDbCriteria;
+                    $criteria->addNotInCondition('id_lesson', $_POST['positions']);
+                    $criteria->compare('id_group', $id_theme);
+                    GroupAndLessons::model()->deleteAll($criteria);
+                    
                     foreach($_POST['positions'] as $key => $id_lesson)
                     {
-                        $criteria = new CDbCriteria;
-                        $criteria->addNotInCondition('id_lesson', $_POST['positions']);
-                        $criteria->compare('id_group', $id_theme);
-                        GroupAndLessons::model()->deleteAll($criteria);
                         $groupAndLessons = GroupAndLessons::model()->findByAttributes(array('id_group'=>$id_theme, 'id_lesson'=>$id_lesson));
                         if($groupAndLessons)
                         {
@@ -195,12 +197,13 @@ class GroupoflessonsController extends Controller
             } elseif($course) {
                 if($_POST['positions'])
                 {
+                    $criteria = new CDbCriteria;
+                    $criteria->addNotInCondition('id_lesson', $_POST['positions']);
+                    $criteria->compare('id_course', $id_course);
+                    CoursesAndLessons::model()->deleteAll($criteria);
+                    
                     foreach($_POST['positions'] as $key => $id_lesson)
                     {
-                        $criteria = new CDbCriteria;
-                        $criteria->addNotInCondition('id_lesson', $_POST['positions']);
-                        $criteria->compare('id_course', $id_course);
-                        CoursesAndLessons::model()->deleteAll($criteria);
                         $coursesAndLessons = CoursesAndLessons::model()->findByAttributes(array('id_course'=>$id_course, 'id_lesson'=>$id_lesson));
                         if($coursesAndLessons)
                         {

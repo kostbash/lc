@@ -110,9 +110,7 @@ class CoursesController extends Controller
                 $courseUser->status = 1;
                 $courseUser->save();
             }
-
-            $index = 1;
-
+            
             if($lesson)
             {
                 $userAndLesson = UserAndLessons::model()->findByPk($lesson);
@@ -123,13 +121,13 @@ class CoursesController extends Controller
                 // если не сущесвует связи
                 if(!$userAndLesson)
                 {
-                    if($lesson = $course->nearestAvailableLesson)
+                    if($nearestAvailableLesson = $course->nearestAvailableLesson)
                     {
                         $userAndLesson = new UserAndLessons;
                         $userAndLesson->id_course = $id;
                         $userAndLesson->id_user = $user->id;
-                        $userAndLesson->id_group = $lesson->Groups[0]->id;
-                        $userAndLesson->id_lesson = $lesson->id;
+                        $userAndLesson->id_group = $nearestAvailableLesson->Groups[0]->id;
+                        $userAndLesson->id_lesson = $nearestAvailableLesson->id;
                         $userAndLesson->save(false);
                     }
                 }
@@ -139,7 +137,6 @@ class CoursesController extends Controller
                     'course'=>$course,
                     'userLesson'=>$userAndLesson,
                     'currentLesson'=>$userAndLesson->Lesson,
-                    'pos'=>$index,
             ));
 	}
         

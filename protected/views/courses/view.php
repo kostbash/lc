@@ -58,7 +58,8 @@
             <?php echo $course->name; ?>
         </h2>
         <div id="top-buttons">
-            <?php echo CHtml::link('Начать обучение', '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#regModel", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
+            <?php $this->renderPartial('//site/begin_learning', array('user'=>new Users, 'login'=>new LoginForm)); ?>
+            <?php echo CHtml::link('Начать обучение', '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#beginLearning", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
             <?php echo CHtml::link('Проверить себя', array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
         </div>
         <div id="course-info" class="clearfix">

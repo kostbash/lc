@@ -97,7 +97,7 @@ class Users extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'email' => 'E-mail',
-			'username' => 'Логин',
+			'username' => 'Псевдоним',
 			'password' => 'Пароль',
 			'checkPassword' => 'Повторите пароль',
                         'registration_day' => 'Дата регистрации',

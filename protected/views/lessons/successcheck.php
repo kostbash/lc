@@ -12,7 +12,8 @@
                             <?php echo MyWidgets::ProgressBarWithLimiter($numberAll, $rightAnswers); ?>
                         </div>-->
                         <p><?php echo $result['recommendation']; ?></p>
-                        <p><?php echo CHtml::link("Начать обучение", array('site/index', 'showreg'=>true), array('class'=>'btn btn-success')); ?></p>
+                        <?php $this->renderPartial('//site/begin_learning', array('user'=>new Users, 'login'=>new LoginForm)); ?>
+                        <?php echo CHtml::link('Начать обучение', '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#beginLearning", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
                     </div>
                 </div>
             </div>

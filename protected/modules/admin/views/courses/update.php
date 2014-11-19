@@ -498,7 +498,7 @@ Yii::app()->clientScript->registerScript('#courses', "
                     success: function(result) {
                        if(result.success)
                        {
-
+                          
                        } else {
                            
                        }
