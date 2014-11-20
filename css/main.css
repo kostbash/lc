@@ -56,6 +56,17 @@ html, body {
     font: 14px/18px Arial, Tahoma, Verdana, sans-serif;
 }
 
+#confirmParentModal .parent
+{
+    font-size: 28px;
+    text-align: center;
+}
+
+#confirmParentModal .confirmation
+{
+    text-align: center;
+}
+
 .answer-image
 {
     text-align: center;

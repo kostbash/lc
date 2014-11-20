@@ -26,6 +26,12 @@ class ChildrenOfParentController extends Controller
                             'actions'=>array('confirmdeal', 'regectdeal'),
                             'users'=>array('*'),
                     ),
+                
+                    array('allow',
+                            'actions'=>array('confirmDealFromSite'),
+                            'roles'=>array('student'),
+                    ),
+                
                     array('allow',
                             'actions'=>array('index', 'view', 'delete', 'create', 'update'),
                             'roles'=>array('parent'),
@@ -74,36 +80,36 @@ class ChildrenOfParentController extends Controller
             $this->redirect('/');
         }
 
-//        Истользуеться для подтверждения с сайта, а не по эмейлу
-//        public function actionConfirmDeal()
-//        {
-//            $result = array('success'=>0);
-//            $id = (int) $_POST['id'];
-//            $answer = (int) $_POST['answer'];
-//            if($answer && $id)
-//            {
-//                $model = ChildrenOfParent::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
-//                if($model)
-//                {
-//                    $model->status = $answer;
-//                    if($model->save())
-//                    {
-//                        if($model->status==1)
-//                        {
-//                            // отклоняем все другие предложения, так как теперь у нас есть родитель
-//                            $childrenParents = ChildrenOfParent::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
-//                            foreach($childrenParents as $childrenParent)
-//                            {
-//                                $childrenParent->status=2;
-//                                $childrenParent->save();
-//                            }
-//                        }
-//                        $result['success'] = 1;
-//                    }
-//                }
-//            }
-//            echo CJSON::encode($result);
-//        }
+        //Используеться для подтверждения с сайта, а не по эмейлу
+        public function actionConfirmDealFromSite()
+        {
+            $result = array('success'=>0);
+            $id = (int) $_POST['id'];
+            $answer = (int) $_POST['answer'];
+            if($answer && $id)
+            {
+                $model = ChildrenOfParent::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
+                if($model)
+                {
+                    $model->status = $answer;
+                    if($model->save())
+                    {
+                        if($model->status==1)
+                        {
+                            // отклоняем все другие предложения, так как теперь у нас есть родитель
+                            $childrenParents = ChildrenOfParent::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
+                            foreach($childrenParents as $childrenParent)
+                            {
+                                $childrenParent->status=2;
+                                $childrenParent->save();
+                            }
+                        }
+                        $result['success'] = 1;
+                    }
+                }
+            }
+            echo CJSON::encode($result);
+        }
         
 	public function actionView($id)
 	{
@@ -153,68 +159,84 @@ class ChildrenOfParentController extends Controller
 	public function actionCreate()
 	{
             $model=new ChildrenOfParent;
-            
-            if(isset($_POST['ChildrenOfParent']) && isset($_POST['Users']['email']))
+            $user=new Users;
+            if(isset($_POST['ChildrenOfParent']) && isset($_POST['Users']['username']))
             {
-                $user = Users::model()->findByAttributes(array('email'=>$_POST['Users']['email']));
-                if(!$user)
+                $user = Users::model()->findByAttributes(array('username'=>$_POST['Users']['username']));
+//                if(!$user)
+//                {
+//                    $user=new Users;
+//                    $_POST['Users']['role'] = 2;
+//                    $user->registration($_POST['Users']);
+//                }
+                
+                if($user)
                 {
-                    $user=new Users;
-                    $_POST['Users']['role'] = 2;
-                    $user->registration($_POST['Users']);
-                }
-                
-                $existParent = ChildrenOfParent::model()->exists("id_child=:id_child AND status=:status", array('id_child'=>$user->id, 'status'=>1));
-                
-                $model->attributes=$_POST['ChildrenOfParent'];
-                $model->id_child=$user->id;
-                $model->id_parent=Yii::app()->user->id;
-                
-                if($model->validate())
-                {
-                    if($model->id_child != $model->id_parent)
+                    $exist = ChildrenOfParent::model()->exists("id_child=:id_child AND id_parent=:id_parent", array('id_child'=>$user->id, 'id_parent'=>Yii::app()->user->id));
+                    if(!$exist)
                     {
-                        if(!$existParent)
+                        $existParent = ChildrenOfParent::model()->exists("id_child=:id_child AND status=:status", array('id_child'=>$user->id, 'status'=>1));
+
+                        $model->attributes=$_POST['ChildrenOfParent'];
+                        $model->id_child=$user->id;
+                        $model->id_parent=Yii::app()->user->id;
+
+                        if($model->validate())
                         {
-                            $model->confirm = substr(md5($user->email.$model->Parent->email.uniqid().'podtverditiko'), 0,26);
-                            $model->regect =  substr(md5($model->Parent->email.uniqid().$user->email.'otklonitiko'), 0,26);
-                            $model->save(false);
-                            
-                            CMailer::send(
-                                array(
-                                    'email' => $user->email,
-                                    'name' => $user->email,
-                                ),
-                                array(
-                                    'email' => 'registration@cursys.ru',
-                                    'name' => 'Cursys.ru'
-                                ),
-                                Yii::app()->name,
-                                array(
-                                    'template' => 'deal_from_parent',
-                                    'vars' => array(
-                                        'email_parent'=> $model->Parent->email,
-                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/childrenOfParent/confirmdeal', 'deal' => $model->confirm)),
-                                        'regect_link' => CHtml::link('Отклонить', array('/admin/childrenOfParent/regectdeal', 'deal' => $model->regect)),
-                                        'site_name'=>Yii::app()->name,
-                                    ),
-                                )
-                            );
-                            
-                            $this->redirect(array('index'));
-                        } else
-                        {
-                            $user->addError('email', 'Система допускает подключение к аккаунту ученика только одного родителя. У данного ученика уже подключен аккаунт родителя.
-Если вы хотите поменять подключенный аккаунт родителя, нужно сначала отключить предыдущий.');
+                            if($model->id_child != $model->id_parent)
+                            {
+                                if(!$existParent)
+                                {
+                                    $model->confirm = substr(md5($user->username.$model->Parent->email.uniqid().'podtverditiko'), 0,26);
+                                    $model->regect =  substr(md5($model->Parent->email.uniqid().$user->email.'otklonitiko'), 0,26);
+                                    $model->save(false);
+
+        //                            CMailer::send(
+        //                                array(
+        //                                    'email' => $user->email,
+        //                                    'name' => $user->email,
+        //                                ),
+        //                                array(
+        //                                    'email' => 'registration@cursys.ru',
+        //                                    'name' => 'Cursys.ru'
+        //                                ),
+        //                                Yii::app()->name,
+        //                                array(
+        //                                    'template' => 'deal_from_parent',
+        //                                    'vars' => array(
+        //                                        'email_parent'=> $model->Parent->email,
+        //                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/childrenOfParent/confirmdeal', 'deal' => $model->confirm)),
+        //                                        'regect_link' => CHtml::link('Отклонить', array('/admin/childrenOfParent/regectdeal', 'deal' => $model->regect)),
+        //                                        'site_name'=>Yii::app()->name,
+        //                                    ),
+        //                                )
+        //                            );
+                                    $this->redirect(array('index'));
+                                } else
+                                {
+                                    $user->addError('username', 'Система допускает подключение к аккаунту ученика только одного родителя. У данного ученика уже подключен аккаунт родителя.
+        Если вы хотите поменять подключенный аккаунт родителя, нужно сначала отключить предыдущий.');
+                                }
+                            }
+                            else
+                            {
+                                $user->addError('username', 'Вы не можете быть сам себе ребеноком');
+                            }
                         }
-                    } else
+                    }
+                    else
                     {
-                        $user->addError('email', 'Вы не можете быть сам себе ребеноком');
+                        $user->addError('username', 'У вас уже есть этот ребенок');
                     }
                 }
-            } else {
-                $user=new Users;
+                else
+                {
+                    $user=new Users;
+                    $user->addError('username', 'Ребенок с таким псевдонимом не зарегистрирован');
+                }
             }
+            
+            print_r($model->errors);
             
             $this->render('create',array(
                     'model'=>$model,

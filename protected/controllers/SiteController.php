@@ -35,10 +35,14 @@ class SiteController extends Controller
             $role = (int) $_GET['role'];
             if($role)
             {
-                if($role==2 or $role==3 or $role==4)
+                if($role==2 or $role==4)
                 {
                     $user->role = $role;
                 }
+            }
+            else
+            {
+                $user->role = Users::$defaultRole;
             }
             
             // регистрация
@@ -46,31 +50,41 @@ class SiteController extends Controller
             {
                 if($user->registration($_POST['Users']))
                 {
-                    $loginForm->username = $user->username;
-                    $loginForm->password = $user->temporary_password;
-                    $loginForm->rememberMe = $user->rememberMe;
-                    $loginForm->login();
-                    
-                    $id_course = (int) $_SESSION['id_course'];
-                    
-                    $link = array('courses/list');
-                    
-                    if($id_course)
+                    if($user->role==2)
                     {
-                        unset($_SESSION['id_course']);
-                        if(Courses::model()->exists('id=:id_course', array('id_course'=>$id_course)))
+                        $loginForm->username = $user->username;
+                        $loginForm->password = $user->temporary_password;
+                        $loginForm->rememberMe = $user->rememberMe;
+                        $loginForm->login();
+
+                        $id_course = (int) $_SESSION['id_course'];
+
+                        $link = array('courses/list');
+
+                        if($id_course)
                         {
-                            $link = array('courses/index', 'id'=>$id_course);
+                            unset($_SESSION['id_course']);
+                            if(Courses::model()->exists('id=:id_course', array('id_course'=>$id_course)))
+                            {
+                                $link = array('courses/index', 'id'=>$id_course);
+                            }
                         }
-                    }
-                    
-                    if($user->role == 2)
+                        
                         $_SESSION['goals'][] = 'RegisterStudent';
-                    $this->render('look_pass', array(
-                        'user'=>$user,
-                        'link'=>$link,
-                    ));
-                    die;
+                        
+                        $this->render('look_pass', array(
+                            'user'=>$user,
+                            'link'=>$link,
+                        ));
+                        die;
+                    }
+                    elseif($user->role==4)
+                    {
+                        $this->render('successReg', array(
+                            'user'=>$user,
+                        ));
+                        die;
+                    }
                 } else {
                     $showRegModal = true;
                 }
@@ -84,7 +98,10 @@ class SiteController extends Controller
                         $loggedUser = Users::model()->findByPk(Yii::app()->user->id);
                         $id_course = (int) $_SESSION['id_course'];
                         if($loggedUser->role == 2)
+                        {
                             $_SESSION['goals'][] = 'LoginStudent';
+                            $_SESSION['checkNewParent'] = true;
+                        }
                         if($id_course)
                             $this->redirect(array('courses/index', 'id'=>$id_course));
                         else

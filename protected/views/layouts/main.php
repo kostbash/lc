@@ -54,20 +54,21 @@
                             </a>
                         </div>
                     <?php endif; ?>
+                    
+                    <?php
+                        $controller = Yii::app()->getController();
+                        $isHome = (($controller->id === Yii::app()->defaultController) && ($controller->action->id === $controller->defaultAction)) ? true : false;
+                        if(!$isHome)
+                        {
+                            $this->renderPartial('//site/login', array('model'=>new LoginForm));
+                            $this->renderPartial('//site/registration', array('model'=>new Users));
+                        }
+                    ?>
                     <div id="login">
                         <div id="logining" class="clearfix">
                             <?php if(Yii::app()->user->isGuest) : ?>
                                 <div id="reg-as-student" data-toggle="modal" data-target="#regModel"><a href="#" onclick="reachGoal('RegisterStart')">Зарегистрируйтесь</a></div>
                                 <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#" onclick="reachGoal('HomeLoginStart')">Войдите</a></div>
-                                <?php
-                                    $controller = Yii::app()->getController();
-                                    $isHome = (($controller->id === Yii::app()->defaultController) && ($controller->action->id === $controller->defaultAction)) ? true : false;
-                                    if(!$isHome)
-                                    {
-                                        $this->renderPartial('//site/login', array('model'=>new LoginForm));
-                                        $this->renderPartial('//site/registration', array('model'=>new Users));
-                                    }
-                                ?>
                                 <script type="text/javascript">
                                     $(function(){
                                         $('#reg-as-student').click(function(){

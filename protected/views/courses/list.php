@@ -74,6 +74,13 @@
 
 <div id="container">
     <div id="courses-page">
+    <?php
+        if($newParent)
+        {
+            $this->renderPartial('//deals/_confirm_modal', array('newParent'=>$newParent));
+        }
+    ?>    
+        
     <?php 
         if($subjects)
         {

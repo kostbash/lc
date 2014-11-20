@@ -33,7 +33,7 @@ class UsersController extends Controller
 				'roles'=>array('student'),
 			),
 			array('allow',
-				'actions'=>array('forget', 'recovery'),
+				'actions'=>array('forget', 'recovery', 'accessDenyByConfirm', 'activate'),
 				'users'=>array('?'),
 			),
 			array('allow',
@@ -109,7 +109,6 @@ class UsersController extends Controller
                     $auth = new UserIdentity($user->username, $user->password);
                     $auth->authenticate(true);
                     Yii::app()->user->login($auth, 0);
-                    //$this->redirect(array('users/update'));
                     $this->redirect(array('courses/list'));
                 }
             }
@@ -239,6 +238,11 @@ class UsersController extends Controller
                 'errorRecoveryAnswer'=>$errorRecoveryAnswer,
                 'error'=>$error,
             ));
+        }
+        
+        public function actionAccessDenyByConfirm()
+        {
+            $this->render('accessDenyByConfirm');
         }
         
 	public function loadModel($id)

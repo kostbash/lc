@@ -87,6 +87,12 @@
 
 <div id="container">
     <div id='course-page'>
+        <?php
+            if($newParent)
+            {
+                $this->renderPartial('//deals/_confirm_modal', array('newParent'=>$newParent));
+            }
+        ?> 
         <?php if ($course->LessonsGroups) : $posLesson = 1; $isSkipLesson = false; ?>
             <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
                 <h1 class='theme-name'><?php echo "Тема $groupNum: \"$lessonGroup->name\""; ?></h1>

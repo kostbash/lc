@@ -24,11 +24,7 @@
             <div class="tab-pane active" id="register-tab">
                 <?php $regFormLearn=$this->beginWidget('CActiveForm', array(
                         'id'=>'reg-form-begin-learning',
-                        'enableClientValidation'=>true,
                         'action'=>array('site/index'),
-                        'clientOptions'=>array(
-                                'validateOnSubmit'=>true,
-                        ),
                 ));
                 $user->rememberMe = true;
                 ?>
@@ -67,11 +63,7 @@
             <div class="tab-pane" id="login-tab">
                 <?php $loginFormLearn=$this->beginWidget('CActiveForm', array(
                         'id'=>'login-form-begin-learning',
-                        'enableClientValidation'=>true,
                         'action'=>array('site/index'),
-                        'clientOptions'=>array(
-                                'validateOnSubmit'=>true,
-                        ),
                 )); ?>
                     <div class="row">
                             <?php echo Chtml::label("Введите ваш псевдоним"); ?>

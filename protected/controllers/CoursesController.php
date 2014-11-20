@@ -133,10 +133,21 @@ class CoursesController extends Controller
                 }
             }
             
+            if($_SESSION['checkNewParent'])
+            {
+                $newParents = ChildrenOfParent::newParents();
+                if($newParents)
+                {
+                    $newParent = $newParents[0]; // берем первое предложение
+                }
+                unset($_SESSION['checkNewParent']);
+            }
+            
             $this->render('index',array(
                     'course'=>$course,
                     'userLesson'=>$userAndLesson,
                     'currentLesson'=>$userAndLesson->Lesson,
+                    'newParent' => $newParent,
             ));
 	}
         
@@ -229,12 +240,22 @@ class CoursesController extends Controller
                     $model->attributes=$_GET['Courses'];
             $user = Users::model()->findByPk(Yii::app()->user->id);
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
+            if($_SESSION['checkNewParent'])
+            {
+                $newParents = ChildrenOfParent::newParents();
+                if($newParents)
+                {
+                    $newParent = $newParents[0]; // берем первое предложение
+                }
+                unset($_SESSION['checkNewParent']);
+            }
             $this->render('list',array(
                     'model'=>$model,
                     'lastActiveCourse' => $user->lastActiveCourse,
                     'activeCourses' => $user->lastCourses(1),
                     'passedCourses' => $user->lastCourses(2),
                     'subjects' => $subjects,
+                    'newParent'=> $newParent,
             ));
 	}
         

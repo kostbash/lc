@@ -45,6 +45,7 @@
                     'id' => 'checked',
 		    'value' => '$data->id',
                 ),
+                'username',
 		'email',
                 'rusRoleName',
                 'registration_day',
