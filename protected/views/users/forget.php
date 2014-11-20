@@ -21,23 +21,25 @@
         )); ?>
             <div class="row row-attr">
                 <div class="col-lg-4 col-md-4">
-                    <?php echo CHtml::label('Введите Ваш псевдоним', 'username'); ?>
+                    <?php echo CHtml::label('Введите Ваш псевдоним или email', 'username'); ?>
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <?php echo CHtml::textField('username', $username, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш логин')); ?>
+                    <?php echo CHtml::textField('username', $username, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш псевдоним или email')); ?>
                     <div class="errorMessage"><?php echo $errorUsername; ?></div>
                 </div>
             </div>
         
-            <div class="row row-attr">
-                <div class="col-lg-4 col-md-4">
-                    <?php echo CHtml::label('Введите Ваш ответ на контрольный вопрос', 'recovery_answer'); ?>
+            <?php if($user && $user->role==2) : ?>
+                <div class="row row-attr">
+                    <div class="col-lg-4 col-md-4">
+                        <?php echo CHtml::label('Введите Ваш ответ на контрольный вопрос', 'recovery_answer'); ?>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <?php echo CHtml::textField('recovery_answer', $recoveryAnswer, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш ответ на вопрос')); ?>
+                        <div class="errorMessage"><?php echo $errorRecoveryAnswer; ?></div>
+                    </div>
                 </div>
-                <div class="col-lg-6 col-md-6">
-                    <?php echo CHtml::textField('recovery_answer', $recoveryAnswer, array('size'=>60,'maxlength'=>100, 'class'=>'form-control', "placeholder"=>'Введите ваш ответ на вопрос')); ?>
-                    <div class="errorMessage"><?php echo $errorRecoveryAnswer; ?></div>
-                </div>
-            </div>
+            <?php endif; ?>
 
             <div class="row row-attr">
                 <div class="col-lg-4 col-md-4">

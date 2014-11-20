@@ -89,7 +89,22 @@
                                 </script>
                             <?php else : ?>
                                 <div id='logout' class="orange-button"><?php echo CHtml::link('Выход', array('site/logout')); ?></div>
-                                <div id='user-page-link'><?php echo CHtml::link(Yii::app()->user->name." (".Users::$rolesRusNames[Users::UserType()].")", array('/users/update')); ?></div>
+                                <?php
+                                    $userPageLink = $user->username." (".Users::$rolesRusNames[Users::UserType()].")";
+                                    if($user->role==2)
+                                    {
+                                        $userPageLink .= "<br/>Родитель: ";
+                                        if($user->ParentRelation)
+                                        {
+                                            $userPageLink .= $user->ParentRelation->Parent->email;
+                                        }
+                                        else
+                                        {
+                                            $userPageLink .= "Нет";
+                                        }
+                                    }
+                                ?>
+                                <div id='user-page-link'><?php echo CHtml::link($userPageLink, array('/users/update')); ?></div>
                             <?php endif; ?>
                         </div>
                         <div id="top-menu-on-main" class="clearfix" >

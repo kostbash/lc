@@ -25,6 +25,30 @@
             current.closest('.modal-content').find('.show form').submit();
             return false;
         });
+        
+        $('#Users_addParentOnReg').change(function(){
+            current = $(this);
+            if(current.is(':checked'))
+            {
+                $('#addParentToMe').show();
+            }
+            else
+            {
+                $('#addParentToMe').hide();
+            }
+        });
+        
+        $('#Users_addParentOnReg').change(function(){
+            current = $(this);
+            if(current.is(':checked'))
+            {
+                $('#addParentToMe').show();
+            }
+            else
+            {
+                $('#addParentToMe').hide();
+            }
+        });
     });
 </script>
 <div class="modal fade" id="regModel" tabindex="-1" role="dialog" aria-labelledby="regModelLabel" aria-hidden="true">
@@ -80,6 +104,33 @@
                     <div class="body-input">
                         <?php echo $formRegStudent->textField($model,'recovery_answer', array('class'=>'form-control', 'placeholder'=>'Введите ответ')); ?>
                         <?php echo $formRegStudent->error($model,'recovery_answer'); ?>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div style="margin-bottom: 10px; text-align: left;">
+                        <h4 style="margin-top: 0;">Родителям</h4>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <?php echo $formRegStudent->checkBox($model,'addParentOnReg', array('style'=>'float: left; margin-right: 4%;')); ?>
+                        <?php echo $formRegStudent->label($model,'addParentOnReg', array('style'=>"line-height: 18px; width: 90%")); ?>
+                    </div>
+                </div>
+                <div id="addParentToMe" class="row" <?php if(!$model->addParentOnReg) echo 'style="display: none;"'; ?>>
+                    <div class="col-lg-offset-1 col-md-offset-1 col-lg-12 col-md-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <?php echo $formRegStudent->labelEx($model,'emailParentOnReg', array('style'=>"line-height: 18px;")); ?>
+                            </div>
+                            <div class="col-lg-9 col-md-9">                  
+                                <?php echo $formRegStudent->textField($model,'emailParentOnReg', array('class'=>'form-control', 'placeholder'=>'Введите Ваш e-mail')); ?>
+                                <?php echo $formRegStudent->error($model,'emailParentOnReg'); ?>
+                                <div style="margin-top: 8px;">
+                                    <?php echo $formRegStudent->checkBox($model,'createParentOnReg', array('style'=>'float: left; margin-right: 4%;')); ?>
+                                    <?php echo $formRegStudent->label($model,'createParentOnReg', array('style'=>"line-height: 18px; width: 90%")); ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" name='Users[role]' value='2' />

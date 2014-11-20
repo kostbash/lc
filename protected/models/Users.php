@@ -50,6 +50,10 @@ class Users extends CActiveRecord
             3 => 'Любимое блюдо',
         );
         
+        public $addParentOnReg = false;
+        public $createParentOnReg = false;
+        public $emailParentOnReg;
+        
     
 	public function tableName()
 	{
@@ -70,11 +74,13 @@ class Users extends CActiveRecord
 			array('role, id_recovery_question', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>100),
 			array('role', 'in', 'range'=>array(1,2,3,4)),
-                        array('email', 'email', 'message'=>'Проверьте правильность введения адреса почты'),
-                        array('sendOnMail, rememberMe, send_notifications', 'boolean'),
+                        array('email, emailParentOnReg', 'email', 'message'=>'Проверьте правильность введенного адреса почты'),
+                        array('sendOnMail, rememberMe, send_notifications, addParentOnReg, createParentOnReg', 'boolean'),
 			array('password, temporary_password', 'length', 'max'=>32),
 			array('recovery_answer', 'length', 'max'=>100),
 			array('progress_key', 'length', 'max'=>25),
+                        array('emailParentOnReg', 'needEmailOnReg'),
+                        array('emailParentOnReg', 'uniqueParentEmailOnReg'),
                     	array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
                     	array('username', 'unique', 'message'=>'Указанный логин уже используется'),
                     	array('username', 'match', 'pattern'=>'/^[\w\d_.@]{4,}$/i', 'message'=>'Логин должен быть не менее 4 символов и состоять из латинских букв, цифр, знака подчеркивания, точки и @'),
@@ -108,6 +114,26 @@ class Users extends CActiveRecord
                 $this->addError($attr, 'Необходимо заполнить поле "'.$this->getAttributeLabel($attr).'"');
             }
         }
+        
+        public function needEmailOnReg($attr, $params)
+        {
+            if($this->role==2 && $this->addParentOnReg && $this->$attr=='')
+            {
+                $this->addError($attr, 'Введите Ваш e-mail');
+            }
+        }
+        
+        public function uniqueParentEmailOnReg($attr, $params)
+        {
+            if($this->role==2 && $this->addParentOnReg && $this->createParentOnReg)
+            {
+                $exists = Users::model()->exists('username=:username', array('username'=>$this->$attr));
+                if($exists)
+                {
+                    $this->addError($attr, 'Пользователь с таким e-mail уже существует');
+                }
+            }
+        }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -130,6 +156,9 @@ class Users extends CActiveRecord
                         'send_notifications'=>'Отправлять на e-mail оповещения учеников',
                         'id_recovery_question'=>'Выберите контрольный вопрос',
                         'recovery_answer'=>'Ваш ответ на контрольный вопрос',
+                        'addParentOnReg'=>'Для родителя: иметь возможность отслеживать прогресс обучения',
+                        'createParentOnReg'=>'У Вас еще нет аккаунта родителя? Установите этот флажок, чтобы создать новый аккаунт',
+                        'emailParentOnReg' => 'Введите Ваш e-mail',
 		);
 	}
 
@@ -308,7 +337,28 @@ class Users extends CActiveRecord
             {
                 $this->username = $this->email;
             }
+            
             $validate = $this->validate();
+            
+            if($validate && $this->role==2 && $this->addParentOnReg)
+            {
+                if($this->createParentOnReg)
+                {
+                    $parent = new Users;
+                    $parent->role = 4;
+                    $parent->registration(array('email'=>$this->emailParentOnReg));
+                }
+                else
+                {
+                    $parent = Users::model()->findByAttributes(array('username'=>$this->emailParentOnReg, 'role'=>4));
+                    if(!$parent)
+                    {
+                        $this->addError('emailParentOnReg', 'Не зарегистрирован родитель с таким e-mail');
+                        $validate = false;
+                    }
+                }
+            }
+            
             if($validate)
             {
                 $this->password = md5(Yii::app()->params['beginSalt'].$this->password.Yii::app()->params['endSalt']);
@@ -339,6 +389,17 @@ class Users extends CActiveRecord
                     );
                 }
                 $this->save(false);
+                
+                if($parent)
+                {
+                    $children = new ChildrenOfParent;
+                    $children->id_child = $this->id;
+                    $children->id_parent = $parent->id;
+                    $children->child_name = 'Без имени';
+                    $children->child_surname = 'Без фамилии';
+                    $children->status = 1;
+                    $children->save();
+                }
             }
             return $validate;
         }

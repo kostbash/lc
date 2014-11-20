@@ -1159,12 +1159,19 @@ z-index:10000000;
     display: inline-block;
     width: 227px;
     height: 22px;
-    overflow: hidden;
+    margin-top: -9px;
+    word-break: break-all;
 }
 
 #logout
 {
     float: right;
+    margin-top: -14px;
+}
+
+#logout a
+{
+    display: inline-block;
 }
 
 #reg-form .or-login

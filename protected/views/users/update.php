@@ -15,7 +15,7 @@
 </div><!-- end-header-->
 
 <div id="container">
-    <div class="widget" style="padding-top: 10px">
+    <div id="content">
         <?php $this->renderPartial('_form', array('model'=>$model)); ?>
     </div>
 </div>

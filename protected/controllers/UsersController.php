@@ -94,6 +94,34 @@ class UsersController extends Controller
                      $this->redirect('/users/update');
                  }
             }
+            
+            
+            if($_POST['RemoveParent'])
+            {
+                $relation = $model->ParentRelation;
+                
+                CMailer::send(
+                     array(
+                         'email' => $relation->Parent->email,
+                         'name' => $relation->Parent->email,
+                     ),
+                     array(
+                         'email' => Yii::app()->params['adminEmail'],
+                         'name' => Yii::app()->name
+                     ),
+                     Yii::app()->name,
+                     array(
+                         'template' => 'break_family_ties',
+                         'vars' => array(
+                             'username_child'=>$model->username,
+                         ),
+                     )
+                );
+                
+                $relation->status = 2;
+                $relation->save(false);
+            }
+            
             $this->render('update',array(
                     'model'=>$model,
                     'user'=>$user,
@@ -162,76 +190,94 @@ class UsersController extends Controller
         
         public function actionForget() {
             $model = new Users;
-
             $username = '';
             $errorUsername = '';
             $recoveryAnswer = '';
             $errorRecoveryAnswer = '';
             $error = '';
-            $checkMain = true;
+            $canRecovery = true;
             
             if($_POST)
             {
                 $username = $_POST['username'];
                 $recoveryAnswer = $_POST['recovery_answer'];
                 
+                
                 if($username=='')
                 {
-                    $errorUsername = 'Введите ваш логин';
-                    $checkMain = false;
+                    $errorUsername = 'Введите ваш логин или email';
+                    $canRecovery = false;
                 }
                 
-                if($recoveryAnswer=='')
+                if($canRecovery)
                 {
-                    $errorRecoveryAnswer = 'Введите ответ для восстановления';
-                    $checkMain = false;
-                }
-                
-                if($checkMain)
-                {
-                    $user = Users::model()->findByAttributes(array('username'=>$username, 'recovery_answer'=>$recoveryAnswer));
-                    if($user)
+                    $user = Users::model()->findByAttributes(array('username'=>$username));
+                    if(!$user)
                     {
-                        $user->password_recovery_key = md5('polux'.uniqid().$user->id.'sun');
-                        $user->save(false);
-                        $url = CHtml::link('восстановить пароль', array('users/recovery', 'key'=>$user->password_recovery_key));
-
-//                        CMailer::send(
-//                            array(
-//                                'email' => $user->email,
-//                                'name' => $user->email,
-//                            ),
-//                            array(
-//                                'email' => 'registration@cursys.ru',
-//                                'name' => 'Cursys.ru'
-//                            ),
-//                            Yii::app()->name,
-//                            array(
-//                                'template' => 'password_recovery',
-//                                'vars' => array(
-//                                    'url'=>$url,
-//                                    'email' => $user->email,
-//                                    'site_name'=>Yii::app()->name,
-//                                ),
-//                            )
-//                        );
-                        
+                        $errorUsername = 'Пользователь с таким псевдонимом или email не зарегистрирован';
+                        $canRecovery = false;
+                    }
+                }
+                
+                
+                if($canRecovery && $user->role==2 && $recoveryAnswer=='')
+                {
+                    if(isset($_POST['recovery_answer']))
+                    {
+                        $errorRecoveryAnswer = 'Введите ответ для восстановления';
+                    }
+                    $canRecovery = false;
+                }
+                
+                if($canRecovery && $user->role==2 && $user->recovery_answer!=$recoveryAnswer)
+                {
+                    $error = 'Логин или ответ на вопрос не верен. Проверьте правильность введенных вами данных.';
+                    $canRecovery = false;
+                }
+                
+                if($canRecovery)
+                {
+                    $user->password_recovery_key = md5('polux'.uniqid().$user->id.'sun');
+                    $user->save(false);
+                    if($user->role==2)
+                    {
                         $this->redirect(array('users/recovery', 'key'=> $user->password_recovery_key));
-//                        
-//                        $this->render('successForget', array(
-//                            'user'=>$user,
-//                        ));
-//                        die;
                     }
                     else
                     {
-                        $error = 'Логин или ответ на вопрос не верен. Проверьте правильность введенных вами данных.';
+                        $url = CHtml::link('восстановить пароль', array('users/recovery', 'key'=>$user->password_recovery_key));
+
+                        CMailer::send(
+                            array(
+                                'email' => $user->email,
+                                'name' => $user->email,
+                            ),
+                            array(
+                                'email' => 'registration@cursys.ru',
+                                'name' => 'Cursys.ru'
+                            ),
+                            Yii::app()->name,
+                            array(
+                                'template' => 'password_recovery',
+                                'vars' => array(
+                                    'url'=>$url,
+                                    'email' => $user->email,
+                                    'site_name'=>Yii::app()->name,
+                                ),
+                            )
+                        );
+
+                        $this->render('successForget', array(
+                            'user'=>$user,
+                        ));
+                        die;
                     }
                 }
             }
             
             $this->render('forget', array(
                 'model'=>$model,
+                'user'=>$user,
                 'errorUsername'=>$errorUsername,
                 'username'=>$username,
                 'recoveryAnswer'=>$recoveryAnswer,
