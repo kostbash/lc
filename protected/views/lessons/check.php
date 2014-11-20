@@ -1,5 +1,5 @@
 <?php 
-    $this->pageTitle="Вступительный тест к <$course->name>. ".Yii::app()->name.".";
+    $this->pageTitle="Вступительный тест к $course->name. ".Yii::app()->name.".";
     $this->renderPartial("_pass_scripts");
     $this->renderPartial("blocks/_2_scripts");
 ?>

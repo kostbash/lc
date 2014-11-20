@@ -142,8 +142,9 @@
                 
             function reachGoal(goal)
             {
-                yaCounter26929302.reachGoal(goal);
+                window.yaCounter26929302.reachGoal(goal);
             }     
+            $(window).on('load',function(){ 
             <?php
                 if(isset($_SESSION['goals'])&&  is_array($_SESSION['goals']) && count($_SESSION['goals']))
                 {
@@ -153,7 +154,7 @@
                     }
                     unset($_SESSION['goals']);
                 }
-            ?>
+            ?>});
         </script>
         <noscript>
             <div>

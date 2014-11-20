@@ -1,4 +1,4 @@
-<?php $this->pageTitle="<$course->name>. ".Yii::app()->name."."; ?>
+<?php $this->pageTitle="$course->name. ".Yii::app()->name."."; ?>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
@@ -65,6 +65,7 @@
                 <div class="content">
                     <div class="text">
                         <p>Место, чтобы инфу по курсу поместить</p>
+                        <?php /* ?>
                         <div class="export-button">
                             <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт курса<span class="caret"></span></button>
                             <ul class="dropdown-menu pull-right" role="menu">
@@ -78,6 +79,7 @@
                                 </div>
                             <?php endif; ?>
                         </div>
+                        <?php */ ?> 
                     </div>
                 </div>
             </div>

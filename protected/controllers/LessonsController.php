@@ -395,7 +395,7 @@ class LessonsController extends Controller
             header("Content-Type: application/force-download");
             header("Content-Type: application/octet-stream");
             header("Content-Type: application/download");
-            header("Content-Disposition: attachment; filename=" . "'Урок_$lesson->name.pdf'");
+            header("Content-Disposition: attachment; filename=" . '"Урок_'.$lesson->name.'.pdf"');
             header("Content-Transfer-Encoding: binary ");  
             flush();
             readfile($path);
