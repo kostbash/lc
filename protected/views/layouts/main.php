@@ -71,19 +71,20 @@
                                 <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#" onclick="reachGoal('HomeLoginStart')">Войдите</a></div>
                                 <script type="text/javascript">
                                     $(function(){
-                                        $('#reg-as-student').click(function(){
-                                            $('#user-role-student').attr('checked', 'checked');
-                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
-                                        });
-
-                                        $('#reg-as-teacher').click(function(){
-                                            $('#user-role-teacher').attr('checked', 'checked');
-                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
-                                        });
+//                                        $('#reg-as-student').click(function(){
+//                                            $('#user-role-student').attr('checked', 'checked');
+//                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
+//                                        });
+//
+//                                        $('#reg-as-teacher').click(function(){
+//                                            $('#user-role-teacher').attr('checked', 'checked');
+//                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
+//                                        });
 
                                         $('#reg-as-parent').click(function(){
                                             $('#user-role-parent').attr('checked', 'checked');
-                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
+                                            $('.reg-as-student').removeClass('show').addClass('hide');
+                                            $('.reg-as-parent').removeClass('hide').addClass('show');
                                         });
                                     });
                                 </script>

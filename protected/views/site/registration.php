@@ -37,18 +37,6 @@
                 $('#addParentToMe').hide();
             }
         });
-        
-        $('#Users_addParentOnReg').change(function(){
-            current = $(this);
-            if(current.is(':checked'))
-            {
-                $('#addParentToMe').show();
-            }
-            else
-            {
-                $('#addParentToMe').hide();
-            }
-        });
     });
 </script>
 <div class="modal fade" id="regModel" tabindex="-1" role="dialog" aria-labelledby="regModelLabel" aria-hidden="true">
