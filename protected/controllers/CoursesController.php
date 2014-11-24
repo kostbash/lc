@@ -17,7 +17,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf', 'congratulation'),
+				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf', 'congratulation', 'unavailable'),
 				'roles'=>array('student'),
 			),
 			array('allow',
@@ -84,22 +84,41 @@ class CoursesController extends Controller
                 $this->redirect(array('/courses/index', 'id'=>$course->id));
             }
         }
+        
+        public function actionUnavailable($id)
+        {
+            $course = Courses::model()->findByPk($id);
+            if($course && !$course->haveAccess)
+            {
+                $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>Yii::app()->user->id));
+                if($courseUser)
+                {
+                    $this->render('unavailable', array(
+                        'course'=>$course,
+                    ));
+                    die;
+                }
+            }
+
+            $this->redirect(array('courses/list'));
+        }
 
 	public function actionIndex($id, $lesson=null)
 	{
             $this->_course = $id;
             $course = $this->loadModel($id);
             $user = Users::model()->findByPk(Yii::app()->user->id);
-
+            
             $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id));
+
             // сущесвует ли курс у пользователя
             if($courseUser)
             {
                 if($courseUser->status == 1)
                 {
                     $courseUser->activity_date = date('Y-m-d H:i:s');
-                    $courseUser->save();
                 }
+                $courseUser->save();
             }
             else
             {
@@ -107,6 +126,7 @@ class CoursesController extends Controller
                 $courseUser->id_course = $course->id;
                 $courseUser->id_user = $user->id;
                 $courseUser->activity_date = date('Y-m-d H:i:s');
+                $courseUser->last_activity_date = date('Y-m-d H:i:s');
                 $courseUser->status = 1;
                 $courseUser->save();
             }
@@ -128,10 +148,13 @@ class CoursesController extends Controller
                         $userAndLesson->id_user = $user->id;
                         $userAndLesson->id_group = $nearestAvailableLesson->Groups[0]->id;
                         $userAndLesson->id_lesson = $nearestAvailableLesson->id;
+                        $userAndLesson->last_activity_date = date('Y-m-d H:i:s');
                         $userAndLesson->save(false);
                     }
                 }
             }
+            
+            $courseUser->OnChangeCourse();
             
             if($_SESSION['checkNewParent'])
             {
@@ -240,6 +263,7 @@ class CoursesController extends Controller
                     $model->attributes=$_GET['Courses'];
             $user = Users::model()->findByPk(Yii::app()->user->id);
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
+            
             if($_SESSION['checkNewParent'])
             {
                 $newParents = ChildrenOfParent::newParents();
@@ -249,6 +273,7 @@ class CoursesController extends Controller
                 }
                 unset($_SESSION['checkNewParent']);
             }
+
             $this->render('list',array(
                     'model'=>$model,
                     'lastActiveCourse' => $user->lastActiveCourse,
@@ -275,8 +300,13 @@ class CoursesController extends Controller
 	public function loadModel($id)
 	{
 		$model=Courses::model()->findByPk($id);
-		if($model===null or !$model->haveAccess)
+		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
+                elseif(!$model->haveAccess)
+                {
+                    $this->redirect(array('courses/unavailable', 'id'=>$model->id));
+                }
+                
 		return $model;
 	}
 

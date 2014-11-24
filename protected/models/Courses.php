@@ -281,7 +281,7 @@ class Courses extends CActiveRecord
 
         public function stateButton() {
             $lastLesson = $this->lastUserLesson;
-            $number = $lastLesson->position;
+            $number = $lastLesson->Lesson->position;
             $exerciseGroup = UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND passed=:passed', array('id_user_and_lesson'=>$lastLesson->id, 'passed'=>1));
             if($exerciseGroup)
             {
@@ -427,11 +427,13 @@ class Courses extends CActiveRecord
                 'params'=>array('id_user'=>Yii::app()->user->id),
                 'order'=>'`activity_date` DESC',
             ));
-            if($lastActive && $lastActive->id_course == $this->id)
-                return "<div class='last-active'>ПОСЛЕДНИЙ АКТИВНЫЙ</div>";
             $userAndCourse = CoursesAndUsers::model()->findByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$this->id));
             if($userAndCourse)
             {
+                if(!$this->haveAccess)
+                    return "<div class='denied'>НЕДОСТУПЕН</div>";
+                if($lastActive && $lastActive->id_course == $this->id)
+                    return "<div class='last-active'>ПОСЛЕДНИЙ АКТИВНЫЙ</div>";
                 if($userAndCourse->status==1)
                     return "<div class='active'>$this->progress <span class='percent'>%</span></div>";
                 if($userAndCourse->status==2)
@@ -499,6 +501,5 @@ class Courses extends CActiveRecord
         {
             $sql = "SELECT * FROM `oed_students_of_teacher` as sot, `oed_course_user_list` as cul WHERE sot.id_student=cul.id_student AND cul.id_course=:id_course AND sot.id_teacher=:id_teacher AND sot.status=1";
             return StudentsOfTeacher::model()->findAllBySql($sql, array('id_course'=>$this->id, 'id_teacher'=>Yii::app()->user->id));
-        }
-                 
+        }     
 }

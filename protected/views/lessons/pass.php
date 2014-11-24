@@ -32,7 +32,7 @@
                                     $contentSkills .= "</table>";
                                 ?>
                                 <div id="lesson-name">
-                                    <?php echo "УРОК $userLesson->position: ".$userLesson->Lesson->name; ?>
+                                    <?php echo "УРОК {$userLesson->Lesson->position}: ".$userLesson->Lesson->name; ?>
                                     <div id="skills" data-toggle="popover" data-trigger ="hover" data-html='true' data-container="#lesson-name" data-placement="right" data-content="<?php echo $contentSkills; ?>"></div>
                                 </div>
                                 <?php echo CHtml::link('Курсы:', array('courses/list'), array('style'=>'color:#263870;')); ?>

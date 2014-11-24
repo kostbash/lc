@@ -129,7 +129,7 @@
                                             <?php echo CHtml::link("Урок $posLesson : ".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
                                         </td>
                                         <td style="text-align: center;">
-                                            <?php if ($userAndLesson->LessonProgress == 100) : ?>
+                                            <?php if ($userAndLesson->passed) : ?>
                                                 <p class="passed">Пройден</p>
                                             <?php else : ?>
                                                 <div class="percent">
@@ -139,7 +139,7 @@
                                             <?php endif; ?>
                                         </td>
                                         <td style="text-align: center;">
-                                            <?php $imageName = $userAndLesson->repeatLesson ? 'repeat' : 'play'; ?>
+                                            <?php $imageName = $userAndLesson->passed ? 'repeat' : 'play'; ?>
                                             <?php echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson', 'onclick'=>"reachGoal('AnyCourseLessonStartIndex')")); ?>
                                         </td>
                                         <td style="text-align: center;">

@@ -369,7 +369,11 @@ class Lessons extends CActiveRecord
             CoursesAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
             GroupAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
             LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
-            UserAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            $userLessons = UserAndLessons::model()->findAllByAttributes(array('id_lesson'=>$this->id));
+            foreach($userLessons as $userLesson)
+            {
+                $userLesson->delete();
+            }
             
             parent::afterDelete();
         }
@@ -386,5 +390,38 @@ class Lessons extends CActiveRecord
                 $course->changeDate();
             }
             parent::afterSave();
+        }
+        
+        public function getPosition()
+        {
+            $position = 0;
+            $query = "SELECT lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons
+                    WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=$this->course_creator_id
+                    ORDER BY themes.order ASC, lessons.order ASC";
+            $lessons = Yii::app()->db->createCommand($query)->queryAll();
+            
+            foreach($lessons as $lesson)
+            {
+                if($lesson['id_lesson'] == $this->id)
+                {
+                    break;
+                }
+                ++$position;
+                
+            }
+            return $position;
+        }
+        
+        public function getIdsBlocks()
+        {
+            $query = "SELECT id_group_exercises as id_block FROM `oed_lesson_and_exercise_group` WHERE id_lesson=$this->id ORDER BY `order` ASC";
+            $blocks = Yii::app()->db->createCommand($query)->queryAll();
+            $result = array();
+            
+            foreach($blocks as $block)
+            {
+                $result[] = $block['id_block'];
+            }
+            return $result;
         }
 }

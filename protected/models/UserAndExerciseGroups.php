@@ -175,7 +175,7 @@ class UserAndExerciseGroups extends CActiveRecord
                 foreach($numberAllSkills as $id_skill => $numberSkill)
                 {
                     $skill = Skills::model()->findByPk($id_skill);
-                    $resultSkills[$id_skill]['achieved'] = $numberSkill ? round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN) : 0;
+                    $resultSkills[$id_skill]['achieved'] = $numberSkill ? round(($numberRightAnswerSkills[$id_skill]/$numberSkill)*100, 0, PHP_ROUND_HALF_DOWN) : 100;
                     $resultSkills[$id_skill]['need']= $this->Group->percentBySkill($id_skill) * 100;
                     $resultSkills[$id_skill]['skill'] = $skill;
                     if($resultSkills[$id_skill]['need'] > $resultSkills[$id_skill]['achieved'])
@@ -413,5 +413,45 @@ class UserAndExerciseGroups extends CActiveRecord
                 $link = array('courses/congratulation', 'id'=>$this->UserAndLesson->id_course);
             }
             return $link;
+        }
+        
+        public function OnChangeBlock($makePassed=false)
+        {
+            if($this->Group->type==2) // если тест и он пройден
+            {
+                $changeDate = strtotime($this->Group->change_date);
+                $lastActivityDate = strtotime($this->last_activity_date);
+                if($makePassed || ($changeDate >= $lastActivityDate))
+                {
+                    $skills = $this->Group->GroupAndSkills;
+                    $attrs = array('id_user_and_lesson'=>$this->id_user_and_lesson, 'id_test_group'=>$this->id_exercise_group);
+                    foreach($skills as $skill)
+                    {
+                        $attrs['id_skill'] = $skill->id_skill;
+                        $userBlockSkill = UserExerciseGroupSkills::model()->findByAttributes($attrs);
+                        if($userBlockSkill)
+                        {
+                            $currentPercent = $userBlockSkill->number_all ? round(($userBlockSkill->right_answers/$userBlockSkill->number_all)*100, 0, PHP_ROUND_HALF_DOWN) : 0;
+                            if($skill->nicePercent > $currentPercent)
+                            {
+                                $userBlockSkill->number_all = 100;
+                                $userBlockSkill->right_answers = $skill->nicePercent;
+                                $userBlockSkill->save();
+                            }
+                        }
+                        else
+                        {
+                            $userBlockSkill = new UserExerciseGroupSkills;
+                            $userBlockSkill->attributes = $attrs;
+                            $userBlockSkill->number_all = 100;
+                            $userBlockSkill->right_answers = $skill->nicePercent;
+                            $userBlockSkill->save();
+                        }
+                    }
+                }
+            }
+            
+            $this->last_activity_date = date('Y-m-d H:i:s');
+            $this->save();
         }
 }

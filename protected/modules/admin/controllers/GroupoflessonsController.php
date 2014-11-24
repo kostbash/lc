@@ -155,7 +155,7 @@ class GroupoflessonsController extends Controller
         public function actionChangePositions() {
             $id_theme = (int) $_POST['id_theme'];
             $id_course = (int) $_POST['id_course'];
-            $course = Courses::existCourseById($id_course);
+            $course = Courses::CourseById($id_course);
             
             if($id_theme && $course)
             {
@@ -193,6 +193,7 @@ class GroupoflessonsController extends Controller
                 } else {
                     GroupAndLessons::model()->deleteAllByAttributes(array('id_group'=>$id_theme));
                 }
+                $course->changeDate();
                 $res['success'] = 1;
             } elseif($course) {
                 if($_POST['positions'])
@@ -225,6 +226,7 @@ class GroupoflessonsController extends Controller
                 } else {
                     CoursesAndLessons::model()->deleteAllByAttributes(array('id_course'=>$id_course));
                 }
+                $course->changeDate();
                 $res['success'] = 1;
             } else {
                 $res['success'] = 0;

@@ -36,9 +36,8 @@ class CoursesAndUsers extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
+                    'Course'=>array(self::BELONGS_TO, 'Courses', 'id_course'),
 		);
 	}
 
@@ -91,4 +90,71 @@ class CoursesAndUsers extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        
+        public function OnChangeCourse()
+        {
+            $changeDate = strtotime($this->Course->change_date);
+            $lastActivityDate = strtotime($this->last_activity_date);
+            
+            if($changeDate >= $lastActivityDate)
+            {
+                $query = "SELECT themes.id_course, lessons.id_group, lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons
+                        WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=$this->id_course
+                        ORDER BY themes.order ASC, lessons.order ASC";
+                $lessonsAttrs = Yii::app()->db->createCommand($query)->queryAll();
+
+                $lastUserLesson = $this->Course->lastUserLesson;
+
+                // убираем проверочный урок
+                if($lessonsAttrs[0])
+                {
+                    $lessonsAttrs[0]['id_user'] = $this->id_user;
+                    $testLesson = UserAndLessons::model()->findByAttributes($lessonsAttrs[0]);
+                    if($testLesson)
+                    {
+                        $testLesson->delete();
+                    }
+                    unset($lessonsAttrs[0]);
+                }
+                
+                if($lastUserLesson)
+                {
+                    foreach($lessonsAttrs as $lessonAttrs)
+                    {
+                        if($lastUserLesson->id_lesson != $lessonAttrs['id_lesson'])
+                        {
+                            $lessonAttrs['id_user'] = $this->id_user;
+                            $userAndLesson = UserAndLessons::model()->findByAttributes($lessonAttrs);
+
+                            if(!$userAndLesson)
+                            {
+                                $userAndLesson = new UserAndLessons;
+                                $userAndLesson->attributes = $lessonAttrs;
+                                $userAndLesson->last_activity_date = date('Y-m-d H:i:s');
+                            }
+                            
+                            $makePassed = false;
+
+                            if($userAndLesson->isNewRecord || !$userAndLesson->passed)
+                            {
+                                $userAndLesson->passed = 1;
+                                $userAndLesson->save();
+                                $makePassed = true;
+                            }
+
+                            $userAndLesson->OnChangeLesson($makePassed);
+                        }
+                        else
+                        {
+                            $lastUserLesson->onChangeLesson();
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            $this->last_activity_date = date('Y-m-d H:i:s');
+            $this->save();
+        }   
 }

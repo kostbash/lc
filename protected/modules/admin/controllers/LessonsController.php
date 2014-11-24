@@ -256,11 +256,18 @@ class LessonsController extends Controller
                 $block->save(false);
             }
             
-            CoursesAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
-            GroupAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
-            LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
-            UserAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$this->id));
+            CoursesAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$model->id));
+            GroupAndLessons::model()->deleteAllByAttributes(array('id_lesson'=>$model->id));
+            LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$model->id));
+            
+            $userLessons = UserAndLessons::model()->findAllByAttributes(array('id_lesson'=>$model->id));
+            foreach($userLessons as $userLesson)
+            {
+                $userLesson->delete();
+            }
+            
             $course->changeDate();
+            
             // удаляем так, чтобы не сработал afterdelete, который удалит все группы
             if(Lessons::model()->deleteByPk($id_lesson))
                 echo 1;
@@ -440,12 +447,13 @@ class LessonsController extends Controller
                 $lesson = $this->loadModel($id_lesson);
                 if($_POST['positions'])
                 {
+                    $criteria = new CDbCriteria;
+                    $criteria->addNotInCondition('id_group_exercises', $_POST['positions']);
+                    $criteria->compare('id_lesson', $id_lesson);
+                    LessonAndExerciseGroup::model()->deleteAll($criteria);
+                    
                     foreach($_POST['positions'] as $key => $id_group)
                     {
-                        $criteria = new CDbCriteria;
-                        $criteria->addNotInCondition('id_group_exercises', $_POST['positions']);
-                        $criteria->compare('id_lesson', $id_lesson);
-                        LessonAndExerciseGroup::model()->deleteAll($criteria);
                         $lessonAndExerciseGroup = LessonAndExerciseGroup::model()->findByAttributes(array('id_lesson'=>$id_lesson, 'id_group_exercises'=>$id_group));
                         if($lessonAndExerciseGroup)
                         {
@@ -458,12 +466,16 @@ class LessonsController extends Controller
                             $lessonAndExerciseGroup->order = $key+1;
                             $lessonAndExerciseGroup->save();
                         }
-                    }
+                        
                     
-                    $userExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
-                    foreach($userExerciseGroups as $userExerciseGroup)
-                    {
-                        $userExerciseGroup->delete();
+                        $userExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
+                        if($userExerciseGroups[0]->UserAndLesson->id_lesson != $id_lesson)
+                        {
+                            foreach($userExerciseGroups as $userExerciseGroup)
+                            {
+                                $userExerciseGroup->delete();
+                            }
+                        }
                     }
                 } else {
                     LessonAndExerciseGroup::model()->deleteAllByAttributes(array('id_lesson'=>$id_lesson));
@@ -473,12 +485,13 @@ class LessonsController extends Controller
             } elseif($id_course) {
                 if($_POST['positions'])
                 {
+                    $criteria = new CDbCriteria;
+                    $criteria->addNotInCondition('id_group', $_POST['positions']);
+                    $criteria->compare('id_course', $id_course);
+                    CoursesAndGroupExercise::model()->deleteAll($criteria);
+                    
                     foreach($_POST['positions'] as $key => $id_group)
                     {
-                        $criteria = new CDbCriteria;
-                        $criteria->addNotInCondition('id_group', $_POST['positions']);
-                        $criteria->compare('id_course', $id_course);
-                        CoursesAndGroupExercise::model()->deleteAll($criteria);
                         $coursesAndGroupExercise = CoursesAndGroupExercise::model()->findByAttributes(array('id_course'=>$id_course, 'id_group'=>$id_group));
                         if($coursesAndGroupExercise)
                         {
@@ -491,11 +504,12 @@ class LessonsController extends Controller
                             $coursesAndGroupExercise->order = $key+1;
                             $coursesAndGroupExercise->save();
                         }
-                    }
-                    $userExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
-                    foreach($userExerciseGroups as $userExerciseGroup)
-                    {
-                        $userExerciseGroup->delete();
+                        
+                        $userExerciseGroups = UserAndExerciseGroups::model()->findAllByAttributes(array('id_exercise_group'=>$id_group));
+                        foreach($userExerciseGroups as $userExerciseGroup)
+                        {
+                            $userExerciseGroup->delete();
+                        }
                     }
                 } else {
                     CoursesAndGroupExercise::model()->deleteAllByAttributes(array('id_course'=>$id_course));

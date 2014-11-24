@@ -26,10 +26,9 @@ class UserAndLessons extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_user', 'required'),
-			array('id_user', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			array('id_user, id_course, id_group, id_lesson, passed', 'required'),
+			array('id_user, id_course, id_group, id_lesson, passed', 'numerical', 'integerOnly'=>true),
+                        array('last_activity_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
 			array('id, id_user', 'safe', 'on'=>'search'),
 		);
 	}
@@ -103,21 +102,12 @@ class UserAndLessons extends CActiveRecord
             return true;
         }
         
-        public function getPosition() {
-            $courseGroups = CourseAndLessonGroup::model()->findAll("`id_course`=$this->id_course ORDER BY `order` ASC");
-            $user = Users::model()->findByPk(Yii::app()->user->id);
-            $count = 1;
-            foreach($courseGroups as $courseGroup) {
-                foreach($courseGroup->GroupAndLessons as $key => $lessonGroup)
-                {
-                    if($key==0 && $count==1)
-                        continue;
-                    if($lessonGroup->id_group == $this->id_group && $lessonGroup->id_lesson == $this->id_lesson)
-                        break 2;
-                    ++$count;
-                }
-            }
-            return $count;
+        public function getLastUserBlock()
+        {
+            $query = "SELECT userBlock.* FROM `oed_lesson_and_exercise_group` lesBlock, `oed_user_and_exercise_groups` userBlock
+                    WHERE lesBlock.id_lesson = :id_lesson AND lesBlock.id_group_exercises = userBlock.id_exercise_group AND userBlock.id_user_and_lesson = :id_user_and_lesson
+                    ORDER BY lesBlock.order DESC LIMIT 1";
+            return UserAndExerciseGroups::model()->findBySql($query, array('id_lesson'=>$this->id_lesson, 'id_user_and_lesson'=>$this->id));
         }
         
         public function afterDelete() {
@@ -130,5 +120,59 @@ class UserAndLessons extends CActiveRecord
                 }
             }
             parent::afterDelete();
+        }
+        
+        public function OnChangeLesson($makePassed = false)
+        {
+            $changeDate = strtotime($this->Lesson->change_date);
+            $lastActivityDate = strtotime($this->last_activity_date);
+            
+            if($makePassed || ($changeDate >= $lastActivityDate))
+            {
+                // если урок пройден, все блоки без исключения должны быть пройдены
+                if($this->passed)
+                {
+                    $passed = true;
+                }
+                else
+                {
+                    $passed = false;
+                    $lastUserBlock = $this->lastUserBlock;
+                }
+                
+                
+                foreach($this->Lesson->idsBlocks as $id_block)
+                {
+                    if($passed || $lastUserBlock->id_exercise_group != $id_block)
+                    {
+                        $userExercisesGroup = UserAndExerciseGroups::model()->findByAttributes(array('id_user_and_lesson'=>$this->id, 'id_exercise_group'=>$id_block));
+                        if(!$userExercisesGroup)
+                        {
+                            $userExercisesGroup = new UserAndExerciseGroups;
+                            $userExercisesGroup->id_user_and_lesson = $this->id;
+                            $userExercisesGroup->id_exercise_group = $id_block;
+                            $userExercisesGroup->last_activity_date = date('Y-m-d H:i:s');
+                        }
+                        
+                        $makePassed = false;
+                        
+                        if($userExercisesGroup->isNewRecord || !$userExercisesGroup->passed)
+                        {
+                            $userExercisesGroup->passed = 1;
+                            $userExercisesGroup->save();
+                            $makePassed = true;
+                        }
+                        
+                        $userExercisesGroup->onChangeBlock($makePassed);
+                    }
+                    else
+                    {
+                        $lastUserBlock->onChangeBlock();
+                        break;
+                    }
+                }
+            }
+            $this->last_activity_date = date('Y-m-d H:i:s');
+            $this->save();
         }
 }

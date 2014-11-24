@@ -88,6 +88,14 @@ class CourseSubjects extends CActiveRecord
                 {
                     $accessCourses[] = $course;
                 }
+                elseif(!Yii::app()->user->isGuest)
+                {
+                    $userCourse = CoursesAndUsers::model()->exists('id_user=:id_user AND id_course=:id_course', array('id_user'=>Yii::app()->user->id, 'id_course'=>$course->id));    
+                    if($userCourse)
+                    {
+                       $accessCourses[] = $course;
+                    }
+                }
             }
             
             return $accessCourses;

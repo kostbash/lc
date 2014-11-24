@@ -27,8 +27,8 @@ class UserExerciseGroupSkills extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_test_group, id_skill, right_answers', 'required'),
-			array('id_test_group, id_skill, right_answers', 'numerical', 'integerOnly'=>true),
+			array('id_user_and_lesson, id_test_group, id_skill, right_answers, number_all', 'required'),
+			array('id_user_and_lesson, id_test_group, id_skill, right_answers, number_all', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, id_test_group, id_skill, right_answers', 'safe', 'on'=>'search'),

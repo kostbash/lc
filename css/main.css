@@ -4246,6 +4246,12 @@ z-index:10000000;
     margin-top: 12px;
 }
 
+#courses-page #courses-tabs .course .foot .status .denied
+{
+    color: #999;
+    margin-top: 12px;
+}
+
 #courses-page #courses-tabs .course .foot .status .active
 {
     font-family: 'PT Sans';

@@ -16,7 +16,7 @@
 </div><!-- end-header-->
 
 <div id="container">
-    <div class="widget">
+    <div class="info-page">
         <?php if(Yii::app()->user->hasFlash('contact')): ?>
             <div class="flash-success">
                     <?php echo Yii::app()->user->getFlash('contact'); ?>

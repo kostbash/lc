@@ -61,16 +61,16 @@ class LessonsController extends Controller
         {   
             
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
-            if(!$userAndLesson)
+            if(!($userAndLesson and $userAndLesson->Course->haveAccess))
                 $this->redirect('/');
-            
+
             if($group)
             {
                 $userAndExerciseGroup = UserAndExerciseGroups::model()->findByAttributes(array('id_exercise_group'=>$group, 'id_user_and_lesson'=>$id));
             }
             else
             {
-                $userAndExerciseGroup = UserAndExerciseGroups::model()->find("`id_user_and_lesson`=:id AND id_user_and_lesson=:user_lesson ORDER BY `id` DESC", array('id'=>$id, 'user_lesson'=>$userAndLesson->id));
+                $userAndExerciseGroup = $userAndLesson->lastUserBlock;
                 // если не сущесвует связи
                 if(!$userAndExerciseGroup)
                 {
@@ -79,6 +79,7 @@ class LessonsController extends Controller
                         $userAndExerciseGroup = new UserAndExerciseGroups;
                         $userAndExerciseGroup->id_user_and_lesson = $userAndLesson->id;
                         $userAndExerciseGroup->id_exercise_group = $userAndLesson->Lesson->ExercisesGroups[0]->id;
+                        $userAndExerciseGroup->last_activity_date = date('Y-m-d H:i:s');
                         $userAndExerciseGroup->save(false);
                     }
                 }
@@ -88,7 +89,7 @@ class LessonsController extends Controller
             
             if($userAndExerciseGroup)
             {
-                $currentExerciseGroup = GroupOfExercises::model()->findByPk($userAndExerciseGroup->id_exercise_group);
+                $currentExerciseGroup = $userAndExerciseGroup->Group;
                 
                 if(isset($_POST['Exercises'])) 
                 {
@@ -137,6 +138,7 @@ class LessonsController extends Controller
                     $nextUserLesson->id_course = $userAndLesson->id_course;
                     $nextUserLesson->id_group = $nextLesson['id_group'];
                     $nextUserLesson->id_lesson = $nextLesson['id_lesson'];
+                    $nextUserLesson->last_activity_date = date('Y-m-d H:i:s');
                     $nextUserLesson->passed = 0;
                     $nextUserLesson->save(false);
                 }
@@ -154,6 +156,7 @@ class LessonsController extends Controller
                 }
             }
             
+            $userAndLesson->OnChangeLesson();
             $this->_lesson = $userAndLesson->Lesson->id;
             $this->_block = $group;
             $this->render('pass',array(
@@ -354,7 +357,7 @@ class LessonsController extends Controller
         {
             $this->layout = '//layouts/empty';
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
-            if(!$userAndLesson)
+            if(!($userAndLesson && $userAndLesson->Course->haveAccess))
                 $this->redirect('/');
             Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl . "/css/export.css");
             
@@ -372,7 +375,7 @@ class LessonsController extends Controller
         public function actionLessonToPdf($id, $with_right=false)
         {
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
-            if(!$userAndLesson)
+            if(!($userAndLesson && $userAndLesson->Course->haveAccess))
                 $this->redirect('/');
             
             $lesson = $userAndLesson->Lesson;
