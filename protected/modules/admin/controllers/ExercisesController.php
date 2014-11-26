@@ -1317,30 +1317,33 @@ class ExercisesController extends Controller
             }
             if ($_FILES['ImportFile'])
             {
-
                 if ($file = CUploadedFile::getInstanceByName("ImportFile"))
                 { 
                     $file = file($file->TempName);
-                        //if (($handle = fopen($file->TempName, "r")) !== FALSE) 
+                    //if (($handle = fopen($file->TempName, "r")) !== FALSE) 
                     $x = $y = 0;
                         foreach ($file as $f)
                         {
                             $y++;
                             //$data = explode(";", $f);
-                            if (($data = str_getcsv($f, ";")) !== FALSE) 
+                            
+                            $f = iconv('cp1251', 'utf-8', $f);
+                            
+                            $data = explode(";", $f);
+                            //if (($data = str_getcsv($f, ";")) !== FALSE) 
                             {
                                 $num = count($data);
                                 if ($num != 5)
                                 {
-                                    
+                                    $res .= "Число столбцов не равно 5. Строка $y.<br>";
                                 }
                                 else
                                 {
-                                    $condition = iconv('cp1251', 'utf-8', $data[0]);
-                                    $answer = iconv('cp1251', 'utf-8', $data[1]);
-                                    $difficulty = iconv('cp1251', 'utf-8', $data[2]);
-                                    $skills = iconv('cp1251', 'utf-8', $data[3]);
-                                    $need_answer = iconv('cp1251', 'utf-8', $data[4]);
+                                    $condition = /*iconv('cp1251', 'utf-8',*/ $data[0];
+                                    $answer = /*iconv('cp1251', 'utf-8',*/ $data[1];
+                                    $difficulty = /*iconv('cp1251', 'utf-8',*/ $data[2];
+                                    $skills = /*iconv('cp1251', 'utf-8',*/ $data[3];
+                                    $need_answer = /*iconv('cp1251', 'utf-8',*/ $data[4];
                                     
                                     if($condition && $answer && $difficulty && $skills)
                                     {
@@ -1355,13 +1358,14 @@ class ExercisesController extends Controller
                                         $exercise->change_date = date('Y-m-d H:i:s');
                                         $exercise->id_type = 1;
                                         $exercise->id_visual = 1;
-                                        $exercise->save();
+                                        if(!$exercise->save())
+                                             $res .= "Ошибка валидации. ".print_r($exercise->getErrors(), true).". Строка $y.<br>";;
                                         
                                         foreach(explode(';', $skills) as $s)
                                         {
                                             if(!($skill = Skills::model()->findByAttributes(array('name'=>$s))))
                                             {
-                                                $skill = new Skill;
+                                                $skill = new Skills;
                                                 $skill->name = $s;
                                                 $skill->type = 2;
                                                 $skill->id_course = $id_course;
@@ -1382,13 +1386,15 @@ class ExercisesController extends Controller
                                             $partExercise->id_exercise = $exercise->id;
                                             $partExercise->save();
                                         }
+                                    } else {
+                                         $res.= "Нарушен формат данных ($condition;$answer;$difficulty;$skills). Строка $y.<br>";
                                     }
                                 }
                             }
-                            fclose($handle);
+                            
                         }
                     
-                    echo "<script>alert('".(($x==$y && $x > 0)?"Импорт успешно выполнен! ":"")."Импортировано $x записей из $y.');location.reload();</script>";
+                    echo "<script>alert('".(($x==$y && $x > 0)?"Импорт успешно выполнен! ":"")."Импортировано $x записей из $y. $res');location.reload();</script>";
                 }
             }
         }
