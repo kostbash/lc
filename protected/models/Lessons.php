@@ -396,7 +396,7 @@ class Lessons extends CActiveRecord
         {
             $position = 0;
             $query = "SELECT lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons
-                    WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=$this->course_creator_id
+                    WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id='$this->course_creator_id'
                     ORDER BY themes.order ASC, lessons.order ASC";
             $lessons = Yii::app()->db->createCommand($query)->queryAll();
             
