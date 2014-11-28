@@ -2,14 +2,16 @@
     $(function(){
        $('#confirmParentModal .confirmation .yes').live('click', function(){
            current = $(this);
+           parent = current.closest('.modal-content').find('.parent');
             $.ajax({
                 url: '<?php echo Yii::app()->createUrl('admin/childrenOfParent/confirmDealFromSite'); ?>',
                 type:'POST',
-                data: {id: current.closest('.modal-content').find('.parent').data('id'), answer: 1},
+                data: {id: parent.data('id'), answer: 1},
                 dataType: 'json',
                 success: function(result) { 
                     if(result.success)
                     {
+                        $('#user-page-link a span').html('Родитель: '+parent.html());
                         $('#confirmParentModal').modal('hide');
                     }
                 }
