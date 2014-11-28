@@ -244,6 +244,6 @@ class UserExercisesLogs extends CActiveRecord
             {
                 $change = ' Изменен';
             }
-            return CHtml::link('Просмотреть задание', array('/admin/exerciseslogs/view', 'id'=>$this->id), array('target'=>'_blank')).$change;
+            return CHtml::link('Просмотреть задание', array('/admin/exercisesLogs/view', 'id'=>$this->id), array('target'=>'_blank')).$change;
         }
 }

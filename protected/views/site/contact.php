@@ -1,3 +1,7 @@
+<?php 
+    $messages = SourceMessages::MessagesByCategories(array('feedback'));
+?>
+
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
@@ -5,10 +9,8 @@
         <div id="header-bottom">
             <div id="head-full-column" class="head-column">
                 <div class="content-mini">
-                    <div class="head">Обратная связь</div>
-                    <div class="foot">
-Задайте любой, интересующий вас вопрос или поделитесь с нами своими впечатлениями о курсе и системе.
-                    </div>
+                    <div class="head"><?php echo Yii::t('feedback', $messages[31]->message); ?></div>
+                    <div class="foot"><?php echo Yii::t('feedback', $messages[32]->message); ?></div>
                 </div>
             </div>
         </div>        

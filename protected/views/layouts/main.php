@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<?php
+    $messages = SourceMessages::MessagesByCategories('layout-main');
+?>    
+    
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="language" content="ru" />
@@ -21,14 +25,14 @@
                 <div id="header-top">
                     <div id="logo">
                         <a href="<?php echo Users::getLogoLink(); ?>"><?php echo Yii::app()->name; ?></a>
-                        <div id="slogan">Обучающие курсы для школьников</div>
+                        <div id="slogan"><?php echo Yii::t('layout-main', $messages[1]->message); ?></div>
                     </div>
                     <?php if(!Yii::app()->user->isGuest) : $user = Users::model()->findByPk(Yii::app()->user->id); ?>
                         <div id="achievements-links">
                             <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/stamina-link.png" height="19" />
-                                    <h5>Выносливость</h5>
+                                    <h5><?php echo Yii::t('layout-main', $messages[2]->message); ?></h5>
                                 </div>
                                 <div class="bottom">
                                     <?php echo $user->stamina; ?> <span>дней</span>
@@ -37,7 +41,7 @@
                             <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/experience-link.png" height="19" />
-                                    <h5>Опыт</h5>
+                                    <h5><?php echo Yii::t('layout-main', $messages[3]->message); ?></h5>
                                 </div>
                                 <div class="bottom">
                                     <?php echo $user->experience; ?> <span>тестов</span>
@@ -46,7 +50,7 @@
                             <a href="<?php echo $this->createUrl('users/achievements'); ?>" >
                                 <div class="top">
                                     <img src="/images/accuracy-link.png" height="19" />
-                                    <h5>Точность</h5>
+                                    <h5><?php echo Yii::t('layout-main', $messages[4]->message); ?></h5>
                                 </div>
                                 <div class="bottom">
                                     <?php echo $user->accuracy; ?> <span>%</span>
@@ -60,49 +64,30 @@
                         $isHome = (($controller->id === Yii::app()->defaultController) && ($controller->action->id === $controller->defaultAction)) ? true : false;
                         if(!$isHome)
                         {
-                            $this->renderPartial('//site/login', array('model'=>new LoginForm));
-                            $this->renderPartial('//site/registration', array('model'=>new Users));
+                            $this->renderPartial('//site/reg_login', array('user'=>new Users, 'login'=>new LoginForm));
                         }
                     ?>
                     <div id="login">
                         <div id="logining" class="clearfix">
                             <?php if(Yii::app()->user->isGuest) : ?>
-                                <div id="reg-as-student" data-toggle="modal" data-target="#regModel"><a href="#" onclick="reachGoal('RegisterStart')">Зарегистрируйтесь</a></div>
-                                <div class="login-button orange-button" data-toggle="modal" data-target="#loginForm"><a href="#" onclick="reachGoal('HomeLoginStart')">Войдите</a></div>
-                                <script type="text/javascript">
-                                    $(function(){
-//                                        $('#reg-as-student').click(function(){
-//                                            $('#user-role-student').attr('checked', 'checked');
-//                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
-//                                        });
-//
-//                                        $('#reg-as-teacher').click(function(){
-//                                            $('#user-role-teacher').attr('checked', 'checked');
-//                                            $('#reg-form input[type=submit]').val('Зарегистрироваться');
-//                                        });
-
-                                        $('#reg-as-parent').click(function(){
-                                            $('#user-role-parent').attr('checked', 'checked');
-                                            $('.reg-as-student').removeClass('show').addClass('hide');
-                                            $('.reg-as-parent').removeClass('hide').addClass('show');
-                                        });
-                                    });
-                                </script>
+                                <div class="reg-as-student" data-toggle="modal" data-target="#regLogin"><a href="#" onclick="reachGoal('RegisterStart')"><?php echo Yii::t('layout-main', $messages[24]->message); ?></a></div>
+                                <div class="login-button orange-button" data-toggle="modal" data-target="#regLogin"><a href="#" onclick="reachGoal('HomeLoginStart')"><?php echo Yii::t('layout-main', $messages[23]->message); ?></a></div>
                             <?php else : ?>
                                 <div id='logout' class="orange-button"><?php echo CHtml::link('Выход', array('site/logout')); ?></div>
                                 <?php
                                     $userPageLink = $user->username." (".Users::$rolesRusNames[Users::UserType()].")";
                                     if($user->role==2)
                                     {
-                                        $userPageLink .= "<br/>Родитель: ";
+                                        $userPageLink .= "<br /><span style='font-size: 14px;'>Родитель: ";
                                         if($user->ParentRelation)
                                         {
                                             $userPageLink .= $user->ParentRelation->Parent->email;
                                         }
                                         else
                                         {
-                                            $userPageLink .= "Нет";
+                                            $userPageLink .= "не зарегистрирован";
                                         }
+                                        $userPageLink .= '</span>';
                                     }
                                 ?>
                                 <div id='user-page-link'><?php echo CHtml::link($userPageLink, array('/users/update')); ?></div>
@@ -111,13 +96,13 @@
                         <div id="top-menu-on-main" class="clearfix" >
                             <ul class="clearfix">
                                 <?php if(Yii::app()->user->isGuest) : ?>
-                                    <li><a id="reg-as-parent" data-toggle="modal" data-target="#regModel" href="#">РОДИТЕЛЯМ</a></li>
-                                    <li><a id="reg-as-teacher" data-toggle="modal" data-target="#regModel" href="#">ПЕДАГОГАМ</a></li>
-                                    <li><a id="contacts" href="#">КОНТАКТЫ</a></li>
+                                    <li><a class="reg-as-parent" data-toggle="modal" data-target="#regLogin" href="#"><?php echo Yii::t('layout-main', $messages[25]->message); ?></a></li>
+                                    <li><a class="reg-as-teacher" data-toggle="modal" data-target="#regLogin" href="#"><?php echo Yii::t('layout-main', $messages[26]->message); ?></a></li>
+                                    <li><a id="contacts" href="#"><?php echo Yii::t('layout-main', $messages[27]->message); ?></a></li>
                                 <?php else : ?>
-                                    <li><?php echo CHtml::link('ЕСТЬ ВОПРОС ?', array('site/contact')); ?></li>
-                                    <li><?php echo CHtml::link('УЧЕНИКАМ', '#'); ?></li>
-                                    <li><?php echo CHtml::link('О ПРОЕКТЕ', array('/site/page', 'view'=>'about')); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[28]->message), array('site/contact')); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[29]->message), '#'); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[30]->message), array('/site/page', 'view'=>'about')); ?></li>
                                 <?php endif; ?>
                             </ul>
                         </div>

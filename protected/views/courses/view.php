@@ -1,4 +1,7 @@
-<?php $this->pageTitle="$course->name. ".Yii::app()->name."."; ?>
+<?php
+    $this->pageTitle="$course->name. ".Yii::app()->name.".";
+    $messages = SourceMessages::MessagesByCategories(array('main-page-unauth', 'course-unauth', 'course-pages'));
+?>
     <div id="separate-header-part">
         <img src="/images/separate-adventages.png" width="1026" height="14" />
     </div>
@@ -8,47 +11,37 @@
                 <div class="advantage">
                     <img src="/images/books-main.png" width="169" height="169" />
                     <div class="explanation">
-                        КУРСЫ ЯДРА ШКОЛЬНОЙ ПРОГРАММЫ
+                        <?php echo Yii::t('main-page-unauth', $messages[5]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/idea-main.png" width="169" height="169" />
                     <div class="explanation">
-                        САМОСТОЯТЕЛЬНАЯ ПРАКТИКА ДО ПОЛНОГО УСВОЕНИЯ
+                        <?php echo Yii::t('main-page-unauth', $messages[6]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/statistic-main.png" width="169" height="169" />
                     <div class="explanation">
-                        СЛОЖНОСТЬ УПРАЖНЕНИЙ И ТЕСТОВ РАСТЕТ ПОСТЕПЕННО
+                        <?php echo Yii::t('main-page-unauth', $messages[7]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/person-main.png" width="169" height="169" />
                     <div class="explanation">
-                        РОДИТЕЛЬСКИЙ КОНТРОЛЬ ЗА УСПЕХАМИ
+                        <?php echo Yii::t('main-page-unauth', $messages[8]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/cloud-main.png" width="169" height="169" />
                     <div class="explanation">
-                        БЕСПЛАТНО!
+                        <?php echo Yii::t('main-page-unauth', $messages[9]->message); ?>
                     </div>
                 </div>
             </div>
         </div>        
     </div>
 </div><!-- end-header-->
-
-<script>
-    $(function(){
-        $('.begin-learning').click(function(){
-            $('#user-role-student').attr('checked', 'checked');
-            $('#reg-form input[type=submit]').val('Перейти к курсу');
-            $('.or-login').removeClass('hide');
-        });
-    });
-</script>
 
 <div id="container">
     <div id="course-view-page">
@@ -58,15 +51,14 @@
             <?php echo $course->name; ?>
         </h2>
         <div id="top-buttons">
-            <?php $this->renderPartial('//site/begin_learning', array('user'=>new Users, 'login'=>new LoginForm)); ?>
-            <?php echo CHtml::link('Начать обучение', '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#beginLearning", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
-            <?php echo CHtml::link('Проверить себя', array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
+            <?php echo CHtml::link(Yii::t('course-unauth', $messages[11]->message), '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#regLogin", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
+            <?php echo CHtml::link(Yii::t('course-pages', $messages[12]->message), array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
         </div>
         <div id="course-info" class="clearfix">
             <div class="get">
                 <div class="content">
                     <div class="info">
-                        <div class="name">ЧТО ПОЛУЧИТЕ:</div>
+                        <div class="name"><?php echo Yii::t('course-pages', $messages[13]->message); ?></div>
                         <ul>
                             <?php if($course->NeedKnows) : ?>
                                 <?php foreach($course->NeedKnows as $needknow) : ?>
@@ -83,7 +75,7 @@
             <div class="need">
                 <div class="content">
                     <div class="info">
-                        <div class="name">ЧТО НУЖНО:</div>
+                        <div class="name"><?php echo Yii::t('course-pages', $messages[14]->message); ?></div>
                         <ul>
                             <?php if($course->YouGets) : ?>
                                 <?php foreach($course->YouGets as $youget) : ?>
@@ -100,7 +92,7 @@
             <div class="statistic">
                 <div class="content">
                     <div class="info">
-                        <div class="name">СТАТИСТИКА:</div>
+                        <div class="name"><?php echo Yii::t('course-pages', $messages[15]->message); ?></div>
                         <div class="param-cont clearfix">
                             <div class="param">Уроков: </div>
                             <div class="value"><?php echo $course->countLessons; ?></div>
@@ -123,7 +115,7 @@
             </div>
         </div>
         
-        <h2 class="main-title">Список уроков:</h2>
+        <h2 class="main-title"><?php echo Yii::t('course-unauth', $messages[16]->message); ?></h2>
         
         <table id="lessons-table">
             <thead>
@@ -133,7 +125,7 @@
                 </tr>
             </thead>
             <tbody>
-            <?php if (count($themesLessons) > 1) : // убераем проверочный тест ?>
+            <?php if (count($themesLessons) > 1) : // убираем проверочный тест ?>
                 <?php foreach ($themesLessons as $n => $lesson) : ?>
                     <?php if($n==0) { continue; } ?>
                     <tr>

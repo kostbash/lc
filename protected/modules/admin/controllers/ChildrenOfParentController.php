@@ -236,8 +236,6 @@ class ChildrenOfParentController extends Controller
                 }
             }
             
-            print_r($model->errors);
-            
             $this->render('create',array(
                     'model'=>$model,
                     'user'=>$user,

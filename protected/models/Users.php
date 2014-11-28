@@ -152,7 +152,7 @@ class Users extends CActiveRecord
 			'role' => 'Роль',
 			'rusRoleName' => 'Роль',
                         'countPassLessons' => 'Число пройденных уроков',
-                        'rememberMe' => 'Узнавать меня на этом устройстве',
+                        'rememberMe' => 'Узнавать меня',
                         'send_notifications'=>'Отправлять на e-mail оповещения учеников',
                         'id_recovery_question'=>'Выберите контрольный вопрос',
                         'recovery_answer'=>'Ваш ответ на контрольный вопрос',
@@ -497,5 +497,10 @@ class Users extends CActiveRecord
             {
                 return Courses::model()->findByPk($lastActive->id_course);
             }
+        }
+        
+        public function getNiceRecoveryQuestion()
+        {
+            return self::$recoveryQuestions[$this->id_recovery_question];
         }
 }

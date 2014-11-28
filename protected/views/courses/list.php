@@ -1,3 +1,7 @@
+<?php
+    $messages = SourceMessages::MessagesByCategories(array('courses','courses-page-auth'));
+?>
+
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
@@ -9,18 +13,18 @@
                         <?php if($lastActiveCourse) : ?>
                         <div class="head">
                             <div class="info">
-                                <div class="status last-active">Последний активный курс:</div>
+                                <div class="status last-active"><?php echo Yii::t('courses-page-auth', $messages[37]->message); ?></div>
                                 <div class="name"><?php echo $lastActiveCourse->name; ?></div>
                             </div>
-                            <?php echo CHtml::link('Продолжить', array('courses/index', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button', 'onclick'=>"reachGoal('HomeLastLesson')")); ?>
+                            <?php echo CHtml::link(Yii::t('courses-page-auth', $messages[36]->message), array('courses/index', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button', 'onclick'=>"reachGoal('HomeLastLesson')")); ?>
                         </div>
                         <div class="content clearfix">
                             <div class="passed-lessons">
-                                <h4>Пройдено:</h4>
+                                <h4><?php echo Yii::t('courses-page-auth', $messages[38]->message); ?></h4>
                                 <div class="value"><?php echo $lastActiveCourse->countPassedLessons; ?> <span>из</span> <?php echo $lastActiveCourse->countLessons; ?></div>
                             </div>
                             <div class="average">
-                                <h4>Средняя оценка:</h4>
+                                <h4><?php echo Yii::t('courses-page-auth', $messages[39]->message); ?></h4>
                                 <div class="value"><?php echo $lastActiveCourse->averageByTests; ?> <span>%</span></div>
                             </div>
                         </div>
@@ -31,7 +35,7 @@
                         <?php else : ?>
                             <div class="head">
                                 <div class="info">
-                                    <div class="name">Выберите предмет и начните курс</div>
+                                    <div class="name"><?php echo Yii::t('courses-page-auth', $messages[40]->message); ?></div>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -42,26 +46,26 @@
                 <div class="content">
                     <div class="text clearfix">
                         <div class="active-courses">
-                            <div class="head">АКТИВНЫЕ:</div>
+                            <div class="head"><?php echo Yii::t('courses-page-auth', $messages[41]->message); ?></div>
                             <ul>
                                 <?php if($activeCourses) : ?>
                                     <?php foreach($activeCourses as $activeCourse) : ?>
                                         <li><?php echo CHtml::link($activeCourse->name, array('courses/index', 'id'=>$activeCourse->id)); ?></li>
                                     <?php endforeach; ?>
                                 <?php else : ?>
-                                    <li>Нет активных курсов</li>
+                                    <li><?php echo Yii::t('courses-page-auth', $messages[44]->message); ?></li>
                                 <?php endif; ?>
                             </ul>
                         </div>
                         <div class="passed-courses">
-                            <div class="head">ЗАВЕРШЕННЫЕ:</div>
+                            <div class="head"><?php echo Yii::t('courses-page-auth', $messages[42]->message); ?></div>
                             <ul>
                                 <?php if($passedCourses) : ?>
                                     <?php foreach($passedCourses as $passedCourse) : ?>
                                         <li><?php echo CHtml::link($passedCourse->name, array('courses/index', 'id'=>$passedCourse->id)); ?></li>
                                     <?php endforeach; ?>
                                 <?php else : ?>
-                                    <li>Нет пройденных курсов</li>
+                                    <li><?php echo Yii::t('courses-page-auth', $messages[43]->message); ?></li>
                                 <?php endif; ?>
                             </ul>
                         </div>
@@ -170,7 +174,7 @@
                     else
                     {
                         $tabs .="<div class='no-courses'>";
-                            $tabs .= 'Курсы по данной теме появятся в ближайшее время';
+                            $tabs .= Yii::t('courses', $messages[35]->message);
                         $tabs .= "</div>";
                     }
                 $tabs .= "</div>";

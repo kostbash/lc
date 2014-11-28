@@ -497,9 +497,15 @@ class Courses extends CActiveRecord
             return Lessons::model()->findBySql($query);
         }
         
+        public function getTestLesson()
+        {
+            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1";
+            return Lessons::model()->findBySql($query);
+        }
+        
         public function getStudentList()
         {
             $sql = "SELECT * FROM `oed_students_of_teacher` as sot, `oed_course_user_list` as cul WHERE sot.id_student=cul.id_student AND cul.id_course=:id_course AND sot.id_teacher=:id_teacher AND sot.status=1";
             return StudentsOfTeacher::model()->findAllBySql($sql, array('id_course'=>$this->id, 'id_teacher'=>Yii::app()->user->id));
-        }     
+        }
 }

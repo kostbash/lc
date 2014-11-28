@@ -72,6 +72,25 @@ html, body {
     text-align: center;
 }
 
+.zgrid .filters input
+{
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    display: block;
+    width: 100%;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
 .info-page
 {
     width: 100%;
@@ -1067,6 +1086,7 @@ z-index:10000000;
 
 #logo {
     float: left;
+    width: 255px;
     margin-top: 13px;
 }
 
@@ -1140,16 +1160,16 @@ z-index:10000000;
     background: #fed75a;
 }
 
-#reg-as-student
+.reg-as-student
 {
     float: right;
 }
 
-#reg-as-student a, #user-page-link a
+.reg-as-student a, #user-page-link a
 {
-    text-decoration: none;
+    text-decoration: none !important;
     border-bottom: 1px dotted #fff;
-    padding: 0  0 2px;
+    padding: 0 0 2px;
 }
 
 #user-page-link
@@ -1309,6 +1329,7 @@ z-index:10000000;
     float: left;
     cursor: pointer;
     vertical-align: middle;
+    font-weight: normal;
     line-height: 34px;
     margin-bottom: 0;
 }
@@ -1364,38 +1385,64 @@ z-index:10000000;
     margin-bottom: 20px;
 }
 
-#beginLearning
+#regLogin
 {
     font-size: 14px;
 }
 
-#beginLearning .modal-header
+#regLogin .modal-header
 {
     padding: 15px 10px 0;
     border-bottom: 0;
 }
 
-#beginLearning .modal-header .nav-tabs
+#regLogin .modal-header .nav-tabs
 {
     border-bottom: none;
 }
 
-#beginLearning .modal-header .close
+#regLogin .modal-header .close
 {
     margin-right: 3px;
 }
 
-#beginLearning .modal-title li a
+#regLogin .modal-title li a
 {
     color: #777;
     height: 72px;
+    width: 275px;
 }
 
-#beginLearning .modal-title li.active a
+#regLogin .modal-title li.active a
 {
     background: #fefefe;
     color: #000;
     vertical-align: middle;
+}
+
+#regLogin .modal-body .forget-pass
+{
+    margin-top: 8px;
+    display: inline-block;
+    font-size: 13px;
+}
+
+#regLogin #reg-roles
+{
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+#regLogin #reg-roles .role
+{
+    float: left;
+    margin-right: 20px;
+}
+
+#regLogin hr
+{
+    margin: 10px 0;
 }
 
 /*------------------------------------------------------ Container ------------------------------------------------------*/
@@ -1788,6 +1835,113 @@ z-index:10000000;
     margin: 40px 0;
 }
 
+
+#course-page-info
+{
+    
+}
+
+#course-page-info > div
+{
+    position: relative;
+    width: 305px;
+    float: left;
+    height: 100%;
+    margin-right: 32px;
+    padding: 14px;
+    background: #fff;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+#course-page-info > div > .content
+{
+    position: relative;
+    min-height: 220px;
+    font-size: 14px;
+    font-family: Arial;
+    color: #263870;
+    background: #f8f8f8;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border: 1px solid #f4f4f4;;
+    border-bottom: 4px solid #d9d9d9;
+}
+
+#course-page-info > div > .content .right-background
+{
+    position: absolute;
+    z-index: 0;
+    background: #f1f0ee;
+    height: 100%;
+    width: 50%;
+    right: 0;
+    top: 0;
+}
+
+#course-page-info > div > .content .info
+{
+    position: relative;
+    z-index: 1;
+    font-family: Arial;
+    font-size: 15px;
+    color: #263870;
+}
+
+#course-page-info > div > .content .name
+{
+    font-family: 'a_FuturaOrto';
+    font-size: 18px;
+    font-weight: bold;
+    margin: 12px 0;
+    text-decoration: underline;
+    text-align: center;
+    color: #b5486d;
+}
+
+#course-page-info > div > .content ul
+{
+    padding: 0 10px 10px 26px;
+    color: #b5486d;
+    margin-bottom: 0;
+}
+
+#course-page-info > div > .content li
+{
+    margin-bottom: 15px;
+}
+
+#course-page-info > div > .content li span
+{
+    color: #263870;
+}
+
+#course-page-info > .statistic
+{
+    margin-right: 0;
+}
+
+#course-page-info > .statistic .param-cont
+{
+    margin: 0 10px 15px 10px;
+}
+
+#course-page-info > .statistic .param
+{
+    float: left;
+    width: 67%;
+}
+
+#course-page-info > .statistic .value
+{
+    float: left;
+    margin-left: 1%;
+    width: 32%;
+    font-weight: bold;
+}
+
 #course-page .lessons-table
 {
     width: 100%;
@@ -2104,6 +2258,28 @@ z-index:10000000;
     text-decoration: none;
 }
 
+#head-col-right .send-result-button
+{
+    float: right;
+    padding: 7px 17px 9px;
+    font-size: 15px;
+    line-height: 15px;
+    font-family: 'PT Sans';
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow:    0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+    box-shadow:         0px 0px 5px 0px rgba(0, 0, 0, 0.27);
+}
+
+#head-col-right .text
+{
+    padding: 10px 10px 4px 10px;
+}
+
+
+
 
 
 #head-full-column
@@ -2163,6 +2339,9 @@ z-index:10000000;
 #head-col-left .course .head .course-state-button
 {
     float: right;
+    color: #EDEDED !important;
+    font-size: 15px;
+    line-height: 15px;
 }
 
 #head-col-left .course .head .name

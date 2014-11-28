@@ -2,6 +2,8 @@
     $this->pageTitle="Вступительный тест к $course->name. ".Yii::app()->name.".";
     $this->renderPartial("_pass_scripts");
     $this->renderPartial("blocks/_2_scripts");
+    
+    $messages = SourceMessages::MessagesByCategories(array('check-test'));
 ?>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
@@ -10,8 +12,8 @@
         <div id="header-bottom">
             <div id="head-full-column" class="head-column">
                 <div class="content-mini">
-                    <div class="head">Проверьте насколько уверенно ваш ребенок складывает и считает</div>
-                    <div class="foot">Проверка насколько ваш ребенок уверенно складывает и считает позволяет заранее узнать о его умственных способностяхи подготовиться к разного рода сюрпризам.</div>
+                    <div class="head"><?php echo Yii::t('check-test', $messages[17]->message); ?></div>
+                    <div class="foot"><?php echo Yii::t('check-test', $messages[18]->message); ?></div>
                 </div>
             </div>
         </div>        
@@ -25,7 +27,7 @@
                 'id'=>'exercises-form',
                 'enableAjaxValidation'=>false,
             )); ?>
-            <h2 class="block-name">ЗАПИШИТЕ ОТВЕТ В ПОЛЯ СПРАВА ОТ ВОПРОСОВ</h2>
+            <h2 class="block-name"><?php echo Yii::t('check-test', $messages[19]->message); ?></h2>
             <?php if($exercises) : $position=0; ?>
                 <div id="exercises">
                     <?php foreach($exercises as $index => $exercise) : $position++; ?>
@@ -50,10 +52,10 @@
 
             <div id="bottom">
                 <?php if($nextGroup) : ?>
-                    <?php echo CHtml::link('Далее', '#', array('class'=>'next-button', 'tabindex'=>$key+2));?>
+                    <?php echo CHtml::link(Yii::t('check-test', $messages[20]->message), '#', array('class'=>'next-button', 'tabindex'=>$key+2));?>
                     <div id="leftStep"><?php echo "Вам осталось <b>$leftStep</b> шага"; ?></div>
                 <?php else : ?>
-                    <?php echo CHtml::link('Просмотреть результат', '#', array('class'=>'next-button', 'tabindex'=>$key+2));?>
+                    <?php echo CHtml::link(Yii::t('check-test', $messages[21]->message), '#', array('class'=>'next-button', 'tabindex'=>$key+2));?>
                 <?php endif; ?>
             </div>
             <?php $this->endWidget(); ?>

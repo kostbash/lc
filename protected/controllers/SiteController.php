@@ -29,8 +29,8 @@ class SiteController extends Controller
             $loginForm = new LoginForm;
             $user = new Users;
             
-            $showRegModal = $_GET['showreg'];
-            $showLoginModal = $_GET['showlogin'];
+            $tab = '';
+            $regLoginType = $_POST['regLoginType'];
             
             $role = (int) $_GET['role'];
             if($role)
@@ -39,10 +39,6 @@ class SiteController extends Controller
                 {
                     $user->role = $role;
                 }
-            }
-            else
-            {
-                $user->role = Users::$defaultRole;
             }
             
             // регистрация
@@ -86,7 +82,7 @@ class SiteController extends Controller
                         die;
                     }
                 } else {
-                    $showRegModal = true;
+                    $tab = 'reg';
                 }
             }
             
@@ -107,7 +103,7 @@ class SiteController extends Controller
                         else
                             $this->redirect(array('courses/list'));
                     } else
-                        $showLoginModal = true;
+                        $tab = 'login';
             }
             
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
@@ -117,9 +113,9 @@ class SiteController extends Controller
             $this->render('index', array(
                 'loginForm' => $loginForm,
                 'user' => $user,
-                'showRegModal'=>$showRegModal,
-                'showLoginModal'=>$showLoginModal,
                 'subjects' => $subjects,
+                'regLoginType'=>$regLoginType,
+                'tab'=>$tab,
             ));
 	}
 

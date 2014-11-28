@@ -705,7 +705,7 @@ $form=$this->beginWidget('CActiveForm', array(
             <th>Умения</th>
             <th>Блоки</th>
             <th>Уроки</th>
-            <th>Темы</th>
+            <th>Шаги</th>
         </tr>
     </thead>
     <tbody>
@@ -796,7 +796,7 @@ $form=$this->beginWidget('CActiveForm', array(
     </div>
     </td>
     <div id="add-theme" class="clearfix">
-        <?php echo CHtml::textField('name', "", array('id'=>false, 'class'=>'form-control input-sm', 'placeholder'=>'Введите название группы уроков')); ?>
+        <?php echo CHtml::textField('name', "", array('id'=>false, 'class'=>'form-control input-sm', 'placeholder'=>'Введите название шага')); ?>
         <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>', "#", array('id'=>false, 'class'=>'btn btn-success btn-sm')); ?>
     </div>
 </div>

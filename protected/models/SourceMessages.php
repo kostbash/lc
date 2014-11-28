@@ -1,27 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "oed_answers_log".
+ * This is the model class for table "source_messages".
  *
- * The followings are the available columns in table 'oed_answers_log':
+ * The followings are the available columns in table 'source_messages':
  * @property integer $id
- * @property string $ip
- * @property string $date
- * @property integer $id_course
- * @property integer $id_lesson_group
- * @property integer $id_lesson
- * @property integer $id_exercise_group
- * @property integer $id_exercise
- * @property string $answer
+ * @property string $category
+ * @property string $message
+ * @property string $page_name
+ * @property string $type
  */
-class AnswersLog extends CActiveRecord
+class SourceMessages extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'oed_answers_log';
+		return 'source_messages';
 	}
 
 	/**
@@ -32,13 +28,11 @@ class AnswersLog extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('date, id_course, id_lesson_group, id_lesson, id_exercise_group, id_exercise, answer', 'required'),
-			array('id_user, id_course, id_lesson_group, id_lesson, id_exercise_group, id_exercise', 'numerical', 'integerOnly'=>true),
-			array('ip', 'length', 'max'=>15),
-			array('answer', 'length', 'max'=>255),
+			array('message', 'required'),
+			//array('category, page_name, type', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, ip, date, id_course, id_lesson_group, id_lesson, id_exercise_group, id_exercise, answer', 'safe', 'on'=>'search'),
+			array('id, category, message, page_name, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,14 +54,10 @@ class AnswersLog extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'ip' => 'Ip',
-			'date' => 'Date',
-			'id_course' => 'Id Course',
-			'id_lesson_group' => 'Id Lesson Group',
-			'id_lesson' => 'Id Lesson',
-			'id_exercise_group' => 'Id Exercise Group',
-			'id_exercise' => 'Id Exercise',
-			'answer' => 'Answer',
+			'category' => 'Category',
+			'message' => 'Значение',
+			'page_name' => 'Места использования',
+			'type' => 'Тип',
 		);
 	}
 
@@ -90,15 +80,10 @@ class AnswersLog extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('ip',$this->ip, true);
-		$criteria->compare('id_user',$this->id_user, true);
-		$criteria->compare('date',$this->date,true);
-		$criteria->compare('id_course',$this->id_course);
-		$criteria->compare('id_lesson_group',$this->id_lesson_group);
-		$criteria->compare('id_lesson',$this->id_lesson);
-		$criteria->compare('id_exercise_group',$this->id_exercise_group);
-		$criteria->compare('id_exercise',$this->id_exercise);
-		$criteria->compare('answer',$this->answer,true);
+		$criteria->compare('category',$this->category,true);
+		$criteria->compare('message',$this->message,true);
+		$criteria->compare('page_name',$this->page_name,true);
+		$criteria->compare('type',$this->type,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -109,10 +94,21 @@ class AnswersLog extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return AnswersLog the static model class
+	 * @return SourceMessages the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
+        
+        public static function MessagesByCategories($categories)
+        {
+            $result = array();
+            $messages = SourceMessages::model()->findAllByAttributes(array('category'=>$categories));
+            foreach($messages as $message)
+            {
+                $result[$message->id] = $message;
+            }
+            return $result;
+        }
 }

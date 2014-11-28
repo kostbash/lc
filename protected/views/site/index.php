@@ -1,21 +1,28 @@
-<?php $this->pageTitle=Yii::app()->name." - Обучающие курсы для школьников"; ?>
-<?php if($showRegModal) : ?>
-    <script type="text/javascript">
-        $(function() {
-            $('#regModel').removeClass('fade').modal('show');
-        });
-    </script>
-<?php endif; ?>
-
-<?php if($showLoginModal) : ?>
-    <script type="text/javascript">
-        $(function() {
-            $('#loginForm').removeClass('fade').modal('show');
-        });
-    </script>
-<?php endif; ?>
-    <?php $this->renderPartial('login', array('model'=>$loginForm)); ?>
-    <?php $this->renderPartial('registration', array('model'=>$user)); ?>
+<?php 
+    $this->pageTitle=Yii::app()->name." - Обучающие курсы для школьников";
+    $messages = SourceMessages::MessagesByCategories(array('main-page-unauth', 'courses'));
+?>
+    <?php $this->renderPartial('//site/reg_login', array('user'=>$user, 'login'=>$loginForm)); ?>
+    <?php if($regLoginType && $tab) : ?>
+        <script>
+            type = '<?php echo $regLoginType; ?>';
+            tab = '<?php echo $tab; ?>';
+            if(type==='login')
+            {
+                loginButton(tab);
+            }
+            else if(type==='registration')
+            {
+                registrationButton(tab, false);
+            }
+            else if(type=='begin-learning')
+            {
+                beginLearningButton(tab, false);
+            }
+            
+            $('#regLogin').removeClass('fade').modal('show').addClass('fade');
+        </script>
+    <?php endif; ?>
     <div id="separate-header-part">
         <img src="/images/separate-adventages.png" width="1026" height="14" />
     </div>
@@ -25,31 +32,31 @@
                 <div class="advantage">
                     <img src="/images/books-main.png" width="169" height="169" />
                     <div class="explanation">
-                        КУРСЫ ЯДРА ШКОЛЬНОЙ ПРОГРАММЫ
+                        <?php echo Yii::t('main-page-unauth', $messages[5]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/idea-main.png" width="169" height="169" />
                     <div class="explanation">
-                        САМОСТОЯТЕЛЬНАЯ ПРАКТИКА ДО ПОЛНОГО УСВОЕНИЯ
+                        <?php echo Yii::t('main-page-unauth', $messages[6]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/statistic-main.png" width="169" height="169" />
                     <div class="explanation">
-                        СЛОЖНОСТЬ УПРАЖНЕНИЙ И ТЕСТОВ РАСТЕТ ПОСТЕПЕННО
+                       <?php echo Yii::t('main-page-unauth', $messages[7]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/person-main.png" width="169" height="169" />
                     <div class="explanation">
-                        РОДИТЕЛЬСКИЙ КОНТРОЛЬ ЗА УСПЕХАМИ
+                        <?php echo Yii::t('main-page-unauth', $messages[8]->message); ?>
                     </div>
                 </div>
                 <div class="advantage">
                     <img src="/images/cloud-main.png" width="169" height="169" />
                     <div class="explanation">
-                        БЕСПЛАТНО!
+                        <?php echo Yii::t('main-page-unauth', $messages[9]->message); ?>
                     </div>
                 </div>
             </div>
@@ -57,7 +64,7 @@
     </div>
 </div><!-- end-header-->
 <div id="container">
-    <h1 class="choose-course">Выберите предмет<br />и курс</h1>
+    <h1 class="choose-course"><?php echo Yii::t('main-page-unauth', $messages[10]->message); ?></h1>
     <?php 
         if($subjects)
         {
@@ -146,7 +153,7 @@
                     else
                     {
                         $tabs .="<div class='no-courses'>";
-                            $tabs .= 'Курсы по данной теме появятся в ближайшее время';
+                            $tabs .= Yii::t('courses', $messages[35]->message);
                         $tabs .= "</div>";
                     }
                 $tabs .= "</div>";

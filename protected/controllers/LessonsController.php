@@ -18,7 +18,7 @@ class LessonsController extends Controller
             return array(
                     array('allow',
                             'actions'=>array('check'),
-                            'users'=>array('?'),
+                            'users'=>array('*'),
                     ),
                     array('allow',
                             'actions'=>array('pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf'),
@@ -61,8 +61,11 @@ class LessonsController extends Controller
         {   
             
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
+            
             if(!($userAndLesson and $userAndLesson->Course->haveAccess))
                 $this->redirect('/');
+            
+            $courseAndUser = CoursesAndUsers::model()->findByAttributes(array('id_user'=>$userAndLesson->id_user, 'id_course'=>$userAndLesson->id_course));
 
             if($group)
             {
@@ -111,6 +114,12 @@ class LessonsController extends Controller
                         $render = false;
                     }
                     
+                    if(!$courseAndUser->is_begin && $userAndExerciseGroup->passed)
+                    {
+                        $courseAndUser->is_begin = 1;
+                        $courseAndUser->save();
+                    }
+                    
                 }
                 else
                 {
@@ -143,6 +152,8 @@ class LessonsController extends Controller
                     $nextUserLesson->save(false);
                 }
             }
+            
+            $userAndLesson->OnChangeLesson();
 
             if(isset($_POST['Exercises'])) 
             {
@@ -156,7 +167,6 @@ class LessonsController extends Controller
                 }
             }
             
-            $userAndLesson->OnChangeLesson();
             $this->_lesson = $userAndLesson->Lesson->id;
             $this->_block = $group;
             $this->render('pass',array(
@@ -170,15 +180,36 @@ class LessonsController extends Controller
         public function actionCheck($course, $step=1)
         {
             $course = Courses::model()->findByPk($course);
-            $checkLesson = $course->LessonsGroups[0]->LessonsRaw[0];
+            
+            if(!($course && $course->haveAccess))
+            {
+                $this->redirect('/');
+            }
+            
+            $beginAttrs = array();
+            
+            if(Yii::app()->user->isGuest)
+            {
+                $beginAttrs['ip'] = $_SERVER['REMOTE_ADDR'];
+            }
+            else
+            {
+                $beginAttrs['id_user'] = Yii::app()->user->id;
+            }
+            
+            $beginAttrs['id_course'] = $course->id;
+            
+            $checkLesson = $course->testLesson;
             $currentGroup = $checkLesson->ExercisesGroups[$step-1];
             $nextGroup = $checkLesson->ExercisesGroups[$step] ? 1 : 0;
+            
             if($currentGroup->type==1)
                 $exercises = $currentGroup->Exercises;
             elseif($currentGroup->type==2)
                 $exercises = $currentGroup->ExercisesTest;
             if(!($currentGroup or $exercises))
                 $this->redirect('/');
+            
             $leftStep = count($checkLesson->ExercisesGroups) - $step;
             $number = 0;
             $numberAll = 0;
@@ -201,22 +232,20 @@ class LessonsController extends Controller
 
             if(isset($_POST['Exercises']))
             {
-                AnswersLog::model()->deleteAllByAttributes(array(
-                    'ip'=>$_SERVER['REMOTE_ADDR'],
-                    'id_course' => $course->id,
-                    'id_lesson_group' => $course->LessonsGroups[0]->id,
-                    'id_lesson' => $checkLesson->id,
-                    'id_exercise_group' => $currentGroup->id,
-                ));
+                $extendedAttrs = array();
+                $extendedAttrs['ip'] = $beginAttrs['ip'];
+                $extendedAttrs['id_user'] = $beginAttrs['id_user'];
+                $extendedAttrs['id_course'] = $course->id;
+                $extendedAttrs['id_lesson_group'] = $checkLesson->Groups[0]->id;
+                $extendedAttrs['id_lesson'] = $checkLesson->id;
+                $extendedAttrs['id_exercise_group'] = $currentGroup->id;
+                
+                AnswersLog::model()->deleteAllByAttributes($extendedAttrs);
 
                 foreach($_POST['Exercises'] as $id_exercise => $exercise)
                 {
                     $answersLog = new AnswersLog;
-                    $answersLog->ip = $_SERVER['REMOTE_ADDR'];
-                    $answersLog->id_course = $course->id;
-                    $answersLog->id_lesson_group = $course->LessonsGroups[0]->id;
-                    $answersLog->id_lesson = $checkLesson->id;
-                    $answersLog->id_exercise_group = $currentGroup->id;
+                    $answersLog->attributes = $extendedAttrs;
                     $answersLog->id_exercise = $id_exercise;
                     $answersLog->date = date('Y-m-d');
                     $answersLog->answer = serialize($exercise['answers']);
@@ -226,7 +255,7 @@ class LessonsController extends Controller
                     $this->redirect(array('lessons/check', 'course'=>$course->id, 'step'=>$step+1));
                 else
                 {
-                    $userAnswers = AnswersLog::model()->findAllByAttributes(array('ip'=>$_SERVER['REMOTE_ADDR']));
+                    $userAnswers = AnswersLog::model()->findAllByAttributes($beginAttrs);
                     $rightAnswers = 0;
                     foreach($userAnswers as $userAnswer)
                     {
@@ -237,9 +266,10 @@ class LessonsController extends Controller
                     $result = Lessons::ResultCheck($rightAnswers, $numberAll);
                     
                     $this->render('successcheck',array(
-                            'rightAnswers'=>$rightAnswers,
-                            'numberAll'=>$numberAll,
-                            'result'=>$result,
+                        'course'=>$course,
+                        'rightAnswers'=>$rightAnswers,
+                        'numberAll'=>$numberAll,
+                        'result'=>$result,
                     ));
                     die;
                 }
@@ -266,6 +296,7 @@ class LessonsController extends Controller
                 $exerciseGroup = new UserAndExerciseGroups;
                 $exerciseGroup->id_user_and_lesson = $userAndExerciseGroup->id_user_and_lesson;
                 $exerciseGroup->id_exercise_group = $userAndExerciseGroup->nextGroup->id_group_exercises;
+                $exerciseGroup->last_activity_date = date('Y-m-d H:i:s');
                 $exerciseGroup->save(false);
             }
             $this->redirect(array('/lessons/pass', 'id'=>$userAndLesson->id, 'group'=>$exerciseGroup->id_exercise_group));

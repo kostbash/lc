@@ -128,6 +128,7 @@ class CoursesController extends Controller
                 $courseUser->activity_date = date('Y-m-d H:i:s');
                 $courseUser->last_activity_date = date('Y-m-d H:i:s');
                 $courseUser->status = 1;
+                $courseUser->is_begin = 0;
                 $courseUser->save();
             }
             
@@ -169,6 +170,7 @@ class CoursesController extends Controller
             $this->render('index',array(
                     'course'=>$course,
                     'userLesson'=>$userAndLesson,
+                    'courseUser'=>$courseUser,
                     'currentLesson'=>$userAndLesson->Lesson,
                     'newParent' => $newParent,
             ));

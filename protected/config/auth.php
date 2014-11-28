@@ -11,6 +11,7 @@ return array(
         'description' => 'admin',
         'children' => array(
             'teacher',
+            'parent',
         ),
         'bizRule' => null,
         'data' => null

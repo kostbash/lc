@@ -1,3 +1,7 @@
+<?php 
+    $messages = SourceMessages::MessagesByCategories(array('about-project'));
+?>
+
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
@@ -5,9 +9,9 @@
         <div id="header-bottom">
             <div id="head-full-column" class="head-column">
                 <div class="content-mini">
-                    <div class="head">О системе</div>
+                    <div class="head"><?php echo Yii::t('about-project', $messages[33]->message); ?></div>
                     <div class="foot">
-                        Текст этой странички находится <code><?php echo __FILE__; ?></code>.
+                        
                     </div>
                 </div>
             </div>
@@ -16,6 +20,7 @@
 </div><!-- end-header-->
 
 <div id="container">
-    <div class="widget">
+    <div class="info-page">
+        <?php echo Yii::t('about-project', $messages[34]->message); ?>
     </div>
 </div>
