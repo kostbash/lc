@@ -124,6 +124,7 @@
         
         <?php if($model->isNewRecord) : ?>
             $('.pick-map a').click(function(){
+                current = $(this);
                 $.ajax({
                     url: '<?php echo Yii::app()->createUrl('/admin/exercises/saveParams', array('id_visual'=>$model->id_visual)); ?>',
                     type: 'POST',
@@ -132,7 +133,8 @@
                     success: function(result) {
                         if(result.success)
                         {
-                            alert(result.html);
+                            document.location.replace(current.attr('href'));
+                            //alert(result.html);
                         }
                     }
                 });

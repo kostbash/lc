@@ -103,10 +103,12 @@
                     success: function(result) {
                         if(result.success)
                         {
+                            document.location.replace(current.attr('href'));
                             //alert(result.html);
                         }
                     }
                 });
+                return false;
             });
         <?php endif; ?>
     });
