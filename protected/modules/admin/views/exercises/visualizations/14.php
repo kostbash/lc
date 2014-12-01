@@ -132,10 +132,11 @@
                     success: function(result) {
                         if(result.success)
                         {
-                            //alert(result.html);
+                            alert(result.html);
                         }
                     }
                 });
+                return false;
             });
         <?php endif; ?>
     });

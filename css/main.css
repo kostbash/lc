@@ -1634,13 +1634,14 @@ z-index:10000000;
 .courses
 {
     margin: 14px 25px;
+    text-align: left;
 }
 
 .courses .course
 {
     width: 290px;
     min-height: 170px;
-    float: left;
+    display: inline-block;
     border: 1px solid #dbdbda;
     margin: 8px 10px;
     border-radius: 8px;
