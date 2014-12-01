@@ -4,7 +4,7 @@
            current = $(this);
            parent = current.closest('.modal-content').find('.parent');
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/childrenOfParent/confirmDealFromSite'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/children/confirmDealFromSite'); ?>',
                 type:'POST',
                 data: {id: parent.data('id'), answer: 1},
                 dataType: 'json',
@@ -21,7 +21,7 @@
        $('#confirmParentModal .confirmation .no').live('click', function(){
            current = $(this);
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/childrenOfParent/confirmDealFromSite'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/children/confirmDealFromSite'); ?>',
                 type:'POST',
                 data: {id: current.closest('.modal-content').find('.parent').data('id'), answer: 2},
                 dataType: 'json',

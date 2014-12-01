@@ -318,7 +318,7 @@ class Users extends CActiveRecord
         
         public function getParentRelation()
         {
-            return ChildrenOfParent::model()->findByAttributes(array('id_child'=>$this->id, 'status'=>1));
+            return Children::model()->findByAttributes(array('id_child'=>$this->id, 'status'=>1));
         }
         
         public function getTeachersRelations()
@@ -392,7 +392,7 @@ class Users extends CActiveRecord
                 
                 if($parent)
                 {
-                    $children = new ChildrenOfParent;
+                    $children = new Children;
                     $children->id_child = $this->id;
                     $children->id_parent = $parent->id;
                     $children->child_name = 'Без имени';
@@ -406,7 +406,7 @@ class Users extends CActiveRecord
         
         public static function Students()
         {
-            $childs=Yii::app()->db->createCommand("SELECT DISTINCT `id_child` FROM `oed_children_of_parent`")->queryAll();
+            $childs=Yii::app()->db->createCommand("SELECT DISTINCT `id_child` FROM `oed_children`")->queryAll();
             $students=Yii::app()->db->createCommand("SELECT DISTINCT `id_student` FROM `oed_students_of_teacher`")->queryAll();
             $allStudents = array();
             foreach($childs as $child)
@@ -428,7 +428,7 @@ class Users extends CActiveRecord
         public static function StudentTeachers($id_student)
         {
             $id_student = (int) $id_student;
-            $parents=Yii::app()->db->createCommand("SELECT DISTINCT `id_parent` FROM `oed_children_of_parent` WHERE id_child='$id_student'")->queryAll();
+            $parents=Yii::app()->db->createCommand("SELECT DISTINCT `id_parent` FROM `oed_children` WHERE id_child='$id_student'")->queryAll();
             $teachers=Yii::app()->db->createCommand("SELECT DISTINCT `id_teacher` FROM `oed_students_of_teacher` WHERE id_student='$id_student'")->queryAll();
             $allTeachers = array();
             foreach($parents as $parent)

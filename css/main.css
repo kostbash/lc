@@ -4515,4 +4515,50 @@ z-index:10000000;
     fill: transparent;
 }
 
+/*------------------------------------------------------ Login-Page ------------------------------------------------------*/
 
+#login-page
+{
+    margin: 20px auto;
+    width: 440px;
+}
+
+#login-page .panel-body
+{
+    border: 3px solid #333;
+    border-radius: 0 0 8px 8px;
+}
+
+#login-page .panel-heading
+{
+    text-align: center;
+    border-width: 3px;
+    background: #333;
+    border-radius:8px 8px 0 0;
+}
+
+#login-page .panel-heading h3
+{
+    color: #ccc;
+    margin: 10px 0;
+}
+
+#login-page .panel-heading h3
+{
+    color: #ccc;
+    margin: 10px 0;
+}
+
+#login-page .login
+{
+    float: right;
+}
+
+/*------------------------------------------------------ Site-closed ------------------------------------------------------*/
+
+
+#site-closed
+{
+    margin: 20px auto;
+    width: 50%;
+}

@@ -159,7 +159,7 @@ class CoursesController extends Controller
             
             if($_SESSION['checkNewParent'])
             {
-                $newParents = ChildrenOfParent::newParents();
+                $newParents = Children::newParents();
                 if($newParents)
                 {
                     $newParent = $newParents[0]; // берем первое предложение
@@ -268,7 +268,7 @@ class CoursesController extends Controller
             
             if($_SESSION['checkNewParent'])
             {
-                $newParents = ChildrenOfParent::newParents();
+                $newParents = Children::newParents();
                 if($newParents)
                 {
                     $newParent = $newParents[0]; // берем первое предложение

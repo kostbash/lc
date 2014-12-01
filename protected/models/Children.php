@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "oed_children_of_parent".
+ * This is the model class for table "oed_children".
  *
- * The followings are the available columns in table 'oed_children_of_parent':
+ * The followings are the available columns in table 'oed_children':
  * @property integer $id
  * @property integer $id_parent
  * @property integer $id_child
@@ -11,7 +11,7 @@
  * @property string $child_surname
  * @property integer $confirm
  */
-class ChildrenOfParent extends CActiveRecord
+class Children extends CActiveRecord
 {
         public $statuses = array(
             '0' => array(
@@ -30,7 +30,7 @@ class ChildrenOfParent extends CActiveRecord
         
 	public function tableName()
 	{
-		return 'oed_children_of_parent';
+		return 'oed_children';
 	}
 
 	/**
@@ -101,7 +101,6 @@ class ChildrenOfParent extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ChildrenOfParent the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -140,11 +139,11 @@ class ChildrenOfParent extends CActiveRecord
         
         public static function countNewParents()
         {
-            return ChildrenOfParent::model()->count("id_child=:id_child AND status=:status", array('id_child'=>Yii::app()->user->id, 'status'=>0));
+            return Children::model()->count("id_child=:id_child AND status=:status", array('id_child'=>Yii::app()->user->id, 'status'=>0));
         }
         
         public static function newParents()
         {
-            return ChildrenOfParent::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
+            return Children::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
         }
 }

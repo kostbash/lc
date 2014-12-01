@@ -36,7 +36,7 @@
        $('.parent .confirmation .yes').live('click', function(){
            current = $(this);
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/childrenofparent/confirmdeal'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/children/confirmdeal'); ?>',
                 type:'POST',
                 data: {id: current.closest('.parent').data('id'), answer: 1},
                 dataType: 'json',
@@ -52,7 +52,7 @@
        $('.parent .confirmation .no').live('click', function(){
            current = $(this);
             $.ajax({
-                url: '<?php echo Yii::app()->createUrl('admin/childrenofparent/confirmdeal'); ?>',
+                url: '<?php echo Yii::app()->createUrl('admin/children/confirmdeal'); ?>',
                 type:'POST',
                 data: {id: current.closest('.parent').data('id'), answer: 2},
                 dataType: 'json',

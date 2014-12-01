@@ -1,6 +1,6 @@
 <div class="page-header clearfix">
     <h2>Мои дети</h2>
-    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить ребенка', array('/admin/childrenofparent/create'), array('class'=>'btn btn-primary btn-icon')); ?>
+    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить ребенка', array('/admin/children/create'), array('class'=>'btn btn-primary btn-icon')); ?>
 </div>
 <?php $this->widget('ZGridView', array(
 	'id'=>'children-of-parent-grid',

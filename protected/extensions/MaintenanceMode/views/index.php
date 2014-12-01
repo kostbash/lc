@@ -9,6 +9,17 @@
 </head>
 
 <body>
-    <?php echo $content; ?>
+<div id="site-closed">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3>Сайт временно не работает !</h3>
+        </div>
+        <div class="panel-body">
+            <?php echo Yii::app()->maintenanceMode->message; ?>
+        </div>
+    </div>
+</div>
+
+    
 </body>
 </html>

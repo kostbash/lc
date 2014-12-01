@@ -155,8 +155,29 @@ class SiteController extends Controller
 
 	public function actionLogout()
 	{
-		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+            Yii::app()->user->logout();
+            $this->redirect(Yii::app()->homeUrl);
+	}
+        
+	public function actionLogin()
+	{
+            $this->layout='//layouts/empty_simple';
+            $model=new LoginForm;
+
+            if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+            {
+                echo CActiveForm::validate($model);
+                Yii::app()->end();
+            }
+
+            if(isset($_POST['LoginForm']))
+            {
+                $model->attributes=$_POST['LoginForm'];
+                if($model->validate() && $model->login())
+                        $this->redirect(Yii::app()->user->returnUrl);
+            }
+            
+            $this->render('login', array('model'=>$model));
 	}
         
 //        public function actionMoveAnswers()

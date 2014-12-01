@@ -11,7 +11,7 @@ return array(
         'sourceLanguage'=>'ru_RU',
         'language' => 'ru', 
 	// preloading 'log' component
-	'preload'=>array('log'),
+	'preload'=>array('log', 'maintenanceMode'),
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
@@ -57,8 +57,6 @@ return array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
                                 'admin/relationskills/<action:\w+>'=>'admin/relationSkills/<action>',
                                 'admin/relationskills'=>'admin/relationSkills',
-                                'admin/childrenofparent/<action:\w+>'=>'admin/childrenOfParent/<action>',
-                                'admin/childrenofparent'=>'admin/childrenOfParent',
                                 'admin/exerciseslogs/<action:\w+>'=>'admin/exercisesLogs/<action>',
                                 'admin/exerciseslogs'=>'admin/exercisesLogs',
                                 'admin/studentsofteacher/<action:\w+>'=>'admin/studentsOfTeacher/<action>',
@@ -88,6 +86,14 @@ return array(
                     'sourceMessageTable'=> 'source_messages',
                     'translatedMessageTable'=>'translated_messages',
                 ),
+            
+                'maintenanceMode' => array(
+                    'class' => 'application.extensions.MaintenanceMode.MaintenanceMode',
+                    'enabledMode' => true,
+                    'urls' => array('site/login'),
+                    'roles' => array('admin', ),
+                ),
+            
 //		'log'=>array(
 //			'class'=>'CLogRouter',
 //			'routes'=>array(

@@ -28,7 +28,7 @@ class DealsController extends Controller
         
 	public function actionIndex()
 	{
-            $newParent = ChildrenOfParent::newParents();
+            $newParent = Children::newParents();
             $newTeachers = StudentsOfTeacher::newTeachers();
 
             $this->render('index',array(

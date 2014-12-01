@@ -1,6 +1,6 @@
 <?php
 
-class ChildrenOfParentController extends Controller
+class ChildrenController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -44,7 +44,7 @@ class ChildrenOfParentController extends Controller
         
         public function actionConfirmDeal($deal)
         {
-            $model = ChildrenOfParent::model()->findByAttributes(array('confirm'=>$deal));
+            $model = Children::model()->findByAttributes(array('confirm'=>$deal));
             if($model)
             {
                 $model->status = 1;
@@ -53,7 +53,7 @@ class ChildrenOfParentController extends Controller
                 if($model->save(false))
                 {
                     // отклоняем все другие предложения, так как теперь у нас есть родитель
-                    $childrenParents = ChildrenOfParent::model()->findAllByAttributes(array('id_child'=>$model->id_child, 'status'=>0));
+                    $childrenParents = Children::model()->findAllByAttributes(array('id_child'=>$model->id_child, 'status'=>0));
                     foreach($childrenParents as $childrenParent)
                     {
                         $childrenParent->status=2;
@@ -66,7 +66,7 @@ class ChildrenOfParentController extends Controller
         
         public function actionRegectDeal($deal)
         {
-            $model = ChildrenOfParent::model()->findByAttributes(array('regect'=>$deal));
+            $model = Children::model()->findByAttributes(array('regect'=>$deal));
             if($model)
             {
                 $model->status = 2;
@@ -88,7 +88,7 @@ class ChildrenOfParentController extends Controller
             $answer = (int) $_POST['answer'];
             if($answer && $id)
             {
-                $model = ChildrenOfParent::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
+                $model = Children::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
                 if($model)
                 {
                     $model->status = $answer;
@@ -97,7 +97,7 @@ class ChildrenOfParentController extends Controller
                         if($model->status==1)
                         {
                             // отклоняем все другие предложения, так как теперь у нас есть родитель
-                            $childrenParents = ChildrenOfParent::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
+                            $childrenParents = Children::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
                             foreach($childrenParents as $childrenParent)
                             {
                                 $childrenParent->status=2;
@@ -158,9 +158,9 @@ class ChildrenOfParentController extends Controller
 
 	public function actionCreate()
 	{
-            $model=new ChildrenOfParent;
+            $model=new Children;
             $user=new Users;
-            if(isset($_POST['ChildrenOfParent']) && isset($_POST['Users']['username']))
+            if(isset($_POST['Children']) && isset($_POST['Users']['username']))
             {
                 $user = Users::model()->findByAttributes(array('username'=>$_POST['Users']['username']));
 //                if(!$user)
@@ -172,12 +172,12 @@ class ChildrenOfParentController extends Controller
                 
                 if($user)
                 {
-                    $exist = ChildrenOfParent::model()->exists("id_child=:id_child AND id_parent=:id_parent", array('id_child'=>$user->id, 'id_parent'=>Yii::app()->user->id));
+                    $exist = Children::model()->exists("id_child=:id_child AND id_parent=:id_parent", array('id_child'=>$user->id, 'id_parent'=>Yii::app()->user->id));
                     if(!$exist)
                     {
-                        $existParent = ChildrenOfParent::model()->exists("id_child=:id_child AND status=:status", array('id_child'=>$user->id, 'status'=>1));
+                        $existParent = Children::model()->exists("id_child=:id_child AND status=:status", array('id_child'=>$user->id, 'status'=>1));
 
-                        $model->attributes=$_POST['ChildrenOfParent'];
+                        $model->attributes=$_POST['Children'];
                         $model->id_child=$user->id;
                         $model->id_parent=Yii::app()->user->id;
 
@@ -205,8 +205,8 @@ class ChildrenOfParentController extends Controller
         //                                    'template' => 'deal_from_parent',
         //                                    'vars' => array(
         //                                        'email_parent'=> $model->Parent->email,
-        //                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/childrenOfParent/confirmdeal', 'deal' => $model->confirm)),
-        //                                        'regect_link' => CHtml::link('Отклонить', array('/admin/childrenOfParent/regectdeal', 'deal' => $model->regect)),
+        //                                        'confirm_link' => CHtml::link('Подтвердить', array('/admin/children/confirmdeal', 'deal' => $model->confirm)),
+        //                                        'regect_link' => CHtml::link('Отклонить', array('/admin/children/regectdeal', 'deal' => $model->regect)),
         //                                        'site_name'=>Yii::app()->name,
         //                                    ),
         //                                )
@@ -247,9 +247,9 @@ class ChildrenOfParentController extends Controller
             $model=$this->loadModel($id);
             $cloneModel = clone $model; // сохраняем модель до присвоения атрибутов
 
-            if(isset($_POST['ChildrenOfParent']))
+            if(isset($_POST['Children']))
             {
-                    $model->attributes=$_POST['ChildrenOfParent'];
+                    $model->attributes=$_POST['Children'];
                     if($model->save())
                             $this->redirect(array('index'));
             }
@@ -267,10 +267,10 @@ class ChildrenOfParentController extends Controller
 
 	public function actionIndex()
 	{
-            $model=new ChildrenOfParent('search');
+            $model=new Children('search');
             $model->unsetAttributes();
-            if(isset($_GET['ChildrenOfParent']))
-                    $model->attributes=$_GET['ChildrenOfParent'];
+            if(isset($_GET['Children']))
+                    $model->attributes=$_GET['Children'];
 
             $this->render('index',array(
                     'model'=>$model,
@@ -279,7 +279,7 @@ class ChildrenOfParentController extends Controller
 
 	public function loadModel($id)
 	{
-            $model=ChildrenOfParent::model()->findByAttributes(array('id'=>$id, 'id_parent'=>Yii::app()->user->id));
+            $model=Children::model()->findByAttributes(array('id'=>$id, 'id_parent'=>Yii::app()->user->id));
             if($model===null)
                     throw new CHttpException(404,'The requested page does not exist.');
             return $model;
@@ -287,7 +287,7 @@ class ChildrenOfParentController extends Controller
         
 	public function loadConfirmedModel($id)
 	{
-            $model=ChildrenOfParent::model()->findByAttributes(array('id'=>$id, 'id_parent'=>Yii::app()->user->id, 'status'=>1));
+            $model=Children::model()->findByAttributes(array('id'=>$id, 'id_parent'=>Yii::app()->user->id, 'status'=>1));
             if($model===null)
                     throw new CHttpException(404,'The requested page does not exist.');
             return $model;
