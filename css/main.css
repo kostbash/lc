@@ -1092,6 +1092,7 @@ z-index:10000000;
 
 #logo a {
     text-transform: uppercase;
+    text-decoration: none;
     color: #fff;
     font-size: 50px;
     line-height: 52px;

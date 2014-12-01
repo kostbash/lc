@@ -131,7 +131,7 @@ class StudentNotificationsAndTeacher extends CActiveRecord
                     array(
                         'template' => 'students_notifications',
                         'vars' => array(
-                            'student_mail' => $this->Student->email,
+                            'student_username' => $this->Student->username,
                             'text' => $this->StudentsNotifications->text,
                         ),
                     )
