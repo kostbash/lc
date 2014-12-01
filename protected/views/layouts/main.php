@@ -96,12 +96,19 @@
                         <div id="top-menu-on-main" class="clearfix" >
                             <ul class="clearfix">
                                 <?php if(Yii::app()->user->isGuest) : ?>
+                                    <?php /*
                                     <li><a class="reg-as-parent" data-toggle="modal" data-target="#regLogin" href="#"><?php echo Yii::t('layout-main', $messages[25]->message); ?></a></li>
                                     <li><a class="reg-as-teacher" data-toggle="modal" data-target="#regLogin" href="#"><?php echo Yii::t('layout-main', $messages[26]->message); ?></a></li>
                                     <li><a id="contacts" href="#"><?php echo Yii::t('layout-main', $messages[27]->message); ?></a></li>
+                                     
+                                     */ ?>
+                                    
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[25]->message), array('/site/page', 'view'=>'for-parents')); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[26]->message), array('/site/page', 'view'=>'for-teachers')); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[27]->message), array('site/contact')); ?></li>
                                 <?php else : ?>
                                     <li><?php echo CHtml::link(Yii::t('layout-main', $messages[28]->message), array('site/contact')); ?></li>
-                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[29]->message), '#'); ?></li>
+                                    <li><?php echo CHtml::link(Yii::t('layout-main', $messages[29]->message), array('/site/page', 'view'=>'for-students')); ?></li>
                                     <li><?php echo CHtml::link(Yii::t('layout-main', $messages[30]->message), array('/site/page', 'view'=>'about')); ?></li>
                                 <?php endif; ?>
                             </ul>

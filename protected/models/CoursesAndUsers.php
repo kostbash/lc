@@ -100,7 +100,7 @@ class CoursesAndUsers extends CActiveRecord
             if($changeDate >= $lastActivityDate)
             {
                 $query = "SELECT themes.id_course, lessons.id_group, lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons
-                        WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id=$this->id_course
+                        WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id='$this->id_course'
                         ORDER BY themes.order ASC, lessons.order ASC";
                 $lessonsAttrs = Yii::app()->db->createCommand($query)->queryAll();
 
