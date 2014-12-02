@@ -16,7 +16,7 @@
                                 <div class="status last-active"><?php echo Yii::t('courses-page-auth', $messages[37]->message); ?></div>
                                 <div class="name"><?php echo $lastActiveCourse->name; ?></div>
                             </div>
-                            <?php echo CHtml::link(Yii::t('courses-page-auth', $messages[36]->message), array('courses/index', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button', 'onclick'=>"reachGoal('HomeLastLesson')")); ?>
+                            <?php echo CHtml::link(Yii::t('courses-page-auth', $messages[36]->message), array('courses/view', 'id'=>$lastActiveCourse->id), array('class'=>'continue-course-button', 'onclick'=>"reachGoal('HomeLastLesson')")); ?>
                         </div>
                         <div class="content clearfix">
                             <div class="passed-lessons">
@@ -50,7 +50,7 @@
                             <ul>
                                 <?php if($activeCourses) : ?>
                                     <?php foreach($activeCourses as $activeCourse) : ?>
-                                        <li><?php echo CHtml::link($activeCourse->name, array('courses/index', 'id'=>$activeCourse->id)); ?></li>
+                                        <li><?php echo CHtml::link($activeCourse->name, array('courses/view', 'id'=>$activeCourse->id)); ?></li>
                                     <?php endforeach; ?>
                                 <?php else : ?>
                                     <li><?php echo Yii::t('courses-page-auth', $messages[44]->message); ?></li>
@@ -62,7 +62,7 @@
                             <ul>
                                 <?php if($passedCourses) : ?>
                                     <?php foreach($passedCourses as $passedCourse) : ?>
-                                        <li><?php echo CHtml::link($passedCourse->name, array('courses/index', 'id'=>$passedCourse->id)); ?></li>
+                                        <li><?php echo CHtml::link($passedCourse->name, array('courses/view', 'id'=>$passedCourse->id)); ?></li>
                                     <?php endforeach; ?>
                                 <?php else : ?>
                                     <li><?php echo Yii::t('courses-page-auth', $messages[43]->message); ?></li>
@@ -143,7 +143,7 @@
                             {
                                 $number = $n+1;
                                 $tabs .="<div class='course'>
-                                            <a class='to-course' href='".Yii::app()->createUrl('courses/index', array('id'=>$subjectCourse->id))."'>
+                                            <a class='to-course' href='".Yii::app()->createUrl('courses/view', array('id'=>$subjectCourse->id))."'>
                                                 <div class='head'>
                                                     <div class='number'>$number</div>
                                                     <div class='name'>$subjectCourse->name</div>

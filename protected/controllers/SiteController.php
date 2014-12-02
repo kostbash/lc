@@ -62,7 +62,7 @@ class SiteController extends Controller
                             unset($_SESSION['id_course']);
                             if(Courses::model()->exists('id=:id_course', array('id_course'=>$id_course)))
                             {
-                                $link = array('courses/index', 'id'=>$id_course);
+                                $link = array('courses/view', 'id'=>$id_course);
                             }
                         }
                         
@@ -99,7 +99,7 @@ class SiteController extends Controller
                             $_SESSION['checkNewParent'] = true;
                         }
                         if($id_course)
-                            $this->redirect(array('courses/index', 'id'=>$id_course));
+                            $this->redirect(array('courses/view', 'id'=>$id_course));
                         else
                             $this->redirect(array('courses/list'));
                     } else

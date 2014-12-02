@@ -21,8 +21,12 @@ class CoursesController extends Controller
 				'roles'=>array('student'),
 			),
 			array('allow',
-				'actions'=>array('view'),
+				'actions'=>array('guestView'),
                                 'users'=>array('?'),
+			),
+                        array('allow',
+				'actions'=>array('view'),
+                                'users'=>array('*'),
 			),
 			array('deny',
 				'users'=>array('*'),
@@ -30,7 +34,15 @@ class CoursesController extends Controller
 		);
 	}
         
-        public function actionView($id){
+        public function actionView($id, $lesson=null)
+        {
+            if(Yii::app()->user->isGuest)
+                $this->actionGuestView ($id);
+            else
+                $this->actionIndex ($id, $lesson);
+        }
+        
+        public function actionGuestView($id){
             $course = $this->loadModel($id);
             $themesLessons = $course->themesLessons;
             $_SESSION['id_course'] = $id;
@@ -52,7 +64,7 @@ class CoursesController extends Controller
                     $courseAndUsers->id_user = $user->id;
                     $courseAndUsers->save();
                 }
-                $this->redirect(array('/courses/index', 'id'=>$course->id));
+                $this->redirect(array('/courses/view', 'id'=>$course->id));
             }
         }
         
@@ -81,7 +93,7 @@ class CoursesController extends Controller
             }
             else
             {
-                $this->redirect(array('/courses/index', 'id'=>$course->id));
+                $this->redirect(array('/courses/view', 'id'=>$course->id));
             }
         }
         
@@ -249,7 +261,7 @@ class CoursesController extends Controller
             {
                 $nextLesson = $userLesson->Course->nextLesson($userLesson->id_group, $userLesson->id_lesson);
                 if(!$nextLesson)
-                    $this->redirect(array('courses/index', 'id'=>$userLesson->id_course, 'lesson'=>$userLesson->id));
+                    $this->redirect(array('courses/view', 'id'=>$userLesson->id_course, 'lesson'=>$userLesson->id));
                 $nextUserLesson = UserAndLessons::model()->findByAttributes(array('id_user'=>Yii::app()->user->id, 'id_course'=>$userLesson->id_course, 'id_group'=>$nextLesson['id_group'], 'id_lesson'=>$nextLesson['id_lesson']));
                 if($nextUserLesson)
                     $this->redirect(array('lessons/pass', 'id'=>$nextUserLesson->id));
@@ -288,7 +300,7 @@ class CoursesController extends Controller
         
 	public function actionMyList()
 	{
-                $this->redirect(array('courses/index', 'id'=>Courses::$defaultCourse));
+                $this->redirect(array('courses/view', 'id'=>Courses::$defaultCourse));
 		$model=new Courses('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Courses']))
