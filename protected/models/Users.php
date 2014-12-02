@@ -459,8 +459,10 @@ class Users extends CActiveRecord
             }
             else
             {
-               if(Yii::app()->user->checkAccess('editor'))
+               if(Yii::app()->user->checkAccess('admin'))
                    return Yii::app()->createUrl('/admin/courses/index');
+               elseif(Yii::app()->user->checkAccess('parent'))
+                   return Yii::app()->createUrl('/admin/children/index');
                else
                    return Yii::app()->createUrl('courses/list');
             }
