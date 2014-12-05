@@ -1317,7 +1317,7 @@ class ExercisesController extends Controller
             }
             if ($_FILES['ImportFile'])
             {
-
+                $errors = "";
                 if ($file = CUploadedFile::getInstanceByName("ImportFile"))
                 { 
                     $file = file($file->TempName);
@@ -1326,13 +1326,13 @@ class ExercisesController extends Controller
                         foreach ($file as $f)
                         {
                             $y++;
-                            //$data = explode(";", $f);
-                            if (($data = str_getcsv($f, ";")) !== FALSE) 
+                            $data = explode(";", $f);
+                            //if (($data = str_getcsv($f, ";")) !== FALSE) 
                             {
                                 $num = count($data);
                                 if ($num != 5)
                                 {
-                                    
+                                    $errors .= "Количество полей не равно 5";
                                 }
                                 else
                                 {
