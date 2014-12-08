@@ -122,6 +122,76 @@ class UserAndLessons extends CActiveRecord
             parent::afterDelete();
         }
         
+        public function saveLessonPassed()
+        {
+                $pass = true;
+                if($this->Lesson->ExercisesGroups)
+                {
+                    foreach($this->Lesson->ExercisesGroups as $exerciseGroup)
+                    {
+                        if(!UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND id_exercise_group=:id_group AND passed=1', array('id_user_and_lesson'=>$this->id, 'id_group'=>$exerciseGroup->id)))
+                        {
+                            $pass = false;
+                            break;
+                        }
+                    }
+                }
+                
+                if($pass && !$this->passed)
+                {
+                    $this->passed = 1;
+                    $this->save(false);
+                    $this->saveLessonLog();
+                }
+                return $pass;
+        }
+        
+        public function saveLessonLog()
+        {
+            $lessonLog = new UserLessonsLogs;
+            $lessonLog->id_user = Yii::app()->user->id;
+            $lessonLog->id_course = $this->id_course;
+            $lessonLog->id_theme = $this->id_group;
+            $lessonLog->id_lesson = $this->id_lesson;
+            $lessonLog->date = date('Y-m-d');
+            $lessonLog->time = date('H:i:s');
+            $lessonLog->duration = $this->userDuration();
+            $lessonLog->save();
+        }
+        
+        
+        public function userDuration()
+        {
+            $blocksLogs = array();
+            $duration = 0;
+            $criteria=new CDbCriteria;
+            $criteria->compare('id_user', Yii::app()->user->id);
+            $criteria->compare('id_course', $this->id_course);
+            $criteria->compare('id_theme', $this->id_group);
+            $criteria->compare('id_lesson', $this->id_lesson);
+            $criteria->compare('passed', 1);
+            $blocksLogsRaw = UserBlocksLogs::model()->findAll($criteria);
+            foreach($blocksLogsRaw as $blockLogRaw)
+            {
+                if(!$blocksLogs[$blockLogRaw->id_block])
+                {
+                    $blocksLogs[$blockLogRaw->id_block] = $blockLogRaw;
+                } else {
+                    if($blockLogRaw->date > $blocksLogs[$blockLogRaw->id_block]->date && $blockLogRaw->time > $blocksLogs[$blockLogRaw->id_block]->time)
+                    {
+                        $blocksLogs[$blockLogRaw->id_block] = $blockLogRaw;
+                    }
+                }
+                
+            }
+
+            foreach($blocksLogs as $blockLog)
+            {
+                $duration += $blockLog->duration;
+            }
+            return $duration;
+        }
+        
         public function OnChangeLesson($makePassed = false)
         {
             $changeDate = strtotime($this->Lesson->change_date);

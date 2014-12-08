@@ -119,7 +119,6 @@ class LessonsController extends Controller
                         $courseAndUser->is_begin = 1;
                         $courseAndUser->save();
                     }
-                    
                 }
                 else
                 {
@@ -134,6 +133,7 @@ class LessonsController extends Controller
                         }
                     }
                 }
+                $userAndLesson->saveLessonPassed();
             }
             
             $nextLesson = $userAndLesson->Course->nextLesson($userAndLesson->id_group, $userAndLesson->id_lesson);
