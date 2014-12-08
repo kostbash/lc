@@ -45,9 +45,12 @@ class ExercisesLogsController extends Controller
         
 	public function loadModelWitCheckAccess($id)
 	{
-            $exist = UserExercisesLogsAndTeacher::model()->exists('id_log=:id_log AND id_teacher=:id_teacher', array('id_log'=>$id, 'id_teacher'=>Yii::app()->user->id));
-            if(!$exist)
-                    throw new CHttpException(404,'The requested page does not exist.');
+            if(!Users::UserType()==1)
+            {
+                $exist = UserExercisesLogsAndTeacher::model()->exists('id_log=:id_log AND id_teacher=:id_teacher', array('id_log'=>$id, 'id_teacher'=>Yii::app()->user->id));
+                if(!$exist)
+                        throw new CHttpException(404,'The requested page does not exist.');
+            }
             return UserExercisesLogs::model()->findByPk($id);
 	}
 
