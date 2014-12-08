@@ -25,6 +25,8 @@ class Users extends CActiveRecord
             '4' => 'Родитель',
         );
         
+        public $countLessons;
+        
         public static $places = array(
             '1' => 'first',
             '2' => 'second',
@@ -50,9 +52,19 @@ class Users extends CActiveRecord
             3 => 'Любимое блюдо',
         );
         
+        public static $listCountLessons = array(
+            '=0' => '0',
+            '=1' => '1',
+            '>1' => 'Больше 1',
+        );
+        
         public $addParentOnReg = false;
         public $createParentOnReg = false;
         public $emailParentOnReg;
+        
+        public $last_unactivity;
+        
+        
         
     
 	public function tableName()
@@ -85,7 +97,7 @@ class Users extends CActiveRecord
                     	array('username', 'unique', 'message'=>'Указанный логин уже используется'),
                     	array('username', 'match', 'pattern'=>'/^[\w\d_.@]{4,}$/i', 'message'=>'Логин должен быть не менее 4 символов и состоять из латинских букв, цифр, знака подчеркивания, точки и @'),
                         array('checkPassword', 'compare', 'compareAttribute'=>'password'),
-			array('id, username, password, role', 'safe', 'on'=>'search'),
+			array('id, username, email, password, role, last_activity, last_unactivity, registration_day, countLessons', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -148,6 +160,7 @@ class Users extends CActiveRecord
 			'checkPassword' => 'Повторите пароль',
                         'registration_day' => 'Дата регистрации',
                         'last_activity' => 'Последняя активность',
+                        'last_unactivity' => 'Не активен',
                         'sendOnMail' => 'Отправить новый пароль на e-mail',
 			'role' => 'Роль',
 			'rusRoleName' => 'Роль',
@@ -159,6 +172,8 @@ class Users extends CActiveRecord
                         'addParentOnReg'=>'Для родителя: иметь возможность отслеживать прогресс обучения',
                         'createParentOnReg'=>'У Вас еще нет аккаунта родителя? Установите этот флажок, чтобы создать новый аккаунт',
                         'emailParentOnReg' => 'Введите Ваш e-mail',
+                        'myParent' => 'Родитель',
+                        'countLessons'=>'Пройдено уроков',
 		);
 	}
 
@@ -180,13 +195,41 @@ class Users extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+                $today = date('Y-m-d H:i:s');
+                
 		$criteria->compare('id',$this->id);
 		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->addNotInCondition('role', array(1));
+                $criteria->compare('role', $this->role, true);
+		$criteria->compare('email',$this->email,true);
+                
+                $criteria->addNotInCondition('role', array(1));
+                
+                if($this->registration_day)
+                {
+                    $criteria->addCondition("`registration_day` >= :registration_day AND `registration_day`<='$today'");
+                    $criteria->params['registration_day'] = $this->registration_day;
+                }
+                
+                if($this->last_activity)
+                {
+                    $criteria->addCondition("`last_activity` >= :last_activity AND `last_activity` <='$today'");
+                    $criteria->params['last_activity'] = $this->last_activity;
+                }
+                
+                if($this->last_unactivity)
+                {
+                    $criteria->addCondition("`last_activity` < :last_unactivity");
+                    $criteria->params['last_unactivity'] = $this->last_unactivity;
+                }
+                
+                if($this->countLessons && isset(self::$listCountLessons[$this->countLessons]))
+                {
+                    $criteria->addCondition("(SELECT count(*) FROM `oed_user_and_lessons` WHERE id_user=t.id AND passed=1) $this->countLessons");
+                }
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination'=> array('pageSize'=>50),
 		));
 	}
 
@@ -363,7 +406,7 @@ class Users extends CActiveRecord
             {
                 $this->password = md5(Yii::app()->params['beginSalt'].$this->password.Yii::app()->params['endSalt']);
                 $this->progress_key = substr(md5(Yii::app()->params['beginSalt'].$this->username.Yii::app()->params['endSalt']), 0, 25);
-                $this->registration_day = date('Y-m-d');
+                $this->registration_day = date('Y-m-d H:i:s');
 
                 if($this->role==4)
                 {
@@ -504,5 +547,47 @@ class Users extends CActiveRecord
         public function getNiceRecoveryQuestion()
         {
             return self::$recoveryQuestions[$this->id_recovery_question];
+        }
+        
+        public function getMyParent()
+        {
+            if($this->role==2)
+            {
+                $parent = Children::model()->findByAttributes(array('id_child'=>$this->id));
+                if($parent)
+                {
+                    return $parent->Parent->email;
+                }
+                return 'Нет';
+            }
+            return '-';
+        }
+        
+        public static function listLastActivity()
+        {
+            $list = array();
+            $list[date('Y-m-d 00:00:00', strtotime('- 1day'))] = 'Сегодня/Вчера';
+            $list[date('Y-m-d 00:00:00', strtotime('- 3day'))] = 'Сегодня/Последние 3 дня';
+            return $list;
+        }
+        
+        public static function listLastUnActivity()
+        {
+            $list = array();
+            $list[date('Y-m-d 00:00:00', strtotime('- 1day'))] = 'Сегодня и вчера';
+            $list[date('Y-m-d 00:00:00', strtotime('- 3day'))] = 'Сегодня и последние 3 дня';
+            $list[date('Y-m-d 00:00:00', strtotime('- 7day'))] = 'Более 7-ми дней';
+            $list[date('Y-m-d 00:00:00', strtotime('- 1month'))] = 'Более месяца';
+            return $list;
+        }
+        
+        public static function listRegistrationDates()
+        {
+            $list = array();
+            $list[date('Y-m-d 00:00:00')] = 'Сегодня';
+            $list[date('Y-m-d 00:00:00', strtotime('- 1day'))] = 'Вчера';
+            $list[date('Y-m-d 00:00:00', strtotime('- 7day'))] = '7 дней';
+            $list[date('Y-m-d 00:00:00', strtotime('- 1month'))] = 'Месяц';
+            return $list;
         }
 }

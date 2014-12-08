@@ -62,10 +62,12 @@ class Controller extends CController
 if(Yii::app()->user->id)
 {
     $user = Users::model()->findByPk(Yii::app()->user->id);
-    if(date('Y-m-d') > $user->last_activity)
+    $date = date('Y-m-d', strtotime("$user->last_activity"));
+    if(date('Y-m-d') > $date)
     {
         $user->stamina = date('Y-m-d', strtotime("$user->last_activity +1 day"))==date('Y-m-d') ? $user->stamina+1 : 1;
-        $user->last_activity = date('Y-m-d');
-        $user->save(false);
     }
+    
+    $user->last_activity = date('Y-m-d H:i:s');
+    $user->save(false);
 }

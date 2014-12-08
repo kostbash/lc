@@ -4,31 +4,47 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="wide form">
+<script>
+    $(function(){
+        $('.search-form form').change(function(){
+            $('#users-grid').yiiGridView('update', { data: $(this).serialize() });
+        });
+    });
+</script>
+
+<div class="well search-form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>
-
-	<div class="row">
-		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>100)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'type'); ?>
-		<?php echo $form->textField($model,'type'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Search'); ?>
-	</div>
+    <div class="row row-attr">
+        <div class="col-md-3">
+            <?php echo $form->label($model,'role'); ?>
+            <?php $roles = Users::$rolesRusNames; unset($roles[1]); // удаляем админа роль=1 ?>
+            <?php echo $form->dropDownList($model,'role', $roles, array('class'=>'form-control input-sm', 'empty'=>'Все')); ?>
+        </div>
+        <div class="col-md-3">
+            <?php echo $form->label($model,'registration_day'); ?>
+            <?php echo $form->dropDownList($model,'registration_day', Users::listRegistrationDates(), array('class'=>'form-control input-sm', 'empty'=>'Все')); ?>
+        </div>
+    </div>
+    <div class="row row-attr">
+        <div class="col-md-3">
+            <?php echo $form->label($model,'last_activity'); ?>
+            <?php echo $form->dropDownList($model,'last_activity', Users::listLastActivity(), array('class'=>'form-control input-sm', 'empty'=>'Все')); ?>
+        </div>
+        <div class="col-md-3">
+            <?php echo $form->label($model,'last_unactivity'); ?>
+            <?php echo $form->dropDownList($model,'last_unactivity', Users::listLastUnActivity(), array('class'=>'form-control input-sm', 'empty'=>'Все')); ?>
+        </div>
+    </div>
+    <div class="row row-attr">
+        <div class="col-md-3">
+            <?php echo $form->label($model,'countLessons'); ?>
+            <?php echo $form->dropDownList($model,'countLessons', Users::$listCountLessons, array('class'=>'form-control input-sm', 'empty'=>'Не выбрано')); ?>
+        </div>
+    </div>
 
 <?php $this->endWidget(); ?>
 

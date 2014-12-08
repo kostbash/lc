@@ -14,6 +14,7 @@
 class StudentNotifications extends CActiveRecord
 {
         public $new;
+        public $lookAdmin;
         
 	public function tableName()
 	{
@@ -32,7 +33,7 @@ class StudentNotifications extends CActiveRecord
 			array('id_user, id_type', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_user, id_type, date, time, text, new', 'safe', 'on'=>'search'),
+			array('id, id_user, id_type, date, time, text, new, lookAdmin', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,11 +79,19 @@ class StudentNotifications extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('text',$this->text,true);
-                $criteria->with = 'NotificationsAndTeachers';
-                $criteria->compare('NotificationsAndTeachers.id_teacher', Yii::app()->user->id, 'AND');
-                $criteria->compare('NotificationsAndTeachers.new', $this->new, 'AND');
-                $criteria->order = 'NotificationsAndTeachers.new DESC, date DESC, time DESC';
-                $criteria->together = true;
+                
+                if(!$this->lookAdmin)
+                {
+                    $criteria->with = 'NotificationsAndTeachers';
+                    $criteria->compare('NotificationsAndTeachers.id_teacher', Yii::app()->user->id, 'AND');
+                    $criteria->compare('NotificationsAndTeachers.new', $this->new, 'AND');
+                    $criteria->order = 'NotificationsAndTeachers.new DESC, date DESC, time DESC';
+                    $criteria->together = true;
+                }
+                else
+                {
+                    $criteria->order = 'date DESC, time DESC';
+                }
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

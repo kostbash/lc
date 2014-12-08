@@ -89,7 +89,7 @@ return array(
             
                 'maintenanceMode' => array(
                     'class' => 'application.extensions.MaintenanceMode.MaintenanceMode',
-                    'enabledMode' => true,
+                    'enabledMode' => false,
                     'urls' => array('site/login'),
                     'roles' => array('admin', ),
                 ),

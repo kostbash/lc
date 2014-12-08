@@ -21,6 +21,7 @@ class UserExercisesLogs extends CActiveRecord
         public $new;
         public $id_block_type;
         public $id_skill;
+        public $lookAdmin;
     
 	public function tableName()
 	{
@@ -38,7 +39,7 @@ class UserExercisesLogs extends CActiveRecord
 			array('id_user, id_course, id_theme, id_lesson, id_block, id_exercise, date, time, duration, right, answer', 'required'),
 			array('id_user, id_course, id_theme, id_lesson, id_block, id_exercise, duration, right', 'numerical', 'integerOnly'=>true),
                         array('answer', 'safe'),
-			array('id, id_user, id_course, id_theme, id_lesson, id_block, id_exercise, date, time, duration, right, new, id_block_type, id_skill', 'safe', 'on'=>'search'),
+			array('id, id_user, id_course, id_theme, id_lesson, id_block, id_exercise, date, time, duration, right, new, id_block_type, id_skill, lookAdmin', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -108,9 +109,12 @@ class UserExercisesLogs extends CActiveRecord
 		$criteria->compare('duration',$this->duration);
 		$criteria->compare('right',$this->right);
                 
-                $with[] = 'LogsAndTeachers';
-                $criteria->compare('LogsAndTeachers.id_teacher', Yii::app()->user->id, 'AND');
-                $criteria->compare('LogsAndTeachers.new', $this->new, 'AND');
+                if(!$this->lookAdmin)
+                {
+                    $with[] = 'LogsAndTeachers';
+                    $criteria->compare('LogsAndTeachers.id_teacher', Yii::app()->user->id, 'AND');
+                    $criteria->compare('LogsAndTeachers.new', $this->new, 'AND');
+                }
                 if(isset($this->id_block_type))
                 {
                     $with[] = 'Block';
@@ -122,8 +126,15 @@ class UserExercisesLogs extends CActiveRecord
 //                    $with[] = 'Exercise';
 //                    $criteria->compare('Exercise.Skills.id_skill', $this->id_skill, 'AND');
 //                }
-
-                $criteria->order = 'LogsAndTeachers.new DESC, date DESC, time DESC';
+                
+                if(!$this->lookAdmin)
+                {
+                    $criteria->order = 'LogsAndTeachers.new DESC, date DESC, time DESC';
+                }
+                else
+                {
+                    $criteria->order = 'date DESC, time DESC';
+                }
                 $criteria->with = $with;
                 $criteria->together = true;
 		return new CActiveDataProvider($this, array(

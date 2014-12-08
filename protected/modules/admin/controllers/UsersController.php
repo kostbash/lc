@@ -33,7 +33,7 @@ class UsersController extends Controller
                             'roles'=>array('student'),
                     ),
                     array('allow',
-                            'actions'=>array('delete','index', 'massdelete', 'resetpassword'),
+                            'actions'=>array('delete','index', 'massdelete', 'resetpassword', 'logs'),
                             'roles'=>array('admin'),
                     ),
                     array('deny',  // deny all users
@@ -181,11 +181,67 @@ class UsersController extends Controller
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Users']))
 			$model->attributes=$_GET['Users'];
+                
+                if(!isset($_GET['Users']['registration_day']))
+                {
+                    $model->registration_day = key(Users::listRegistrationDates());
+                }
 
 		$this->render('index',array(
 			'model'=>$model,
 		));
 	}
+        
+        public function actionLogs($id)
+        {
+            $user = Users::model()->findByAttributes(array( 'id'=>$id, 'role'=>array(2,3,4) ));
+            if(!$user)
+            {
+                $this->redirect(array('/admin/users/index'));
+            }
+
+            $notifications = new StudentNotifications('search');
+            $notifications->unsetAttributes();
+            $notifications->id_user = $user->id;
+            $notifications->lookAdmin = true;
+            
+            $exercisesLogs = new UserExercisesLogs('search');
+            $exercisesLogs->unsetAttributes();
+            $exercisesLogs->id_user = $user->id;
+            $exercisesLogs->lookAdmin = true;
+            
+            if($_POST['Notifications'])
+            {
+                $notifications->attributes = $_POST['Notifications'];
+                
+                unset($_SESSION['Notifications']);
+                $_SESSION['Notifications'] = $_POST['Notifications'];
+                $_GET['filter'] = 1;
+            } elseif($_GET['filter'])
+            {
+                $notifications->attributes = $_SESSION['Notifications'];
+            }
+            
+            if($_POST['ExercisesLogs'])
+            {
+                $exercisesLogs->attributes = $_POST['ExercisesLogs'];
+                
+                unset($_SESSION['ExercisesLogs']);
+                $_SESSION['ExercisesLogs'] = $_POST['ExercisesLogs'];
+                $_GET['filter'] = 1;
+            } elseif($_GET['filter'])
+            {
+                $exercisesLogs->attributes = $_SESSION['ExercisesLogs'];
+            }
+            
+            $this->render('logs',array(
+                'user'=>$user,
+                'notifications'=>$notifications,
+                'exercisesLogs'=>$exercisesLogs,
+                'notificationsDataProvider' => $notifications->search(),
+                'exercisesLogsDataProvider' => $exercisesLogs->search(),
+            ));
+        }
 
 	public function loadModel($id)
 	{

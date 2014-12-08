@@ -29,6 +29,13 @@
 <div class="page-header clearfix">
     <h2>Пользователи</h2>
 </div>
+
+<?php
+$this->renderPartial('_search', array(
+    'model' => $model,
+));
+?>
+    
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'users-form',
 	'enableAjaxValidation'=>false,
@@ -39,6 +46,7 @@
 	'id'=>'users-grid',
 	'dataProvider'=>$model->search(),
         'selectableRows' => 2,
+        'summaryText'=>"Всего найдено записей: {count}",
 	'columns'=>array(
                 array(
                     'class'=>'CCheckBoxColumn',
@@ -49,8 +57,13 @@
 		'email',
                 'rusRoleName',
                 'registration_day',
-                'countPassLessons',
+                array(
+                    'name'=>'countPassLessons',
+                    'value'=>'CHtml::link($data->countPassLessons, array("/admin/users/logs", "id"=>$data->id), array("target"=>"_blank"))',
+                    'type'=>'raw',
+                ),
                 'last_activity',
+                'myParent',
 		array(
 			'class'=>'CButtonColumn',
                         'template'=>'{reset}{delete}',

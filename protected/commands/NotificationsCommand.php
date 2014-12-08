@@ -12,7 +12,7 @@ class NotificationsCommand extends CConsoleCommand
     
     public function createNotifications()
     {
-        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $yesterday = date('Y-m-d H:i:s', strtotime('-1 day'));
         foreach($this->students as $id_student)
         {
             if($user = Users::model()->findByPk($id_student))

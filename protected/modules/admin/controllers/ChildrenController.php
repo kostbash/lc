@@ -13,10 +13,10 @@ class ChildrenController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
-			'accessControl', 
-			'postOnly + delete',
-		);
+            return array(
+                    'accessControl', 
+                    'postOnly + delete',
+            );
 	}
 
 	public function accessRules()
