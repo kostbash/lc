@@ -44,12 +44,10 @@ class CoursesController extends Controller
         
         public function actionGuestView($id){
             $course = $this->loadModel($id);
-            $themesLessons = $course->themesLessons;
             $_SESSION['id_course'] = $id;
             $this->_course = $id;
             $this->render('view',array(
                 'course'=>$course,
-                'themesLessons'=>$themesLessons,
             ));
         }
         

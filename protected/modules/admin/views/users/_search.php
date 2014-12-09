@@ -7,7 +7,7 @@
 <script>
     $(function(){
         $('.search-form form').change(function(){
-            $('#users-grid').yiiGridView('update', { data: $(this).serialize() });
+            $('#users-grid').yiiGridView('update', { data: $(this).serialize()+'&filter=1' });
         });
     });
 </script>
@@ -16,7 +16,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
-	'method'=>'get',
+	'method'=>'post',
 )); ?>
     <div class="row row-attr">
         <div class="col-md-3">

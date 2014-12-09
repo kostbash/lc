@@ -4193,6 +4193,11 @@ z-index:10000000;
 
 /*------------------------------------------------------ Course-View-Page ------------------------------------------------------*/
 
+#course-view-page
+{
+    margin-bottom: 50px;
+}
+
 #course-view-page #top-buttons
 {
     margin-bottom: 50px;
@@ -4315,11 +4320,23 @@ z-index:10000000;
     font-weight: bold;
 }
 
+#course-view-page .main-title
+{
+    margin-bottom: 30px;
+}
 
-#course-view-page #lessons-table
+#course-view-page .theme-name
+{
+    font-size: 28px;
+    font-family: 'a_FuturaOrto' !important;
+    color: #fff;
+    margin: 0 0 30px;
+}
+
+#course-view-page .lessons-table
 {
     width: 100%;
-    margin: 20px 0 70px;
+    margin: 0 0 30px;
     font-family: 'a_FuturaOrtoLt';
     font-size: 14px;
     color: #022f6d;
@@ -4334,7 +4351,7 @@ z-index:10000000;
     table-layout: fixed;
 }
 
-#course-view-page #lessons-table th
+#course-view-page .lessons-table th
 {
     height: 54px;
     font-size: 20px;
@@ -4343,7 +4360,7 @@ z-index:10000000;
     color: #0d1d56;
 }
 
-#course-view-page #lessons-table thead .number
+#course-view-page .lessons-table thead .number
 {
     background: #afdb98;
     width: 15%;
@@ -4353,7 +4370,7 @@ z-index:10000000;
     border-radius: 6px 0 0 0;
 }
 
-#course-view-page #lessons-table thead .name
+#course-view-page .lessons-table thead .name
 {
     background: #ffe582;
     width: 85%;
@@ -4362,7 +4379,7 @@ z-index:10000000;
     border-radius: 0 6px 0 0;
 }
 
-#course-view-page #lessons-table td
+#course-view-page .lessons-table td
 {
     border: 1px solid #f5f4f3;
     background: #fefefe;
@@ -4370,7 +4387,7 @@ z-index:10000000;
     color: #022f6d;
 }
 
-#course-view-page #lessons-table tbody .number
+#course-view-page .lessons-table tbody .number
 {
     font-family: 'PT Sans';
     font-weight: bold;
@@ -4379,14 +4396,14 @@ z-index:10000000;
     color: #b5486d;
 }
 
-#course-view-page #lessons-table tr:last-child td:first-child
+#course-view-page .lessons-table tr:last-child td:first-child
 {
     -moz-border-radius: 0 0 0 6px;
     -webkit-border-radius: 0 0 0 6px;
     border-radius: 0 0 0 6px;
 }
 
-#course-view-page #lessons-table tr:last-child td:last-child
+#course-view-page .lessons-table tr:last-child td:last-child
 {
     -moz-border-radius: 0 0 6px 0;
     -webkit-border-radius: 0 0 6px 0;

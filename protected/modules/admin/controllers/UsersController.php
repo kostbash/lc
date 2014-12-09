@@ -179,10 +179,19 @@ class UsersController extends Controller
 	{
 		$model=new Users('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Users']))
-			$model->attributes=$_GET['Users'];
                 
-                if(!isset($_GET['Users']['registration_day']))
+		if(isset($_POST['filter']))
+                {
+                    $model->attributes=$_POST['Users'];
+                    unset($_SESSION['Users']);
+                    $_SESSION['Users'] = $_POST['Users'];
+                    $_GET['filter'] = 1;
+                }
+                elseif($_GET['filter'] && $_SESSION['Users'])
+                {
+                    $model->attributes=$_SESSION['Users'];
+                }
+                else
                 {
                     $model->registration_day = key(Users::listRegistrationDates());
                 }

@@ -47,6 +47,7 @@ $this->renderPartial('_search', array(
 	'dataProvider'=>$model->search(),
         'selectableRows' => 2,
         'summaryText'=>"Всего найдено записей: {count}",
+        'ajaxType'=>'POST',
 	'columns'=>array(
                 array(
                     'class'=>'CCheckBoxColumn',

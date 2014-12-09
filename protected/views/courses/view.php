@@ -117,32 +117,45 @@
         
         <h2 class="main-title"><?php echo Yii::t('course-unauth', $messages[16]->message); ?></h2>
         
-        <table id="lessons-table">
-            <thead>
-                <tr>
-                    <th class='number'>Номер</th>
-                    <th class='name'>Название урока</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php if (count($themesLessons) > 1) : // убираем проверочный тест ?>
-                <?php foreach ($themesLessons as $n => $lesson) : ?>
-                    <?php if($n==0) { continue; } ?>
-                    <tr>
-                        <td class="number">
-                            <?php echo $n; ?>
-                        </td>
-                        <td class="name">
-                            <?php echo $lesson->name; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <tr>
-                    <td colspan="2">Нет уроков</td>
-                </tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
+        <?php if ($course->LessonsGroups) : $posLesson = 1; $isSkipLesson = false; ?>
+            <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
+                <h1 class='theme-name'><?php echo "Шаг $groupNum: \"$lessonGroup->name\""; ?></h1>
+                <?php
+                    $themeLessons = $lessonGroup->LessonsRaw;
+                    if(!$isSkipLesson && $posLesson==1) {
+                        $isSkipLesson=true;
+                        unset($themeLessons[0]);
+                    }
+                ?>
+                <table class="lessons-table">
+                    <thead>
+                        <tr>
+                            <th class='number'>Номер</th>
+                            <th class='name'>Название урока</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php if ($themeLessons) : ?>
+                        <?php foreach ($themeLessons as $lesson) : ?>
+                            <tr>
+                                <td class="number">
+                                    <?php echo $posLesson++; ?>
+                                </td>
+                                <td class="name">
+                                    <?php echo $lesson->name; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="2">Нет уроков</td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            <?php endforeach; ?>
+        <?php else : ?>
+            Курс пуст
+        <?php endif; ?>
     </div>
 </div>
