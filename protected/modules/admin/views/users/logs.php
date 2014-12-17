@@ -14,10 +14,14 @@
                 url:'<?php echo Yii::app()->createUrl('admin/courses/coursesbyajax'); ?>',
                 type:'POST',
                 data: { term: current.val()},
-                success: function(result) { 
+                dataType: 'json',
+                success: function(result) {
+                    if(result.success)
+                    {
                         current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
-                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result);
+                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result.html);
                         current.siblings('.input-group-btn').addClass('open');
+                    }
                 }
             });
         });
@@ -27,10 +31,12 @@
             $.ajax({
                 url:'<?php echo Yii::app()->createUrl('admin/courses/coursesbyajax'); ?>',
                 type:'POST',
+                dataType: 'json',
                 success: function(result) {
-                    if(result) {
+                    if(result.success)
+                    {
                         current.siblings('.dropdown-menu').find('li').remove();
-                        current.siblings('.dropdown-menu').append(result);
+                        current.siblings('.dropdown-menu').append(result.html);
                     }
                 }
             });

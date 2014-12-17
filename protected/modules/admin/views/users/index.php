@@ -23,7 +23,50 @@
             }
             return false;
         });
+        
+        $('.subscribe').live('click',function(){
+            if(confirm('Вы действительно подписать пользователя на рассылку ?'))
+            {
+                current = $(this);
+                $.ajax({
+                    url: current.attr('href'),
+                    type:'POST',
+                    dataType: 'json',
+                    success: function(result) { 
+                        if(result.success) {
+                            alert('Пользователь успешно подписан');
+                            updateGrid();
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+        
+        $('.unsubscribe').live('click',function(){
+            if(confirm('Вы действительно отписать пользователя от рассылки ?'))
+            {
+                current = $(this);
+                $.ajax({
+                    url: current.attr('href'),
+                    type:'POST',
+                    dataType: 'json',
+                    success: function(result) { 
+                        if(result.success) {
+                            alert('Пользователь успешно отписан');
+                            updateGrid();
+                        }
+                    }
+                });
+            }
+            return false;
+        });
     });
+    
+    function updateGrid()
+    {
+       $('#users-grid').yiiGridView('update', { data: $('.search-form form').serialize()+'&filter=1' });
+    }
 </script>
 
 <div class="page-header clearfix">
@@ -67,8 +110,20 @@ $this->renderPartial('_search', array(
                 'myParent',
 		array(
 			'class'=>'CButtonColumn',
-                        'template'=>'{reset}{delete}',
+                        'template'=>'{subscribe}{unsubscribe}{reset}{delete}',
                         'buttons' => array(
+                            'subscribe' => array(
+                                'label'=>'',
+                                'url'=>'Yii::app()->createUrl("/admin/users/changesubscribe", array("id"=>"$data->id"))',
+                                'options'=>array('class'=>'subscribe', 'title'=>'Подписать'),
+                                'visible'=>'!$data->send_mailing',
+                            ),
+                            'unsubscribe' => array(
+                                'label'=>'',
+                                'url'=>'Yii::app()->createUrl("/admin/users/changesubscribe", array("id"=>"$data->id"))',
+                                'options'=>array('class'=>'unsubscribe', 'title'=>'Отписать'),
+                                'visible'=>'$data->send_mailing',
+                            ),
                             'reset' => array(
                                 'label'=>'',
                                 'url'=>'Yii::app()->createUrl("/admin/users/resetpassword", array("id"=>"$data->id"))',

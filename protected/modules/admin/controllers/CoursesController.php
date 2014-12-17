@@ -310,6 +310,7 @@ class CoursesController extends Controller
         
 	public function actionCoursesByAjax()
 	{
+            $result = array('success'=>1);
             $criteria = new CDbCriteria;
             if(isset($_POST['term']))
             {
@@ -318,15 +319,21 @@ class CoursesController extends Controller
             }
             
             $criteria->limit = 10;
-            $res = '';
+            $result['html'] = '';
             $courses = Courses::model()->findAll($criteria);
-            foreach ($courses  as $course)
+            if($courses)
             {
-                $res .= "<li data-id='$course->id'><a href='#'>$course->name</a></li>";
+                foreach ($courses  as $course)
+                {
+                    $result['html'] .= "<li data-id='$course->id'><a href='#'>$course->name</a></li>";
+                }
             }
-            if($res=='')
-                $res = '<li><a href="#">Результатов нет</a></li>';
-            echo $res;
+            else
+            {
+                $result['html'] = '<li><a href="#">Результатов нет</a></li>';
+            }
+            
+            echo CJSON::encode($result);
 	}
         
 }

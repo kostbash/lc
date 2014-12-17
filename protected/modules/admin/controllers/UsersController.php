@@ -33,7 +33,7 @@ class UsersController extends Controller
                             'roles'=>array('student'),
                     ),
                     array('allow',
-                            'actions'=>array('delete','index', 'massdelete', 'resetpassword', 'logs'),
+                            'actions'=>array('delete','index', 'massdelete', 'resetpassword', 'logs', 'changesubscribe'),
                             'roles'=>array('admin'),
                     ),
                     array('deny',  // deny all users
@@ -159,6 +159,30 @@ class UsersController extends Controller
                 }
                 echo CJSON::encode($result);
 	}
+        
+        public function actionChangeSubscribe($id)
+        {
+            $user = $this->loadModel($id);
+            $result = array('success'=>0);
+            // не даем сбрасывать пароль других админов
+            if($user->role != 1)
+            {
+                if($user->send_mailing)
+                {
+                    $user->send_mailing = 0;
+                }
+                else
+                {
+                    $user->send_mailing = 1;
+                }
+                if($user->save(false))
+                {
+                    $result['success'] = 1;
+
+                }
+            }
+            echo CJSON::encode($result);
+        }
 
 	public function actionMassDelete()
 	{

@@ -7,7 +7,7 @@
 <script>
     $(function(){
         $('.search-form form').change(function(){
-            $('#users-grid').yiiGridView('update', { data: $(this).serialize()+'&filter=1' });
+            updateGrid();
         });
     });
 </script>

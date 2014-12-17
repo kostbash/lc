@@ -87,8 +87,8 @@ class Users extends CActiveRecord
 			array('username', 'length', 'max'=>100),
 			array('role', 'in', 'range'=>array(1,2,3,4)),
                         array('email, emailParentOnReg', 'email', 'message'=>'Проверьте правильность введенного адреса почты'),
-                        array('sendOnMail, rememberMe, send_notifications, addParentOnReg, createParentOnReg', 'boolean'),
-			array('password, temporary_password', 'length', 'max'=>32),
+                        array('sendOnMail, rememberMe, send_notifications, addParentOnReg, createParentOnReg, send_mailing', 'boolean'),
+			array('password, temporary_password, unsubscribe_key', 'length', 'max'=>32),
 			array('recovery_answer', 'length', 'max'=>100),
 			array('progress_key', 'length', 'max'=>25),
                         array('emailParentOnReg', 'needEmailOnReg'),
@@ -589,5 +589,12 @@ class Users extends CActiveRecord
             $list[date('Y-m-d 00:00:00', strtotime('- 7day'))] = '7 дней';
             $list[date('Y-m-d 00:00:00', strtotime('- 1month'))] = 'Месяц';
             return $list;
+        }
+        
+        public function numberWorkPiece($id_rule)
+        {
+            $query = "SELECT number FROM `oed_mail_workpieces` WHERE `id_user`='$this->id' AND `id_rule` = '$id_rule' ORDER BY `number` DESC LIMIT 1";
+            $result = Yii::app()->db->createCommand($query)->queryAll();
+            return ((int) $result[0]['number'])+1;
         }
 }

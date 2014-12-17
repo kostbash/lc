@@ -48,7 +48,25 @@
                 {
                     $this->menu[] = array('label'=>'Тексты', 'url'=>array('/admin/sourceMessages/index'));
                     $this->menu[] = array('label'=>'Параметры курсов', 'url'=>array('/admin/courseParams/index'));
-                    $this->menu[] = array('label'=>'Пользователи', 'url'=>array('/admin/users/index'));
+                    $this->menu[] = array('label'=>'Пользователи <b class="caret"></b>',
+                                          'url'=>array('#'),
+                                          'itemOptions'=>array('class'=>'dropdown'),
+                                          'submenuOptions'=>array('class'=>'dropdown-menu'),
+                                          'linkOptions'=>array('class'=>'dropdown-toggle', 'data-toggle'=>'dropdown'),
+                                          'items'=>array(
+                                                array('label'=>'Список', 'url'=>array('/admin/users/index')),
+                                                array('label'=>'Правила', 'url'=>array('/admin/mailRules/index')),
+                                                array('label'=>'Лента', 'url'=>"#",
+                                                    'itemOptions'=>array('class'=>'dropdown-submenu'),
+                                                    'submenuOptions'=>array('class'=>'dropdown-menu'),
+                                                    'linkOptions'=>array('class'=>'dropdown-toggle', 'data-toggle'=>'dropdown'),
+                                                    'items'=>array(
+                                                        array('label'=>'Заготовки', 'url'=>array('/admin/mailWorkpieces/unsended')),
+                                                        array('label'=>'Отправленные', 'url'=>array('/admin/mailWorkpieces/sended')),
+                                                    ),
+                                                ),
+                                          ),
+                                    );
                 }
                 
                     $this->widget('zii.widgets.CMenu',array(

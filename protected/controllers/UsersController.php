@@ -37,7 +37,7 @@ class UsersController extends Controller
 				'users'=>array('?'),
 			),
 			array('allow',
-				'actions'=>array('recovery', 'achievements'),
+				'actions'=>array('recovery', 'achievements', 'unsubscribe'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -180,6 +180,24 @@ class UsersController extends Controller
                     }
                     $user->password = null;
                     $this->render('recovery', array(
+                        'user'=>$user,
+                    ));
+                    die;
+                }
+            }
+            $this->redirect('/');
+        }
+        
+        public function actionUnsubscribe($key) {
+            if($key)
+            { 
+                $user = Users::model()->findByAttributes(array('unsubscribe_key'=>$key));
+                if($user)
+                {
+                    $user->send_mailing = 0;
+                    $user->unsubscribe_key = NULL;
+                    $user->save(false);
+                    $this->render('unsubscribe', array(
                         'user'=>$user,
                     ));
                     die;
