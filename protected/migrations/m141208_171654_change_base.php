@@ -10,7 +10,5 @@ class m141208_171654_change_base extends CDbMigration
 
     public function down()
     {
-        $this->dropColumn('oed_users', 'registration_day');
-        $this->dropColumn('oed_users', 'last_activity');
     }
 }
