@@ -39,12 +39,11 @@ class MailRulesController extends Controller
 
 		if(isset($_POST['MailRules']))
 		{
+                    $model->unsetAttributes(array('passed_reg_days', 'unactivity_days', 'number_of_passed_lessons', 'passed_course', 'number_of_passed_courses', 'unpassed_check_test'));
                     $model->attributes=$_POST['MailRules'];
                     $model->roles = serialize($_POST['MailRules']['roles']);
                     if($model->save())
                         $this->redirect(array('index'));
-                    else
-                        print_r($model->errors);
 		}
 
 		$this->render('create',array(
@@ -57,9 +56,9 @@ class MailRulesController extends Controller
 		$model=$this->loadModel($id);
                 $cloneModel = clone $model;
                 
-                
 		if(isset($_POST['MailRules']))
 		{
+                    $model->unsetAttributes(array('passed_reg_days', 'unactivity_days', 'number_of_passed_lessons', 'passed_course', 'number_of_passed_courses', 'unpassed_check_test'));
                     $model->attributes=$_POST['MailRules'];
                     $model->roles = serialize($_POST['MailRules']['roles']);
                     if($model->save())

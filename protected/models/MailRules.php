@@ -40,13 +40,13 @@ class MailRules extends CActiveRecord
 	}
         
         public static $defaultValues = array(
-            'use_number' => 1,
-            'interval' => 3,
-            'passed_reg_days' => 0,
-            'unactivity_days' => 3,
-            'unpassed_check_test' => 1,
-            'number_of_passed_lessons' => 1,
-            'number_of_passed_courses' => 1,
+            'use_number' => '1',
+            'interval' => '3',
+            'passed_reg_days' => '0',
+            'unactivity_days' => '3',
+            'unpassed_check_test' => '1',
+            'number_of_passed_lessons' => '1',
+            'number_of_passed_courses' => '1',
         );
 
 	/**
@@ -71,7 +71,7 @@ class MailRules extends CActiveRecord
 			'interval' => 'Минимальный интервал',
                         'roles'=>'Роли',
 			'passed_reg_days' => 'Зарегистрирован',
-			'unactivity_days' => 'Не активен ученик',
+			'unactivity_days' => 'Не активен',
 			'number_of_passed_lessons' => 'Пройдено уроков',
 			'passed_course' => 'Пройден определенный курс',
 			'number_of_passed_courses' => 'Пройдено курсов',
@@ -136,7 +136,7 @@ class MailRules extends CActiveRecord
             $condition .= " AND ";
             $condition .= "(`email` IS NOT NULL OR EXISTS(SELECT * FROM `{$prefix}children` WHERE `id_child`=user.id AND `status`=2))";
             
-            if($this->use_number!='')
+            if($this->use_number)
             {
                 $condition .= " AND ";
                 $condition .= "(SELECT COUNT(*) FROM `{$prefix}mail_workpieces` WHERE id_user=user.id AND id_rule='$this->id') < '$this->use_number'";

@@ -52,6 +52,19 @@
             current.closest('.input-group-btn').removeClass('open');
             return false;
         });
+        
+        $('.useRule').change(function(){
+            current = $(this);
+            filter = current.closest('.row-attr').find('.form-control');
+            if(current.is(":checked"))
+            {
+                filter.removeAttr('disabled');
+            }
+            else
+            {
+                filter.val('').attr('disabled', 'disabled');
+            }
+        });
     });
 </script>
 
@@ -103,39 +116,52 @@
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
-            <?php echo $form->labelEx($model,'passed_reg_days'); ?>
+           <?php echo CHtml::checkBox('', $model->passed_reg_days!='', array('class'=>'useRule')); ?>
+           <?php echo $form->labelEx($model,'passed_reg_days'); ?>
         </div>
         <div class="col-md-4">
-            <?php echo $form->textField($model,'passed_reg_days', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней прошедшее с момента регистрации')); ?>
+            <?php echo $form->textField($model,'passed_reg_days', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней прошедшее с момента регистрации', 'disabled'=>$model->passed_reg_days=='')); ?>
             <?php echo $form->error($model,'passed_reg_days'); ?>
+        </div>
+        <div class="col-md-2">
+            <div style="line-height: 34px">дней</div>
         </div>
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
+            <?php echo CHtml::checkBox('', $model->unactivity_days!='', array('class'=>'useRule')); ?>
             <?php echo $form->labelEx($model,'unactivity_days'); ?>
         </div>
         <div class="col-md-4">
-            <?php echo $form->textField($model,'unactivity_days', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней не активности ученика')); ?>
+            <?php echo $form->textField($model,'unactivity_days', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней не активности ученика', 'disabled'=>$model->unactivity_days=='')); ?>
             <?php echo $form->error($model,'unactivity_days'); ?>
+        </div>
+        <div class="col-md-2">
+            <div style="line-height: 34px">дней</div>
         </div>
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
+            <?php echo CHtml::checkBox('', $model->unpassed_check_test!='', array('class'=>'useRule')); ?>
             <?php echo $form->labelEx($model,'unpassed_check_test'); ?>
         </div>
         <div class="col-md-4">
-            <?php echo $form->textField($model,'unpassed_check_test', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней прошедшее с момента прохождения')); ?>
+            <?php echo $form->textField($model,'unpassed_check_test', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число дней прошедшее с момента прохождения', 'disabled'=>$model->unpassed_check_test=='')); ?>
             <?php echo $form->error($model,'unpassed_check_test'); ?>
+        </div>
+        <div class="col-md-2">
+            <div style="line-height: 34px">дней</div>
         </div>
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
+            <?php echo CHtml::checkBox('', $model->passed_course!='', array('class'=>'useRule')); ?>
             <?php echo $form->labelEx($model,'passed_course'); ?>
-            <?php echo $form->hiddenField($model,'passed_course'); ?>
+            <?php echo $form->hiddenField($model,'passed_course', array('class'=>'form-control')); ?>
         </div>
         <div class="col-md-4 passed_course">
             <div class="input-group mydrop">
-                <?php echo CHtml::textField("", $model->PassedCourse->name, array('class'=>'form-control search', 'placeholder'=>'Введите название пройденного курса', 'autocomplete'=>'off')); ?>
+                <?php echo CHtml::textField("", $model->PassedCourse->name, array('class'=>'form-control search', 'placeholder'=>'Введите название пройденного курса', 'autocomplete'=>'off', 'disabled'=>$model->passed_course=='')); ?>
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                         <span class="caret"></span>
@@ -150,20 +176,28 @@
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
+            <?php echo CHtml::checkBox('', $model->number_of_passed_courses!='', array('class'=>'useRule')); ?>
             <?php echo $form->labelEx($model,'number_of_passed_courses'); ?>
         </div>
         <div class="col-md-4">
-            <?php echo $form->textField($model,'number_of_passed_courses', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число пройденных курсов')); ?>
+            <?php echo $form->textField($model,'number_of_passed_courses', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число пройденных курсов', 'disabled'=>$model->number_of_passed_courses=='')); ?>
             <?php echo $form->error($model,'number_of_passed_courses'); ?>
+        </div>
+        <div class="col-md-2">
+            <div style="line-height: 34px">курсов</div>
         </div>
     </div>
     <div class="row row-attr">
         <div class="col-md-3">
+            <?php echo CHtml::checkBox('', $model->number_of_passed_lessons!='', array('class'=>'useRule')); ?>
             <?php echo $form->labelEx($model,'number_of_passed_lessons'); ?>
         </div>
         <div class="col-md-4">
-            <?php echo $form->textField($model,'number_of_passed_lessons', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число пройденных уроков')); ?>
+            <?php echo $form->textField($model,'number_of_passed_lessons', array('maxlength'=>6, 'class'=>'form-control', 'placeholder'=>'Введите число пройденных уроков', 'disabled'=>$model->number_of_passed_lessons=='')); ?>
             <?php echo $form->error($model,'number_of_passed_lessons'); ?>
+        </div>
+        <div class="col-md-2">
+            <div style="line-height: 34px">уроков</div>
         </div>
     </div>
 <?php $this->endWidget(); ?>
