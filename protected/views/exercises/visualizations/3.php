@@ -4,7 +4,7 @@
         <div class="radio-button">
             <?php
                 echo "<input tabindex='$index' value='$answer->id' id='Exercises_{$key}_answers_{$n}' type='radio' name='Exercises[$key][answers]'>";
-                echo "<label for='Exercises_{$key}_answers_{$n}'><span></span>$answer->answer</label>";
+                echo "<label for='Exercises_{$key}_answers_{$n}'><span></span>".GraphicWidgets::transform($answer->answer)."</label>";
             ?>
         </div>
     <?php endforeach; ?>

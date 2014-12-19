@@ -13,5 +13,5 @@ if($text && $spaces)
 ?>
 
 <div class="text-with-limits clearfix">
-    <?php echo $text; ?>
+    <?php echo GraphicWidgets::transform($text); ?>
 </div>

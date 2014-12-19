@@ -2946,13 +2946,13 @@ z-index:10000000;
 
 .pick-blocks .block
 {
-    float: left;
+    display: inline-block;
     cursor: pointer;
     border: 1px solid #bbd6e9;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    width:  160px;
+    width: 240px;
     padding: 8px;
     text-align: center;
     min-height: 160px;
@@ -2967,7 +2967,6 @@ z-index:10000000;
 
 .pick-blocks .block.first-in-line
 {
-    clear: both;
     margin-left: 0;
 }
 
@@ -4661,6 +4660,8 @@ z-index:10000000;
     position: absolute;
     width: 200px;
     height: 200px;
+    top: 0;
+    left: 0;
 }
 
 .graphic-widget .clock svg
@@ -4668,5 +4669,7 @@ z-index:10000000;
     position: absolute;
     width: 200px;
     height: 200px;
+    top: 0;
+    left: 0;
 }
 

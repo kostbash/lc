@@ -4,19 +4,19 @@ class GraphicWidgets
 {
     static function transform($rawText)
     {
-        return preg_replace_callback("#\[([\d\w]*):(.*)\]#uUm", "GraphicWidgets::pick", $rawText);
+        return preg_replace_callback("#//([\d\w]*)=\((.*)\)//#uUm", "GraphicWidgets::pick", $rawText);
     }
     
     static function pick($matches)
     {
         $name = $matches[1];
-        $params = CJSON::decode($matches[2]);
+        $params = CJSON::decode("{".$matches[2]."}");
         $text = "<div class='graphic-widget'>";
         if($name==='clock')
         {
             $path = '/'.Yii::app()->params['graphicWidgetsPath'].'/'.$name;
-            $bigHandDegree = ($params['hour']*30)+(($params['minutes']%60)*0.5);
-            $smallHandDegree = 6 * $params['minutes'];
+            $bigHandDegree = ($params['h']*30)+(($params['m']%60)*0.5);
+            $smallHandDegree = 6 * $params['m'];
             $text .= "<div class='clock'>";
                 $text .= "<img src='$path/clock.png' />";
                 $text .= "<svg xmlns='http://www.w3.org/2000/svg' version='1.2'>";

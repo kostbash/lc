@@ -9,13 +9,13 @@
             if($i==$next)
             {
                 $additionClass = ' first-in-line';
-                $next += 4;
+                $next += 3;
             }
             else
             {
                 $additionClass = '';
             }
-            echo "<div data-key='$key' data-val='$answer->id' class='block$additionClass'>$answer->answer</div>";
+            echo "<div data-key='$key' data-val='$answer->id' class='block$additionClass'>".GraphicWidgets::transform($answer->answer)."</div>";
             ++$i;
         }
     }

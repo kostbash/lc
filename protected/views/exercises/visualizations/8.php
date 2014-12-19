@@ -15,7 +15,7 @@ if($text && $spaces)
         
 <div class="text-with-space clearfix">
     <div class="text">
-        <?php echo $text; ?>
+        <?php echo GraphicWidgets::transform($text); ?>
     </div>
     <div class="words">
         <?php foreach($rightAnswers as $answer) : ?>
