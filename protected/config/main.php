@@ -118,6 +118,7 @@ return array(
                 'endSalt' => 'bsl@swa',
                 'WordsImagesPath' => 'images/lessons',
                 'MapImagesPath' => 'images/mapImages',
+                'graphicWidgetsPath'=>'images/graphicWidgets',
                 'pdfPath' => 'pdf',
 	),
 );

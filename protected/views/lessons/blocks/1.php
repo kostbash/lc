@@ -718,7 +718,9 @@
             <div id="exercise_<?php echo $i; ?>"  class="exercise <?php echo ( ++$i % 2) == 0 ? 'even' : 'odd'; ?>">
                 <div class="head clearfix">
                     <div class="number"><?php echo $posTest++; ?></div>
-                    <div class="condition"><?php echo "$exercise->condition"; ?></div>
+                    <div class="condition">
+                        <?php echo GraphicWidgets::transform($exercise->condition);?>
+                    </div>
                     <div class="result"></div>
                 </div>
                 <div class="answer clearfix">

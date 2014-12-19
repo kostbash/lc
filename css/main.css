@@ -4642,3 +4642,31 @@ z-index:10000000;
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
 }
+
+.graphic-widget
+{
+    display: inline-block;
+}
+
+
+.graphic-widget .clock
+{
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.graphic-widget .clock img
+{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+}
+
+.graphic-widget .clock svg
+{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+}
+

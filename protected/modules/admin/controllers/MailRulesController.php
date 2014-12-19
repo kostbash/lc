@@ -66,6 +66,8 @@ class MailRulesController extends Controller
                         $this->redirect(array('index'));
                     }
 		}
+                
+                //CVarDumper::dump($model->selectUsers(), 10, true);
 
 		$this->render('update',array(
 			'model'=>$model,
