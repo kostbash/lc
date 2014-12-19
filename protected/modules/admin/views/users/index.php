@@ -106,6 +106,7 @@ $this->renderPartial('_search', array(
                     'value'=>'CHtml::link($data->countPassLessons, array("/admin/users/logs", "id"=>$data->id), array("target"=>"_blank"))',
                     'type'=>'raw',
                 ),
+                'countPassCourses',
                 'last_activity',
                 'myParent',
 		array(

@@ -9,7 +9,7 @@ if(!empty($model->Answers))
     {
         $clearListWord = preg_replace('/_/u',' ',$listWord);
         $list[] = "<div class='word'>"
-                    ."$clearListWord"
+                    .GraphicWidgets::transform($clearListWord)
                     ."<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][]' value='$listWord' />"
                   ."</div>";
     }             

@@ -165,6 +165,7 @@ class Users extends CActiveRecord
 			'role' => 'Роль',
 			'rusRoleName' => 'Роль',
                         'countPassLessons' => 'Число пройденных уроков',
+                        'countPassCourses' => 'Число пройденных курсов',
                         'rememberMe' => 'Узнавать меня',
                         'send_notifications'=>'Отправлять на e-mail оповещения учеников',
                         'id_recovery_question'=>'Выберите контрольный вопрос',
@@ -230,6 +231,9 @@ class Users extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
                         'pagination'=> array('pageSize'=>50),
+                        'sort'=>array(
+                            'defaultOrder'=>'`last_activity` DESC',
+                        ),
 		));
 	}
 
@@ -266,6 +270,10 @@ class Users extends CActiveRecord
         
         public function getCountPassLessons() {
             return UserAndLessons::model()->countByAttributes(array('id_user'=>$this->id, 'passed'=>1));
+        }
+        
+        public function getCountPassCourses() {
+            return CoursesAndUsers::model()->countByAttributes(array('id_user'=>$this->id, 'status'=>2));
         }
         
         public function getCountPassTest()

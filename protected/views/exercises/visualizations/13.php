@@ -14,7 +14,7 @@
                         ?>
                     </div>
                 <?php endif; ?>
-                <div class="name"><?php echo $answer->name; ?></div>
+                <div class="name"><?php echo GraphicWidgets::transform($answer->name); ?></div>
             </div>
         <?php endforeach; ?>
     </div>

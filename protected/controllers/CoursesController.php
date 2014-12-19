@@ -117,8 +117,8 @@ class CoursesController extends Controller
 	{
             $this->_course = $id;
             $course = $this->loadModel($id);
+            //$course->openForAdmin(); //открываем полность курс для админа
             $user = Users::model()->findByPk(Yii::app()->user->id);
-            
             $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$course->id, 'id_user'=>$user->id));
 
             // сущесвует ли курс у пользователя

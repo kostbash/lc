@@ -508,4 +508,38 @@ class Courses extends CActiveRecord
             $sql = "SELECT * FROM `oed_students_of_teacher` as sot, `oed_course_user_list` as cul WHERE sot.id_student=cul.id_student AND cul.id_course=:id_course AND sot.id_teacher=:id_teacher AND sot.status=1";
             return StudentsOfTeacher::model()->findAllBySql($sql, array('id_course'=>$this->id, 'id_teacher'=>Yii::app()->user->id));
         }
+        
+        public function openForAdmin()
+        {
+            if(Yii::app()->user->checkAccess('admin'))
+            {
+                $id_user = (int) Yii::app()->user->id;
+                $courseUser = CoursesAndUsers::model()->findByAttributes(array('id_course'=>$this->id, 'id_user'=>$id_user));
+                if($courseUser)
+                {
+                    if($courseUser->status != 2)
+                    {
+                        $courseUser->status = 2;
+                        $courseUser->passed_date = date('Y-m-d H:i:s');
+                    }
+                    if(!$courseUser->is_begin)
+                    {
+                        $courseUser->is_begin = 1;
+                    }
+                    $courseUser->save();
+                }
+                else
+                {
+                    $courseUser = new CoursesAndUsers;
+                    $courseUser->id_course = $this->id;
+                    $courseUser->id_user = $id_user;
+                    $courseUser->activity_date = date('Y-m-d H:i:s');
+                    $courseUser->last_activity_date = date('Y-m-d H:i:s');
+                    $courseUser->passed_date = date('Y-m-d H:i:s');
+                    $courseUser->status = 2;
+                    $courseUser->is_begin = 1;
+                    $courseUser->save();
+                }
+            }
+        }
 }
