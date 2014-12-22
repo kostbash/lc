@@ -98,5 +98,11 @@
 <div id="footer" class="container bg-main">
         Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
 </div><!-- footer -->
+<script>
+    function reachGoal(goal)
+    {
+        //window.yaCounter26929302.reachGoal(goal);
+    }  
+</script>
 </body>
 </html>
