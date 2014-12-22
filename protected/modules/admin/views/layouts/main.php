@@ -27,8 +27,8 @@
                 if(Yii::app()->user->checkAccess('admin'))
                 {
                     $this->menu[] = array('label'=>'Курсы', 'url'=>array('/admin/courses/index'));
-                    $this->menu[] = array('label'=>'Задания', 'url'=>array('/admin/exercises/index'));
-                    $this->menu[] = array('label'=>'Умения', 'url'=>array('/admin/skills/index'));
+                    //$this->menu[] = array('label'=>'Задания', 'url'=>array('/admin/exercises/index'));
+                    //$this->menu[] = array('label'=>'Умения', 'url'=>array('/admin/skills/index'));
                     $this->menu[] = array('label'=>'Списки <b class="caret"></b>',
                                           'url'=>array('#'),
                                           'itemOptions'=>array('class'=>'dropdown'),

@@ -128,25 +128,9 @@ class SkillsController extends Controller
             }
 	}
         
-	public function actionSkillsByAjax()
+	public function actionSkillsByAjax($id_course=null, $withOutUsed=false)
 	{
-            $criteria = new CDbCriteria;
-            if(isset($_POST['term']))
-            {
-                $criteria->condition = '`name` LIKE :name';
-                $criteria->params['name'] = '%' . $_POST['term'] . '%';
-            }
-            
-            $criteria->limit = 10;
-            $skills = Skills::model()->findAll($criteria);
-            $res = '';
-            foreach ($skills  as $skill)
-            {
-                $res .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
-            }
-            if($res=='')
-                $res = '<li><a href="#">Результатов нет</a></li>';
-            echo $res;
+            echo Skills::skillsForAjax();
 	}
 
 	public function actionUpdate()

@@ -201,26 +201,7 @@ class GroupofexercisesController extends Controller
 	public function actionSkillsByAjax($id)
 	{
             $group = $this->loadModel($id);
-            
-            $criteria = new CDbCriteria;
-            if (isset($_POST['term']))// если переданы символы
-            {
-                $criteria->condition = '`name` LIKE :name';
-                $criteria->params['name'] = '%' . $_POST['term'] . '%';
-            }
-
-            $criteria->addNotInCondition('id', $group->idsUsedSkills);
-            $criteria->addInCondition('id_course', array(0, $group->id_course));
-            $criteria->limit = 10;
-            $skills = Skills::model()->findAll($criteria);
-            $res = '';
-            foreach ($skills  as $skill)
-            {
-                $res .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
-            }
-            if($res=='')
-                $res = '<li><a href="#">Результатов нет</a></li>';
-            echo $res;
+            echo Skills::skillsForAjax($group->id_course, $group->idsUsedSkills);
 	}
         
 	public function actionShuffleExericises($id_block)

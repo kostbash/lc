@@ -268,14 +268,14 @@
                         ));
                         ?>
                         <div class="row">
-                            <?php echo $formRegStudent->labelEx($user,'username'); ?>
+                            <?php echo $formRegStudent->labelEx($user,'username', array('class'=>'label-row')); ?>
                             <div class="body-input">
                                 <?php echo $formRegStudent->textField($user,'username', array('class'=>'form-control', 'placeholder'=>'Введите логин')); ?>
                                 <?php echo $formRegStudent->error($user,'username'); ?>
                             </div>
                         </div>
                         <div class="row rememberMe">
-                            <?php echo $formRegStudent->label($user,'rememberMe'); ?>
+                            <?php echo $formRegStudent->label($user,'rememberMe', array('class'=>'label-row', 'style'=>'margin-right: 5px;')); ?>
                             <?php echo $formRegStudent->checkBox($user,'rememberMe'); ?>
                             <?php echo $formRegStudent->error($user,'rememberMe'); ?>
                         </div>
@@ -284,14 +284,14 @@
                             <div style="margin-bottom: 10px; text-align: left;">
                                 <h4 style="margin-top: 0;">Восстановление пароля</h4>
                             </div>
-                            <?php echo $formRegStudent->labelEx($user,'id_recovery_question'); ?>
+                            <?php echo $formRegStudent->labelEx($user,'id_recovery_question', array('class'=>'label-row')); ?>
                             <div class="body-input">
                                 <?php echo $formRegStudent->dropDownList($user,'id_recovery_question', Users::$recoveryQuestions, array('class'=>'form-control', 'empty'=>'Выберите вопрос')); ?>
                                 <?php echo $formRegStudent->error($user,'id_recovery_question'); ?>
                             </div>
                         </div>
                         <div class="row">
-                            <?php echo $formRegStudent->labelEx($user,'recovery_answer'); ?>
+                            <?php echo $formRegStudent->labelEx($user,'recovery_answer', array('class'=>'label-row')); ?>
                             <div class="body-input">
                                 <?php echo $formRegStudent->textField($user,'recovery_answer', array('class'=>'form-control', 'placeholder'=>'Введите ответ')); ?>
                                 <?php echo $formRegStudent->error($user,'recovery_answer'); ?>
@@ -339,7 +339,7 @@
                                 <h4 style="margin-top: 0;">Укажите адрес Вашей электронной почты</h4>
                                 <div>На этот адрес будет отослано письмо, содержащее пароль доступа к вашей учетной записи в Курсис.</div>
                             </div>
-                            <?php echo $formRegParent->labelEx($user,'email'); ?>
+                            <?php echo $formRegParent->labelEx($user,'email', array('class'=>'label-row')); ?>
                             <div class="body-input">
                                 <?php echo $formRegParent->textField($user,'email', array('class'=>'form-control', 'placeholder'=>'Введите электронный адрес')); ?>
                                 <?php echo $formRegParent->error($user,'email'); ?>
@@ -356,14 +356,14 @@
                             'action'=>array('site/index'),
                     )); ?>
                     <div class="row">
-                            <?php echo Chtml::label("Введите ваш псевдоним"); ?>
+                            <?php echo CHtml::label("Введите ваш псевдоним", '', array('class'=>'label-row')); ?>
                         <div class="body-input">
                             <?php echo $loginFormLearn->textField($login, 'username', array('class'=>'form-control', 'placeholder'=>'Введите логин', 'id'=>false)); ?>
                             <?php echo $loginFormLearn->error($login, 'username'); ?>
                         </div>
                     </div>
                     <div class="row">
-                            <?php echo $loginFormLearn->labelEx($login,'password'); ?>
+                            <?php echo $loginFormLearn->labelEx($login,'password', array('class'=>'label-row')); ?>
                         <div class="body-input">
                             <?php echo $loginFormLearn->passwordField($login,'password', array('class'=>'form-control', 'placeholder'=>'Введите пароль', 'id'=>false)); ?>
                             <?php echo $loginFormLearn->error($login,'password'); ?>
@@ -371,7 +371,7 @@
                         </div>
                     </div>
                     <div class="row rememberMe">
-                        <?php echo $loginFormLearn->label($login,'rememberMe'); ?>
+                        <?php echo $loginFormLearn->label($login,'rememberMe', array('class'=>'label-row', 'style'=>'margin-right:5px')); ?>
                         <?php echo $loginFormLearn->checkBox($login,'rememberMe'); ?>
                         <?php echo $loginFormLearn->error($login,'rememberMe'); ?>
                     </div>

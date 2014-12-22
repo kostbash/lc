@@ -42,12 +42,13 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('#addSkill #searchSkill').live('keyup', function(){
                 current = $(this);
                 $.ajax({
-                    'url':'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
-                    'type':'POST',
-                    'data': { term: current.val() },
-                    'success': function(result) { 
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                    type:'POST',
+                    data: { term: current.val() },
+                    dataType: 'json',
+                    success: function(result) { 
                             current.siblings('.input-group-btn').children('.dropdown-menu').children('li').remove();
-                            current.siblings('.input-group-btn').children('.dropdown-menu').append(result);
+                            current.siblings('.input-group-btn').children('.dropdown-menu').append(result.html);
                             current.siblings('.input-group-btn').addClass('open');
                     }
                 });
@@ -56,12 +57,13 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('#addSkill .dropdown-toggle').live('click', function(){
                 current = $(this);
                     $.ajax({
-                        'url':'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
-                        'type':'POST',
-                        'success': function(result) { 
-                            if(result!='')
+                        url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                        type:'POST',
+                        dataType: 'json',
+                        success: function(result) { 
+                            if(result)
                                 current.siblings('.dropdown-menu').children('li').remove();
-                                current.siblings('.dropdown-menu').append(result);
+                                current.siblings('.dropdown-menu').append(result.html);
                         }
                     });
             });

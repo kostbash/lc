@@ -102,30 +102,18 @@ class CourseandskillsController extends Controller
 
 	public function actionSkillsByAjax($id_course, $with_used=true)
 	{
-            $criteria = new CDbCriteria;
-
-            if (isset($_POST['term']))// если переданы символы
+            $course = Courses::CourseById($id_course);
+            if($course)
             {
-                $criteria->condition = '`name` LIKE :name';
-                $criteria->params['name'] = '%' . $_POST['term'] . '%';
+                if($with_used)
+                {
+                    echo Skills::skillsForAjax($id_course, $course->idsUsedSkills);
+                }
+                else
+                {
+                    echo Skills::skillsForAjax($id_course);
+                }
             }
-            if($with_used)
-            {
-                $course = Courses::CourseById($id_course);
-                if($course)
-                    $criteria->addNotInCondition('id', $course->idsUsedSkills);
-            }
-            $criteria->addInCondition('id_course', array(0, $id_course));
-            $criteria->limit = 10;
-            $skills = Skills::model()->findAll($criteria);
-            $res = '';
-            foreach ($skills  as $skill)
-            {
-                $res .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
-            }
-            if($res=='')
-                $res = '<li><a href="#">Результатов нет</a></li>';
-            echo $res;
 	}
 
 	public function loadModel($id)

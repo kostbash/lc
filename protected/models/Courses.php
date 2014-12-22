@@ -509,6 +509,19 @@ class Courses extends CActiveRecord
             return StudentsOfTeacher::model()->findAllBySql($sql, array('id_course'=>$this->id, 'id_teacher'=>Yii::app()->user->id));
         }
         
+        public function getLessonsAttrs()
+        {
+            $query = "SELECT themes.id_course, lessons.id_group, lessons.id_lesson FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons
+                    WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id='$this->id'
+                    ORDER BY themes.order ASC, lessons.order ASC";
+            $lessonsAttrs = Yii::app()->db->createCommand($query)->queryAll();
+            if($lessonsAttrs[0])
+            {
+                unset($lessonsAttrs[0]);
+            }
+            return $lessonsAttrs;
+        }
+        
         public function openForAdmin()
         {
             if(Yii::app()->user->checkAccess('admin'))
@@ -539,6 +552,26 @@ class Courses extends CActiveRecord
                     $courseUser->status = 2;
                     $courseUser->is_begin = 1;
                     $courseUser->save();
+                }
+                
+                foreach($this->lessonsAttrs as $lessonAttrs)
+                {
+                    $lessonAttrs['id_user'] = $id_user;
+                    $userAndLesson = UserAndLessons::model()->findByAttributes($lessonAttrs);
+
+                    if(!$userAndLesson)
+                    {
+                        $userAndLesson = new UserAndLessons;
+                        $userAndLesson->attributes = $lessonAttrs;
+                        $userAndLesson->last_activity_date = date('Y-m-d H:i:s');
+                    }
+                    
+                    if($userAndLesson->isNewRecord || !$userAndLesson->passed)
+                    {
+                        $userAndLesson->passed = 1;
+                        $userAndLesson->save();
+                        $userAndLesson->OnChangeLesson(true);
+                    }
                 }
             }
         }

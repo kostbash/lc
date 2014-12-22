@@ -54,6 +54,7 @@ class Skills extends CActiveRecord
                     'TopSkills'=>array(self::MANY_MANY, 'Skills', 'oed_relation_skills(id_skill, id_main_skill)'),
                     'UnderSkills'=>array(self::MANY_MANY, 'Skills', 'oed_relation_skills(id_main_skill, id_skill)'),
                     'Courses'=>array(self::MANY_MANY, 'Courses', 'oed_course_and_skills(id_skill, id_course)'),
+                    'CourseAndSkills'=>array(self::HAS_MANY, 'CourseAndSkills', 'id_skill'),
 		);
 	}
 
@@ -186,6 +187,40 @@ class Skills extends CActiveRecord
             RelationSkills::model()->deleteAll('id_main_skill=:id or id_skill=:id', array('id'=>$this->id));
             UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_skill'=>$this->id));
             parent::afterDelete();
+        }
+        
+        public static function skillsForAjax($id_course=null, $ids=null)
+        {
+            $criteria = new CDbCriteria;
+            $result = array();
+            if(isset($_POST['term']))
+            {
+                $criteria->condition = '`name` LIKE :name';
+                $criteria->params['name'] = '%' . $_POST['term'] . '%';
+            }
+            
+            if($id_course && Courses::existCourseById($id_course))
+            {
+                if($ids)
+                {
+                    $criteria->addNotInCondition('t.id', $ids);
+                }
+                $criteria->compare('id_course', $id_course);
+            }
+            
+            $criteria->limit = 10;
+            $skills = Skills::model()->findAll($criteria);
+            
+            foreach ($skills  as $skill)
+            {
+                $result['html'] .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
+            }
+            if(!$result['html'])
+            {
+                $result['html'] = '<li><a href="#">Результатов нет</a></li>';
+            }
+            
+            return CJSON::encode($result);
         }
         
 }

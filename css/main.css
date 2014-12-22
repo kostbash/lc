@@ -1355,6 +1355,13 @@ z-index:10000000;
     margin-bottom: 0;
 }
 
+.modal-body .label-row
+{
+    width: 45%;
+    text-align: right;
+    margin-right: 5%;
+}
+
 .modal-header {
    background: #f8f8f8;
    text-align: center;
@@ -2361,9 +2368,9 @@ z-index:10000000;
 #head-col-left .course .head .course-state-button
 {
     float: right;
-    color: #EDEDED !important;
-    font-size: 15px;
-    line-height: 15px;
+    color: #fefefe !important;
+    font-size: 16px;
+    line-height: 16px;
 }
 
 #head-col-left .course .head .name
