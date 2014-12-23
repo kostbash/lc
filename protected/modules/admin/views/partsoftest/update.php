@@ -289,7 +289,6 @@ $this->widget('ZGridView', array(
 )); ?>
 
 <div class="clearfix">
-<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_part'=>$part->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
 <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_part'=>$part->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon','style'=>'float: left; margin: 0 5px')) ?>
 
 <div id="dropdown-generators">

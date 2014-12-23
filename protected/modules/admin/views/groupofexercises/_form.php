@@ -126,9 +126,10 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
                     type:'POST',
                     data: current.closest('.inputs-mini').find('input').serialize(),
+                    dataType: 'json',
                     success: function(result) {
                             current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
-                            current.siblings('.input-group-btn').find('.dropdown-menu').append(result);
+                            current.siblings('.input-group-btn').find('.dropdown-menu').append(result.html);
                             current.siblings('.input-group-btn').addClass('open');
                     }
                 });
@@ -144,10 +145,11 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
                     type: 'POST',
                     data: current.closest('.inputs-mini').find('input').serialize(), 
+                    dataType: 'json',
                     success: function(result) { 
                         if(result!='') {
                             current.siblings('.dropdown-menu').find('li').remove();
-                            current.siblings('.dropdown-menu').append(result);
+                            current.siblings('.dropdown-menu').append(result.html);
                         }
                     }
                 });
@@ -339,6 +341,21 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 $('#htmlEditor').modal('hide');
             });
             
+            $('.add-part').click(function(){
+                current = $(this);
+                $.ajax({
+                    url: current.attr('href'),
+                    dataType: 'json',
+                    success: function(result){
+                        if(result.success)
+                        {
+                            $('.type-test').yiiGridView('update');
+                        }
+                    }
+                });
+                return false;
+            });
+            
         });"
         
     );
@@ -526,7 +543,6 @@ Yii::app()->clientScript->registerScript("skills-grid",
             </div>
         </div>
         <div class="clearfix">
-            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить глобальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
             <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left; margin: 0 5px')) ?>
 
             <div id="dropdown-generators">
@@ -611,7 +627,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             </div>
         </div>
         <div class="clearfix">
-            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из глобальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left;')) ?>
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить пустую часть', array('/admin/groupofexercises/addPart', 'id'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon add-part', 'style'=>'float: left;')) ?>
             <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть из локальных заданий', array('/admin/exercises/index', 'id_group'=>$exerciseGroup->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon', 'style'=>'float: left; margin: 0 5px')) ?>
 
             <div id="dropdown-generators" style="width: 273px;">

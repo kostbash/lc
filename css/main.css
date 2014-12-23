@@ -663,7 +663,7 @@ h2{
 
 
 #course-themes .blocks .block .block-name {
-    width: 40%;
+    width: 36%;
     padding-right: 1%;
 }
 
@@ -691,7 +691,11 @@ h2{
 }
 
 #course-themes .blocks .block .block-operation {
-    width: 6%;
+    width: 10%;
+}
+
+#course-themes .blocks .block .block-operation .edit {
+    color: #006699;
 }
 
 #course-themes .blocks .block .block-operation .edit {
@@ -2881,22 +2885,34 @@ z-index:10000000;
 
 .radio-buttons .radio-button label
 {
+    display: table-row;
     font-family: Arial;
     font-size: 15px;
     font-weight: normal;
     cursor: pointer;
     display: inline-block;
     color: #263870;
-    vertical-align: middle;
     line-height: normal !important;
+}
+
+.radio-buttons .radio-button .left
+{
+    display: table-cell;
+    width: 38px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.radio-buttons .radio-button .right
+{
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .radio-buttons .radio-button input[type="radio"] + label span
 {
     display: inline-block;
     width: 38px;
-    vertical-align: middle;
-    margin-right: 10px;
     height: 38px;
     background: url(../images/square-radio-button.png) left top no-repeat;
 }
@@ -2940,6 +2956,20 @@ z-index:10000000;
     color: #263870;
     vertical-align: middle;
     line-height: normal !important;
+}
+
+.checkboxes .checkbox .left
+{
+    display: table-cell;
+    width: 38px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.checkboxes .checkbox .right
+{
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .checkboxes .checkbox input[type="checkbox"] + label span
@@ -3021,7 +3051,7 @@ z-index:10000000;
     text-align: center;
     line-height: normal;
     vertical-align: top;
-    padding: 2px 40px;
+    padding: 8px;
 }
 
 /*---------------------- 7.text-with-space ----------------------*/

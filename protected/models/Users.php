@@ -207,7 +207,14 @@ class Users extends CActiveRecord
                 
                 if($this->registration_day)
                 {
-                    $criteria->addCondition("`registration_day` >= :registration_day AND `registration_day`<='$today'");
+                    if(date('Y-m-d 00:00:00', strtotime('- 1day'))==$this->registration_day) // если фильтр вчера
+                    {
+                        $criteria->addCondition("DATE_FORMAT(`registration_day`,'%m-%d-%Y') = DATE_FORMAT(:registration_day, '%m-%d-%Y')");
+                    }
+                    else
+                    {
+                        $criteria->addCondition("`registration_day` >= :registration_day AND `registration_day`<='$today'");
+                    }
                     $criteria->params['registration_day'] = $this->registration_day;
                 }
                 

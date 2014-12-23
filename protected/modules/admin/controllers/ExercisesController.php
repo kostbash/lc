@@ -95,7 +95,7 @@ class ExercisesController extends Controller
             {
                 //CVarDumper::dump($_POST['Exercises'], 5, true); die;
                 $model->attributes = $_POST['Exercises'];
-                $model->course_creator_id = $groupExercise && $groupExercise->id_course ? $groupExercise->id_course : 0;
+                $model->course_creator_id = ($groupExercise && $groupExercise->id_course) ? $groupExercise->id_course : 0;
                 $model->change_date = date('Y-m-d H:i:s');
                 if($model->save())
                 {
@@ -1078,27 +1078,7 @@ class ExercisesController extends Controller
         
 	public function actionSkillsNotIdsAjax()
 	{
-            $criteria = new CDbCriteria;
-
-            if ($_POST['term'])
-            {
-                $criteria->condition = '`name` LIKE :name';
-                $criteria->params['name'] = '%' . $_POST['term'] . '%';
-            }
-
-            if($_POST['skillsIds'])
-                $criteria->addNotInCondition('id', $_POST['skillsIds']);
-            
-            $criteria->limit = 10;
-            $skills = Skills::model()->findAll($criteria);
-            $res = '';
-            foreach ($skills  as $skill)
-            {
-                $res .= "<li data-id='$skill->id'><a href='#'>$skill->name</a></li>";
-            }
-            if($res=='')
-                $res = '<li><a href="#">Результатов нет</a></li>';
-            echo $res;
+            echo Skills::skillsForAjax(40, $_POST['skillsIds']);
 	}
         
 	public function actionSkillsByIdsAjax($id_group)

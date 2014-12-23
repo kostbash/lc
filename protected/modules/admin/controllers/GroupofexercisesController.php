@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete', 'update', 'updatebyajax', 'shuffleexericises', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup'),
+				'actions'=>array('delete', 'update', 'updatebyajax', 'shuffleexericises', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup', 'addPart'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -271,6 +271,20 @@ class GroupofexercisesController extends Controller
             {
                 $res['success'] = 0;
                 $res['message'] = 'Удаление не произошло: такого умения нет в блоке';
+            }
+            echo CJSON::encode($res);
+        }
+        
+        public function actionAddPart($id)
+        {
+            $group = $this->loadModel($id);
+            $res = array('success'=>0);
+            $part = new PartsOfTest;
+            $part->id_group = $group->id;
+            $part->order = PartsOfTest::maxValueOrder($group->id);
+            if($part->save())
+            {
+                $res['success'] = 1;
             }
             echo CJSON::encode($res);
         }

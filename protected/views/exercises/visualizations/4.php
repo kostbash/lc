@@ -4,7 +4,7 @@
         <div class="checkbox">
             <?php
                 echo "<input tabindex='$index' value='$answer->id' id='Exercises_{$key}_answers_{$n}' type='checkbox' name='Exercises[$key][answers][]'>";
-                echo "<label for='Exercises_{$key}_answers_{$n}'><span></span>".GraphicWidgets::transform($answer->answer)."</label>";
+                echo "<label for='Exercises_{$key}_answers_{$n}'><div class='left'><span></span></div><div class='right'>".GraphicWidgets::transform($answer->answer)."</div></label>";
             ?>
         </div>
     <?php endforeach; ?>

@@ -286,11 +286,10 @@ $this->widget('ZGridView', array(
             'template' => '{update}{delete}',
             'buttons' => array(
                 'update' => array(
-                    'visible' => '$data->canChange',
+                    'visible' => $group ? "false" : "true",
                 ),
                 'delete' => array(
                     'click' => 'false',
-                    'visible' => '$data->canChange',
                 ),
             ),
             'htmlOptions' => array('width' => '6%'),
@@ -299,9 +298,6 @@ $this->widget('ZGridView', array(
 ));
 ?>
 <?php
-if($group)
-    echo CHtml::submitButton("Выбрать", array('class' => 'btn btn-default'));
-
 Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
                         function uploadHandle()
                         {
@@ -318,8 +314,13 @@ Yii::app()->clientScript->registerScript('search' . $x . $this->id, '
                             	uploadHandle();
 			});
 		    ');
-$this->endWidget();
 ?>
+
+<?php if($group) :
+    echo CHtml::submitButton("Выбрать", array('class' => 'btn btn-default'));
+?>
+
+<?php else : ?>
 
 <div id="dropdown-types_of_exercises" style="/* width: 136px; */">
     <div class="input-group-btn">
@@ -340,9 +341,14 @@ $this->endWidget();
 </div>
 <div id="dropdown-generators" style="margin-left: 20px;">
     <div class="input-group-btn">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить часть с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
         <ul class="dropdown-menu" role="menu">
             <?php echo Generators::ListGenerators($course->id, 'course'); ?>
         </ul>
     </div>
 </div>
+
+<?php
+    endif; 
+    $this->endWidget();
+?>
