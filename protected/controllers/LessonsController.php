@@ -59,7 +59,7 @@ class LessonsController extends Controller
 
         public function actionPass($id, $group=null)
         {   
-            
+            $user = Users::model()->findByPk(Yii::app()->user->id);
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
             
             if(!($userAndLesson and $userAndLesson->Course->haveAccess))
@@ -104,7 +104,12 @@ class LessonsController extends Controller
                     elseif($currentExerciseGroup->type==2)
                     {
                         $resultTest = $userAndExerciseGroup->saveResultTest($_POST['Exercises'], $_SESSION['exercisesTest']);
-
+                        if($user->getCountPassLessons() == 0)
+                        {
+                            if($resultTest['passed'])
+                                $_SESSION['goals'][] = 'FirstLessonFinish';
+                            unset($_SESSION['FirstLessonStart']);
+                        }
                         $this->render('successtest',array(
                             'userLesson'=>$userAndLesson,
                             'userAndExerciseGroup'=>$userAndExerciseGroup,
@@ -122,6 +127,11 @@ class LessonsController extends Controller
                 }
                 else
                 {
+                    if($user->getCountPassLessons() == 0 && (!isset($_SESSION['FirstLessonStart'] ) || $_SESSION['FirstLessonStart'] != $userAndLesson->id_lesson))
+                    {
+                        $_SESSION['goals'][] = 'FirstLessonStart';
+                        $_SESSION['FirstLessonStart'] = $userAndLesson->id_lesson;
+                    }
                     if($currentExerciseGroup->type==2)
                     {
                         $exercisesTest = $currentExerciseGroup->ExercisesTest;
