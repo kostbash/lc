@@ -46,6 +46,7 @@ class SiteController extends Controller
             {
                 if($user->registration($_POST['Users']))
                 {
+                    $_SESSION['goals'][] = 'Register';
                     if($user->role==2)
                     {
                         $loginForm->username = $user->username;
@@ -76,6 +77,7 @@ class SiteController extends Controller
                     }
                     elseif($user->role==4)
                     {
+                        $_SESSION['goals'][] = 'RegisterParent';
                         $this->render('successReg', array(
                             'user'=>$user,
                         ));
