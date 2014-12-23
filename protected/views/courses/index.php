@@ -61,6 +61,10 @@
                                 <?php $courseProgress = $course->progress; ?>
                                 <div class="progress-bar progress-bar-warning"  role="progressbar" aria-valuenow="<?php echo $courseProgress; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courseProgress; ?>%"></div>
                             </div>
+                            <div class="course-page-share">
+                                <script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
+                                <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="small" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1997,6 +1997,11 @@ z-index:10000000;
     table-layout: fixed;
 }
 
+.course-page-share
+{
+    margin-left: 6px;
+}
+
 #course-page .lessons-table p
 {
     margin: 0;
@@ -4346,6 +4351,12 @@ z-index:10000000;
     text-decoration: underline;
     text-align: center;
     color: #b5486d;
+}
+
+#course-view-page .share
+{
+    display: inline-block;
+    margin-left: 10px;
 }
 
 #course-view-page #course-info > div > .content ul

@@ -49,6 +49,10 @@
             <?php echo CHtml::link('Курсы', array('site/index'), array('style'=>'color: #feffff;')); ?>
             <i class="glyphicon glyphicon-arrow-right" style="top:4px;"></i>
             <?php echo $course->name; ?>
+            <div class="share">
+                <script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>
+                <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="small" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir" data-yashareTheme="counter"></div>
+            </div>
         </h2>
         <div id="top-buttons">
             <?php echo CHtml::link(Yii::t('course-unauth', $messages[11]->message), '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#regLogin", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
