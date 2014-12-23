@@ -193,7 +193,7 @@
                                 <?php if($userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id)) : ?>
                                     <tr>
                                         <td>
-                                            <?php echo CHtml::link("Урок $posLesson : ".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
+                                            <?php echo CHtml::link("<span>Урок $posLesson : </span>".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
                                         </td>
                                         <td style="text-align: center;">
                                             <?php if ($userAndLesson->passed) : ?>

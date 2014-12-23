@@ -1384,6 +1384,14 @@ z-index:10000000;
    margin-top: -6px;
 }
 
+.modal-body .rememberMe
+{
+    position: absolute;
+    width: 300px;
+    bottom: -73px;
+    left: 0;
+}
+
 .modal-body .rememberMe input {
     float: left;
     margin: 1px 0 0 8px;
@@ -2057,6 +2065,11 @@ z-index:10000000;
     color: #022f6d;
 }
 
+
+#course-page .lessons-table .lesson-name span {
+    color: #999898 !important;
+}
+
 #course-page .lessons-table .to-lesson
 {
     display: inline-block;
@@ -2320,7 +2333,7 @@ z-index:10000000;
 .course-state-button
 {
     display: inline-block;
-    background: #e094b2;
+    background: #ED80AB;
     text-decoration: none !important;
     color: #fff !important;
     padding: 7px 17px 9px;
