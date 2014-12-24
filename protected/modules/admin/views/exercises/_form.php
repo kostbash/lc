@@ -6,17 +6,19 @@
             current = $(this);
             skills = current.closest('#add-skills').find('.skills .skill');
             skillsIds = new Array();
+            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
             skills.each(function(i, skill){
                 skillsIds[i] = $(skill).data('id');
             });
             
             $.ajax({
-                url:'<?php echo Yii::app()->createUrl('admin/exercises/skillsnotidsajax'); ?>',
+                url:'<?php echo Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$groupExercise->id_course)); ?>',
                 type:'POST',
-                data: { term: current.val(), skillsIds: skillsIds },
+                data: { term: current.val(), Exercises:{0:{SkillsIds: skillsIds, firstIds: firstIds}} },
+                dataType: 'json',
                 success: function(result) {
                         current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
-                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result);
+                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result.html);
                         current.siblings('.input-group-btn').addClass('open');
                 }
             });
@@ -27,18 +29,20 @@
             current = $(this);
             skills = current.closest('#add-skills').find('.skills .skill');
             skillsIds = new Array();
+            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
             skills.each(function(i, skill){
                 skillsIds[i] = $(skill).data('id');
             });
             
             $.ajax({
-                url:'<?php echo Yii::app()->createUrl('admin/exercises/skillsnotidsajax'); ?>',
+                url:'<?php echo Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$groupExercise->id_course)); ?>',
                 type:'POST',
-                data: { term: current.val(), skillsIds: skillsIds },
+                data: { term: current.val(), Exercises:{0:{SkillsIds: skillsIds, firstIds: firstIds}} },
+                dataType: 'json',
                 success: function(result) { 
                     if(result) {
                         current.siblings('.dropdown-menu').find('li').remove();
-                        current.siblings('.dropdown-menu').append(result);
+                        current.siblings('.dropdown-menu').append(result.html);
                     }
                 }
             });

@@ -120,6 +120,7 @@ class PartsoftestController extends Controller
 
             $this->render('update',array(
                     'part'=>$part,
+                    'group'=>$part->Group,
             ));
 	}
 

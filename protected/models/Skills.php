@@ -189,27 +189,40 @@ class Skills extends CActiveRecord
             parent::afterDelete();
         }
         
-        public static function skillsForAjax($id_course=null, $ids=null)
+        public static function skillsForAjax($id_course=null, $ids=null, $firstIds=null)
         {
-            $criteria = new CDbCriteria;
             $result = array();
+            $sql = '';
+            $params = array();
+            $ids = self::makeNumberMass($ids);
+            $firstIds = array_diff(self::makeNumberMass($firstIds), $ids); // вывести сначала умения с определенными id
+            $condition = array(0=>1);
             if(isset($_POST['term']))
             {
-                $criteria->condition = '`name` LIKE :name';
-                $criteria->params['name'] = '%' . $_POST['term'] . '%';
+                $condition[] = '`name` LIKE :name';
+                $params['name'] = '%' . $_POST['term'] . '%';
+            }
+            
+            if($firstIds)
+            {
+                $sql .= "SELECT * FROM `oed_skills` WHERE `id` IN (".implode(',', $firstIds).") UNION ";
+                $ids = array_merge($ids, $firstIds);
             }
             
             if($id_course && Courses::existCourseById($id_course))
             {
                 if($ids)
                 {
-                    $criteria->addNotInCondition('t.id', $ids);
+                    $condition[] = "`id` NOT IN(".implode(',', $ids).")";
                 }
-                $criteria->compare('id_course', $id_course);
+                
+                $condition[] = '`id_course`=:id_course';
+                $params['id_course'] = $id_course;
             }
             
-            $criteria->limit = 10;
-            $skills = Skills::model()->findAll($criteria);
+            $sql .= "SELECT * FROM `oed_skills` WHERE ".implode(' AND ', $condition);
+
+            $skills = Skills::model()->findAllBySql($sql, $params);
             
             foreach ($skills  as $skill)
             {
@@ -221,6 +234,19 @@ class Skills extends CActiveRecord
             }
             
             return CJSON::encode($result);
+        }
+        
+        public static function makeNumberMass($mass)
+        {
+            $newMass = array();
+            if($mass && is_array($mass))
+            {
+                foreach($mass as $item)
+                {
+                    $newMass[] = (int) $item;
+                }
+            }
+            return $newMass;
         }
         
 }

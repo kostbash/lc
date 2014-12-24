@@ -51,12 +51,13 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .mydrop input').live('keyup', function(){
                 current = $(this);
                 $.ajax({
-                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
+                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$group->id_course))."',
                     type:'POST',
                     data: current.closest('.inputs-mini').find('input').serialize(),
+                    dataType: 'json',
                     success: function(result) {
                             current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
-                            current.siblings('.input-group-btn').find('.dropdown-menu').append(result);
+                            current.siblings('.input-group-btn').find('.dropdown-menu').append(result.html);
                             current.siblings('.input-group-btn').addClass('open');
                     }
                 });
@@ -69,14 +70,14 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .mydrop .dropdown-toggle').live('click', function() {
                 current = $(this);
                 $.ajax({
-                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
+                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$group->id_course))."',
                     type: 'POST',
-                    data: current.closest('.inputs-mini').find('input').serialize(), 
+                    data: current.closest('.inputs-mini').find('input').serialize(),
+                    dataType: 'json',
                     success: function(result) { 
-                        if(result!='') {
-                            current.siblings('.dropdown-menu').find('li').remove();
-                            current.siblings('.dropdown-menu').append(result);
-                        }
+                        current.siblings('.dropdown-menu').find('li').remove();
+                        current.siblings('.dropdown-menu').append(result.html);
+ 
                     }
                 });
 

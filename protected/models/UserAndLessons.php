@@ -102,6 +102,14 @@ class UserAndLessons extends CActiveRecord
             return true;
         }
         
+        public function getfirstUserBlock()
+        {
+            $query = "SELECT userBlock.* FROM `oed_lesson_and_exercise_group` lesBlock, `oed_user_and_exercise_groups` userBlock
+                    WHERE lesBlock.id_lesson = :id_lesson AND lesBlock.id_group_exercises = userBlock.id_exercise_group AND userBlock.id_user_and_lesson = :id_user_and_lesson
+                    ORDER BY lesBlock.order ASC LIMIT 1";
+            return UserAndExerciseGroups::model()->findBySql($query, array('id_lesson'=>$this->id_lesson, 'id_user_and_lesson'=>$this->id));
+        }
+        
         public function getLastUserBlock()
         {
             $query = "SELECT userBlock.* FROM `oed_lesson_and_exercise_group` lesBlock, `oed_user_and_exercise_groups` userBlock

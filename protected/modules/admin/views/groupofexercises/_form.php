@@ -123,7 +123,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .mydrop input').live('keyup', function(){
                 current = $(this);
                 $.ajax({
-                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
+                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$exerciseGroup->id_course))."',
                     type:'POST',
                     data: current.closest('.inputs-mini').find('input').serialize(),
                     dataType: 'json',
@@ -142,7 +142,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .mydrop .dropdown-toggle').live('click', function() {
                 current = $(this);
                 $.ajax({
-                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax')."',
+                    url: '".Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$exerciseGroup->id_course))."',
                     type: 'POST',
                     data: current.closest('.inputs-mini').find('input').serialize(), 
                     dataType: 'json',

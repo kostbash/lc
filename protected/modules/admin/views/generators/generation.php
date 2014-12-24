@@ -36,7 +36,7 @@
             $.ajax({
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
-                data: { term: current.val() },
+                data: { term: current.val(), firstIds: [<?php echo implode(',', $group->IdsUsedSkills); ?>] },
                 dataType: 'json',
                 success: function(result) {
                         current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
@@ -59,6 +59,7 @@
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
                 dataType: 'json',
+                data: { firstIds: [<?php echo implode(',', $group->IdsUsedSkills); ?>] },
                 success: function(result) { 
                     if(result) {
                         current.siblings('.dropdown-menu').find('li').remove();

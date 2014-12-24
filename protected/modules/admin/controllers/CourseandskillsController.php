@@ -107,11 +107,11 @@ class CourseandskillsController extends Controller
             {
                 if($with_used)
                 {
-                    echo Skills::skillsForAjax($id_course, $course->idsUsedSkills);
+                    echo Skills::skillsForAjax($id_course, $course->idsUsedSkills, $_POST['firstIds']);
                 }
                 else
                 {
-                    echo Skills::skillsForAjax($id_course);
+                    echo Skills::skillsForAjax($id_course, null, $_POST['firstIds']);
                 }
             }
 	}

@@ -73,7 +73,14 @@ class LessonsController extends Controller
             }
             else
             {
-                $userAndExerciseGroup = $userAndLesson->lastUserBlock;
+                if($userAndLesson->passed)
+                {
+                    $userAndExerciseGroup = $userAndLesson->firstUserBlock;
+                }
+                else
+                {
+                    $userAndExerciseGroup = $userAndLesson->lastUserBlock;
+                }
                 // если не сущесвует связи
                 if(!$userAndExerciseGroup)
                 {

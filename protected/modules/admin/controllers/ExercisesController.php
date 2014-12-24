@@ -418,6 +418,7 @@ class ExercisesController extends Controller
                 'id_group' => $id_group,
                 'id_part' => $id_part,
                 'id_map' => $id_map,
+                'groupExercise'=>$groupExercise,
             ));
 	}
         
@@ -439,6 +440,7 @@ class ExercisesController extends Controller
             
             if($id_part) {
                 $part = PartsOfTest::model()->findByPk($id_part);
+                $groupExercise = $part->Group;
             } elseif($id_group) {
                 $groupExercise = GroupOfExercises::model()->findBypk($id_group);
             }
@@ -855,6 +857,7 @@ class ExercisesController extends Controller
                 'id_group' => $id_group,
                 'id_part' => $id_part,
                 'id_map'=>$id_map,
+                'groupExercise'=>$groupExercise,
             ));
 	}
         
@@ -1076,9 +1079,10 @@ class ExercisesController extends Controller
             echo $res;
 	}
         
-	public function actionSkillsNotIdsAjax()
+	public function actionSkillsNotIdsAjax($id_course)
 	{
-            echo Skills::skillsForAjax(40, $_POST['skillsIds']);
+            $exercise = array_shift($_POST['Exercises']);
+            echo Skills::skillsForAjax($id_course, $exercise['SkillsIds'], $exercise['firstIds']);
 	}
         
 	public function actionSkillsByIdsAjax($id_group)
