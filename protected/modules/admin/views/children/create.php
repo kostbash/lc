@@ -1,6 +1,7 @@
 <div class="page-header clearfix">
     <h2>Добавление ребенка</h2>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Создать', '#', array('class'=>'btn btn-success btn-icon', 'onclick'=>'$("#children-of-parent-form").submit();')); ?>
+    <?php echo CHtml::link('<i class="glyphicon glyphicon-remove"></i>Отмена', array('index'), array('class'=>'btn btn-danger btn-icon', 'style'=>'margin-right: 12px;')); ?>
 </div>
 <div class="form">
 

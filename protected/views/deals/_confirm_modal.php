@@ -44,7 +44,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="regModelLabel">Запрос на подтверждение родителя</h4>
+        <h4 class="modal-title" id="regModelLabel">Вы получили запрос на подтверждение родителя с почтового ящика - <?php echo $newParent->Parent->email; ?></h4>
       </div>
       <div class="modal-body clearfix">
           <div class="parent" data-id="<?php echo $newParent->id; ?>">

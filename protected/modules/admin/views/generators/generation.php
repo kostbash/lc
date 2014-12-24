@@ -30,7 +30,6 @@
                     }
                 });
             }
-            
         }
         else
         {
@@ -38,9 +37,10 @@
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
                 data: { term: current.val() },
+                dataType: 'json',
                 success: function(result) {
                         current.siblings('.input-group-btn').find('.dropdown-menu li').remove();
-                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result);
+                        current.siblings('.input-group-btn').find('.dropdown-menu').append(result.html);
                         current.siblings('.input-group-btn').addClass('open');
                 }
             });
@@ -58,10 +58,11 @@
             $.ajax({
                 url:'<?php echo Yii::app()->createUrl('admin/courseandskills/skillsbyajax', array('id_course'=>$group->id_course, 'with_used'=>false)); ?>',
                 type:'POST',
+                dataType: 'json',
                 success: function(result) { 
-                    if(result!='') {
+                    if(result) {
                         current.siblings('.dropdown-menu').find('li').remove();
-                        current.siblings('.dropdown-menu').append(result);
+                        current.siblings('.dropdown-menu').append(result.html);
                     }
                 }
             });
