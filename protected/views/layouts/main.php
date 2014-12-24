@@ -130,6 +130,7 @@
     </div>
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
+            <?php if(!YII_DEBUG) { ?>
             var yaParams = {
                 login: '<?php echo ((!Yii::app()->user->isGuest)?Yii::app()->user->name:'Guest')?>'
                 <?php echo isset($this->Course)&&$this->Course?(", course: '".$this->Course."'"):"" ?>
@@ -147,10 +148,12 @@
                     s.async = true; 
                     s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; 
                     if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
-                
+            <?php } ?>    
             function reachGoal(goal)
             {
+                <?php if(!YII_DEBUG) { ?>
                 window.yaCounter26929302.reachGoal(goal);
+                <?php } ?> 
             }     
             $(window).on('load',function(){ 
             <?php
@@ -164,11 +167,13 @@
                 }
             ?>});
         </script>
+        <?php if(!YII_DEBUG) { ?>
         <noscript>
             <div>
                 <img src="//mc.yandex.ru/watch/26929302" style="position:absolute; left:-9999px;" alt="" />
             </div>
         </noscript>
+        <?php } ?> 
         <!-- /Yandex.Metrika counter -->
 </body>
 </html>
