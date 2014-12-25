@@ -19,7 +19,7 @@ class Children extends CActiveRecord
                     'color'=>'#00a',
                 ),
             '1' => array(
-                    'text'=>'Ваш ученик',
+                    'text'=>'Ваш ребенок',
                     'color'=>'#0a0',
                 ),
             '2' => array(

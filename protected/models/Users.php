@@ -20,7 +20,7 @@ class Users extends CActiveRecord
         
         public static $rolesRusNames = array(
             '1' => 'Админ',
-            '2' => 'Студент',
+            '2' => 'Ученик',
             '3' => 'Учитель',
             '4' => 'Родитель',
         );
@@ -167,7 +167,7 @@ class Users extends CActiveRecord
                         'countPassLessons' => 'Число пройденных уроков',
                         'countPassCourses' => 'Число пройденных курсов',
                         'rememberMe' => 'Узнавать меня',
-                        'send_notifications'=>'Отправлять на e-mail оповещения учеников',
+                        'send_notifications'=>'Включить оповещения о результатах ребенка на e-mail',
                         'id_recovery_question'=>'Выберите контрольный вопрос',
                         'recovery_answer'=>'Ваш ответ на контрольный вопрос',
                         'addParentOnReg'=>'Для родителя: иметь возможность отслеживать прогресс обучения',
@@ -519,8 +519,6 @@ class Users extends CActiveRecord
             {
                if(Yii::app()->user->checkAccess('admin'))
                    return Yii::app()->createUrl('/admin/courses/index');
-               elseif(Yii::app()->user->checkAccess('parent'))
-                   return Yii::app()->createUrl('/admin/children/index');
                else
                    return Yii::app()->createUrl('courses/list');
             }

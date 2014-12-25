@@ -1,5 +1,5 @@
 <div class="page-header clearfix">
-    <h2>Настройки ученика "<?php echo $cloneModel->child_name." ".$cloneModel->child_surname; ?>"</h2>
+    <h2>Настройки ребенка "<?php echo $cloneModel->child_name." ".$cloneModel->child_surname; ?>"</h2>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-ok"></i>Сохранить', '#', array('class'=>'btn btn-success btn-icon', 'onclick'=>'$("#children-of-parent-form").submit();')); ?>
 </div>
 <div class="form">

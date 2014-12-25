@@ -91,6 +91,9 @@
                                     }
                                 ?>
                                 <div id='user-page-link'><?php echo CHtml::link($userPageLink, array('/users/update')); ?></div>
+                                <?php if($user->role==4) : ?>
+                                    <div id="students-link"><?php echo CHtml::link('Мои ученики', array('/admin/children/index')); ?></div>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </div>
                         <div id="top-menu-on-main" class="clearfix" >
