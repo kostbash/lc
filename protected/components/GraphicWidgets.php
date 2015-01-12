@@ -64,8 +64,8 @@ class GraphicWidgets
         {
             $len = mb_strlen($this->widgetsTexts[$n], 'UTF-8');
             $begin = mb_strstr($this->rawText, $this->widgetsTexts[$n], true, 'UTF-8');
-            $end = mb_substr(mb_strstr($this->rawText, $this->widgetsTexts[$n], false, 'UTF-8'), $len, NULL, 'UTF-8');
-            $this->rawText = $begin.$widget->draw($this->answers, $this->numberOfExercise).$end;
+            $end = mb_substr(mb_strstr($this->rawText, $this->widgetsTexts[$n], false, 'UTF-8'), $len);
+            $this->rawText = $begin . $widget->draw($this->answers, $this->numberOfExercise) . $end;
             $this->answers = $widget->answers;
         }
         return $this->rawText;
