@@ -15,7 +15,8 @@
             {
                 $additionClass = '';
             }
-            echo "<div data-key='$key' data-val='$answer->id' class='block$additionClass'>".GraphicWidgets::transform($answer->answer)."</div>";
+            $gw = new GraphicWidgets($answer->answer);
+            echo "<div data-key='$key' data-val='$answer->id' class='block$additionClass'>". $gw->draw() ."</div>";
             ++$i;
         }
     }

@@ -341,6 +341,30 @@ class ExercisesController extends Controller
                             }
                         }
                     }
+                    elseif($id_visual==16)
+                    {
+                        $question = new ExercisesQuestions;
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        $question->id_exercise = $model->id;
+                        if($question->save())
+                        {
+                            $gw = new GraphicWidgets($question->text);
+                            $answers = $gw->getAnswersAttrs();
+                            if($answers)
+                            {
+                                foreach($answers as $n => $answer)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers ->answer = $answer;
+                                    $exercisesAnswers ->id_question = $question->id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->number = $n;
+                                    $exercisesAnswers->save();
+                                }
+                            }
+                        }
+                    }
                     else 
                     {
                         if($_POST['Exercises']['answers'])
@@ -793,6 +817,30 @@ class ExercisesController extends Controller
                                 $exercisesAnswers ->id_exercise = $model->id;
                                 $exercisesAnswers->save();
                                 $order++;
+                            }
+                        }
+                    }
+                    elseif($model->id_visual==16)
+                    {
+                        $question = $model->Questions[0];
+                        $question->attributes = $_POST['Exercises']['questions'][0];
+                        if($question->save())
+                        {
+                            $gw = new GraphicWidgets($question->text);
+                            $answers = $gw->getAnswersAttrs();
+                            if($answers)
+                            {
+                                foreach($model->Answers as $eAnswer) $eAnswer->delete();
+                                foreach($answers as $n => $answer)
+                                {
+                                    $exercisesAnswers = new ExercisesListOfAnswers;
+                                    $exercisesAnswers ->id_exercise = $model->id;
+                                    $exercisesAnswers ->answer = $answer;
+                                    $exercisesAnswers ->id_question = $question->id;
+                                    $exercisesAnswers ->is_right = 1;
+                                    $exercisesAnswers ->number = $n;
+                                    $exercisesAnswers->save();
+                                }
                             }
                         }
                     }

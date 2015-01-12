@@ -666,6 +666,16 @@
             current = $(this);
             current.attr('class', 'area disable');
         });
+        
+        $('.universal').change(function() {
+            current = $(this);
+            setDuration(this);
+            ResultAnswer(this);
+            if(current.closest('.exercise').hasClass('without-answer'))
+            {
+                checkUniversal(this);
+            }
+        });
     });
     
     function ResultAnswer(container)
@@ -719,7 +729,8 @@
                 <div class="head clearfix">
                     <div class="number"><?php echo $posTest++; ?></div>
                     <div class="condition">
-                        <?php echo GraphicWidgets::transform($exercise->condition);?>
+                        <?php $gw = new GraphicWidgets($exercise->condition);?>
+                        <?php echo $gw->draw();?>
                     </div>
                     <div class="result"></div>
                 </div>

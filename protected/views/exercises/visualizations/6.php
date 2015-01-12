@@ -6,9 +6,11 @@ if($countComparisons)
 {
     foreach($model->Comparisons as $comparison)
     {
-        $listOne[] = "<div class='comp-answer'>".GraphicWidgets::transform($comparison->AnswerOne->answer).
+        $gw1 = new GraphicWidgets($comparison->AnswerOne->answer);
+        $listOne[] = "<div class='comp-answer'>".$gw1->draw().
                      "<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][1][]' value='{$comparison->AnswerOne->id}' /></div>";
-        $listTwo[] = "<div class='comp-answer'>".GraphicWidgets::transform($comparison->AnswerTwo->answer).
+        $gw2 = new GraphicWidgets($comparison->AnswerTwo->answer);
+        $listTwo[] = "<div class='comp-answer'>".$gw2->draw().
                      "<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][2][]' value='{$comparison->AnswerTwo->id}' /></div>";
     }
     

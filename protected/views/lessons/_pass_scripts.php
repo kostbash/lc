@@ -191,6 +191,17 @@
                     }
                 });
             }
+            
+            universals = $('.universal');
+            if (universals.length)
+            {
+                universals.each(function(n, universal) {
+                    if(!checkUniversal(universal))
+                    {
+                        result = false;
+                    }
+                });
+            }
 
             if (result) {
                 $('#exercises-form').submit();
@@ -413,6 +424,27 @@
             exerciseCont.removeClass('without-answer');
             return true;
         }
+    }
+    
+    function checkUniversal(universal)
+    {
+        universal = $(universal);
+        inputs = universal.find('input');
+        exerciseCont = universal.closest('.exercise');
+        res = true;
+        inputs.each(function(n, input) {
+            input = $(input);
+            if (!input.val())
+            {
+                res = false;
+                return false;
+            }
+        });
+        if (res)
+            exerciseCont.removeClass('without-answer');
+        else
+            exerciseCont.addClass('without-answer');
+        return res;
     }
     
     seconds = 0;

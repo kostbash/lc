@@ -437,5 +437,14 @@
             current = $(this);
             current.attr('class', 'area disable');
         });
+        
+        $('.universal').change(function() {
+            current = $(this);
+            setDuration(this);
+            if(current.closest('.exercise').hasClass('without-answer'))
+            {
+                checkUniversal(this);
+            }
+        });
     });
 </script>

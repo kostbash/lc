@@ -17,6 +17,9 @@ if($text && $spaces)
         
 <div class="exact-answers-with-space clearfix">
     <div class="text">
-        <?php echo GraphicWidgets::transform(nl2br($text)); ?>
+        <?php
+            $gw = new GraphicWidgets(nl2br($text));
+            echo $gw->draw();
+        ?>
     </div>
 </div>

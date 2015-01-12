@@ -418,6 +418,21 @@ class Exercises extends CActiveRecord
                             }
                         }
                     }
+                    elseif($exercise->id_visual==16) // универсальное
+                    {
+                        if(count($answers)==count($rightAnswers))
+                        {
+                            $cleanRightAnswers = array();
+                            foreach($rightAnswers as $rightAnswer)
+                            {
+                                $cleanRightAnswers[$rightAnswer->id] = $rightAnswer->answer;
+                            }
+                            if(!array_diff_assoc($cleanRightAnswers, $answers))
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 } 
             }
             return false;
@@ -429,7 +444,7 @@ class Exercises extends CActiveRecord
                 $criteria = new CDbCriteria;
                 $criteria->compare('id_exercise', $this->id);
                 $criteria->compare('is_right', 1);
-                $criteria->order = 'reg_exp ASC, id ASC';
+                $criteria->order = 'reg_exp ASC, number ASC, id ASC';
                 return ExercisesListOfAnswers::model()->findAll($criteria);
             }
             return array();

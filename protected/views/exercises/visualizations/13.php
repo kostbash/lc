@@ -14,7 +14,12 @@
                         ?>
                     </div>
                 <?php endif; ?>
-                <div class="name"><?php echo GraphicWidgets::transform($answer->name); ?></div>
+                <div class="name">
+                    <?php
+                        $gw = new GraphicWidgets($answer->name);
+                        echo $gw->draw();
+                    ?>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>

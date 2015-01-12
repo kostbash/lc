@@ -8,8 +8,9 @@ if(!empty($model->Answers))
     foreach($listWords as $listWord)
     {
         $clearListWord = preg_replace('/_/u',' ',$listWord);
+        $gw = new GraphicWidgets($clearListWord);
         $list[] = "<div class='word'>"
-                    .GraphicWidgets::transform($clearListWord)
+                    .$gw->draw()
                     ."<input class='hidden-answer' type='hidden' name='Exercises[$key][answers][]' value='$listWord' />"
                   ."</div>";
     }             

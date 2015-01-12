@@ -9,7 +9,8 @@
                 <div class="head clearfix">
                     <div class="number"><?php echo $position; ?></div>
                     <div class="condition">
-                        <?php echo GraphicWidgets::transform($exercise->condition);?>
+                        <?php $gw = new GraphicWidgets($exercise->condition);?>
+                        <?php echo $gw->draw(); ?>
                     </div>
                 </div>
                 <div class="answer clearfix">
