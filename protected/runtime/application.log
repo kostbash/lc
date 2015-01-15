@@ -38777,3 +38777,561 @@ in D:\sites\education\www\index.php (13)
 2015/01/12 18:20:02 [warning] [application] Не удалось присвоить небезопасный атрибут "SkillsIds" класса "Exercises".
 in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (1237)
 in D:\sites\education\www\index.php (13)
+2015/01/12 20:05:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/12 20:13:45 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/12 20:14:15 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/12 20:15:21 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/12 20:29:04 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/13 04:06:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/13 16:30:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/13 16:36:01 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/13 16:38:48 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/13 16:39:28 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/13 16:40:08 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/13 16:41:33 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/13 16:41:43 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/14 14:37:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/14 14:38:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "images/lessons/3b03a01989.png".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('images/lessons/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/images/lessons/3b03a01989.png
+HTTP_REFERER=http://education.loc/admin/generators/generation/id/2/id_group/596
+---
+2015/01/14 14:38:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "images/lessons/d0e46c11e4.jpg".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('images/lessons/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/images/lessons/d0e46c11e4.jpg
+HTTP_REFERER=http://education.loc/admin/generators/generation/id/2/id_group/596
+---
+2015/01/14 14:38:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "images/lessons/f836154ad0.jpg".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('images/lessons/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/images/lessons/f836154ad0.jpg
+HTTP_REFERER=http://education.loc/admin/generators/generation/id/2/id_group/596
+---
+2015/01/14 14:38:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "images/lessons/46c5ec6076.jpg".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('images/lessons/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/images/lessons/46c5ec6076.jpg
+HTTP_REFERER=http://education.loc/admin/generators/generation/id/2/id_group/596
+---
+2015/01/14 14:38:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "images/lessons/1d7592b894.jpg".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('images/lessons/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/images/lessons/1d7592b894.jpg
+HTTP_REFERER=http://education.loc/admin/generators/generation/id/2/id_group/596
+---
+2015/01/15 03:50:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/15 03:57:41 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 04:01:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathMenu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathMenu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:01:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathZoom.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathZoom.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathMenu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathMenu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathZoom.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathZoom.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathMenu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathMenu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathMenu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathMenu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathZoom.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathZoom.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathMenu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathMenu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:02:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/extensions/MathZoom.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/extensions/M...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/extensions/MathZoom.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:07:05 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 04:12:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:12:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/input/TeX/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/input/TeX/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:14:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/jax/output/HTML-CSS/config.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/jax/...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/jax/output/HTML-CSS/config.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 04:18:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/fonts/HTML-CSS/TeX/png/imagedata.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/font...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/fonts/HTML-CSS/TeX/png/imagedata.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 13:13:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/15 13:19:00 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Некорректный запрос.' in D:\sites\education\www\framework\web\CController.php:336
+Stack trace:
+#0 D:\sites\education\www\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 D:\sites\education\www\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 D:\sites\education\www\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 D:\sites\education\www\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 D:\sites\education\www\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 D:\sites\education\www\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 D:\sites\education\www\framework\web\CController.php(291): CFilterChain->run()
+#7 D:\sites\education\www\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 D:\sites\education\www\framework\web\CWebApplication.php(282): CController->run('pass')
+#9 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('lessons/pass/[C...')
+#10 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#11 D:\sites\education\www\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/lessons/pass/[Contrib]/forminput.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 13:20:04 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 13:20:06 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Некорректный запрос.' in D:\sites\education\www\framework\web\CController.php:336
+Stack trace:
+#0 D:\sites\education\www\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 D:\sites\education\www\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 D:\sites\education\www\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 D:\sites\education\www\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 D:\sites\education\www\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 D:\sites\education\www\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 D:\sites\education\www\framework\web\CController.php(291): CFilterChain->run()
+#7 D:\sites\education\www\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 D:\sites\education\www\framework\web\CWebApplication.php(282): CController->run('pass')
+#9 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('lessons/pass/[C...')
+#10 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#11 D:\sites\education\www\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/lessons/pass/[Contrib]/forminput.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 13:20:38 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Некорректный запрос.' in D:\sites\education\www\framework\web\CController.php:336
+Stack trace:
+#0 D:\sites\education\www\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 D:\sites\education\www\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 D:\sites\education\www\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 D:\sites\education\www\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 D:\sites\education\www\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 D:\sites\education\www\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 D:\sites\education\www\framework\web\CController.php(291): CFilterChain->run()
+#7 D:\sites\education\www\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 D:\sites\education\www\framework\web\CWebApplication.php(282): CController->run('pass')
+#9 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('lessons/pass/[C...')
+#10 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#11 D:\sites\education\www\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/lessons/pass/[Contrib]/forminput.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 13:23:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "js/mathJax/extensions/forminpu.js".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('js/mathJax/exte...')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/js/mathJax/extensions/forminpu.js?rev=2.4-beta-2
+HTTP_REFERER=http://education.loc/lessons/pass/1061
+---
+2015/01/15 13:26:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/15 13:26:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "favicon.ico".' in D:\sites\education\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 D:\sites\education\www\framework\web\CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 D:\sites\education\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 D:\sites\education\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2015/01/15 14:01:10 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 14:20:17 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 14:24:02 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 14:24:38 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 14:26:39 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)
+2015/01/15 14:30:18 [warning] [application] Не удалось присвоить небезопасный атрибут "questions" класса "Exercises".
+in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
+in D:\sites\education\www\index.php (13)

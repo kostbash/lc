@@ -3,6 +3,7 @@
 class WidgetClock
 {
     public $params;
+    public $answers;
     function __construct($params) {
         $this->params = $params;
     }
@@ -30,6 +31,7 @@ class WidgetClock
                 $text .= "</svg>";
             $text .= "</div>";
         $text .= "</div>";
+        $this->answers = $answers;
         return $text;
     }
     

@@ -1,5 +1,18 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery.svg.min.js"); ?>
+<?php //Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/mathJax/MathJax.js"); ?>
+
+ <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js","/js/mathJax/extensions/forminput.js"],
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+        TeX: {extensions: ["AMSmath.js","AMSsymbols.js"]}
+    });
+ </script>
+
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl;?>/js/mathJax/MathJax.js"></script>
+
 <script type="text/javascript">
     $(function(){
         $(document).bind('keyup keydown keypress', function (e) {

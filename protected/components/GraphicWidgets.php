@@ -2,6 +2,7 @@
 require_once 'graphicWidgets/WidgetClock.php';
 require_once 'graphicWidgets/WidgetDivCol.php';
 require_once 'graphicWidgets/WidgetInput.php';
+require_once 'graphicWidgets/WidgetExpression.php';
 
 class GraphicWidgets
 {
@@ -26,7 +27,7 @@ class GraphicWidgets
     
     function setWidgets()
     {
-        preg_match_all("#//([\d\w]*)=\((.*)\)//#uUm", $this->rawText, $matches, PREG_SET_ORDER);
+        preg_match_all("#\[([\d\w]*):\{(.*)\}\]#uUm", $this->rawText, $matches, PREG_SET_ORDER);
         foreach($matches as $match)
         {
             $widget = $this->pick($match[1], CJSON::decode("{".$match[2]."}"));
@@ -53,6 +54,10 @@ class GraphicWidgets
         elseif($name==='inp')
         {
             $widget = new WidgetInput($params);
+        }
+        elseif($name==='ex')
+        {
+            $widget = new WidgetExpression($params);
         }
         
         return $widget;
