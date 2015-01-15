@@ -12,7 +12,7 @@ class WidgetInput
     {
         $text = "<div class='graphic-widget'>";
             $text .= "<div class='input'>";
-                if($this->params['r'] && $answers)
+                if($this->params['r']!=='' && $answers)
                 {
                     $attrs = array();
                     $atts['value'] = '';
@@ -44,7 +44,7 @@ class WidgetInput
     function getAnswersAttrs()
     {
         $attrs = array();
-        if($this->params['r'])
+        if($this->params['r']!=='')
         {
             $attrs[] = $this->params['r'];
         }

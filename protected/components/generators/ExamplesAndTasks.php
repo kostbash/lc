@@ -69,6 +69,7 @@ class ExampleAndTasks
         $attempts = 0; // попытки сгенировать
         $exercises = array();
         $answers = array();
+        $questions = array();
         while(($count < $this->template->number_exercises) && $attempts < 1000)
         {
             $forReplace = $this->template->ForPeplace;
@@ -104,7 +105,7 @@ class ExampleAndTasks
                         $convertedCorrectAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $this->template->correct_answers);
                         $convertedCorrectAnswers = preg_replace_callback("@#(.*)#@uUm", "Generators::callBackForBraces", $convertedCorrectAnswers); // выполняем выражения в ##
                         //$convertedCorrectAnswers = preg_replace_callback("#\[(.*)\]#uUm", "Generators::callBackForSquareBrackets", $convertedCorrectAnswers); // выполняем выражения в []
-
+                        
                         if(!empty($wrongAnswers))
                         {
                             $convertedWrongAnswers = Generators::getConvertStrings($forReplace['patterns'], $forReplace['replacements'], $wrongAnswers);
@@ -130,9 +131,34 @@ class ExampleAndTasks
                     }
 
                     // сохраняем правильный ответ
-                    $index++;
-                    $answers[$count][$index]['answer'] = $convertedCorrectAnswers;
-                    $answers[$count][$index]['is_right'] = 1;
+                    if(isset($index))
+                    {
+                        $index++;
+                    }
+                    else
+                    {
+                        $index = 0;
+                    }
+                    
+                    if($this->template->id_visual==16)
+                    {
+                        $gw = new GraphicWidgets($convertedCorrectAnswers);
+                        $gwAnswers = $gw->getAnswersAttrs();
+                        foreach($gwAnswers as $gwAnswer)
+                        {
+                            $answers[$count][$index]['answer'] = $gwAnswer;
+                            $answers[$count][$index]['is_right'] = 1;
+                            $answers[$count][$index]['number'] = $index;
+                            $index++;
+                        }
+                        $questions[$count][] = $convertedCorrectAnswers;
+                    }
+                    else
+                    {
+                        $answers[$count][$index]['answer'] = $convertedCorrectAnswers;
+                        $answers[$count][$index]['is_right'] = 1;
+                    }
+
                     unset($index);
                     $count++;
                     $this->useReplacements[] = $forReplace['replacements'];
@@ -146,6 +172,7 @@ class ExampleAndTasks
             'attempts'=>$attempts,
             'exercises'=>$exercises,
             'answers'=>$answers,
+            'questions'=>$questions,
         );
     }
     

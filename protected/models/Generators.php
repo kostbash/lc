@@ -251,7 +251,7 @@ class Generators extends CActiveRecord
         }
         
         static function getVisualsForGenerator2() {
-            $visuals = ExercisesVisuals::model()->findAllByAttributes(array('id'=>array(1,2,3)));
+            $visuals = ExercisesVisuals::model()->findAllByAttributes(array('id'=>array(1,2,3,16)));
             $res = array();
             foreach($visuals as $visual)
             {

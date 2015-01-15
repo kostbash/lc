@@ -246,9 +246,10 @@
                     {
                         foreach($answer as $indexAnswer => $attrs)
                         {
-                            echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer][answer]", $attrs['answer']);
-                            if($attrs['is_right'])
-                                echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer][is_right]", 1);
+                            foreach($attrs as $attrName => $val)
+                            {
+                                echo CHtml::hiddenField("Exercises[$indexExercise][answers][$indexAnswer][$attrName]", $val);
+                            }
                         }
                     }
                 }
@@ -268,6 +269,18 @@
                                 echo CHtml::hiddenField("Exercises[$indexExercise][comparisons][$indexComparison][$attrName]", $attr);
                             }
                         }
+                    }
+                }
+            ?>
+        </div>
+        
+        <div id="questionsHiddens">
+            <?php
+                if(!empty($questions))
+                {
+                    foreach($questions as $indexExercise => $question)
+                    {
+                        echo CHtml::hiddenField("Exercises[$indexExercise][questions][]", $question[0]);
                     }
                 }
             ?>

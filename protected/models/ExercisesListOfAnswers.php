@@ -29,7 +29,7 @@ class ExercisesListOfAnswers extends CActiveRecord
                     array('id_exercise', 'required'),
                     array('answer', 'requiredSpacePass'),
                     array('name', 'length', 'max'=>255),
-                    array('id_exercise, is_right, reg_exp, number_space, id_question, id_area', 'numerical', 'integerOnly'=>true),
+                    array('id_exercise, is_right, reg_exp, number_space, id_question, id_area, number', 'numerical', 'integerOnly'=>true),
                     array('imageFile', 'file', 'types'=>'jpg,jpeg, png, gif', 'allowEmpty'=>true),
                     array('deleteImage', 'boolean'),
                     array('id, id_exercise, answer', 'safe', 'on'=>'search'),

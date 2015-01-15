@@ -145,19 +145,36 @@
         $('#GeneratorsTemplates_id_visual').change(function(){
             vis = $('#visualization');
             current = $(this);
+            separate = $('#separate');
+            check = separate.find('input[type=checkbox]');
+            correctAnswer = $('#correct-answers-cont');
+            label = correctAnswer.find('label');
             vis.find('.row').remove();
-            if(current.val()==2 || current.val()==3)
+            
+            if(current.val()==16)
             {
-                $.ajax({
-                    url: '<?php echo Yii::app()->createUrl('admin/generators/gethtmlvisual'); ?>',
-                    data: { id_visual: $(this).val() },
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function(result) {
-                        if(result.success)
-                            vis.append(result.html).removeClass('hide');
-                    }
-                });
+                check.attr('checked', 'checked');
+                separate.addClass('hide');
+                label.html('Текст задания');
+                correctAnswer.show();
+            }
+            else
+            {
+                separate.removeClass('hide');
+                label.html('Правильный ответ');
+                if(current.val()==2 || current.val()==3)
+                {
+                    $.ajax({
+                        url: '<?php echo Yii::app()->createUrl('admin/generators/gethtmlvisual'); ?>',
+                        data: { id_visual: $(this).val() },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(result) {
+                            if(result.success)
+                                vis.append(result.html).removeClass('hide');
+                        }
+                    });
+                }
             }
         });
         
@@ -390,10 +407,10 @@
                   <?php echo CHtml::textField("GeneratorsTemplates[number_exercises]", $generator->Template->number_exercises, array('maxlength'=>11, 'class'=>'form-control only-number', 'placeholder' => 'Введите число заданий')); ?>
                   <div class="errorMessage"></div>
               </div>
-              <div class="col-lg-4 col-md-4">
+              <div id="separate" class="col-lg-4 col-md-4<?php if($generator->Template->id_visual==16) echo ' hide'; ?>">
                   <?php echo CHtml::hiddenField("GeneratorsTemplates[separate_template_and_correct_answers]", 0, array('id'=>false)); ?>
                   <?php echo CHtml::checkBox("GeneratorsTemplates[separate_template_and_correct_answers]", $generator->Template->separate_template_and_correct_answers, array('style'=>'float: left; width: 5%;')); ?>
-                  <?php echo CHtml::label("Раздельные шаблоны условия и правильнго ответа", 'GeneratorsTemplates_separate_template_and_correct_answers', array('style'=>'font-size: 14px; line-height: 14px; float: left; width: 93%; margin-left: 2%;')); ?>
+                  <?php echo CHtml::label("Раздельные шаблоны условия и правильного ответа", 'GeneratorsTemplates_separate_template_and_correct_answers', array('style'=>'font-size: 14px; line-height: 14px; float: left; width: 93%; margin-left: 2%;')); ?>
               </div>
             </div>
           <div class="row">
@@ -407,7 +424,7 @@
           </div>
           <div class="row" id="correct-answers-cont" <?php if(!$generator->Template->separate_template_and_correct_answers) echo 'style="display: none"'; ?>>
               <div class="col-lg-2 col-md-2">
-                  <?php echo CHtml::label('Правильный ответ', 'GeneratorsTemplates_correct_answers'); ?>
+                  <?php echo CHtml::label($generator->Template->id_visual==16 ? 'Текст задания' : 'Правильный ответ', 'GeneratorsTemplates_correct_answers'); ?>
               </div>
               <div class="col-lg-6 col-md-6">
                   <?php echo CHtml::textField($generator->Template->separate_template_and_correct_answers ? "GeneratorsTemplates[correct_answers]" : "", $generator->Template->correct_answers, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение', 'id'=>'GeneratorsTemplates_correct_answers')); ?>
@@ -461,9 +478,9 @@
       ?>
     </div>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить условие', '#', array('class'=>'btn btn-success btn-icon', 'id'=>'add-condition')); ?>
-    <div class="section<?php if(!$generator->Template->id_visual || $generator->Template->id_visual==1) echo ' hide'; ?>" id='visualization'>
+    <div class="section<?php if(!$generator->Template->id_visual || $generator->Template->id_visual==1 or $generator->Template->id_visual==16) echo ' hide'; ?>" id='visualization'>
         <h3 class="head">Шаблоны неправильных ответов</h3>
-        <?php if($generator->Template->id_visual && $generator->Template->id_visual!=1) $this->renderPartial("visualizations/{$generator->Template->id_visual}", array('model'=>$generator->Template)); ?>
+        <?php if($generator->Template->id_visual && $generator->Template->id_visual!=1 && $generator->Template->id_visual!=16) $this->renderPartial("visualizations/{$generator->Template->id_visual}", array('model'=>$generator->Template)); ?>
     </div>
 </div>
 <?php $this->endWidget(); ?>

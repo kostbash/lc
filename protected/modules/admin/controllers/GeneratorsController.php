@@ -143,6 +143,18 @@ class GeneratorsController extends Controller
                                 $comparison->isNewRecord = true;
                             }
                         }
+                        
+                        if($attributes['questions'])
+                        {
+                            $question = new ExercisesComparisons;
+                            foreach($attributes['questions'] as $text)
+                            {
+                                $question = new ExercisesQuestions;
+                                $question->text = $text;
+                                $question->id_exercise = $exercise->id;;
+                                $question->save();
+                            }
+                        }
 
                         if($part) // если существует часть значит добавляем задания в нее
                         {
@@ -186,6 +198,7 @@ class GeneratorsController extends Controller
                     'count' => $resultGeneration['count'],
                     'answers' => $resultGeneration['answers'],
                     'comparisons' => $resultGeneration['comparisons'],
+                    'questions' => $resultGeneration['questions'],
             ));
         }
 
