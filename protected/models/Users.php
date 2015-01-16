@@ -576,6 +576,19 @@ class Users extends CActiveRecord
             return '-';
         }
         
+        public function getParent()
+        {
+            if($this->role==2)
+            {
+                $parent = Children::model()->findByAttributes(array('id_child'=>$this->id));
+                if($parent)
+                {
+                    return $parent->Parent;
+                }
+            }
+            return NULL;
+        }
+        
         public static function listLastActivity()
         {
             $list = array();
