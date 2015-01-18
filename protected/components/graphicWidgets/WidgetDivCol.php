@@ -29,7 +29,7 @@ class WidgetDivCol
                                     $text .= "<td> </td>";
                                 $text .= "</tr>";
                                 $text .= "<tr>";
-                                    $text .="<td><div class='under'>-".$sub['subtractor']."</div></td>";
+                                    $text .="<td><div class='minus'>-</div><div class='under'> ".$sub['subtractor']."</div></td>";
                                     $text .="<td class='right'>".$this->values['rightAnswer']."</td>";
                                     $text .="<td> </td>";
                                 $text .= "</tr>";
@@ -40,7 +40,7 @@ class WidgetDivCol
                                     $text .= "<td colspan='".$this->values['dividentLength']."'>".str_repeat('&nbsp;', $k*2+1).$sub['subtrahend']."</td>";
                                 $text .= "</tr>";
                                 $text .= "<tr>";
-                                    $text .= "<td colspan='".$this->values['dividentLength']."'>".str_repeat('&nbsp;', $k*2)."<div class='under'>-".$sub['subtractor']."</div></td>";
+                                    $text .= "<td colspan='".$this->values['dividentLength']."'>".str_repeat('&nbsp;', $k*2)."<div class='minus'>-</div><div class='under'> ".$sub['subtractor']."</div></td>";
                                 $text .= "</tr>";
                             }
                             $k++;
@@ -99,7 +99,7 @@ class WidgetDivCol
             foreach($inps as $inp)
             {
                 $key = key($answers);
-                $answer = CHtml::textField("Exercises[$numberOfExercise][answers][".$answers[$key]->id."]", '', array('style'=>"width:" . (mb_strlen($answers[$key]->answer, 'UTF-8') * 9+8) . "px;"));
+                $answer = CHtml::textField("Exercises[$numberOfExercise][answers][".$answers[$key]->id."]", '', array('style'=>"width:" . (mb_strlen($answers[$key]->answer, 'UTF-8') * 9+4) . "px;"));
                 if($inp=='a')
                 {
                     $this->values['rightAnswer'] = $answer;
