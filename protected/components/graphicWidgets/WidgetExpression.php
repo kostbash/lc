@@ -16,7 +16,7 @@ class WidgetExpression
     {
         $this->addInps($answers, $numberOfExercise);
         $text = "<div class='graphic-widget'>";
-            $text .= "<div class='expression'>";
+            $text .= "<div class='expression hideMathJax tex2jax_process'>";
                 if($this->params['e'])
                 {
                     $text .= "\[" . $this->params['e'] . "\]";

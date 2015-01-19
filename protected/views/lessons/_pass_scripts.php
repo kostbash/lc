@@ -1,8 +1,21 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery-ui.js"); ?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/jquery.svg.min.js"); ?>
-<?php //Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/mathJax/MathJax.js"); ?>
 
- <script type="text/x-mathjax-config">
+<?php Yii::app()->clientScript->registerScript('',' MathJax.Hub.Config({
+        extensions: ["tex2jax.js","http://cs.jsu.edu/mathjax-ext/github/forminput/forminput.js"],
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+            inlineMath: [["$","$"],["\\(","\\)"]],
+            ignoreClass: "tex2jax_ignore",
+            processClass: "tex2jax_process",
+            preview: "Подождите..."
+        },
+        TeX: {extensions: ["AMSmath.js","AMSsymbols.js"]}
+    });
+        ',  CClientScript::POS_HEAD, array('type'=>'text/x-mathjax-config')); ?>
+<?php //Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/mathJax/MathJax.js", CClientScript::POS_HEAD); ?>
+<?php /*
+<script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         extensions: ["tex2jax.js","/js/mathJax/extensions/forminput.js"],
         jax: ["input/TeX","output/HTML-CSS"],
@@ -10,7 +23,7 @@
         TeX: {extensions: ["AMSmath.js","AMSsymbols.js"]}
     });
  </script>
-
+*/ ?>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl;?>/js/mathJax/MathJax.js"></script>
 
 <script type="text/javascript">
@@ -476,4 +489,8 @@
         ++seconds;
     }
     setInterval('countTime()', 1000);
+    
+    $(document).ready(function(){
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub], function(){$(".hideMathJax").removeClass('hideMathJax');});
+    });
 </script>

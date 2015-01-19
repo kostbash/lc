@@ -18,7 +18,7 @@
     
 </head>
 
-<body>
+<body class="tex2jax_ignore">
     <div id="wrapper">
         <div id="header">
             <div id="back-header-top">

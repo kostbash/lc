@@ -16,7 +16,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<body>
+<body class="tex2jax_ignore">
 <div class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
