@@ -1,5 +1,5 @@
 <?php
-
+Yii::import("application.models.*");
 function transformationFormat($matches)
 {
     return "[".$matches[1].":{".$matches[2]."}]";
@@ -10,6 +10,7 @@ class m150115_113111_change_base extends CDbMigration
 	public function up()
 	{
             set_time_limit(60000);
+            ini_set("memory_limit","1200M");
 
             $answers = ExercisesListOfAnswers::model()->findAll();
             foreach($answers as $answer)
