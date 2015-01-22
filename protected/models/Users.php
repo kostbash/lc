@@ -92,6 +92,7 @@ class Users extends CActiveRecord
 			array('recovery_answer', 'length', 'max'=>100),
 			array('progress_key', 'length', 'max'=>25),
                         array('emailParentOnReg', 'needEmailOnReg'),
+                        array('emailParentOnReg', 'differentWithChild'),
                         array('emailParentOnReg', 'uniqueParentEmailOnReg'),
                     	array('email', 'unique', 'message'=>'Указанный почтовый адрес уже используется'),
                     	array('username', 'unique', 'message'=>'Указанный логин уже используется'),
@@ -133,6 +134,12 @@ class Users extends CActiveRecord
             {
                 $this->addError($attr, 'Введите Ваш e-mail');
             }
+        }
+        
+        public function differentWithChild($attr, $params)
+        {
+            if($this->username == $this->emailParentOnReg)
+                $this->addError($attr, 'Логин родителя должен отличаться от логина ученика.');
         }
         
         public function uniqueParentEmailOnReg($attr, $params)
