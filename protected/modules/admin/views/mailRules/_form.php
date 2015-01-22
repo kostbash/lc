@@ -202,4 +202,20 @@
     </div>
 <?php $this->endWidget(); ?>
 
+    <div>
+        <?php
+            $users = $model->selectUsers();
+            if($users)
+            {
+                foreach($users as $user)
+                {
+                    echo $user->username."<br>";
+                }
+            }
+            else {
+                echo "нет отобранных пользователей";
+            }
+        ?>
+    </div>    
+    
 </div><!-- form -->
