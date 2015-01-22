@@ -134,7 +134,7 @@ class MailRules extends CActiveRecord
             }
             
             $condition .= " AND ";
-            $condition .= "(`email` IS NOT NULL OR EXISTS(SELECT * FROM `{$prefix}children` WHERE `id_child`=user.id AND `status`=2))";
+            $condition .= "(`email` IS NOT NULL OR EXISTS(SELECT * FROM `{$prefix}children` WHERE `id_child`=user.id AND `status`=1))";
             
             if($this->use_number)
             {
