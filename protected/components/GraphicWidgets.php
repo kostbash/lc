@@ -1,6 +1,9 @@
 <?php
 require_once 'graphicWidgets/WidgetClock.php';
 require_once 'graphicWidgets/WidgetDivCol.php';
+require_once 'graphicWidgets/WidgetMultCol.php';
+require_once 'graphicWidgets/WidgetAddCol.php';
+require_once 'graphicWidgets/WidgetSubCol.php';
 require_once 'graphicWidgets/WidgetInput.php';
 require_once 'graphicWidgets/WidgetExpression.php';
 
@@ -12,9 +15,11 @@ class GraphicWidgets
     public $widgets = array();
     public $widgetsTexts = array();
     public $numberOfExercise = null;
+    public static $key = 0;
     
     function __construct($rawText, Exercises $exercise=null, $numberOfExercise=null)
     {
+        self::$key = 0;
         if($exercise)
         {
             $this->exercise = $exercise;
@@ -43,21 +48,15 @@ class GraphicWidgets
     {
         $widget = null;
         
-        if($name==='clock')
+        switch($name)
         {
-            $widget = new WidgetClock($params);
-        }
-        elseif($name==='div_col')
-        {
-            $widget = new WidgetDivCol($params);
-        }
-        elseif($name==='inp')
-        {
-            $widget = new WidgetInput($params);
-        }
-        elseif($name==='ex')
-        {
-            $widget = new WidgetExpression($params);
+            case "clock": $widget = new WidgetClock($params); break;
+            case "div_col": $widget = new WidgetDivCol($params); break;
+            case "inp": $widget = new WidgetInput($params); break;
+            case "ex": $widget = new WidgetExpression($params); break;
+            case "mult_col": $widget = new WidgetMultCol($params); break;
+            case "add_col": $widget = new WidgetAddCol($params); break;
+            case "sub_col": $widget = new WidgetSubCol($params); break;
         }
         
         return $widget;

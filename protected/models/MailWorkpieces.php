@@ -145,7 +145,7 @@ class MailWorkpieces extends CActiveRecord
         {
             if(!$this->send)
             {
-                return CHtml::link('<i class="glyphicon glyphicon-envelope"></i>Отправить', array('/admin/mailworkpieces/sendmessage', 'id'=>$this->id), array('class'=>'btn btn-sm btn-icon btn-info send-message'));
+                return CHtml::link('<i class="glyphicon glyphicon-envelope"></i>Отправить', array('/admin/mailWorkpieces/sendMessage', 'id'=>$this->id), array('class'=>'btn btn-sm btn-icon btn-info send-message'));
             }
             else
             {

@@ -4825,3 +4825,168 @@ z-index:10000000;
     visibility:hidden;
 }
 .hideMathJax:before{content:"Ждите...";visibility:visible;}
+
+/* MULT COL*/
+.graphic-widget .mult_col table
+{
+    font-size: 16px;
+    line-height: 16px;
+    text-align: left;
+    table-layout: fixed;
+    border-collapse: collapse;
+    letter-spacing: 3px;
+}
+
+.graphic-widget .num
+{
+    width: 12px;
+/* text-align: center; */
+display: inline-block;
+padding-left: 1px;
+}
+
+.graphic-widget .mult_col table td
+{
+    white-space: pre-wrap;
+    padding: 2px 0 0 2px;
+    text-align:right;
+}
+
+.graphic-widget .mult_col table .dir
+{
+    border-left:1px solid black;
+    border-bottom:1px solid black;
+}
+
+.graphic-widget .mult_col table .right
+{
+    border-left:1px solid black;
+}
+
+.graphic-widget .mult_col table .residue
+{
+    
+}
+
+.graphic-widget .mult_col table input
+{
+    display: inline-block;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1px;
+    margin-bottom: 1px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.graphic-widget .mult_col table .minus
+{
+    position: absolute;
+    top: -6px;
+    display: inline-block;
+    left: 0;
+    font-size: 12px;
+}
+
+
+.graphic-widget .mult_col table .plus
+{
+    position: absolute;
+    top: -6px;
+    display: inline-block;
+    left: 0;
+    font-size: 12px;
+}
+
+#lesson-page .graphic-widget .mult_col .under {
+display: inline-block;
+border-bottom: 1px solid #000;
+}
+/* END MULT COL*/
+/* ADD-SUB COL*/
+.graphic-widget .add_col table,.graphic-widget .sub_col table
+{
+    font-size: 16px;
+    line-height: 16px;
+    text-align: left;
+    table-layout: fixed;
+    border-collapse: collapse;
+    letter-spacing: 3px;
+}
+
+.graphic-widget .num
+{
+    width: 12px;
+/* text-align: center; */
+display: inline-block;
+padding-left: 1px;
+}
+
+.graphic-widget .add_col table td,.graphic-widget .sub_col table td
+{
+    white-space: pre-wrap;
+    padding: 2px 0 0 2px;
+    text-align:right;
+}
+
+.graphic-widget .add_col table .dir,.graphic-widget .sub_col table .dir
+{
+    border-left:1px solid black;
+    border-bottom:1px solid black;
+}
+
+.graphic-widget .add_col table .right,.graphic-widget .sub_col table .right
+{
+    border-left:1px solid black;
+}
+
+.graphic-widget .mult_col table .residue
+{
+    
+}
+
+.graphic-widget .add_col table input,.graphic-widget .sub_col table input
+{
+    display: inline-block;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1px;
+    margin-bottom: 1px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.graphic-widget .add_col table .minus,.graphic-widget .sub_col table .minus
+{
+    position: absolute;
+    top: -6px;
+    display: inline-block;
+    left: 0;
+    font-size: 12px;
+}
+
+
+.graphic-widget .add_col table .plus,.graphic-widget .sub_col table .plus
+{
+    position: absolute;
+    top: -6px;
+    display: inline-block;
+    left: 0;
+    font-size: 12px;
+}
+
+#lesson-page .graphic-widget .add_col .under,#lesson-page .graphic-widget .sub_col .under {
+display: inline-block;
+border-bottom: 1px solid #000;
+}
+/* END ADD-SUB COL*/
