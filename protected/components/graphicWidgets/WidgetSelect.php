@@ -25,6 +25,11 @@ class WidgetSelect
 		}
         $text .= "</div>";
 
+		if($answers)
+        {
+            $this->answers = $answers;
+        }
+		
         return $text;
     }
     
