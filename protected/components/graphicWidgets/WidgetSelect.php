@@ -10,7 +10,7 @@ class WidgetSelect
     
     function draw($answers=null, $numberOfExercise=null)
     {
-        $text = "<div class='graphic-widget'>";
+        $text = "<div class='dropdown-list'>";
 		if($this->params['a']!=='' && $answers)
 		{
 			$key = key($answers);
