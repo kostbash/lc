@@ -6,6 +6,7 @@ require_once 'graphicWidgets/WidgetAddCol.php';
 require_once 'graphicWidgets/WidgetSubCol.php';
 require_once 'graphicWidgets/WidgetInput.php';
 require_once 'graphicWidgets/WidgetExpression.php';
+require_once 'graphicWidgets/WidgetSelect.php';
 
 class GraphicWidgets
 {
@@ -57,6 +58,7 @@ class GraphicWidgets
             case "mult_col": $widget = new WidgetMultCol($params); break;
             case "add_col": $widget = new WidgetAddCol($params); break;
             case "sub_col": $widget = new WidgetSubCol($params); break;
+            case "select": $widget = new WidgetSelect($params); break;
         }
         
         return $widget;
