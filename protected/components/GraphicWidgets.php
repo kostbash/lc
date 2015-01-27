@@ -7,6 +7,7 @@ require_once 'graphicWidgets/WidgetSubCol.php';
 require_once 'graphicWidgets/WidgetInput.php';
 require_once 'graphicWidgets/WidgetExpression.php';
 require_once 'graphicWidgets/WidgetSelect.php';
+require_once 'graphicWidgets/WidgetRadio.php';
 
 class GraphicWidgets
 {
@@ -59,6 +60,7 @@ class GraphicWidgets
             case "add_col": $widget = new WidgetAddCol($params); break;
             case "sub_col": $widget = new WidgetSubCol($params); break;
             case "select": $widget = new WidgetSelect($params); break;
+            case "radio": $widget = new WidgetRadio($params); break;
         }
         
         return $widget;
