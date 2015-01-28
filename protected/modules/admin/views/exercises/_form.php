@@ -294,6 +294,7 @@
     
 <div class="section<?php if(!$model->id_visual) echo ' hide'; ?>" id='visualization' data-visual="<?php echo $model->id_visual; ?>">
     <h2>Визуализация</h2>
+	<?php if($model->id_type=='8') $this->widget("application.modules.admin.widgets.ButtonsWidget"); ?>
     <?php if($model->id_visual) $this->renderPartial("visualizations/{$model->id_visual}", array('model'=>$model, 'id_group'=>$id_group, 'id_part'=>$id_part, 'id_map'=>$id_map)); ?>
 </div>
     

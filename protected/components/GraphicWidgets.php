@@ -88,5 +88,12 @@ class GraphicWidgets
         }
         return $attrs;
     }
+	
+	public function getAllWidgetsName()
+    {
+		$arr=array("clock","div_col","inp","ex","mult_col","add_col","sub_col", "select", "radio");
+		
+		return $arr;
+    }
 }
 
