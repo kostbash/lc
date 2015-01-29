@@ -1218,16 +1218,21 @@ class ExercisesController extends Controller {
         Yii::app()->end();
     }
 
-    public function actionBuildExpressionButtons($widget) {
-        if ($_POST) {
-            $arr[$widget]['r'] = $_POST['r'];
-            $arr[$widget]['w'] = $_POST['w'];
+    public function actionBuildExpressionButtons() {
 
-            $json = CJSON::encode($arr);
+        if ($_POST) {
+           
+            $widget = $_POST['widget'];
+            $post = $_POST;
+            unset($post['widget']);
+            
+            foreach ($post as $key => $row)
+                $arr[$widget][$key] = trim($row);
+
+            $json = json_encode($arr, JSON_UNESCAPED_UNICODE);
             $json = substr($json, 1, -1);
             $json = str_replace('"' . $widget . '"', $widget, $json);
 
-            //echo urlencode("[".$json."]");
             echo "[" . $json . "]";
         }
     }

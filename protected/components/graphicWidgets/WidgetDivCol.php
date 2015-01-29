@@ -173,5 +173,34 @@ class WidgetDivCol
         }
         return array_unique($inps);
     }
+    
+        function drawModalBody() {
+
+        echo '<div class="row">
+                    <div class="col-lg-5 col-md-5">
+                            <label for="">Делимое</label>
+                    </div>
+                    <div class="col-lg-5 col-md-5">
+                            <input type="text" name="did"/>
+                    </div>
+            </div>
+            <div class="row">
+                    <div class="col-lg-5 col-md-5">
+                            <label for="">Делитель</label>
+                    </div>
+                    <div class="col-lg-5 col-md-5">
+                            <input type="text" name="dir"/>
+                    </div>
+            </div>
+            <div class="row">
+                    <div class="col-lg-5 col-md-5">
+                            <label for="">Коды мест вставки полей ввода</label>
+                    </div>
+                    <div class="col-lg-5 col-md-5">
+                            <input type="text" name="inps"/>
+                    </div>
+            </div>
+            ';
+    }
 }
 
