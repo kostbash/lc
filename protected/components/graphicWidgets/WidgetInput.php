@@ -1,76 +1,69 @@
 <?php
 
-class WidgetInput
-{
+class WidgetInput {
+
     public $params;
     public $answers;
+
     function __construct($params) {
         $this->params = $params;
     }
-    
-    function draw($answers=null, $numberOfExercise=null)
-    {
+
+    function draw($answers = null, $numberOfExercise = null) {
         $text = "<div class='graphic-widget'>";
-            $text .= "<div class='input'>";
-                if($this->params['r']!=='' && $answers)
-                {
-                    $attrs = array();
-                    $atts['value'] = '';
-                    $atts['style'] = '';
-                    $width = (int) $this->params['w'] ? (int) $this->params['w'] : (mb_strlen($this->params['r'], 'UTF-8') * 9)+14;
-                    $key = key($answers);
-                    $id = $answers[$key]->id;
-                    if($width)
-                    {
-                        $attrs['style'] .= "width:{$width}px;";
-                    }
+        $text .= "<div class='input'>";
+        if ($this->params['r'] !== '' && $answers) {
+            $attrs = array();
+            $atts['value'] = '';
+            $atts['style'] = '';
+            $width = (int) $this->params['w'] ? (int) $this->params['w'] : (mb_strlen($this->params['r'], 'UTF-8') * 9) + 14;
+            $key = key($answers);
+            $id = $answers[$key]->id;
+            if ($width) {
+                $attrs['style'] .= "width:{$width}px;";
+            }
 
-                    if($id)
-                    {
-                        unset($answers[$key]);
-                    }
+            if ($id) {
+                unset($answers[$key]);
+            }
 
-                    $text .= CHtml::textField("Exercises[$numberOfExercise][answers][$id]", '', $attrs);
-                }
-            $text .= "</div>";
+            $text .= CHtml::textField("Exercises[$numberOfExercise][answers][$id]", '', $attrs);
+        }
         $text .= "</div>";
-        if($answers)
-        {
+        $text .= "</div>";
+        if ($answers) {
             $this->answers = $answers;
         }
         return $text;
     }
-    
-    function getAnswersAttrs()
-    {
+
+    function getAnswersAttrs() {
         $attrs = array();
-        if($this->params['r']!=='')
-        {
+        if ($this->params['r'] !== '') {
             $attrs[] = $this->params['r'];
         }
         return $attrs;
     }
-	
-	function drawModalBody() {
+
+    function drawModalBody() {
 
         echo '<div class="row">
-				<div class="col-lg-5 col-md-5">
-					<label for="">Правильный ответ</label>
-				</div>
-				<div class="col-lg-5 col-md-5">
-					<input type="text" name="r"/>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-5 col-md-5">
-					<label for="">Ширина в пикселях</label>
-				</div>
-				<div class="col-lg-5 col-md-5">
-					<input type="text" name="w"/>
-				</div>
-			</div>
-			';
+                    <div class="col-lg-5 col-md-5">
+                            <label for="">Правильный ответ</label>
+                    </div>
+                    <div class="col-lg-5 col-md-5">
+                            <input type="text" name="r"/>
+                    </div>
+            </div>
+            <div class="row">
+                    <div class="col-lg-5 col-md-5">
+                            <label for="">Ширина в пикселях</label>
+                    </div>
+                    <div class="col-lg-5 col-md-5">
+                            <input type="text" name="w"/>
+                    </div>
+            </div>
+            ';
     }
-	
-}
 
+}
