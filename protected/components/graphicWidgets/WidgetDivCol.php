@@ -198,7 +198,7 @@ class WidgetDivCol
                             <label for="">Коды мест вставки полей ввода</label>
                     </div>
                     <div class="col-lg-5 col-md-5">
-                            <input type="text" name="inps"/>
+                            <input type="text" name="inps[]"/>
                     </div>
             </div>
             ';

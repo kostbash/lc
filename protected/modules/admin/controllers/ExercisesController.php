@@ -1221,13 +1221,17 @@ class ExercisesController extends Controller {
     public function actionBuildExpressionButtons() {
 
         if ($_POST) {
-           
             $widget = $_POST['widget'];
             $post = $_POST;
             unset($post['widget']);
-            
-            foreach ($post as $key => $row)
-                $arr[$widget][$key] = trim($row);
+
+            foreach ($post as $key => $row) {
+                if (is_array($row) && count($row) > 0)
+                    $stroka = explode(",",$row[0]);
+                else
+                    $stroka = trim($row);
+                $arr[$widget][$key] = $stroka;
+            }
 
             $json = json_encode($arr, JSON_UNESCAPED_UNICODE);
             $json = substr($json, 1, -1);
