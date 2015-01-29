@@ -160,16 +160,17 @@ class WidgetDivCol
     {
         $inps = array();
         if($this->params['inps'])
-        {
-            $this->params['inps'];
-            $dirtyInps = explode(',', $this->params['inps']);
-            if($dirtyInps)
-            {
-                foreach($dirtyInps as $dirtyInp)
-                {
-                    $inps[] = trim($dirtyInp);
-                }
-            }
+        { 
+            return $this->params['inps'];
+//            $this->params['inps'];
+//            $dirtyInps = explode(',', $this->params['inps']);
+//            if($dirtyInps)
+//            {
+//                foreach($dirtyInps as $dirtyInp)
+//                {
+//                    $inps[] = trim($dirtyInp);
+//                }
+//            }
         }
         return array_unique($inps);
     }

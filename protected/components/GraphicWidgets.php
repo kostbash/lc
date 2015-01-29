@@ -70,7 +70,7 @@ class GraphicWidgets
     {
         foreach($this->widgets as $n => $widget)
         {
-            $len = mb_strlen($this->widgetsTexts[$n], 'UTF-8');
+            $len = mb_strlen($this->widgetsTexts[$n]);
             $begin = mb_strstr($this->rawText, $this->widgetsTexts[$n], true, 'UTF-8');
             $end = mb_substr(mb_strstr($this->rawText, $this->widgetsTexts[$n], false, 'UTF-8'), $len);
             $this->rawText = $begin . $widget->draw($this->answers, $this->numberOfExercise) . $end;
