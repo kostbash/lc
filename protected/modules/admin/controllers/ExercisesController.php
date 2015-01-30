@@ -1218,22 +1218,36 @@ class ExercisesController extends Controller {
         Yii::app()->end();
     }
 
-	/*
-	* Преобразовываем полученные данные из формы в json
- 	*
-	*/
-	
-    public function actionBuildExpressionButtons() {
+    /*
+     * Преобразовываем полученные данные из формы в json
+     *
+     */
 
+    public function actionBuildExpressionButtons() {
         if ($_POST) {
             $widget = $_POST['widget'];
             $post = $_POST;
             unset($post['widget']);
-
+            $arr2 = array();
+            
             foreach ($post as $key => $row) {
-                if (is_array($row) && count($row) > 0)
-                    $stroka = explode(",",$row[0]);
-                else
+                if (is_array($row) && count($row) > 0) {
+                    preg_match_all('/(\s?[^\[\],]+:?(?:\[([0-9,\s]+)?\])?)/', $row[0], $matches);
+
+                    if (count($matches[0])) {
+                        foreach ($matches[0] as $k => $r) {
+                            $r = trim($r);
+
+                            if (substr_count($r, '[')) {
+                                $exp_arr = explode("[", $r);
+                                $exp = trim($exp_arr[0], ":");
+                                $arr1 = (array) json_decode('{"' . $exp . '":[' . $exp_arr[1] . '}');
+                                $arr2 = $arr2 + $arr1;
+                            }
+                        }
+                        $stroka = $arr2;
+                    }
+                } else
                     $stroka = trim($row);
                 $arr[$widget][$key] = $stroka;
             }
