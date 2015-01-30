@@ -1218,6 +1218,11 @@ class ExercisesController extends Controller {
         Yii::app()->end();
     }
 
+	/*
+	* Преобразовываем полученные данные из формы в json
+ 	*
+	*/
+	
     public function actionBuildExpressionButtons() {
 
         if ($_POST) {

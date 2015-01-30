@@ -10,16 +10,21 @@
                 //dataType: 'json',
                 complete: function(result) {
 
-                    $('#Exercises_questions_0_text').val($('#Exercises_questions_0_text').val() + result.responseText);
+                    var area = $('#Exercises_questions_0_text');
+                    p_start = $('#textarea-position').val();
+                    area.val(area.val().substring(0, p_start) + result.responseText + area.val().substring(p_start, area.val().length));
+
                     $('#add-modal-' + widget).modal('hide');
                 }
             });
             return false;
         });
+        
+        $('#w').focus();
+
     });
 </script>
 <style>
-
     input:focus
     {
         background:#ccc;
@@ -37,9 +42,10 @@
             <div class="modal-body">
                 <form id="add-modal-form-<?php echo $widget; ?>" enctype="multipart/form-data">
                     <input id='add-modal-widget' type='hidden' name='widget' value='<?php echo $widget; ?>'/>
+                    <input id='textarea-position' type='hidden' value='0'/>
                     <?php
-                         $this->renderPartial('/exercises/modals/_'.$widget, array(), false, true);
-                        //$objWidget->drawModalBody();
+                    $this->renderPartial('/exercises/modals/_' . $widget, array(), false, true);
+                    //$objWidget->drawModalBody();
                     ?>
                 </form>
             </div>
