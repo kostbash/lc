@@ -1220,7 +1220,7 @@ class ExercisesController extends Controller {
 
     /*
      * Преобразовываем полученные данные из формы в json
-     *
+     * 
      */
 
     public function actionBuildExpressionButtons() {
