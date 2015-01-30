@@ -1224,14 +1224,17 @@ class ExercisesController extends Controller {
      */
 
     public function actionBuildExpressionButtons() {
+
         if ($_POST) {
             $widget = $_POST['widget'];
             $post = $_POST;
             unset($post['widget']);
             $arr2 = array();
-            
+
             foreach ($post as $key => $row) {
-                if (is_array($row) && count($row) > 0) {
+                if (trim($row[0] == ''))
+                    continue;
+                if (is_array($row) && count($row[0]) > 0) {
                     preg_match_all('/(\s?[^\[\],]+:?(?:\[([0-9,\s]+)?\])?)/', $row[0], $matches);
 
                     if (count($matches[0])) {
@@ -1245,7 +1248,8 @@ class ExercisesController extends Controller {
                                 $arr2 = $arr2 + $arr1;
                             }
                         }
-                        $stroka = $arr2;
+                        if (count($arr2))
+                            $stroka = $arr2;
                     }
                 } else
                     $stroka = trim($row);
