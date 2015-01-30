@@ -53,33 +53,4 @@ class WidgetSelect {
         }
         return array_unique($v);
     }
-
-    function drawModalBody() {
-
-        echo '<div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Название элементов выбора через запятую</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="v"/>
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Номер выделенного по умолчанию элемента, счет с 1</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="s"/>
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Номер правильного ответа, счет с 1</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="a"/>
-                    </div>
-            </div>
-            ';
-    }
 }

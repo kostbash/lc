@@ -44,26 +44,4 @@ class WidgetInput {
         }
         return $attrs;
     }
-
-    function drawModalBody() {
-
-        echo '<div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Правильный ответ</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="r"/>
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Ширина в пикселях</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="w"/>
-                    </div>
-            </div>
-            ';
-    }
-
 }

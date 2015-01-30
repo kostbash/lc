@@ -39,26 +39,5 @@ class WidgetClock
     {
         return array();
     }
-    
-    function drawModalBody() {
-
-        echo '<div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Часы</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="h"/>
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="col-lg-5 col-md-5">
-                            <label for="">Минуты</label>
-                    </div>
-                    <div class="col-lg-5 col-md-5">
-                            <input type="text" name="m"/>
-                    </div>
-            </div>
-            ';
-    }
 }
 
