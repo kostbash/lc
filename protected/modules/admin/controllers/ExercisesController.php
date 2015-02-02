@@ -1242,28 +1242,31 @@ class ExercisesController extends Controller {
             $arr2 = array();
 
             foreach ($post as $key => $row) {
-                if (trim($row[0] == ''))
-                    continue;
-                if (is_array($row) && count($row[0]) > 0) {
-                    preg_match_all('/(\s?[^\[\],]+:?(?:\[([0-9,\s]+)?\])?)/', $row[0], $matches);
+                $stroka = '';
 
-                    if (count($matches[0])) {
-                        foreach ($matches[0] as $k => $r) {
-                            $r = trim($r);
+                if (trim($row[0]) != '')
+                    if (is_array($row)) {
+                        preg_match_all('/(\s?[^\[\],]+:?(?:\[([0-9,\s]+)?\])?)/', $row[0], $matches);
 
-                            if (substr_count($r, '[')) {
-                                $exp_arr = explode("[", $r);
-                                $exp = trim($exp_arr[0], ":");
-                                $arr1 = (array) json_decode('{"' . $exp . '":[' . $exp_arr[1] . '}');
-                                $arr2 = $arr2 + $arr1;
+                        if (count($matches[0])) {
+                            foreach ($matches[0] as $k => $r) {
+                                $r = trim($r);
+
+                                if (substr_count($r, '[')) {
+                                    $exp_arr = explode("[", $r);
+                                    $exp = trim($exp_arr[0], ":");
+                                    $arr1 = (array) json_decode('{"' . $exp . '":[' . $exp_arr[1] . '}');
+                                    $arr2 = $arr2 + $arr1;
+                                } else
+                                    $stroka = trim($r);
                             }
+                            if (count($arr2))
+                                $stroka = $arr2;
                         }
-                        if (count($arr2))
-                            $stroka = $arr2;
-                    }
-                } else
-                    $stroka = trim($row);
-                $arr[$widget][$key] = $stroka;
+                    } else
+                        $stroka = trim($row);
+                if ($stroka)
+                    $arr[$widget][$key] = $stroka;
             }
 
             //$json = json_encode($arr, JSON_UNESCAPED_UNICODE);
@@ -1274,5 +1277,4 @@ class ExercisesController extends Controller {
             echo "[" . $json . "]";
         }
     }
-
 }
