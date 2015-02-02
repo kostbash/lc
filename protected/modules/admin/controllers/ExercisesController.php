@@ -1218,6 +1218,16 @@ class ExercisesController extends Controller {
         Yii::app()->end();
     }
 
+    public function json_encode($data) {
+        return preg_replace_callback('/\\\\ud([89ab][0-9a-f]{2})\\\\ud([c-f][0-9a-f]{2})|\\\\u([0-9a-f]{4})/i', function($val) {
+            return html_entity_decode(
+                    empty($val[3]) ?
+                            sprintf('&#x%x;', ((hexdec($val[1]) & 0x3FF) << 10) + (hexdec($val[2]) & 0x3FF) + 0x10000) :
+                            '&#x' . $val[3] . ';', ENT_NOQUOTES, 'utf-8'
+            );
+        }, json_encode($data));
+    }
+
     /*
      * Преобразовываем полученные данные из формы в json
      * 
@@ -1256,7 +1266,8 @@ class ExercisesController extends Controller {
                 $arr[$widget][$key] = $stroka;
             }
 
-            $json = json_encode($arr, JSON_UNESCAPED_UNICODE);
+            //$json = json_encode($arr, JSON_UNESCAPED_UNICODE);
+            $json = self::json_encode($arr);
             $json = substr($json, 1, -1);
             $json = str_replace('"' . $widget . '"', $widget, $json);
 
