@@ -54,7 +54,7 @@ class WidgetMultCol
         $mul1 = (int) $this->params['m1'];
         $mul2 = (int) $this->params['m2'];
         $this->values['subs'] = array();
-        if($mul1>0 && $mul2>0 && $mul1 >= $mul2)
+        if($mul1>0 && $mul2>0)
         {
             $mul1 = (string) $mul1;
             $mul2 = (string) $mul2;
