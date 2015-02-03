@@ -1258,7 +1258,7 @@ class ExercisesController extends Controller {
                                     $arr1 = (array) json_decode('{"' . $exp . '":[' . $exp_arr[1] . '}');
                                     $arr2 = $arr2 + $arr1;
                                 } else
-                                    $stroka = trim($r);
+                                    $arr2[$r] = array();
                             }
                             if (count($arr2))
                                 $stroka = $arr2;
@@ -1277,4 +1277,5 @@ class ExercisesController extends Controller {
             echo "[" . $json . "]";
         }
     }
+
 }
