@@ -33,11 +33,11 @@ class UsersController extends Controller
 				'roles'=>array('student'),
 			),
 			array('allow',
-				'actions'=>array('forget', 'accessDenyByConfirm', 'activate'),
+				'actions'=>array('forget', 'accessDenyByConfirm'),
 				'users'=>array('?'),
 			),
 			array('allow',
-				'actions'=>array('recovery', 'achievements', 'unsubscribe'),
+				'actions'=>array('recovery', 'achievements', 'unsubscribe', 'activate'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
