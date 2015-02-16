@@ -113,7 +113,7 @@ class MailWorkpiecesController extends Controller
                                 'email' => Yii::app()->params['adminEmail'],
                                 'name' => 'Cursys.ru',
                             ),
-                            $model->subject."Чтобы отписаться от рассылки нажмите на ссылку - ".CHtml::link('Отписаться', array('users/unsubscribe', 'key'=>$addressee->unsubscribe_key)),
+                            $model->subject,//."Чтобы отписаться от рассылки нажмите на ссылку - ".CHtml::link('Отписаться', array('users/unsubscribe', 'key'=>$addressee->unsubscribe_key)),
                             array(
                                 'text' => $model->template,
                                 'vars' => array(

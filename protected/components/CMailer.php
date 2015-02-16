@@ -102,9 +102,9 @@ class CMailer
 	}
 
 	//self::BuildDNSTXTRR() ;
-	$headers .= "Return-Receipt-To: " . $from['email'] . "\r\n";
-	$headers .= "X-Confirm-Reading-To: " . $from['email'] . "\r\n";
-	$headers .= "Disposition-Notification-To: " . $from['email'] . "\r\n";
+	//$headers .= "Return-Receipt-To: " . $from['email'] . "\r\n";
+	//$headers .= "X-Confirm-Reading-To: " . $from['email'] . "\r\n";
+	//$headers .= "Disposition-Notification-To: " . $from['email'] . "\r\n";
 	//$headers = self::AddDKIM($headers_to.$headers,$subject,$body) . $headers;
 	$headers = str_replace("\r\n", "\n", $headers);
 	$sender = $from['email'];
