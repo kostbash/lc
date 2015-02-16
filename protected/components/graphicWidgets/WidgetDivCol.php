@@ -1,80 +1,85 @@
 <?php
 
-class WidgetDivCol
+class WidgetDivCol extends GraphicWidget
 {
+
+    protected $INPS_PARAM = 'inps';
+
     public $params;
     public $answers;
     public $values = array();
-    function __construct($params) {
+
+    function __construct($params)
+    {
         $this->params = $params;
         $this->setValues();
     }
-    
-    function draw($answers=null, $numberOfExercise=null)
+
+    function draw($answers = null, $numberOfExercise = null)
     {
         $this->addInps($answers, $numberOfExercise);
         $text = "<div class='graphic-widget'>";
-            $text .= "<div class='div_col'>";
-                if($this->values['subs'])
+        $text .= "<div class='div_col'>";
+        if ($this->values['subs'])
+        {
+            $text .= "<table>";
+            $text .= "<tbody>";
+            foreach ($this->values['subs'] as $k => $sub)
+            {
+                if ($k == 0)
                 {
-                    $text .= "<table>";
-                    $text .= "<tbody>";
-                        foreach($this->values['subs'] as $k => $sub)
-                        {
-                            if($k==0)
-                            {
-                                $text .= "<tr>";
-                                    $text .= "<td>&nbsp;".$this->values['dividend']."</td>";
-                                    $text .= "<td class='dir'>".$this->values['divider']."</td>";
-                                    $text .= "<td> </td>";
-                                $text .= "</tr>";
-                                $text .= "<tr>";
-                                    $text .="<td><div class='minus'>-</div><div class='under'> ".$sub['subtractor']."</div></td>";
-                                    $text .="<td class='right'>".$this->values['rightAnswer']."</td>";
-                                    $text .="<td> </td>";
-                                $text .= "</tr>";
-                            }
-                            else
-                            {
-                                $text .= "<tr>";
-                                    $text .= "<td colspan='".$this->values['dividentLength']."'>".str_repeat('&nbsp;', $k*2+1).$sub['subtrahend']."</td>";
-                                $text .= "</tr>";
-                                $text .= "<tr>";
-                                    $text .= "<td colspan='".$this->values['dividentLength']."'>".str_repeat('&nbsp;', $k*2)."<div class='minus'>-</div><div class='under'> ".$sub['subtractor']."</div></td>";
-                                $text .= "</tr>";
-                            }
-                            $k++;
-                        }
-                        $text .= "<tr>";
-                            $text .= "<td colspan='".$this->values['dividentLength']."' class='residue'>".str_repeat('&nbsp;', ($k-1)*2+strlen($this->values['lastSubstractor'])*2-1).$this->values['residue']."</td>";
-                        $text .= "</tr>";
-                    $text .= "</tbody>";
-                    $text .= "</table>";
+                    $text .= "<tr>";
+                    $text .= "<td>&nbsp;" . $this->values['dividend'] . "</td>";
+                    $text .= "<td class='dir'>" . $this->values['divider'] . "</td>";
+                    $text .= "<td> </td>";
+                    $text .= "</tr>";
+                    $text .= "<tr>";
+                    $text .="<td><div class='minus'>-</div><div class='under'> " . $sub['subtractor'] . "</div></td>";
+                    $text .="<td class='right'>" . $this->values['rightAnswer'] . "</td>";
+                    $text .="<td> </td>";
+                    $text .= "</tr>";
                 }
-            $text .= "</div>";
+                else
+                {
+                    $text .= "<tr>";
+                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k * 2 + 1) . $sub['subtrahend'] . "</td>";
+                    $text .= "</tr>";
+                    $text .= "<tr>";
+                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k * 2) . "<div class='minus'>-</div><div class='under'> " . $sub['subtractor'] . "</div></td>";
+                    $text .= "</tr>";
+                }
+                $k++;
+            }
+            $text .= "<tr>";
+            $text .= "<td colspan='" . $this->values['dividentLength'] . "' class='residue'>" . str_repeat('&nbsp;', ($k - 1) * 2 + strlen($this->values['lastSubstractor']) * 2 - 1) . $this->values['residue'] . "</td>";
+            $text .= "</tr>";
+            $text .= "</tbody>";
+            $text .= "</table>";
+        }
+        $text .= "</div>";
         $text .= "</div>";
         return $text;
     }
-    
+
     function setValues()
     {
         $dividend = (int) $this->params['did'];
         $divider = (int) $this->params['dir'];
         $this->values['subs'] = array();
-        if($dividend>0 && $divider>0 && $dividend >= $divider)
+        if ($dividend > 0 && $divider > 0 && $dividend >= $divider)
         {
             $dividend = (string) $dividend;
             $divider = (string) $divider;
             $dividentLength = strlen($dividend);
             $residue = 0; // остаток от деления
-            $rightAnswer = floor($dividend/$divider);
+            $rightAnswer = floor($dividend / $divider);
             $k = 0;
-            for($i=0; $i<$dividentLength; $i++)
+            for ($i = 0; $i < $dividentLength; $i++)
             {
-                $subtrahend = (int) ($residue.$dividend[$i]); // вычитаемое
+                $subtrahend = (int) ($residue . $dividend[$i]); // вычитаемое
                 $residue = fmod($subtrahend, $divider); // остаток от деления
-                $subtractor = floor($subtrahend/$divider) * $divider; // вычитатель
-                if($subtractor)
+                $subtractor = floor($subtrahend / $divider) * $divider; // вычитатель
+                if ($subtractor)
                 {
                     $this->values['subs'][$k]['subtrahend'] = $subtrahend;
                     $this->values['subs'][$k]['subtractor'] = $subtractor;
@@ -86,38 +91,38 @@ class WidgetDivCol
         $this->values['dividend'] = $dividend;
         $this->values['divider'] = $divider;
         $this->values['dividentLength'] = $dividentLength;
-        $this->values['lastSubstractor'] = $this->values['subs'][$k-1]['subtractor'];
+        $this->values['lastSubstractor'] = $this->values['subs'][$k - 1]['subtractor'];
         $this->values['rightAnswer'] = $rightAnswer;
     }
-    
+
     // заменяет на инпуты
     function addInps($answers, $numberOfExercise)
     {
         $inps = $this->clearInps();
-        if($inps && $answers)
+        if ($inps && $answers)
         {
-            foreach($inps as $inp)
+            foreach ($inps as $k => $inp)
             {
-                $key = key($answers);
-                $answer = CHtml::textField("Exercises[$numberOfExercise][answers][".$answers[$key]->id."]", '', array('style'=>"width:" . (mb_strlen($answers[$key]->answer, 'UTF-8') * 9+4) . "px;"));
-                if($inp=='a')
+                if ($k == 'a')
                 {
-                    $this->values['rightAnswer'] = $answer;
+                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, &$answers);
+                    ;
                     unset($answers[$key]);
                 }
-                elseif(preg_match('#s(\d+)#', $inp, $match))
+                elseif (preg_match('#s(\d+)#', $k, $match))
                 {
-                    if($this->values['subs'][$match[1]]['subtrahend'])
+                    if ($this->values['subs'][$match[1]]['subtrahend'])
                     {
-                        $this->values['subs'][$match[1]]['subtrahend'] = $answer;
+                        $this->values['subs'][$match[1]]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1]]['subtrahend'], $inp, $numberOfExercise, &$answers);
                         unset($answers[$key]);
                     }
                 }
-                elseif(preg_match('#l(\d+)#', $inp, $match))
+                elseif (preg_match('#l(\d+)#', $k, $match))
                 {
-                    if($this->values['subs'][$match[1]-1]['subtractor'])
+                    if ($this->values['subs'][$match[1] - 1]['subtractor'])
                     {
-                        $this->values['subs'][$match[1]-1]['subtractor'] = $answer;
+                        $this->values['subs'][$match[1] - 1]['subtractor'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtractor'], $inp, $numberOfExercise, &$answers);
+                        ;
                         unset($answers[$key]);
                     }
                 }
@@ -125,54 +130,41 @@ class WidgetDivCol
         }
         $this->answers = $answers;
     }
-    
+
     function getAnswersAttrs()
     {
         $attrs = array();
         $inps = $this->clearInps();
-        foreach($inps as $inp)
+        foreach ($inps as $key => $inp)
         {
-            if($inp=='a')
+            if ($key == 'a')
             {
-                $attrs[] = $this->values['rightAnswer'];
+                $ans = $this->setPartialAttrs($this->values['rightAnswer'], $inp);
+                foreach ($ans as $a)
+                    $attrs[] = $a;
             }
-            elseif(preg_match('#l(\d+)#', $inp, $match))
+            elseif (preg_match('#l(\d+)#', $key, $match))
             {
-                $subtractor = $this->values['subs'][$match[1]-1]['subtractor'];
-                if($subtractor)
+                $subtractor = $this->values['subs'][$match[1] - 1]['subtractor'];
+                if ($subtractor)
                 {
-                    $attrs[] = $subtractor;
+                    $ans = $this->setPartialAttrs($subtractor, $inp);
+                    foreach ($ans as $a)
+                        $attrs[] = $a;
                 }
             }
-            elseif(preg_match('#s(\d+)#', $inp, $match))
+            elseif (preg_match('#s(\d+)#', $key, $match))
             {
                 $subtrahend = $this->values['subs'][$match[1]]['subtrahend'];
-                if($subtrahend)
+                if ($subtrahend)
                 {
-                    $attrs[] = $subtrahend;
+                    $ans = $this->setPartialAttrs($subtrahend, $inp);
+                    foreach ($ans as $a)
+                        $attrs[] = $a;
                 }
             }
         }
         return $attrs;
     }
-    
-    function clearInps()
-    {
-        $inps = array();
-        if($this->params['inps'])
-        { 
-            return $this->params['inps'];
-//            $this->params['inps'];
-//            $dirtyInps = explode(',', $this->params['inps']);
-//            if($dirtyInps)
-//            {
-//                foreach($dirtyInps as $dirtyInp)
-//                {
-//                    $inps[] = trim($dirtyInp);
-//                }
-//            }
-        }
-        return array_unique($inps);
-    }
-}
 
+}
