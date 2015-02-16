@@ -20,7 +20,7 @@ class WidgetSubCol extends GraphicWidget
     function draw($answers = null, $numberOfExercise = null)
     {
         $this->addInps($answers, $numberOfExercise);
-        $text = "<div class='graphic-widget'>";
+        $text = "<div class='graphic-widget monowidth'>";
         $text .= "<div class='sub_col'>";
 
         $text .= "<table>";
@@ -48,7 +48,7 @@ class WidgetSubCol extends GraphicWidget
         $mul1 = (int) $this->params['s1'];
         $mul2 = (int) $this->params['s2'];
         $this->values['subs'] = array();
-        if ($mul1 > 0 && $mul2 > 0)
+        if ($mul1 >= 0 && $mul2 >= 0)
         {
             $mul1 = (string) $mul1;
             $mul2 = (string) $mul2;
@@ -77,7 +77,7 @@ class WidgetSubCol extends GraphicWidget
                 }
                 elseif (preg_match('#s(\d+)#', $k, $match))
                 {
-                    if ($this->values['mul' . $match[1]])
+                    if ($this->values['mul' . $match[1]]>=0)
                     {
                         $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, &$answers, &$key);
                     }

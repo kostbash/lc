@@ -20,7 +20,7 @@ class WidgetAddCol extends GraphicWidget
     function draw($answers = null, $numberOfExercise = null)
     {
         $this->addInps($answers, $numberOfExercise);
-        $text = "<div class='graphic-widget'>";
+        $text = "<div class='graphic-widget monowidth'>";
         $text .= "<div class='add_col'>";
         $text .= "<table>";
         $text .= "<tbody>"; 
@@ -72,7 +72,7 @@ class WidgetAddCol extends GraphicWidget
                 }
                 elseif (preg_match('#s(\d+)#', $k, $match))
                 {
-                    if ($this->values['mul' . $match[1]])
+                    if ($this->values['mul' . $match[1]]>=0)
                     {
                         $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, &$answers);
                     }

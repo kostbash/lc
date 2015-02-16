@@ -19,7 +19,7 @@ class WidgetMultCol extends GraphicWidget
     function draw($answers = null, $numberOfExercise = null)
     {
         $this->addInps($answers, $numberOfExercise);
-        $text = "<div class='graphic-widget'>";
+        $text = "<div class='graphic-widget monowidth'>";
         $text .= "<div class='mult_col'>";
         if ($this->values['subs'])
         {
@@ -59,7 +59,7 @@ class WidgetMultCol extends GraphicWidget
         $mul1 = (int) $this->params['m1'];
         $mul2 = (int) $this->params['m2'];
         $this->values['subs'] = array();
-        if ($mul1 > 0 && $mul2 > 0)
+        if ($mul1 >= 0 && $mul2 >= 0)
         {
             $mul1 = (string) $mul1;
             $mul2 = (string) $mul2;
@@ -96,14 +96,14 @@ class WidgetMultCol extends GraphicWidget
                 }
                 elseif (preg_match('#m(\d+)#', $k, $match))
                 {
-                    if ($this->values['mul' . $match[1]])
+                    if ($this->values['mul' . $match[1]]>=0)
                     {
                         $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, &$answers);
                     }
                 }
                 elseif (preg_match('#l(\d+)#', $k, $match))
                 {
-                    if ($this->values['subs'][$match[1] - 1]['subtrahend'])
+                    if ($this->values['subs'][$match[1] - 1]['subtrahend']>=0)
                     {
                         $this->values['subs'][$match[1] - 1]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtrahend'], $inp, $numberOfExercise, &$answers);
                         ;

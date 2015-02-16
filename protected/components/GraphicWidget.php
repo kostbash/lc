@@ -3,6 +3,8 @@
 class GraphicWidget
 {
 
+    const LETTER_WIDTH = 14;
+    
     protected $INPS_PARAM = 'a';
 
     public $params;
@@ -54,10 +56,10 @@ class GraphicWidget
         {
             for ($i = 0; $i < strlen($value); $i++)
             {
-                $ans = $value[$i]; //print $answer."=";
+                $ans = $value[$i]; //print $answer."="; 
                 if (in_array(strlen($value) - $i, $inputs))
                 {
-                    $ans = CHtml::textField("Exercises[$numberOfExercise][answers][" . $answers[GraphicWidgets::$key]->id . "]", '', array('style' => "width:" . (12) . "px;", "key" => GraphicWidgets::$key));
+                    $ans = CHtml::textField("Exercises[$numberOfExercise][answers][" . $answers[GraphicWidgets::$key]->id . "]", '', array('style' => "width:" . (self::LETTER_WIDTH) . "px;", "key" => GraphicWidgets::$key));
                     unset($answers[GraphicWidgets::$key]);
                     GraphicWidgets::$key++;
                 }
@@ -68,7 +70,7 @@ class GraphicWidget
         }
         else
         {
-            $result = CHtml::textField("Exercises[$numberOfExercise][answers][" . $answers[GraphicWidgets::$key]->id . "]", '', array('style' => "letter-spacing:3px;width:" . (mb_strlen($answers[GraphicWidgets::$key]->answer, 'UTF-8') * 12) . "px;", "key" => GraphicWidgets::$key));
+            $result = CHtml::textField("Exercises[$numberOfExercise][answers][" . $answers[GraphicWidgets::$key]->id . "]", '', array('style' => (strlen($value)>1?"letter-spacing:3px;":"")."width:" . (mb_strlen($answers[GraphicWidgets::$key]->answer, 'UTF-8') * self::LETTER_WIDTH - 1) . "px;", "key" => GraphicWidgets::$key, 'onblur'=>'$(this).setCursorPosition(0);'));
             unset($answers[GraphicWidgets::$key]);
             GraphicWidgets::$key++;
         }

@@ -4837,14 +4837,6 @@ z-index:10000000;
     letter-spacing: 3px;
 }
 
-.graphic-widget .num
-{
-    width: 12px;
-/* text-align: center; */
-display: inline-block;
-padding-left: 1px;
-}
-
 .graphic-widget .mult_col table td
 {
     white-space: pre-wrap;
@@ -4921,10 +4913,10 @@ border-bottom: 1px solid #000;
 
 .graphic-widget .num
 {
-    width: 12px;
+    width: 11px;
 /* text-align: center; */
 display: inline-block;
-padding-left: 1px;
+/*padding-left: 1px;*/
 }
 
 .graphic-widget .add_col table td,.graphic-widget .sub_col table td
@@ -4952,6 +4944,7 @@ padding-left: 1px;
 
 .graphic-widget .add_col table input,.graphic-widget .sub_col table input
 {
+    text-align:left;
     display: inline-block;
     color: #555;
     background-color: #fff;
@@ -4990,3 +4983,8 @@ display: inline-block;
 border-bottom: 1px solid #000;
 }
 /* END ADD-SUB COL*/
+.monowidth
+{
+    font-family:courier;
+    letter-spacing: 3px;
+}

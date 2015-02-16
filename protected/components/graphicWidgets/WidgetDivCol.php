@@ -18,7 +18,7 @@ class WidgetDivCol extends GraphicWidget
     function draw($answers = null, $numberOfExercise = null)
     {
         $this->addInps($answers, $numberOfExercise);
-        $text = "<div class='graphic-widget'>";
+        $text = "<div class='graphic-widget monowidth'>";
         $text .= "<div class='div_col'>";
         if ($this->values['subs'])
         {
@@ -42,16 +42,16 @@ class WidgetDivCol extends GraphicWidget
                 else
                 {
                     $text .= "<tr>";
-                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k * 2 + 1) . $sub['subtrahend'] . "</td>";
+                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k  + 1) . $sub['subtrahend'] . "</td>";
                     $text .= "</tr>";
                     $text .= "<tr>";
-                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k * 2) . "<div class='minus'>-</div><div class='under'> " . $sub['subtractor'] . "</div></td>";
+                    $text .= "<td colspan='" . $this->values['dividentLength'] . "'>" . str_repeat('&nbsp;', $k ) . "<div class='minus'>-</div><div class='under'> " . $sub['subtractor'] . "</div></td>";
                     $text .= "</tr>";
                 }
                 $k++;
             }
             $text .= "<tr>";
-            $text .= "<td colspan='" . $this->values['dividentLength'] . "' class='residue'>" . str_repeat('&nbsp;', ($k - 1) * 2 + strlen($this->values['lastSubstractor']) * 2 - 1) . $this->values['residue'] . "</td>";
+            $text .= "<td colspan='" . $this->values['dividentLength'] . "' class='residue'>" . str_repeat('&nbsp;', ($k - 1) + strlen($this->values['lastSubstractor'])) . $this->values['residue'] . "</td>";
             $text .= "</tr>";
             $text .= "</tbody>";
             $text .= "</table>";
