@@ -68,13 +68,13 @@ class WidgetAddCol extends GraphicWidget
             {
                 if ($k == 'r')
                 {
-                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, &$answers);
+                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, $answers);
                 }
                 elseif (preg_match('#s(\d+)#', $k, $match))
                 {
                     if ($this->values['mul' . $match[1]]>=0)
                     {
-                        $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, &$answers);
+                        $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, $answers);
                     }
                 }
             }

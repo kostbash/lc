@@ -105,7 +105,7 @@ class WidgetDivCol extends GraphicWidget
             {
                 if ($k == 'a')
                 {
-                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, &$answers);
+                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, $answers);
                     ;
                     unset($answers[$key]);
                 }
@@ -113,7 +113,7 @@ class WidgetDivCol extends GraphicWidget
                 {
                     if ($this->values['subs'][$match[1]]['subtrahend'])
                     {
-                        $this->values['subs'][$match[1]]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1]]['subtrahend'], $inp, $numberOfExercise, &$answers);
+                        $this->values['subs'][$match[1]]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1]]['subtrahend'], $inp, $numberOfExercise, $answers);
                         unset($answers[$key]);
                     }
                 }
@@ -121,7 +121,7 @@ class WidgetDivCol extends GraphicWidget
                 {
                     if ($this->values['subs'][$match[1] - 1]['subtractor'])
                     {
-                        $this->values['subs'][$match[1] - 1]['subtractor'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtractor'], $inp, $numberOfExercise, &$answers);
+                        $this->values['subs'][$match[1] - 1]['subtractor'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtractor'], $inp, $numberOfExercise, $answers);
                         ;
                         unset($answers[$key]);
                     }

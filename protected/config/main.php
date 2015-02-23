@@ -49,7 +49,7 @@ return array(
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
 			'urlFormat'=>'path',
-                        'baseUrl' => 'http://education.loc',
+                        'baseUrl' => 'http://cursys',
                         'showScriptName' => false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -71,7 +71,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=education',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => 'root',
+			'password' => '',
 			'charset' => 'utf8',
                         'enableProfiling'=>true,
 		),

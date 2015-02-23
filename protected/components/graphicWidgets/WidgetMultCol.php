@@ -92,20 +92,20 @@ class WidgetMultCol extends GraphicWidget
 
                 if ($k == 'r')
                 {
-                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, &$answers);
+                    $this->values['rightAnswer'] = $this->setPartialInput($this->values['rightAnswer'], $inp, $numberOfExercise, $answers);
                 }
                 elseif (preg_match('#m(\d+)#', $k, $match))
                 {
                     if ($this->values['mul' . $match[1]]>=0)
                     {
-                        $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, &$answers);
+                        $this->values['mul' . $match[1]] = $this->setPartialInput($this->values['mul' . $match[1]], $inp, $numberOfExercise, $answers);
                     }
                 }
                 elseif (preg_match('#l(\d+)#', $k, $match))
                 {
                     if ($this->values['subs'][$match[1] - 1]['subtrahend']>=0)
                     {
-                        $this->values['subs'][$match[1] - 1]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtrahend'], $inp, $numberOfExercise, &$answers);
+                        $this->values['subs'][$match[1] - 1]['subtrahend'] = $this->setPartialInput($this->values['subs'][$match[1] - 1]['subtrahend'], $inp, $numberOfExercise, $answers);
                         ;
                     }
                 }
