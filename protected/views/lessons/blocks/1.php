@@ -729,7 +729,7 @@
                 <div class="head clearfix">
                     <div class="number"><?php echo $posTest++; ?></div>
                     <div class="condition">
-                        <?php $gw = new GraphicWidgets($exercise->condition);?>
+                        <?php $gw = new GraphicWidgets($exercise->condition, $exercise, $exercise->id);?>
                         <?php echo $gw->draw();?>
                     </div>
                     <div class="result"></div>
