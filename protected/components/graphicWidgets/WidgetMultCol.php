@@ -31,17 +31,20 @@ class WidgetMultCol extends GraphicWidget
             $text .= "<tr>";
             $text .="<td style=\"position:relative;\"><div class='minus'>x</div><div class='under'> " . $this->values['mul2'] . "</div></td>";
             $text .= "</tr>";
-            foreach ($this->values['subs'] as $k => $sub)
+            if(count($this->values['subs'])>1)
             {
+                foreach ($this->values['subs'] as $k => $sub)
                 {
-                    $text .= "<tr>";
-                    $plus = ""; //"<div class='plus'>+</div>";
-                    if ($k == 0)
-                        $plus = "";
-                    $text .= "<td style='padding-right:" . ($k * 12) . "px;position:relative;' colspan='" . $this->values['mul1Length'] . "'>$plus" . ($k == count($this->values['subs']) - 1 ? "<div class='under'>" : "") . $sub['subtrahend'] . ($k == count($this->values['subs']) - 1 ? "</div>" : "") . "</td>";
-                    $text .= "</tr>";
+                    {
+                        $text .= "<tr>";
+                        $plus = ""; //"<div class='plus'>+</div>";
+                        if ($k == 0)
+                            $plus = "";
+                        $text .= "<td style='padding-right:" . ($k * 12) . "px;position:relative;' colspan='" . $this->values['mul1Length'] . "'>$plus" . ($k == count($this->values['subs']) - 1 ? "<div class='under'>" : "") . $sub['subtrahend'] . ($k == count($this->values['subs']) - 1 ? "</div>" : "") . "</td>";
+                        $text .= "</tr>";
+                    }
+                    $k++;
                 }
-                $k++;
             }
             $text .= "<tr>";
             $text .= "<td colspan='" . $this->values['mul1Length'] . "' class='residue'>" . $this->values['rightAnswer'] . "</td>";
