@@ -15,7 +15,7 @@ class GroupandexercisesController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -92,6 +92,7 @@ class GroupandexercisesController extends Controller
                     }
                 }
             }
+            $this->redirect(array('/admin/groupofexercises/update', 'id'=>$id_group));
 	}
 
 	public function loadModel($id)
