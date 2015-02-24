@@ -20,7 +20,7 @@ class GraphicWidgets {
     public $numberOfExercise = null;
     public static $key = 0;
 
-    function __construct($rawText, Exercises $exercise = null, $numberOfExercise = null) {
+    function __construct($rawText = null, Exercises $exercise = null, $numberOfExercise = null) {
         self::$key = 0;
         if ($exercise) {
             $this->exercise = $exercise;
