@@ -16,7 +16,7 @@ class GroupofexercisesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('delete', 'update', 'updatebyajax', 'shuffleexericises', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup', 'addPart'),
+				'actions'=>array('delete', 'isMixedAjax', 'update', 'updatebyajax', 'shuffleexericises', 'view', 'removeskill', 'addskill', 'createincourse', 'skillsbyajax', 'RemoveSkillByGroup', 'addPart'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -288,4 +288,12 @@ class GroupofexercisesController extends Controller
             }
             echo CJSON::encode($res);
         }
+
+    public function actionIsMixedAjax($id, $state) {
+        $model=$this->loadModel($id);
+        $model->is_mixed = $state;
+        if ($model->save()) {
+            echo 'okokok';
+        }
+    }
 }

@@ -942,7 +942,8 @@ class ExercisesController extends Controller {
     }
 
     public function actionSkillsNotIdsAjax($id_course) {
-        $exercise = array_shift($_POST['Exercises']);
+        //TODO: Нормально обработать
+        @$exercise = array_shift($_POST['Exercises']);
         echo Skills::skillsForAjax($id_course, $exercise['SkillsIds'], $exercise['firstIds']);
     }
 

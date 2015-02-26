@@ -88,6 +88,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             
             $('.type-exercise tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
                 $(this).closest('tr').find('.save-row').show();
+                saveRow();
             });
             
             $('.type-exercise tbody tr .save-row').live('click', function(){
@@ -116,6 +117,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                {
                     $(this).closest('tr').find('.save-row').show();
                     $(this).closest('.input-mini-container').remove();
+                    saveRow();
                }
                return false;
             });
@@ -165,6 +167,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     nameSkill = current.find('a').html();
                     current.closest('.mydrop').before('<div class=\"input-mini-container clearfix\"><p class=\"name\">'+nameSkill+'</p><a href=\"#\" class=\"close\">&times;</a><input type=\"hidden\" name=\"Exercises['+idExercise+'][SkillsIds][]\" value='+dataId+' /></div>');
                     current.closest('tr').find('.save-row').show();
+                    saveRow();
                 }
                 current.parents('.input-group-btn').removeClass('open');
                 return false;
@@ -188,6 +191,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
 
             $('.type-test tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
                 $(this).closest('tr').find('.save-row').show();
+                saveRow();
             });
             
             $('.type-test tbody tr .save-row').live('click', function(){
@@ -324,6 +328,12 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     $('#editingQuestion').removeAttr('id');
                     hidden.attr('id', 'editingQuestion');
                     CKEDITOR.instances['editor-text'].setData(hidden.val());
+                    CKEDITOR.on('instanceReady', function (ev) {
+                       // Prevent drag-and-drop.
+                       ev.editor.document.on('drop', function (ev) {
+                          ev.data.preventDefault(true);
+                       });
+                    });
                 }
                 $('#htmlEditor').modal('show');
             });
@@ -338,6 +348,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 }
                 if(editing.val()!=data)
                     editing.val(data).siblings('.for-editor-field').html(data).closest('tr').find('.save-row').show();
+                    saveRow();
                 $('#htmlEditor').modal('hide');
             });
             
@@ -355,8 +366,242 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 });
                 return false;
             });
-            
-        });"
+
+            if (0 == ".$exerciseGroup->is_mixed.") {
+                $('#shuffle-exericises').attr('disabled','disabled');
+            }
+
+            $('#is_mixed').click(function(){
+                if ($(this).attr('checked')) {
+                    $('#shuffle-exericises').attr('disabled','disabled');
+                    state = 0;
+                } else {
+                    $('#shuffle-exericises').removeAttr('disabled');
+                    state = 1;
+                }
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/ismixedajax', array('id'=>$exerciseGroup->id))."/state/'+state,
+                    type:'GET',
+                    success: function(result) {
+                    }
+                });
+            });
+
+            $('.odd, .even').click(function(){
+                checkbox = $(this).children('td').children(':checkbox');
+                if (checkbox.attr('checked')) {
+                    checkbox.removeAttr('checked');
+                } else {
+                    checkbox.attr('checked', 'checked');
+                }
+            });
+
+            $('#check_all').click(function(){
+                checkbox = $('.odd, .even').children('td').children(':checkbox');
+                if (!$(this).attr('checked')) {
+                    checkbox.removeAttr('checked');
+                } else {
+                    checkbox.attr('checked', 'checked');
+                }
+            });
+
+            $('td :checkbox').click(function(){
+                if ($(this).attr('checked')) {
+                    $(this).removeAttr('checked');
+                } else {
+                    $(this).attr('checked', 'checked');
+                }
+            });
+
+            $('#addSkillForSelected #searchSkillForSelected').live('keyup', function(){
+                current = $(this);
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                    type:'POST',
+                    data: { term: current.val() },
+                    dataType: 'json',
+                    success: function(result) {
+                            current.siblings('.input-group-btn').children('.dropdown-menu').children('li').remove();
+                            current.siblings('.input-group-btn').children('.dropdown-menu').append(result.html);
+                            current.siblings('.input-group-btn').addClass('open');
+                    }
+                });
+            });
+
+            $('#addSkillForSelected .dropdown-toggleForSelected').live('click', function(){
+                current = $(this);
+                    $.ajax({
+                        url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                        type:'POST',
+                        dataType: 'json',
+                        success: function(result) {
+                            if(result)
+                                current.siblings('.dropdown-menu').children('li').remove();
+                                current.siblings('.dropdown-menu').append(result.html);
+                        }
+                    });
+            });
+
+            $('#addSkillForSelected .dropdown-menu li').live('click', function(){
+                current = $(this);
+                skillName = current.children().text();
+                roll = true;
+
+                checked = $('td [type=checkbox]:checked');
+                checked.each(function(i, arr){
+                    elem = $('tr[data-id='+$(arr).attr('id')+'] td .inputs-mini');
+                    childInputs = $(elem).children('div').children('input');
+                    childInputs.each(function(i, arr){
+                        if ($(arr).attr('value') == current.data('id')) {
+                            roll = false;
+                        }
+                    });
+                    if (roll) {
+                        elem.prepend('<div class=\"input-mini-container clearfix\"><p class=\"name\">'+skillName+'</p><a href=\"#\" class=\"close\">×</a><input type=\"hidden\" id=\"Exercises_'+$(arr).attr('id')+'_SkillsIds\" name=\"Exercises['+$(arr).attr('id')+'][SkillsIds][]\" value=\"'+current.data('id')+'\"></div>');
+                    } else {
+                        roll = true;
+                    }
+
+                    curr = $('tr[data-id='+$(arr).attr('id')+']');
+                    saveButton = $('tr[data-id='+$(arr).attr('id')+'] .save-row');
+                    saveButton.show();
+                    $.ajax({
+                        'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$exerciseGroup->id))."',
+                        'type':'POST',
+                        'data': curr.find('textarea, input, select').serialize(),
+                        'success': function(result) {
+                            if(result==1) {
+                                saveButton.hide();
+
+                            }
+                            else if(result!='' && result != '1111111111111')
+
+                                current.hide();
+                                saveButton.hide();
+                        },
+                            complete: function(){
+                                $('.save-row').hide();
+                            }
+
+                    });
+
+                });
+
+
+                current.parents('.input-group-btn').removeClass('open');
+                return false;
+            });
+
+            function saveRow(){
+                current = $('.type-exercise tbody tr .save-row');
+                if(current.closest('tr').data('cansave') != 1)
+                    if(!confirm('Создать задание на основании измененных данных ?'))
+                        return false;
+
+               $.ajax({
+                    'url': current.attr('href'),
+                    'type':'POST',
+                    'data': current.closest('tr').find('textarea, input, select').serialize(),
+                    'success': function(result) {
+                        if(result==1) {
+                             current.parents('.zgrid').yiiGridView('update');
+                             current.hide();
+                        }
+                        else if(result!='' && result != '1111111111111')
+                            //alert(result);
+                            current.hide();
+                    },
+                            complete: function(){
+                                $('.save-row').hide();
+                            }
+                });
+
+                return false;
+            }
+
+            $('#delete_for_selected').click(function(){
+                if (confirm('Вы уверены, что хотите удалить умения у выбранных элементов?')) {
+                    checked = $('td [type=checkbox]:checked');
+                    checked.each(function(i, arr){
+                        elem = $('tr[data-id='+$(arr).attr('id')+'] td .inputs-mini');
+                        elem.children('.input-mini-container').remove();
+                        curr = $('tr[data-id='+$(arr).attr('id')+']');
+                        saveButton = $('tr[data-id='+$(arr).attr('id')+'] .save-row');
+                        saveButton.show();
+                        $.ajax({
+                            'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$exerciseGroup->id))."',
+                            'type':'POST',
+                            'data': curr.find('textarea, input, select').serialize(),
+                            'success': function(result) {
+                                if(result==1) {
+                                    saveButton.hide();
+
+                                }
+                                else if(result!='' && result != '1111111111111')
+                                    alert(result);
+                                    current.hide();
+                                    saveButton.hide();
+                            },
+                            complete: function(){
+                                $('.save-row').hide();
+                            }
+
+                        });
+                    });
+                }
+                return false;
+            });
+
+
+            $('#delete_group_for_selected').click(function(){
+                if (confirm('Вы уверены, что хотите удалить выбранные задания?')) {
+                    checked = $('td [type=checkbox]:checked');
+                    checked.each(function(i, arr){
+                        elem = $('tr[data-id='+$(arr).attr('id')+'] td .delete');
+
+                        $.ajax({
+                            'url': $(elem).attr('href')+'?ajax=exerciseGroup-".$exerciseGroup->id."-grid',
+                            'type': 'POST',
+                            'success': function(result) {
+                                $('tr[data-id='+$(arr).attr('id')+']').remove();
+                            },
+                            complete: function(){
+
+                            }
+
+                        });
+                    });
+                }
+                return false;
+            });
+
+        });
+        setInterval(function(){
+                $('.count_skills').each(function(i, arr){
+                    count = 0;
+                    id = $(this).data('skill-id');
+                    $('.inputs-mini .input-mini-container input')
+                        .each(function(i, arr){
+                            if (id == $(arr).attr('value')){
+                                count++;
+                            }
+                        });
+                    $(this).html(count);
+                });
+
+                $('tr td .inputs-mini')
+                        .each(function(i, arr){
+
+                            if(!$(arr).children('.input-mini-container').length){
+                                $(arr).parents('tr').addClass('bg-danger');
+                            } else {
+                                $(arr).parents('tr').removeClass('bg-danger');
+                            }
+
+                        });
+
+            }, 1000);
+        "
         
     );
 ?>
@@ -435,6 +680,13 @@ Yii::app()->clientScript->registerScript("skills-grid",
                                 'htmlOptions'=>array('width'=>'40%'),
                             ),
                             array(
+                                'name' => 'Skill.id',
+                                'header'=>'Число заданий',
+                                'type'=>'raw',
+                                'value'=> '"<span class=\'count_skills\' data-skill-id=\'$data->id_skill\' data-ex-id=\'$data->id\'>^_^</span>"',
+                                'htmlOptions'=>array('width'=>'10%'),
+                            ),
+                            array(
                                     'class'=>'CButtonColumn',
                                     'template'=>'{delete}',
                                     'buttons'=>array(
@@ -468,8 +720,29 @@ Yii::app()->clientScript->registerScript("skills-grid",
         <div style="margin-top: 20px;" class="exercisegroup" data-id=<?php echo $exerciseGroup->id; ?> >
         <?php if($exerciseGroup->type == 1) : ?>
         <div style="padding-bottom: 0;" class="clearfix page-header">
-            <h3 style="float: left; width: 83%; margin:0 2% 0 0; border-bottom: none; line-height: 34px;" class="head">Задания</h3>
-            <a href="#" style="float: right; width: 15%" id="shuffle-exericises" class="btn btn-primary btn-icon"><i class="glyphicon glyphicon-random"></i>Перемешать</a>
+            <h3 style="float: left; width: 20%; margin:0 2% 0 0; border-bottom: none; line-height: 34px;" class="head">Задания</h3>
+
+            <div style="float: right; width: 80%;">
+
+                <div style="float: right; width: 132px; position: relative; bottom: 22px">
+                    <span style="float: right"><?php $check = (!$exerciseGroup->is_mixed)?'checked':''; echo CHtml::checkBox("is_mixed", $check);?> запретить</span>
+                    <a href="#" style="" id="shuffle-exericises" class="btn btn-primary btn-icon"><i class="glyphicon glyphicon-random"></i>Перемешать</a>
+                </div>
+                <a href="#" style="float: right; margin-right: 10px" id="delete_for_selected" class="btn btn-danger btn-icon"><i class="glyphicon glyphicon-remove"></i>Удалить умения</a>
+                <a href="#" style="float: right; margin-right: 10px" id="delete_group_for_selected" class="btn btn-danger btn-icon"><i class="glyphicon glyphicon-remove"></i>Удалить задания</a>
+                <div id="addSkillForSelected" style="float: right" class="col-lg-3 col-md-2">
+                    <div class="input-group mydrop" id="courseSkill">
+                        <?php echo CHtml::textField("searchSkillForSelected", '', array('placeholder'=>'Введите название умения', 'class'=>'form-control input-sm')); ?>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-info btn-sm dropdown-toggleForSelected" data-toggle="dropdown" tabindex="-1">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-12 col-md-12">
@@ -479,6 +752,13 @@ Yii::app()->clientScript->registerScript("skills-grid",
                             'dataProvider'=>new CArrayDataProvider($exerciseGroup->Exercises, array('pagination'=>false)),
                             'rowHtmlOptionsExpression' => 'array("data-cansave"=>$data->canSaveFromGroup('.$exerciseGroup->id.'), "data-id"=>$data->id)',
                             'columns'=>array(
+                                array(
+                                    'name' => 'difficulty',
+                                    'header'=>'<input type="checkbox" name="" id="check_all">',
+                                    'type'=>'raw',
+                                    'value'=>'CHtml::checkBox("$data->id", "")',
+                                    'htmlOptions'=>array('width'=>'2%'),
+                                ),
                                 array(
                                     'header'=>'',
                                     'type'=>'raw',
