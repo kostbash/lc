@@ -104,16 +104,15 @@ class GroupOfExercises extends CActiveRecord
 	}
 
         public function getCountExercises() {
-            if($this->type == 1)
-                return GroupAndExercises::model()->countByAttributes(array('id_group'=>$this->id));
-            else {
+
+                //GroupAndExercises::model()->countByAttributes(array('id_group'=>$this->id));
                $count = 0;
                foreach($this->PartsOfTest as $part)
                {
                    $count += $part->CountExercises;
                }
-               return $count;
-            }
+               return $count+GroupAndExercises::model()->countByAttributes(array('id_group'=>$this->id));
+
         }
         
         public function getTest() {

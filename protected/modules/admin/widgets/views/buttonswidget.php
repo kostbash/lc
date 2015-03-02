@@ -11,6 +11,10 @@ foreach ($widgets as $key => $row) {
                                 $('#add-modal-" . $row . "').modal('show');
 
                                 textarea =  $('#Exercises_questions_0_text');
+                                if (textarea.length == 0) {
+                                    textarea = $('#GeneratorsTemplates_template');
+
+                                }
                                 position_text =  textarea[0].selectionStart;
                                 $('#textarea-position').val(position_text);
                             }

@@ -10,7 +10,11 @@
                 //dataType: 'json',
                 complete: function(result) {
 
-                    var area = $('#Exercises_questions_0_text');
+                     var area =  $('#Exercises_questions_0_text');
+                    if (area.length == 0) {
+                        area = $('#GeneratorsTemplates_template');
+
+                    }
                     p_start = $('#textarea-position').val();
                     area.val(area.val().substring(0, p_start) + result.responseText + area.val().substring(p_start, area.val().length));
 
