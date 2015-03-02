@@ -270,8 +270,9 @@
         if($('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
         {
             template = $('#GeneratorsTemplates_correct_answers');
+            generator_id = $('#GeneratorsTemplates_id_visual :selected').attr('value');
             errors = template.siblings('.errorMessage');
-            if(!template.val())
+            if(!template.val() && generator_id != 16)
             {
                 errors.html('Введите шаблон');
                 return false;
@@ -418,6 +419,7 @@
                   <?php echo CHtml::label('Шаблон условия', 'GeneratorsTemplates_template'); ?>
               </div>
               <div class="col-lg-6 col-md-6">
+                  <?$this->widget("application.modules.admin.widgets.ButtonsWidget");?>
                   <?php echo CHtml::textArea("GeneratorsTemplates[template]", $generator->Template->template, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение')); ?>
                   <div class="errorMessage"></div>
               </div>

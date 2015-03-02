@@ -707,9 +707,17 @@ h2{
 }
 
 #additional {
-    border-top: 2px solid #999;
+    background: none repeat scroll 0 0 lightgray;
+    bottom: 0;
+    left: 12%;
     margin-top: 5px;
-    padding-top: 5px;
+    padding: 5px;
+    position: fixed;
+    width: 78%;
+}
+
+.blocks .ui-sortable .active {
+    background: lightgreen;
 }
 
 #select-skills {

@@ -190,6 +190,12 @@
                     'value'=>'"<div class=\"skills-mini\"><div class=\"skills\" data-id=\"$data->number\"></div></div>"',
                     'htmlOptions'=>array('width'=>'15%'),
                 ),
+                array(
+                    'header'=>'Ответ',
+                    'type'=>'raw',
+                    'value'=>'$data->difficultyMass["answer"]',
+                    'htmlOptions'=>array('width'=>'15%'),
+                ),
             ),
         )); ?>
         </div>

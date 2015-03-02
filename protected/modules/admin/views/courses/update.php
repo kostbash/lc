@@ -137,7 +137,7 @@ Yii::app()->clientScript->registerScript('#courses', "
         $('.block input, .block select').live('change', function() {
             current = $(this);
             if(current.is('[name*=type]')) {
-                if(!confirm('Все задания группы удаляться, продолжить ?'))
+                if(!confirm('Вы уверены, что хотите сменить тип?'))
                     return false;
             }
             $.ajax({
@@ -254,10 +254,15 @@ Yii::app()->clientScript->registerScript('#courses', "
                     success: function(result) {
                         if(result.success)
                         {
-                            $('#blocks-course .blocks > tbody').append(result.html);
+                            first = $('.active');
+                            first.after(result.html);
+                            first.removeClass('active');
+                            first.next().addClass('active');
                             input.val('');
                             sortBlocks();
                             dropSkills();
+                            sortLessons();
+                            saveSort($('.active').parent('tbody'));
                         }
                     }
                 });
@@ -341,6 +346,11 @@ Yii::app()->clientScript->registerScript('#courses', "
             }
             return false;
         });
+
+        $('.block').live('click', function(){
+            $('.block').removeClass('active');
+            $(this).addClass('active');
+        });
     });
     
     function calcLessonsHeight(pos, lessonItem)
@@ -422,6 +432,44 @@ Yii::app()->clientScript->registerScript('#courses', "
     }
     
     dropSkills();
+
+    function saveSort(object = '.blocks > .ui-sortable'){
+         $(object).each(function(event, ui){
+         current = $(this);
+            blocks = $(this).closest('.blocks');
+                positions = new Array();
+                current.find('tr').each(function(pos, group) {
+                    positions[pos] = $(group).data('id');
+                });
+
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/lessons/changepositions')."',
+                    type:'POST',
+                    data: {id_course: blocks.data('idcourse')},
+                    dataType: 'json',
+                    success: function(result) {
+                        if(result.success)
+                        {
+
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/lessons/changepositions')."',
+                    type:'POST',
+                    data: { id_lesson: blocks.data('id'), id_course: blocks.data('idcourse'), positions: positions },
+                    dataType: 'json',
+                    success: function(result) {
+                        if(result.success)
+                        {
+                            setHeightLessons();
+                            makeSkills();
+                        }
+                    }
+                });
+        });
+    }
         
     function sortBlocks()
     {
@@ -746,8 +794,8 @@ $form=$this->beginWidget('CActiveForm', array(
             <td class='blocks-container active-blocks' style="vertical-align: top;"><?php echo $modelExerciseGroupsHtml;  ?></td>
             <td class='lessons-container' style="vertical-align: top;"><?php if(true || $modelLessonsHtml) { ?><table><tbody><?php echo $modelLessonsHtml;  ?></tbody></table><?php } ?></td>
         </tr>
-            <?php  ?>
-        <tr id='blocks-course'>
+            <?php //TODO: !!!!Поправить  ?>
+        <!--<tr id='blocks-course'>
             <td class='blocks-container'  style="vertical-align: top;">
                 <table class='blocks' data-idcourse="<?php echo $model->id; ?>"><tbody>
                     <?php foreach($model->Blocks as $blockCourse) : ?>
@@ -755,7 +803,7 @@ $form=$this->beginWidget('CActiveForm', array(
                     <?php endforeach; ?>
                 </tbody></table>
             </td>
-        </tr>
+        </tr>-->
 
     </tbody>
     <tfoot>

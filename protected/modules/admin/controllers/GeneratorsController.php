@@ -189,6 +189,11 @@ class GeneratorsController extends Controller
                 $resultGeneration = $generatorFactory->generateExercises();
             }
 
+            foreach($resultGeneration['exercises'] as $key=>$val) {
+                $resultGeneration['exercises'][$key]->difficultyMass['answer'] = $resultGeneration['answers'][$key][0]['answer'];
+
+            }
+
             $this->render('generation',array(
                     'generator'=>$generator,
                     'group'=>$group,

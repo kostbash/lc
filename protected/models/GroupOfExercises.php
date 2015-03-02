@@ -158,7 +158,7 @@ class GroupOfExercises extends CActiveRecord
             return $res;
         }
 
-        public function getHtmlForCourse($active = false) {
+        public function getHtmlForCourse($active = true) {
             return "
                 <tr class='block ".($active ? "active-block" : "")."' data-id='$this->id'>
                     <td class='block-name'>".CHtml::textField("GroupOfExercises[$this->id][name]", $this->name, array('id'=>false, 'class'=>'form-control input-sm', 'placeholder'=>'Введите название урока'))."</td>
