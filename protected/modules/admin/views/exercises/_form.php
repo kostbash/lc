@@ -169,8 +169,9 @@
             condition = $('input[name*=condition]');
             if(!condition.val())
             {
-                condition.siblings('.errorMessage').html('Введите условие');
-                $return = false;
+                //condition.siblings('.errorMessage').html('Введите условие');
+                //$return = false;
+                condition.val('&#160;');
             } else {
                 condition.siblings('.errorMessage').html('');
             }

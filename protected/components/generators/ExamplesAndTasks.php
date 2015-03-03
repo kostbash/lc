@@ -54,7 +54,7 @@ class ExampleAndTasks
         (
             $this->attributes &&
             $this->attributes['GeneratorsTemplates'] &&
-            $this->attributes['GeneratorsTemplates']['template'] &&
+            ($this->attributes['GeneratorsTemplates']['template'] or $this->attributes['GeneratorsTemplates']['correct_answers']) &&
             $this->attributes['GeneratorsTemplates']['number_exercises']
         )
         {

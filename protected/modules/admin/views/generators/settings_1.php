@@ -1,6 +1,6 @@
 <script type='text/javascript'>
     $(function(){
-        $('#GeneratorsTemplates_template').change(function(){
+        $('#GeneratorsTemplates_template').keypress(function(){
             input = $(this);
             val = input.val();
             template = /x\d+/ig;
@@ -15,13 +15,24 @@
               else
                   data[i++] = res[0];
             }
+
+            input = $('#GeneratorsTemplates_correct_answers');
+            val = input.val();
+            while ( (res = template.exec(val)) != null )
+            {
+                variable = $('.variable .name[data-name='+res[0]+']');
+                if(variable.length)
+                    variable.closest('.variable').addClass('dont-remove');
+                else
+                    data[i++] = res[0];
+            }
             
             $('.variable:not(.dont-remove)').remove();
 
             if(data.length)
             {
                 $.ajax({
-                    url: '<?php echo Yii::app()->createUrl('admin/generatorsTemplatesVariables/getHtmlVars'); ?>',
+                    url: '<?php echo Yii::app()->createUrl('admin/generatorstemplatesvariables/getHtmlVars'); ?>',
                     type: 'POST',
                     data: { names:data, lastNum: $('.variable:last-child').data('num') },
                     dataType: 'json',
@@ -34,8 +45,63 @@
                 });
             }
         });
+
+        $('#GeneratorsTemplates_correct_answers').keypress(function(){
+            input = $(this);
+            val = input.val();
+            template = /x\d+/ig;
+            data = new Array();
+            i = 0;
+            $('.variable').removeClass('dont-remove');
+            while ( (res = template.exec(val)) != null )
+            {
+                variable = $('.variable .name[data-name='+res[0]+']');
+                if(variable.length)
+                    variable.closest('.variable').addClass('dont-remove');
+                else
+                    data[i++] = res[0];
+            }
+
+            input = $('#GeneratorsTemplates_template');
+            val = input.val();
+            while ( (res = template.exec(val)) != null )
+            {
+                variable = $('.variable .name[data-name='+res[0]+']');
+                if(variable.length)
+                    variable.closest('.variable').addClass('dont-remove');
+                else
+                    data[i++] = res[0];
+            }
+
+            $('.variable:not(.dont-remove)').remove();
+
+            if(data.length)
+            {
+                $.ajax({
+                    url: '<?php echo Yii::app()->createUrl('admin/generatorstemplatesvariables/getHtmlVars'); ?>',
+                    type: 'POST',
+                    data: { names:data, lastNum: $('.variable:last-child').data('num') },
+                    dataType: 'json',
+                    success: function(result) {
+                        if(result.success)
+                        {
+                            $('#variables').append(result.html);
+                        }
+                    }
+                });
+            }
+        });
         
         $('#GeneratorsTemplates_template').live('change keyup input click', function() {
+            if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
+            {
+                template = /[^x\+\-\*\d\/\(\)\smod]/gi;
+                if (this.value.match(template))
+                    this.value = this.value.replace(template, '');
+            }
+        });
+
+        $('#GeneratorsTemplates_correct_answers').live('change keyup input click', function() {
             if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
             {
                 template = /[^x\+\-\*\d\/\(\)\smod]/gi;
@@ -245,8 +311,9 @@
         errors = template.siblings('.errorMessage');
         if(!template.val())
         {
-            errors.html('Введите шаблон');
-            return false;
+            //errors.html('Введите шаблон');
+            //return false;
+            template.val('&#160;');
         } else {
             if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
             {

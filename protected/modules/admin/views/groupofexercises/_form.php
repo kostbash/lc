@@ -87,7 +87,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             });
             
             $('.type-exercise tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
-                $(this).closest('tr').find('.save-row').show();
+                $(this).closest('tr').find('.save-row');
                 saveRow();
             });
             
@@ -115,7 +115,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .inputs-mini .close').live('click', function(){
                if(confirm('Вы уверены, что хотите удалить данное умение ?'))
                {
-                    $(this).closest('tr').find('.save-row').show();
+                    $(this).closest('tr').find('.save-row');
                     $(this).closest('.input-mini-container').remove();
                     saveRow();
                }
@@ -166,7 +166,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     idExercise = current.closest('.mydrop').find('input').data('id');
                     nameSkill = current.find('a').html();
                     current.closest('.mydrop').before('<div class=\"input-mini-container clearfix\"><p class=\"name\">'+nameSkill+'</p><a href=\"#\" class=\"close\">&times;</a><input type=\"hidden\" name=\"Exercises['+idExercise+'][SkillsIds][]\" value='+dataId+' /></div>');
-                    current.closest('tr').find('.save-row').show();
+                    current.closest('tr').find('.save-row');
                     saveRow();
                 }
                 current.parents('.input-group-btn').removeClass('open');
@@ -190,7 +190,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             
 
             $('.type-test tbody tr').find('textarea, input:not([name=term]), select').live('change', function(){
-                $(this).closest('tr').find('.save-row').show();
+
                 saveRow();
             });
             
@@ -347,7 +347,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     return false;
                 }
                 if(editing.val()!=data)
-                    editing.val(data).siblings('.for-editor-field').html(data).closest('tr').find('.save-row').show();
+                    editing.val(data).siblings('.for-editor-field').html(data).closest('tr').find('.save-row');
                     saveRow();
                 $('#htmlEditor').modal('hide');
             });
@@ -416,7 +416,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('#addSkillForSelected #searchSkillForSelected').live('keyup', function(){
                 current = $(this);
                 $.ajax({
-                    url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id, 'all'=>1))."',
                     type:'POST',
                     data: { term: current.val() },
                     dataType: 'json',
@@ -431,7 +431,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('#addSkillForSelected .dropdown-toggleForSelected').live('click', function(){
                 current = $(this);
                     $.ajax({
-                        url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id))."',
+                        url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$exerciseGroup->id, 'all'=>1))."',
                         type:'POST',
                         dataType: 'json',
                         success: function(result) {
@@ -463,24 +463,19 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     }
 
                     curr = $('tr[data-id='+$(arr).attr('id')+']');
-                    saveButton = $('tr[data-id='+$(arr).attr('id')+'] .save-row');
-                    saveButton.show();
                     $.ajax({
                         'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$exerciseGroup->id))."',
                         'type':'POST',
                         'data': curr.find('textarea, input, select').serialize(),
                         'success': function(result) {
                             if(result==1) {
-                                saveButton.hide();
 
                             }
                             else if(result!='' && result != '1111111111111')
 
                                 current.hide();
-                                saveButton.hide();
                         },
                             complete: function(){
-                                $('.save-row').hide();
                             }
 
                     });
@@ -526,15 +521,14 @@ Yii::app()->clientScript->registerScript("skills-grid",
                         elem = $('tr[data-id='+$(arr).attr('id')+'] td .inputs-mini');
                         elem.children('.input-mini-container').remove();
                         curr = $('tr[data-id='+$(arr).attr('id')+']');
-                        saveButton = $('tr[data-id='+$(arr).attr('id')+'] .save-row');
-                        saveButton.show();
+
                         $.ajax({
                             'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$exerciseGroup->id))."',
                             'type':'POST',
                             'data': curr.find('textarea, input, select').serialize(),
                             'success': function(result) {
                                 if(result==1) {
-                                    saveButton.hide();
+
 
                                 }
                                 else if(result!='' && result != '1111111111111')

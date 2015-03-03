@@ -198,10 +198,14 @@ class GroupofexercisesController extends Controller
 		}
 	}
         
-	public function actionSkillsByAjax($id)
+	public function actionSkillsByAjax($id, $all = false)
 	{
             $group = $this->loadModel($id);
+        if ($all) {
+            echo Skills::skillsForAjax($group->id_course, array());
+        } else {
             echo Skills::skillsForAjax($group->id_course, $group->idsUsedSkills);
+        }
 	}
         
 	public function actionShuffleExericises($id_block)
