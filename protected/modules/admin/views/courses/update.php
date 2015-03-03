@@ -137,7 +137,7 @@ Yii::app()->clientScript->registerScript('#courses', "
         $('.block input, .block select').live('change', function() {
             current = $(this);
             if(current.is('[name*=type]')) {
-                if(!confirm('Вы уверены, что хотите сменить тип?'))
+                if(!confirm('При смене типа будут удалены все задания. Продолжить?'))
                     return false;
             }
             $.ajax({

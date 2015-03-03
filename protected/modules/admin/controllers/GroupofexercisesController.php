@@ -106,9 +106,9 @@ class GroupofexercisesController extends Controller
                         { print_r($usersExerciseGroup);
                             if($model->type==1)
                             {
-                                //UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
+                                UserAndExercises::model()->deleteAllByAttributes(array('id_relation'=>$usersExerciseGroup->id));
                             } else {
-                                //UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
+                                UserExerciseGroupSkills::model()->deleteAllByAttributes(array('id_test_group'=>$usersExerciseGroup->id));
                             }
                             $usersExerciseGroup->number_right = NULL;
                             $usersExerciseGroup->number_all = NULL;
@@ -119,11 +119,11 @@ class GroupofexercisesController extends Controller
                         {
                             foreach($model->PartsOfTest as $partsOfTest)
                             {
-                                //$partsOfTest->delete();
+                                $partsOfTest->delete();
                             }
                         }
                         
-                        //GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$id_group));
+                        GroupAndExercises::model()->deleteAllByAttributes(array('id_group'=>$id_group));
                         
                         $model->type = $attributes['type'];
                         $res['needUpdate'] = 1;
