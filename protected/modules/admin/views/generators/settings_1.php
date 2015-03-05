@@ -1,6 +1,6 @@
 <script type='text/javascript'>
     $(function(){
-        $('#GeneratorsTemplates_template').keypress(function(){
+        $('#GeneratorsTemplates_template').change(function(){
             input = $(this);
             val = input.val();
             template = /x\d+/ig;
@@ -46,7 +46,7 @@
             }
         });
 
-        $('#GeneratorsTemplates_correct_answers').keypress(function(){
+        $('#GeneratorsTemplates_correct_answers').change(function(){
             input = $(this);
             val = input.val();
             template = /x\d+/ig;
@@ -313,7 +313,7 @@
         {
             //errors.html('Введите шаблон');
             //return false;
-            template.val('&#160;');
+            template.val(' ');
         } else {
             if(!$('#GeneratorsTemplates_separate_template_and_correct_answers').is(':checked'))
             {
