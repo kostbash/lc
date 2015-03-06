@@ -40,8 +40,10 @@
                                           ),
                                     );
                 }
-                if(Yii::app()->user->checkAccess('teacher'))
+                if(Yii::app()->user->checkAccess('teacher')) {
+                    $this->menu[] = array('label'=>'Курсы', 'url'=>array('/admin/courses/index'));
                     $this->menu[] = array('label'=>'Ученики', 'url'=>array('/admin/studentsofteacher/index'));
+                }
                 if(Yii::app()->user->checkAccess('parent'))
                     $this->menu[] = array('label'=>'Дети', 'url'=>array('/admin/children/index'));
                 if(Yii::app()->user->checkAccess('admin'))

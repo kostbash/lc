@@ -245,9 +245,12 @@ Yii::app()->clientScript->registerScript('#courses', "
             input = current.siblings('input[name=name]');
             type = current.siblings('select');
             name = $.trim(input.val());
+            first = $('.active');
+            st_for_url ='';
+            if (!first.length) st_for_url = '/not_selected/1';
             if(name) {
                 $.ajax({
-                    url:'".Yii::app()->createUrl('admin/groupofexercises/createincourse', array('id_course'=>$model->id))."',
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/createincourse', array('id_course'=>$model->id))."'+st_for_url,
                     type:'POST',
                     data: { name: input.val(), type: type.val() },
                     dataType: 'json',
@@ -255,9 +258,14 @@ Yii::app()->clientScript->registerScript('#courses', "
                         if(result.success)
                         {
                             first = $('.active');
-                            first.after(result.html);
-                            first.removeClass('active');
-                            first.next().addClass('active');
+                            if (!first.length) {
+                                $('#blocks-course .blocks > tbody').append(result.html);
+                            } else {
+                                first.after(result.html);
+                                first.removeClass('active');
+                                first.next().addClass('active');
+                            }
+
                             input.val('');
                             sortBlocks();
                             dropSkills();
@@ -795,7 +803,7 @@ $form=$this->beginWidget('CActiveForm', array(
             <td class='lessons-container' style="vertical-align: top;"><?php if(true || $modelLessonsHtml) { ?><table><tbody><?php echo $modelLessonsHtml;  ?></tbody></table><?php } ?></td>
         </tr>
             <?php //TODO: !!!!Поправить  ?>
-        <!--<tr id='blocks-course'>
+        <tr id='blocks-course'>
             <td class='blocks-container'  style="vertical-align: top;">
                 <table class='blocks' data-idcourse="<?php echo $model->id; ?>"><tbody>
                     <?php foreach($model->Blocks as $blockCourse) : ?>
@@ -803,7 +811,7 @@ $form=$this->beginWidget('CActiveForm', array(
                     <?php endforeach; ?>
                 </tbody></table>
             </td>
-        </tr>-->
+        </tr>
 
     </tbody>
     <tfoot>

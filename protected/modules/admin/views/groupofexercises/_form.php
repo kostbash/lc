@@ -569,6 +569,21 @@ Yii::app()->clientScript->registerScript("skills-grid",
                 return false;
             });
 
+            $('.to_uz').click(function(){
+                $(this).parent().find('ul .visual a').each(function(i, arr){
+                    if ($(arr).html() == 'Универсальное задание') {
+                        window.location.href=$(arr).attr('href');
+
+                    }
+                });
+                return false;
+            });
+
+            $('.carret_uz').click(function(){
+                $(this).parent().parent().addClass('open');
+                return false;
+            });
+
         });
         setInterval(function(){
                 $('.count_skills').each(function(i, arr){
@@ -829,7 +844,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
             </div>
             <div id="dropdown-types_of_exercises" style="width: 136px;">
                 <div class="input-group-btn">
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+
+                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p style="padding-right: 5px" class="caret-cont carret_uz"><b class="caret"></b></p>', array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix to_uz', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
                     <ul class="dropdown-menu" role="menu">
                         <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
                             <li class='type'>

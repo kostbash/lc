@@ -240,7 +240,7 @@ class GroupofexercisesController extends Controller
                 $model->type = $type;
                 $model->id_course = $id_course;
                 $model->change_date = date('Y-m-d H:i:s');
-                if($model->save())
+                if($model->save() and $_GET['not_selected'])
                 {
                     $courseAndGroupExercise = new CoursesAndGroupExercise;
                     $courseAndGroupExercise->id_course = $id_course;
@@ -252,6 +252,10 @@ class GroupofexercisesController extends Controller
                         $res['html'] = $model->htmlForCourse;
                         echo CJSON::encode($res, true);
                     }
+                } else {
+                    $res['success'] = 1;
+                    $res['html'] = $model->htmlForCourse;
+                    echo CJSON::encode($res, true);
                 }
             }
 	}
