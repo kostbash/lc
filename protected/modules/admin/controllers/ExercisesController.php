@@ -99,7 +99,7 @@ class ExercisesController extends Controller {
 
                 if ($id_visual == 9) {
                     $question = new ExercisesQuestions;
-                    $question->attributes = $_POST['Exercises']['questions'][0];
+                    $question->attributes = nl2br($_POST['Exercises']['questions'][0]);
                     $question->id_exercise = $model->id;
                     if ($question->save()) {
                         preg_match_all('#sp(\d+)#ui', $question->text, $matches);
@@ -406,7 +406,7 @@ class ExercisesController extends Controller {
 
                 if ($model->id_visual == 9) {
                     $question = $model->Questions[0];
-                    $question->attributes = $_POST['Exercises']['questions'][0];
+                    $question->attributes = nl2br($_POST['Exercises']['questions'][0]);
                     if ($question->save()) {
                         preg_match_all('#sp(\d+)#ui', $question->text, $matches);
                         $numberSpaces = $matches[1];

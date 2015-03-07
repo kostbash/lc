@@ -213,6 +213,7 @@ class GeneratorsController extends Controller
                 $id_group = (int) $_GET['id_group'];
                 $id_part = (int) $_GET['id_part'];
                 $id_course = (int) $_GET['id_course'];
+                $_POST['GeneratorsTemplates']['correct_answers'] = nl2br($_POST['GeneratorsTemplates']['correct_answers']);
                 
                 $words = new GeneratorsWords('search');
                 $words->unsetAttributes();

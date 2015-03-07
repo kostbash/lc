@@ -496,7 +496,7 @@
                   <?php echo CHtml::label($generator->Template->id_visual==16 ? 'Текст задания' : 'Правильный ответ', 'GeneratorsTemplates_correct_answers'); ?>
               </div>
               <div class="col-lg-6 col-md-6">
-                  <?php echo CHtml::textField($generator->Template->separate_template_and_correct_answers ? "GeneratorsTemplates[correct_answers]" : "", $generator->Template->correct_answers, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение', 'id'=>'GeneratorsTemplates_correct_answers')); ?>
+                  <?php echo CHtml::textArea($generator->Template->separate_template_and_correct_answers ? "GeneratorsTemplates[correct_answers]" : "", $generator->Template->correct_answers, array('maxlength'=>255, 'class'=>'form-control', 'placeholder' => 'Введите выражение', 'id'=>'GeneratorsTemplates_correct_answers')); ?>
                   <div class="errorMessage"></div>
               </div>
           </div>

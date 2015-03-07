@@ -262,7 +262,12 @@ class Generators extends CActiveRecord
         
         static function callBackForBraces($matches) {
             $string = preg_replace('#mod#u', '%', $matches[1]);
-            return (int) self::executeCode($string);
+            $arr_exe = explode(', ', $string);
+
+            if (!isset($arr_exe[1]))
+                return round(self::executeCode($arr_exe[0]));
+
+            return number_format(self::executeCode($arr_exe[0]), $arr_exe[1]);
         }
         
         static function callBackForSquareBrackets($matches) {

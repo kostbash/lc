@@ -254,6 +254,7 @@ class Lessons extends CActiveRecord
                     <td class='lesson-name clearfix'>
                         ".CHtml::textArea("Lessons[$this->id][name]", $this->name, array('id'=>false, 'class'=>'form-control'))."
                         <div class='lesson-remove'>".CHtml::link('<i class="glyphicon glyphicon-remove"></i>', '#')."</div>
+                        <h3 class='lessons_count' style='position: relative; right: 607%; bottom: 20px;'>~</h3>
                     </td>
             </tr>";
             $result['exerciseGroupHtml'] = $exerciseGroupHtml;

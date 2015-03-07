@@ -28,7 +28,7 @@ class ChildrenController extends Controller
                     ),
                 
                     array('allow',
-                            'actions'=>array('confirmDealFromSite'),
+                            'actions'=>array('confirmDealFromSite', 'teachersList'),
                             'roles'=>array('student'),
                     ),
                 
@@ -276,6 +276,17 @@ class ChildrenController extends Controller
                     'model'=>$model,
             ));
 	}
+
+    public function actionTeachersList(){
+        $model=new Children('search');
+        $model->unsetAttributes();
+        if(isset($_GET['Children']))
+            $model->attributes=$_GET['Children'];
+
+        $this->render('index',array(
+            'model'=>$model,
+        ));
+    }
 
 	public function loadModel($id)
 	{

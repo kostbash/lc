@@ -24,6 +24,12 @@ Yii::app()->clientScript->registerScript('#courses', "
     }
 
     $(function(){
+
+        $('.remove').first().remove();
+
+        $('.lesson-remove').first().remove();
+
+
         $('#courseSkill input').live('keyup', function(e){
         if(globalTimeout != null) clearTimeout(globalTimeout);  
         globalTimeout =setTimeout(SkillsByAjax,200);  
@@ -481,7 +487,7 @@ Yii::app()->clientScript->registerScript('#courses', "
         
     function sortBlocks()
     {
-        $('.blocks > tbody').sortable({
+        $('.blocks > tbody:not(:first)').sortable({
             delay:0,
             axis: 'y',
             connectWith: '.blocks > tbody',
@@ -528,6 +534,7 @@ Yii::app()->clientScript->registerScript('#courses', "
             axis: 'y',
             connectWith: '.lessons-container > table > tbody',
             cursor: 'move',
+            items: 'tr:not(:first)',
             update: function(event, ui) {
                 positions = new Array();
                 itemId = ui.item.data('id');
@@ -705,6 +712,17 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
         } //if(e.keyCode==13){
     }); //keyup
 
+    setInterval(function(){
+        $('.lessons_count').each(function(i, arr){
+            $(arr).html(i+1);
+            if (i+1>=10) {
+                $(arr).css('right', '566%');
+                $(arr).css('bottom', '71px');
+            }
+        });
+    }, 1000);
+
+
 ");
 ?>
 
@@ -802,7 +820,7 @@ $form=$this->beginWidget('CActiveForm', array(
             <td class='blocks-container active-blocks' style="vertical-align: top;"><?php echo $modelExerciseGroupsHtml;  ?></td>
             <td class='lessons-container' style="vertical-align: top;"><?php if(true || $modelLessonsHtml) { ?><table><tbody><?php echo $modelLessonsHtml;  ?></tbody></table><?php } ?></td>
         </tr>
-            <?php //TODO: !!!!Поправить  ?>
+
         <tr id='blocks-course'>
             <td class='blocks-container'  style="vertical-align: top;">
                 <table class='blocks' data-idcourse="<?php echo $model->id; ?>"><tbody>

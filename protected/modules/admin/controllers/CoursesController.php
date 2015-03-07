@@ -99,6 +99,37 @@ class CoursesController extends Controller
                                     }
                                 }
                             }
+
+
+                                $n_lesson=new Lessons;
+                                $n_lesson->name = 'Проверочный тест';
+                                $n_lesson->change_date = date('Y-m-d H:i:s');
+                                $n_lesson->course_creator_id = $model->id;
+
+                            if($n_lesson->save())
+                            {
+                                $courseAndLesson = new CoursesAndLessons;
+                                $courseAndLesson->id_course = $model->id;
+                                $courseAndLesson->id_lesson = $n_lesson->id;
+                                $courseAndLesson->order = CoursesAndLessons::maxValueOrder($model->id);
+                                $courseAndLesson->save();
+                            }
+
+                            $name = 'Проверочный тест';
+                            $type = 2;
+
+                                $n_block=new GroupOfExercises;
+                                $n_block->name = $name;
+                                $n_block->type = $type;
+                                $n_block->id_course = $model->id;
+                                $n_block->change_date = date('Y-m-d H:i:s');
+                                $n_block->save();
+
+                            $p_block = new LessonAndExerciseGroup;
+                            $p_block->id_lesson = $n_lesson->id;
+                            $p_block->id_group_exercises = $n_block->id;
+                            $p_block->order = 1;
+                            $p_block->save();
                             
                             $this->redirect(array('update','id'=>$model->id));
                         }
