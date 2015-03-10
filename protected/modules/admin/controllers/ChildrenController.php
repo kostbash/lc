@@ -86,9 +86,13 @@ class ChildrenController extends Controller
             $result = array('success'=>0);
             $id = (int) $_POST['id'];
             $answer = (int) $_POST['answer'];
+            $is_teacher = (int) $_POST['isTeacher'];
             if($answer && $id)
-            {
-                $model = Children::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
+            {   if ($is_teacher) {
+                    $model = StudentsOfTeacher::model()->findByAttributes(array('id'=>$id, 'id_student'=>Yii::app()->user->id));
+                } else {
+                    $model = Children::model()->findByAttributes(array('id'=>$id, 'id_child'=>Yii::app()->user->id));
+                }
                 if($model)
                 {
                     $model->status = $answer;
@@ -97,7 +101,12 @@ class ChildrenController extends Controller
                         if($model->status==1)
                         {
                             // отклоняем все другие предложения, так как теперь у нас есть родитель
-                            $childrenParents = Children::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
+                            if ($is_teacher) {
+                                $childrenParents = StudentsOfTeacher::model()->findAllByAttributes(array('id_student'=>Yii::app()->user->id, 'status'=>0));
+                            } else {
+                                $childrenParents = Children::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
+                            }
+
                             foreach($childrenParents as $childrenParent)
                             {
                                 $childrenParent->status=2;

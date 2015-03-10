@@ -146,4 +146,6 @@ class Children extends CActiveRecord
         {
             return Children::model()->findAllByAttributes(array('id_child'=>Yii::app()->user->id, 'status'=>0));
         }
+
+
 }

@@ -83,6 +83,11 @@
         {
             $this->renderPartial('//deals/_confirm_modal', array('newParent'=>$newParent));
         }
+
+    if($newTeacher)
+    {
+        $this->renderPartial('//deals/_confirm_modal_teacher', array('newTeacher'=>$newTeacher));
+    }
     ?>    
         
     <?php 

@@ -99,6 +99,7 @@ class SiteController extends Controller
                         {
                             $_SESSION['goals'][] = 'LoginStudent';
                             $_SESSION['checkNewParent'] = true;
+                            $_SESSION['checkNewTeacher'] = true;
                         }
                         if($id_course)
                             $this->redirect(array('courses/view', 'id'=>$id_course));

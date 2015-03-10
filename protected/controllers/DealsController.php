@@ -16,10 +16,10 @@ class DealsController extends Controller
 	public function accessRules()
 	{
 		return array(
-//			array('allow',
-//				'actions'=>array('index'),
-//				'roles'=>array('student'),
-//			),
+			array('allow',
+				'actions'=>array('index'),
+				'roles'=>array('student'),
+			),
 			array('deny',
 				'users'=>array('*'),
 			),

@@ -275,7 +275,6 @@ class CoursesController extends Controller
                     $model->attributes=$_GET['Courses'];
             $user = Users::model()->findByPk(Yii::app()->user->id);
             $subjects = CourseSubjects::model()->findAll(array('order'=>'`order` ASC'));
-            
             if($_SESSION['checkNewParent'])
             {
                 $newParents = Children::newParents();
@@ -286,13 +285,24 @@ class CoursesController extends Controller
                 unset($_SESSION['checkNewParent']);
             }
 
+        if($_SESSION['checkNewTeacher'])
+        {
+            $newTeachers = StudentsOfTeacher::newTeachers();
+            if($newTeachers)
+            {
+                $newTeacher = $newTeachers[0]; // берем первое предложение
+            }
+            unset($_SESSION['checkNewTeacher']);
+        }
+
             $this->render('list',array(
                     'model'=>$model,
                     'lastActiveCourse' => $user->lastActiveCourse,
-                    'activeCourses' => $user->lastCourses(1),
-                    'passedCourses' => $user->lastCourses(2),
-                    'subjects' => $subjects,
-                    'newParent'=> $newParent,
+                    'activeCourses'    => $user->lastCourses(1),
+                    'passedCourses'    => $user->lastCourses(2),
+                    'subjects'         => $subjects,
+                    'newParent'        => $newParent,
+                    'newTeacher'       => $newTeacher,
             ));
 	}
         
