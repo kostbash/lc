@@ -487,11 +487,12 @@ Yii::app()->clientScript->registerScript('#courses', "
         
     function sortBlocks()
     {
-        $('.blocks > tbody:not(:first)').sortable({
+        $('.blocks > tbody').sortable({
             delay:0,
             axis: 'y',
             connectWith: '.blocks > tbody',
             cursor: 'move',
+            items:'>*:not(.notSort)',
             update: function(event, ui) {
                 current = $(this);
                 blocks = $(this).closest('.blocks');
@@ -525,6 +526,7 @@ Yii::app()->clientScript->registerScript('#courses', "
             }
         });
     }
+    $('.blocks-container table:first > tbody:first tr:first').addClass('notSort');
     sortBlocks();
     
     function sortLessons()
@@ -713,7 +715,7 @@ $('.block select[data-id='+$(b).data('id')+']').css('background-color', $('.skil
     }); //keyup
 
     setInterval(function(){
-        $('.lessons_count').each(function(i, arr){
+        $('.lessons_count:not(:first)').each(function(i, arr){
             $(arr).html(i+1);
             if (i+1>=10) {
                 $(arr).css('right', '566%');

@@ -845,7 +845,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
             <div id="dropdown-types_of_exercises" style="width: 136px;">
                 <div class="input-group-btn">
 
-                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p style="padding-right: 5px" class="caret-cont carret_uz"><b class="caret"></b></p>', array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix to_uz', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+                    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p style="padding-right: 15px; position: absolute; right: 0; width: 30px" class="caret-cont carret_uz"><b class="caret"></b></p>', array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_group'=>$exerciseGroup->id), array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix to_uz', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
                     <ul class="dropdown-menu" role="menu">
                         <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
                             <li class='type'>
