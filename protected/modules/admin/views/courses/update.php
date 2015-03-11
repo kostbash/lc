@@ -447,7 +447,8 @@ Yii::app()->clientScript->registerScript('#courses', "
     
     dropSkills();
 
-    function saveSort(object = '.blocks > .ui-sortable'){
+    function saveSort(object){
+    object = object || '.blocks > .ui-sortable';
          $(object).each(function(event, ui){
          current = $(this);
             blocks = $(this).closest('.blocks');
