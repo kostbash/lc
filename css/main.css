@@ -72,6 +72,11 @@ html, body {
     text-align: center;
 }
 
+.dub:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .zgrid .filters input
 {
     height: 30px;

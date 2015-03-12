@@ -1,3 +1,31 @@
+<script>
+    $(document).ready(function(){
+        if (<?=$model->is_dub?>) {
+            $('#isDub').attr('checked','checked');
+        }
+
+        $('#isDub').click(function(){
+            if ($(this).attr('checked')) {
+                state = 1;
+            } else {
+                state = 0;
+            }
+            $('#load_img').show();
+            $.ajax({
+                url:'<?=Yii::app()->createUrl('users/isdubajax')?>',
+                type:'POST',
+                data: { state: state},
+                success: function(result) {
+                    $('#load_img').hide();
+                    if (result==0) {
+                        alert('Произошла ошибка при сохранении. Обратитесь к администрации.');
+                    }
+            }
+        });
+    });
+    });
+</script>
+
 <div class="form-profile">
 <h4>Сменить пароль: </h4>
     
@@ -113,5 +141,8 @@
             </div>
 
     <?php $this->endWidget(); ?>
+    <h4>Озвучка</h4>
+    <input type="checkbox" name="is_dub" id="isDub"> Включить озвучку текстов заданий
+    <img src="<?=Yii::app()->createUrl('images/ajaxIcons/ajax-loader.gif')?>" id="load_img" style="display: none" alt=""/>
 <?php endif; ?>
 </div><!-- form -->

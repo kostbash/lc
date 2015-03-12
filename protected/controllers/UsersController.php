@@ -29,7 +29,7 @@ class UsersController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('update'),
+				'actions'=>array('update', 'isDubAjax'),
 				'roles'=>array('student'),
 			),
 			array('allow',
@@ -329,4 +329,10 @@ class UsersController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+    public function actionIsDubAjax() {
+        $model=$this->loadModel(Yii::app()->user->id);
+        $model->is_dub = $_POST['state'];
+        echo ($model->save(false))? 1 : 0;
+    }
 }

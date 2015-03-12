@@ -21,7 +21,7 @@ class LessonsController extends Controller
                             'users'=>array('*'),
                     ),
                     array('allow',
-                            'actions'=>array('pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf'),
+                            'actions'=>array('pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf', 'GetDubByAjax'),
                             'roles'=>array('student'),
                     ),
                     array('deny',  // deny all users
@@ -122,6 +122,7 @@ class LessonsController extends Controller
                             'userAndExerciseGroup'=>$userAndExerciseGroup,
                             'exerciseGroup'=>$currentExerciseGroup,
                             'resultTest' => $resultTest,
+                            'user' => $user,
                         ));
                         $render = false;
                     }
@@ -191,6 +192,7 @@ class LessonsController extends Controller
                     'userAndExerciseGroup'=>$userAndExerciseGroup,
                     'exerciseGroup'=>$currentExerciseGroup,
                     'exercisesTest' => $exercisesTest,
+                    'user' => $user,
             ));
         }
         
@@ -468,5 +470,17 @@ class LessonsController extends Controller
             $x=$mpdf->x;
             $y=$mpdf->y;
             $mpdf->Output($fileName, $output);
+        }
+
+        public function actionGetDubByAjax(){
+            $music_folder = Yii::app()->basePath.'/../sound/';
+            $text = trim($_POST['text']);
+
+            $request = 'http://tts.voicetech.yandex.net/generate?text="'.urlencode($text).'"&format=mp3&lang=ru-RU&speaker=jane&emotion=good&key=936111b0-76c9-4d43-9b7c-eedbfaeb6ccf';
+            if (file_put_contents($music_folder.Yii::app()->user->id.'sound.mp3', file_get_contents($request))) {
+                echo Yii::app()->user->id.'sound.mp3';
+            } else {
+                echo 'danger.mp3';
+            }
         }
 }

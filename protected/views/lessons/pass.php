@@ -1,6 +1,7 @@
 <?php 
-    $this->renderPartial("_pass_scripts");
+    $this->renderPartial("_pass_scripts", array('user'=>$user));
 ?>
+<div class="music" style="display: none"></div>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>

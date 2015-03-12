@@ -236,6 +236,37 @@
             }
             return false;
         });
+
+        if (<?=$user->is_dub?>) {
+
+            $('.condition').each(function(i, arr){
+                result = '';
+                var string = $(arr).html().split(/[\n]+/);
+                string.forEach(function(elem){
+                    result = result+'<span class="dub">'+elem+'</span>';
+                });
+                $(arr).html(result);
+
+            });
+
+            $('.dub').click(function(){
+                $.ajax({
+                    url: '<?=Yii::app()->createUrl('lessons/getdubbyajax')?>',
+                    type: 'POST',
+                    data: {text: $(this).html().replace(/<\/?[^>]+>/g,'')},
+                    success: function (result) {
+                        if (result == 'danger.mp3') {
+                            alert ('Не удалось загрузить озвучку');
+                            return;
+                        }
+                        $('.music').html('<audio id="soundcard" src="/sound/'+result+'?t='+Date.now()+'"></audio>');
+                        document.getElementById("soundcard").play();
+                    }
+                });
+            });
+
+        }
+
     });
 
     function checkAccurateAnswer(accurateAnswer)
