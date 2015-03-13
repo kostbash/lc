@@ -239,6 +239,8 @@
 
         if (<?=$user->is_dub?>) {
 
+            $('.block-name').addClass('dub');
+
             $('.condition').each(function(i, arr){
                 result = '';
                 var string = $(arr).html().split(/[\n]+/);
