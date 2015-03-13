@@ -237,7 +237,7 @@
             return false;
         });
 
-        if (<?=$user->is_dub?>) {
+        if (<?php if(isset($user->is_dub)) echo $user->is_dub; else echo false;?>) {
 
             $('.block-name').addClass('dub');
 
