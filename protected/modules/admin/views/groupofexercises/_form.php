@@ -488,9 +488,9 @@ Yii::app()->clientScript->registerScript("skills-grid",
             });
 
             function saveRow(){
-                current = $('.type-exercise tbody tr .save-row');
+                current = $('.save-row');
                 if(current.closest('tr').data('cansave') != 1)
-                    if(!confirm('Создать задание на основании измененных данных ?'))
+                    if(!confirm('Создать задание на основании измененных данных?'))
                         return false;
 
                $.ajax({
