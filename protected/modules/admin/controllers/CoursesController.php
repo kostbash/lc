@@ -16,7 +16,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('create','update','delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
+				'actions'=>array('showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -140,6 +140,14 @@ class CoursesController extends Controller
 		));
 	}
 
+    public function actionNewUpdate($id = 31){
+        $model=$this->loadModel($id);
+
+        $this->render('new_update', array(
+            'model' => $model,
+        ));
+    }
+
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -159,6 +167,7 @@ class CoursesController extends Controller
 			if($model->validate() && $lessonValid)
                         {
                             $model->change_date = date('Y-m-d H:i:s');
+                            $model->code = parseCode::GenerateCourseCode($model->id);
                             $model->save(false);
                             foreach($lessonsGroups as $lessonGroup)
                                 $lessonGroup->save(false);
@@ -170,6 +179,11 @@ class CoursesController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    public function actionShowCode($id_course){
+        $model=$this->loadModel($id_course);
+        $this->render('show_code', array('course'=>$model));
+    }
         
 	public function actionParams($id_course)
 	{

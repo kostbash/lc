@@ -528,6 +528,7 @@ Yii::app()->clientScript->registerScript('#courses', "
         });
     }
     $('.blocks-container table:first > tbody:first tr:first').addClass('notSort');
+    $('.lessons-container table:first > tbody:first tr:first').addClass('notSort');
     sortBlocks();
     
     function sortLessons()
@@ -537,7 +538,7 @@ Yii::app()->clientScript->registerScript('#courses', "
             axis: 'y',
             connectWith: '.lessons-container > table > tbody',
             cursor: 'move',
-            items: 'tr:not(:first)',
+            items: '>*:not(.notSort)',
             update: function(event, ui) {
                 positions = new Array();
                 itemId = ui.item.data('id');
@@ -767,6 +768,7 @@ $form=$this->beginWidget('CActiveForm', array(
         <div class="col-lg-4 col-md-4">
             <?php echo CHtml::link('Умения курса', array('/admin/skills/index', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
             <?php echo CHtml::link('<i class="glyphicon glyphicon-cog"></i>Параметры курса', array('/admin/courses/params', 'id_course'=>$model->id), array('class'=>'btn btn-primary btn-sm btn-icon')); ?>
+            <?php echo CHtml::link('Код курса', array('/admin/courses/showcode', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
         </div>
     </div>
 </div>

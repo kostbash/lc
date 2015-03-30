@@ -1107,6 +1107,9 @@ class ExercisesController extends Controller {
                 }
             }
         }
+        $course = Courses::model()->findByPk($group->id_course);
+        $course->code = parseCode::GenerateCourseCode($group->id_course);
+        $course->save(false);
     }
 
     public function loadModel($id) {

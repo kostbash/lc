@@ -1,7 +1,52 @@
 <?php
 Yii::beginProfile('index');
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/ckeditor/ckeditor.js");
 Yii::app()->clientScript->registerScript("UpdateByAjax",
         "$(function(){
+
+        $('.for-editor-field').live('click', function() {
+                current = $(this);
+                hidden = current.siblings('input[type=hidden]');
+                if(hidden.attr('id')!='editingQuestion')
+                {
+                    $('#editingQuestion').removeAttr('id');
+                    hidden.attr('id', 'editingQuestion');
+                    CKEDITOR.instances['editor-text'].setData(hidden.val());
+                    CKEDITOR.on('instanceReady', function (ev) {
+                       // Prevent drag-and-drop.
+                       ev.editor.document.on('drop', function (ev) {
+                          ev.data.preventDefault(true);
+                       });
+                    });
+                }
+                $('#htmlEditor').modal('show');
+            });
+
+            $('#amend').click(function() {
+                data = CKEDITOR.instances['editor-text'].getData();
+                editing = $('#editingQuestion');
+                if(!$.trim(data))
+                {
+                    alert('Задание не может быть пустым !');
+                    return false;
+                }
+                if(editing.val()!=data)
+                    editing.val(data).siblings('.for-editor-field').html(data).closest('tr');
+                    current = editing;
+                    $.ajax({
+                    'url':'".Yii::app()->createUrl("admin/skills/update")."',
+                    'type':'POST',
+                    'data':$(current).serialize(),
+                    'success': function(result) {
+                                    if(result==1)
+                                        $(current).parents('.zgrid').yiiGridView('update');
+                                    else if(result!='')
+                                        alert(result);
+                     }
+                });
+                $('#htmlEditor').modal('hide');
+            });
+
             $('.zgrid .new-record').live('change', function(){
                 current = this;
                 $.ajax({
@@ -117,6 +162,23 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
     );
 ?>
 
+<div class="modal fade" id="htmlEditor" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="htmlEditorLabel">Html-редактор</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="editor-text" class="ckeditor" name="editor"></textarea>
+            </div>
+            <div class="modal-footer">
+                <?php echo CHtml::Button('Внести изменения', array("class"=>"btn btn-primary", 'id'=>'amend')); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="page-header clearfix">
     <h2>Умения<?php if($course) echo " курса \"$course->name\""; ?></h2>
 </div>
@@ -134,6 +196,13 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                 'type'=>'textAreaSkill',
                 'htmlOptions'=>array('style'=>'width: 30%'),
             ),
+        array(
+            'name'=>'condition',
+            'header'=>'Html текст',
+            'type'=>'forEditor',
+            'htmlOptions'=>array('style'=>'width: 30%'),
+            'visibleCell'=>'!$data->isNewRecord',
+        ),
             array(
                 'name'=>'UnderSkills',
                 'type'=>'labelSkill',

@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property string $type
+ * @property string $condition
  */
 class Skills extends CActiveRecord
 {
@@ -33,13 +34,14 @@ class Skills extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+            array('condition', 'length', 'max'=>65535),
 			array('name, type', 'required'),
 			array('name', 'length', 'max'=>255),
 			array('id_course', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, type', 'safe', 'on'=>'search'),
+			array('id, name, type, condition', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class Skills extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Название',
+            'condition' => 'Html текст',
 			'type' => 'Type',
                         'countExercises'=>'Число заданий',
                         'UnderSkills'=> 'Требуемое умение',

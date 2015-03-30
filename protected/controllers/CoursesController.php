@@ -17,7 +17,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf', 'congratulation', 'unavailable'),
+				'actions'=>array('skillByAjax','list','index', 'nextlesson', 'print', 'toPdf', 'congratulation', 'unavailable'),
 				'roles'=>array('student'),
 			),
 			array('allow',
@@ -25,7 +25,7 @@ class CoursesController extends Controller
                                 'users'=>array('?'),
 			),
                         array('allow',
-				'actions'=>array('view'),
+				'actions'=>array('view', 'test'),
                                 'users'=>array('*'),
 			),
 			array('deny',
@@ -176,6 +176,18 @@ class CoursesController extends Controller
                 }
                 unset($_SESSION['checkNewParent']);
             }
+
+            $nodes = null;
+            $edges = null;
+            foreach($course->Skills as $skill) {
+
+                $nodes .= "{ data: { id: '$skill->id', name: '$skill->name' } },";
+                foreach ($skill->TopSkills as $top) {
+                    $edges .= "{ data: { source: '$skill->id', target: '$top->id' } },";
+                }
+
+
+            }
             
             $this->render('index',array(
                     'course'=>$course,
@@ -183,6 +195,8 @@ class CoursesController extends Controller
                     'courseUser'=>$courseUser,
                     'currentLesson'=>$userAndLesson->Lesson,
                     'newParent' => $newParent,
+                    'nodes'=>$nodes,
+                    'edges'=>$edges,
             ));
 	}
         
@@ -318,6 +332,34 @@ class CoursesController extends Controller
 			'model'=>$model,
 		));
 	}
+
+    public function actionSkillByAjax($id) {
+        $skill = Skills::model()->findByPk($id);
+        echo $skill->condition;
+    }
+
+    public function actionTest() {
+        $string = '
+            SetBlockType(btExersice)
+            SetBlockTitle(тестовый блок)
+            addTask(lol)
+
+            SetBlockType(btExersice)
+            SetBlockTitle(второй блок)
+
+            SetBlockType(btExersice)
+            SetBlockTitle(третий блок)
+            AddControlledU(66)
+            addTask(8401)
+            addTask(5411)
+            addTask(5416)
+        ';
+
+        echo '<pre>';
+        $code = new parseCode($string);
+       $tt = $code->getSkills($code->getBlocks()[2]['body']);
+        print_r($tt);
+    }
 
 	public function loadModel($id)
 	{
