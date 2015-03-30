@@ -198,8 +198,8 @@ class LessonsController extends Controller
 
     public function actionNewLesson($id) {
         if (isset($_POST['Exercises'])) {
-            //$this->nextBlock($id);
-            //return;
+            $this->nextBlock($id);
+            return;
         }
 
         $course = Courses::model()->findByPk($id);
