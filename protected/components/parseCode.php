@@ -172,7 +172,6 @@ class parseCode {
 
 
         $code = $this->code;
-
         
 
         $block = array();
