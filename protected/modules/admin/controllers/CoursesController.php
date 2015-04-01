@@ -187,6 +187,15 @@ class CoursesController extends Controller
         
 	public function actionParams($id_course)
 	{
+        if(!$var = Variables::model()->findByAttributes(array('name'=>'BlockIndex', 'id_course'=>$id_course))) {
+            $var = new Variables();
+            $var->name='BlockIndex';
+            $var->type='int';
+            $var->id_course = $id_course;
+            $var->default_value=1;
+            $var->save();
+        }
+
 		$model=$this->loadModel($id_course);
                 
                 $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));

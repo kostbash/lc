@@ -340,25 +340,60 @@ class CoursesController extends Controller
 
     public function actionTest() {
         $string = '
+        switch(BlockIndex) {
+        case 1:
             SetBlockType(btExersice)
             SetBlockTitle(тестовый блок)
             addTask(lol)
-
+        break;
+        case 2:
             SetBlockType(btExersice)
             SetBlockTitle(второй блок)
+        break;
+        case 3:
+            SetBlockTitle(Числа до 20 и цифры - проверка)
+AddControlledU(17)
+SetULevel(17, 0.7)
+AddControlledU(49)
+SetULevel(49, 0.7)
 
-            SetBlockType(btExersice)
-            SetBlockTitle(третий блок)
-            AddControlledU(66)
-            addTask(8401)
-            addTask(5411)
-            addTask(5416)
+ addTask(5610)
+ addTask(5611)
+ addTask(5612)
+ addTask(5613)
+ addTask(5614)
+ addTask(5615)
+ addTask(5616)
+ addTask(5617)
+ addTask(5631)
+ addTask(5632)
+ addTask(5633)
+ addTask(5634)
+ addTask(5635)
+ addTask(5636)
+ addTask(5637)
+ addTask(5638)
+ addTask(5639)
+ addTask(5640)
+ addTask(5641)
+ addTask(5642)
+ addTask(5643)
+ addTask(5644)
+ addTask(5645)
+ addTask(5646)
+ addTask(5647)
+ addTask(5648)
+ addTask(5649)
+        break;
+        }
         ';
+
+
 
         echo '<pre>';
         $code = new parseCode($string);
-       $tt = $code->getSkills($code->getBlocks()[2]['body']);
-        print_r($tt);
+        $block = $code->getBlock(11);
+        print_r($block);
     }
 
 	public function loadModel($id)

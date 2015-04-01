@@ -21,20 +21,7 @@ class parseCode {
         return $result;
     }
 
-    public function getBlocks() {
-        $result_tmp = $this->getFunc('SetBlockType', $this->code);
-        $result = $result_tmp[0];
-        foreach ($result_tmp[1] as $key=>$val) {
-            $result[$key]['type'] = $val[0];
-            $result[$key]['body'] = substr($this->code, $result[$key][1],
-                (isset($result[$key+1])) ? $result[$key+1][1] - $result[$key][1] : strlen($this->code));
-            $result[$key]['title'] = $this->parseBlockTitle($result[$key]['body']);
-//            $result[$key]['skills'] = $this->getSkills($result[$key]['body']);
-//            $result[$key]['tasks'] = $this->getTasks($result[$key]['body']);
 
-        }
-        return $result;
-    }
 
     public function parseBlockTitle($string) {
         $result = $this->getFunc('SetBlockTitle', $string);
@@ -95,9 +82,12 @@ class parseCode {
 
         }
         $block_count = count($blocks);
-        $code = null;
+        $code = "switch(BlockIndex) {\n";
+        $step = 0;
         for ($i = 1; $i<$block_count; $i++) {
             foreach ($blocks[$i] as $block) {
+                $step++;
+                $code .= "case $step:\n";
                 $model = GroupOfExercises::model()->findByPk($block->id);
                 if ($model->type == 1) {
                     $code .= "SetBlockType(btExersice)\n";
@@ -134,12 +124,98 @@ class parseCode {
 
 
 
-
+                $code .= "break;\n";
                 $code .= "\n\n";
             }
 
         }
+        $code .= '}';
         return $code;
 
     }
+
+
+
+    public function getBlock($id_course = 11) {
+
+        $user_variables = Variables::model()->findAllByAttributes(array('id_course'=>$id_course));
+
+        foreach ($user_variables as $variable) {
+           if (!$vars = VarUserValue::model()->findByAttributes(
+               array(
+                   'variable_id'=>$variable->id,
+                   'user_id'=>Yii::app()->user->id,
+                   'id_course'=>$id_course
+               )))
+           {
+               $var = new VarUserValue();
+               $var->variable_id=$variable->id;
+               $var->id_course = $id_course;
+               $var->user_id = Yii::app()->user->id;
+               $var->value = $variable->default_value;
+               if ($var->save()) {
+                   $all_vars[] = array(
+                       'var' => $variable,
+                       'user_value' => $var,
+                   );
+               }
+
+           } else {
+               $all_vars[] = array(
+                   'var' => $variable,
+                   'user_value' => $vars,
+               );
+           }
+        }
+
+
+
+
+        $code = $this->code;
+
+        
+
+        $block = array();
+        $test_section = 'tasks';
+        $count = 0;
+
+        foreach ($all_vars as $var) {
+            $name = $var['var']->name;
+            $$name = $var['user_value']->value;
+            $code = preg_replace('/'.$name.'/', '\$'.$name, $code);
+        }
+
+
+        $code = preg_replace('/SetBlockType\((.{1,})\)/', '\$block[\'type\'] = \'$1\';', $code);
+        $code = preg_replace('/SetBlockTitle\((.{1,})\)/', '\$block[\'title\'] = \'$1\';', $code);
+        $code = preg_replace('/AddControlledU\((.{1,})\)/', '\$block[\'skills\'][] = Skills::model()->findByPk($1);', $code);
+        $code = preg_replace('/addTask\((.{1,})\)/', '\$block[\'tasks\'][\$test_section][] = Exercises::model()->findByPk($1);', $code);
+        $code = preg_replace('/SetULevel\((.{1,}),(.{1,})\)/', '\$block[\'skill_levels\'][$1] = (float)\'$2\';', $code);
+        $code = preg_replace('/AddTestSection/', '\$test_section = \'section_\'.++\$count;', $code);
+        $code = preg_replace('/SetTestSectionVisibleTasks\((.{1,})\)/', '\$block[\$test_section.\'_visible\'] = \'$1\';', $code);
+
+        //echo '<pre>'.$code;
+        eval ($code);
+        //echo '<pre>'; print_r($block); exit;
+        if (empty($block)) {
+            return false;
+        }
+        if (isset($block['tasks']['tasks'])) {
+            $block['tasks'] = $block['tasks']['tasks'];
+        } else {
+            $tasks = array();
+            foreach ($block['tasks'] as $key=>$val) {
+
+                shuffle($block['tasks'][$key]);
+                array_splice($block['tasks'][$key], $block[$key.'_visible']);
+                $tasks=array_merge($tasks, $block['tasks'][$key]);
+            }
+            shuffle($tasks);
+            $block['tasks'] = $tasks;
+
+        }
+        return $block;
+    }
+
+
 }
