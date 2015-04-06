@@ -181,7 +181,7 @@ class CoursesController extends Controller
             $edges = null;
             foreach($course->Skills as $skill) {
 
-                $nodes .= "{ data: { id: '$skill->id', name: '$skill->name' } },";
+                $nodes .= "{ data: { id: '$skill->id', name: '$skill->name', width: ".mb_strlen($skill->name, 'utf-8')*10 ." } },";
                 foreach ($skill->TopSkills as $top) {
                     $edges .= "{ data: { source: '$skill->id', target: '$top->id' } },";
                 }

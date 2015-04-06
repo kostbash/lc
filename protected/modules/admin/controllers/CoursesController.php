@@ -106,13 +106,29 @@ class CoursesController extends Controller
                                 $n_lesson->change_date = date('Y-m-d H:i:s');
                                 $n_lesson->course_creator_id = $model->id;
 
+
+
+
                             if($n_lesson->save())
                             {
-                                $courseAndLesson = new CoursesAndLessons;
-                                $courseAndLesson->id_course = $model->id;
-                                $courseAndLesson->id_lesson = $n_lesson->id;
-                                $courseAndLesson->order = CoursesAndLessons::maxValueOrder($model->id);
-                                $courseAndLesson->save();
+                                $n_step = new GroupOfLessons;
+                                $n_step->name = 'Тестовый блок';
+                                $n_step->save();
+
+
+
+
+                                $c_step = new GroupAndLessons;
+                                $c_step->id_group = $n_step->id;
+                                $c_step->id_lesson = $n_lesson->id;
+                                $c_step->order = 1;
+                                $c_step->save();
+
+                                $courseAndStep = new CourseAndLessonGroup;
+                                $courseAndStep->id_course = $model->id;
+                                $courseAndStep->id_group_lesson = $n_step->id;
+                                $courseAndStep->order = 1;
+                                $courseAndStep->save();
                             }
 
                             $name = 'Проверочный тест';

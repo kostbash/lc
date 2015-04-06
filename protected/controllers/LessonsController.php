@@ -211,7 +211,8 @@ class LessonsController extends Controller
         $block = $code->getBlock($id);
 
         if (!$block) {
-            $this->redirect('/courses/list');
+
+            $block['null_block'] = true;
         }
 
         if (isset($_POST['Exercises'])) {
@@ -226,7 +227,20 @@ class LessonsController extends Controller
                 ));
                 return;
             } else {
-                $this->actionNextBlock($id);
+                $level = current($block['skill_levels'])*100;
+                $count = 0;
+                $right = 0;
+                foreach ($_POST['Exercises'] as $key=>$exercise) {
+                    $count++;
+                    $exe = Exercises::model()->findByPk($key);
+                    if ($exe->correct_answers == $_POST['Exercises'][$key]['answers']) {
+                        $right++;
+                    }
+                }
+                if($right*100/$count >= $level) {
+                    $this->actionNextBlock($id);
+                }
+
                 return;
             }
 

@@ -50,7 +50,7 @@
 <a class="btn btn-success" href="<?php echo Yii::app()->createUrl('lessons/newLesson', array('id'=>$course->id)); ?>">Начать прохождение курса</a>
 
 
-<div id="cy" style="width: 100%; height: 600px"></div>
+<div id="cy" style="width: 100%; height: 900px"></div>
 <script type="text/javascript">
     $(function(){ // on dom ready
 
@@ -62,11 +62,8 @@
                     'text-valign': 'center',
                     'color': 'white',
                     'shape': 'rectangle',
-                    'text-outline-width': 2,
-                    'text-outline-color': '#888',
-                    'width': '150',
-                    'height': '50',
-                    'padding-left': '1'
+                    'width': "data(width)",
+                    'height': '50'
                 })
                 .selector('edge')
                 .css({
@@ -98,7 +95,7 @@
 
             layout: {
                 name: 'breadthfirst',
-                padding: 10
+
             },
 
             // on graph initial layout done (could be async depending on layout...)
@@ -152,7 +149,7 @@
         Описание отсутствует
     </div>
 
-
+    <?php if (false): //true в случае ностальгии?>
     <div id="back-header-bottom">
         <div id="header-bottom">
                 <div id="head-col-left" class="head-column">
@@ -369,4 +366,5 @@
             Курс пуст
         <?php endif; ?>
     </div>
+    <?php endif?>
 </div>

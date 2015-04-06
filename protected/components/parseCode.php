@@ -67,25 +67,15 @@ class parseCode {
         if (!$id) {
             return false;
         }
-        $model=Courses::CourseById($id);
+        $blocks = GroupOfExercises::model()->findAllByAttributes(array('id_course'=>$id));
 
-        $steps = $model->LessonsGroups;
-        foreach ($steps as $step) {
-            $lesson = GroupOfLessons::model()->findByPk($step->id);
-            $lessons[] = $lesson->LessonsRaw;
-        }
-        foreach($lessons as $lesson_l) {
-            foreach($lesson_l as $lesson) {
-                $block = Lessons::model()->findByPk($lesson->id);
-                $blocks[] = $block->ExercisesGroups;
-            }
 
-        }
-        $block_count = count($blocks);
-        $code = "switch(BlockIndex) {\n";
+
+        $code = "if isBlockPassed then \n inc(BlockIndex) \nendif \n\n";
+        $code .= "switch(BlockIndex) {\n";
         $step = 0;
-        for ($i = 1; $i<$block_count; $i++) {
-            foreach ($blocks[$i] as $block) {
+        if (isset($blocks[0])) unset($blocks[0]); //Убрать при необходимост отображения проверочного теста
+            foreach ($blocks as $block) {
                 $step++;
                 $code .= "case $step:\n";
                 $model = GroupOfExercises::model()->findByPk($block->id);
@@ -128,7 +118,7 @@ class parseCode {
                 $code .= "\n\n";
             }
 
-        }
+
         $code .= '}';
         return $code;
 
@@ -137,7 +127,7 @@ class parseCode {
 
 
     public function getBlock($id_course = 11) {
-
+        $code = $this->code;
         $user_variables = Variables::model()->findAllByAttributes(array('id_course'=>$id_course));
 
         foreach ($user_variables as $variable) {
@@ -171,8 +161,6 @@ class parseCode {
 
 
 
-        $code = $this->code;
-        
 
         $block = array();
         $test_section = 'tasks';
@@ -182,6 +170,7 @@ class parseCode {
             $name = $var['var']->name;
             $$name = $var['user_value']->value;
             $code = preg_replace('/'.$name.'/', '\$'.$name, $code);
+            $code = mb_substr($code, 12);
         }
 
 
@@ -193,26 +182,33 @@ class parseCode {
         $code = preg_replace('/AddTestSection/', '\$test_section = \'section_\'.++\$count;', $code);
         $code = preg_replace('/SetTestSectionVisibleTasks\((.{1,})\)/', '\$block[\$test_section.\'_visible\'] = \'$1\';', $code);
 
+        $code = preg_replace('/SetBlockTitle\(\)/', '\$block[\'title\'] = \' \';', $code);
+
         //echo '<pre>'.$code;
         eval ($code);
         //echo '<pre>'; print_r($block); exit;
         if (empty($block)) {
             return false;
         }
-        if (isset($block['tasks']['tasks'])) {
-            $block['tasks'] = $block['tasks']['tasks'];
-        } else {
-            $tasks = array();
-            foreach ($block['tasks'] as $key=>$val) {
+        if (isset($block['tasks'])) {
+            if (isset($block['tasks']['tasks'])) {
+                $block['tasks'] = $block['tasks']['tasks'];
+            } else {
+                $tasks = array();
+                foreach ($block['tasks'] as $key=>$val) {
 
-                shuffle($block['tasks'][$key]);
-                array_splice($block['tasks'][$key], $block[$key.'_visible']);
-                $tasks=array_merge($tasks, $block['tasks'][$key]);
+                    shuffle($block['tasks'][$key]);
+                    array_splice($block['tasks'][$key], $block[$key.'_visible']);
+                    $tasks=array_merge($tasks, $block['tasks'][$key]);
+                }
+                shuffle($tasks);
+                $block['tasks'] = $tasks;
+
             }
-            shuffle($tasks);
-            $block['tasks'] = $tasks;
-
+        } else {
+            $block['tasks'] = false;
         }
+
         return $block;
     }
 

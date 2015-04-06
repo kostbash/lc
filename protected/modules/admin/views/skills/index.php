@@ -109,7 +109,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                 current = $(this);
                 input = current.parents('.input-group-btn').siblings('input');
                 $.ajax({
-                    'url':'".Yii::app()->createUrl('admin/relationskills/create')."',
+                    'url':'".Yii::app()->createUrl('admin/Relationskills/create')."',
                     'type':'POST',
                     'data':{ 'id_main': input.data('id'), 'id': current.data('id') },
                     'success': function(result) { 
@@ -181,6 +181,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
 
 <div class="page-header clearfix">
     <h2>Умения<?php if($course) echo " курса \"$course->name\""; ?></h2>
+    <a class="btn btn-success btn-sm" href="http://cursys/admin/skills/showtree/id_course/<?=$course->id?>">Посмотреть дерево умений</a>
 </div>
 <div class="row">
 <div class="pull-left col-lg-6 col-md-6">

@@ -74,22 +74,28 @@ $this->renderPartial("_pass_scripts", array('user'=>$user));
         <div id="lesson-page">
 
             <h2 class="block-name">Блок "<?=$block['title']?>"</h2>
-            <?php
-            $form=$this->beginWidget('CActiveForm', array(
-                'id'=>'exercises-form',
-                'enableAjaxValidation'=>false,
-            ));
-            ?>
-            <input type="hidden" name="Exercises" />
-
+            <?php if($block['tasks']):?>
                 <?php
-                $this->renderPartial("blocks/new_$block_type", array(
-                    'tasks'=>$block['tasks'],
-                    'course_id' => $course_id,
+                $form=$this->beginWidget('CActiveForm', array(
+                    'id'=>'exercises-form',
+                    'enableAjaxValidation'=>false,
                 ));
                 ?>
-                <?php $this->endWidget(); ?>
-
+                <input type="hidden" name="Exercises" />
+                    <?php
+                    $this->renderPartial("blocks/new_$block_type", array(
+                        'tasks'=>$block['tasks'],
+                        'course_id' => $course_id,
+                    ));
+                    ?>
+                    <?php $this->endWidget(); ?>
+            <?php else: ?>
+                <?php if ($block['null_block']):?>
+                    Нет блоков
+                <?php else: ?>
+                    Нет уроков
+                <?php endif?>
+            <?php endif?>
         </div>
     </div>
 
