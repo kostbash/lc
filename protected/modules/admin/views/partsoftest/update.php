@@ -15,8 +15,142 @@ Yii::app()->clientScript->registerScript("skills-grid",
             });
             
             $('.type-exercise tbody tr textarea, input[type!=checkbox]:not([name=term]), select').live('change', function(){
-                $(this).closest('tr').find('.save-row').show();
+                //$(this).closest('tr').find('.save-row').show();
+                saveRow();
             });
+
+            $('#addSkillForSelected #searchSkillForSelected').live('keyup', function(){
+                current = $(this);
+                $.ajax({
+                    url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$part->Group->id, 'all'=>1))."',
+                    type:'POST',
+                    data: { term: current.val() },
+                    dataType: 'json',
+                    success: function(result) {
+                            current.siblings('.input-group-btn').children('.dropdown-menu').children('li').remove();
+                            current.siblings('.input-group-btn').children('.dropdown-menu').append(result.html);
+                            current.siblings('.input-group-btn').addClass('open');
+                    }
+                });
+            });
+
+            $('#addSkillForSelected .dropdown-toggleForSelected').live('click', function(){
+                current = $(this);
+                    $.ajax({
+                        url:'".Yii::app()->createUrl('admin/groupofexercises/skillsbyajax', array('id'=>$part->Group->id, 'all'=>1))."',
+                        type:'POST',
+                        dataType: 'json',
+                        success: function(result) {
+                            if(result)
+                                current.siblings('.dropdown-menu').children('li').remove();
+                                current.siblings('.dropdown-menu').append(result.html);
+                        }
+                    });
+            });
+
+            $('#addSkillForSelected .dropdown-menu li').live('click', function(){
+                current = $(this);
+                skillName = current.children().text();
+                roll = true;
+
+                checked = $('td [type=checkbox]:checked');
+                checked.each(function(i, arr){
+                    elem = $('tr[data-id='+$(arr).attr('value')+'] td .inputs-mini');
+                    childInputs = $(elem).children('div').children('input');
+                    childInputs.each(function(i, arr){
+                        if ($(arr).attr('value') == current.data('id')) {
+                            roll = false;
+                        }
+                    });
+                    if (roll) {
+                        elem.prepend('<div class=\"input-mini-container clearfix\"><p class=\"name\">'+skillName+'</p><a href=\"#\" class=\"close\">×</a><input type=\"hidden\" id=\"Exercises_'+$(arr).attr('value')+'_SkillsIds\" name=\"Exercises['+$(arr).attr('value')+'][SkillsIds][]\" value=\"'+current.data('id')+'\"></div>');
+                    } else {
+                        roll = true;
+                    }
+
+                    curr = $('tr[data-id='+$(arr).attr('value')+']');
+                    $.ajax({
+                        'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$part->Group->id))."',
+                        'type':'POST',
+                        'data': curr.find('textarea, input, select').serialize(),
+                        'success': function(result) {
+                            if(result==1) {
+
+                            }
+                            else if(result!='' && result != '1111111111111')
+
+                                current.hide();
+                        },
+                            complete: function(){
+                            }
+
+                    });
+
+                });
+
+
+                current.parents('.input-group-btn').removeClass('open');
+                return false;
+            });
+
+            $('#delete_for_selected').click(function(){
+                if (confirm('Вы уверены, что хотите удалить умения у выбранных элементов?')) {
+                    checked = $('td [type=checkbox]:checked');
+                    checked.each(function(i, arr){
+                        elem = $('tr[data-id='+$(arr).attr('value')+'] td .inputs-mini');
+                        elem.children('.input-mini-container').remove();
+                        curr = $('tr[data-id='+$(arr).attr('value')+']');
+
+                        $.ajax({
+                            'url': '".Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>$part->Group->id))."',
+                            'type':'POST',
+                            'data': curr.find('textarea, input, select').serialize(),
+                            'success': function(result) {
+                                if(result==1) {
+
+
+                                }
+                                else if(result!='' && result != '1111111111111')
+                                    alert(result);
+                                    current.hide();
+                                    saveButton.hide();
+                            },
+                            complete: function(){
+                                $('.save-row').hide();
+                            }
+
+                        });
+                    });
+                }
+                return false;
+            });
+
+            function saveRow(){
+                current = $('.save-row');
+                if(current.closest('tr').data('cansave') != 1)
+                    if(!confirm('Создать задание на основании измененных данных?'))
+                        return false;
+
+               $.ajax({
+                    'url': current.attr('href'),
+                    'type':'POST',
+                    'data': current.closest('tr').find('textarea, input, select').serialize(),
+                    'success': function(result) {
+                        if(result==1) {
+                             current.parents('.zgrid').yiiGridView('update');
+                             current.hide();
+                        }
+                        else if(result!='' && result != '1111111111111')
+                            //alert(result);
+                            current.hide();
+                    },
+                            complete: function(){
+                                $('.save-row').hide();
+                            }
+                });
+
+                return false;
+            }
             
             $('.type-exercise tbody tr .save-row').live('click', function(){
                current = $(this);
@@ -42,7 +176,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
             $('.type-exercise .inputs-mini .close').live('click', function(){
                if(confirm('Вы уверены, что хотите удалить данное умение ?'))
                {
-                    $(this).closest('tr').find('.save-row').show();
+                    //$(this).closest('tr').find('.save-row').show();
+                    saveRow();
                     $(this).closest('.input-mini-container').remove();
                }
                return false;
@@ -91,7 +226,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     idExercise = current.closest('.mydrop').find('input').data('id');
                     nameSkill = current.find('a').html();
                     current.closest('.mydrop').before('<div class=\"input-mini-container clearfix\"><p class=\"name\">'+nameSkill+'</p><a href=\"#\" class=\"close\">&times;</a><input type=\"hidden\" name=\"Exercises['+idExercise+'][SkillsIds][]\" value='+dataId+' /></div>');
-                    current.closest('tr').find('.save-row').show();
+                    //current.closest('tr').find('.save-row').show();
+                    saveRow();
                 }
                 current.parents('.input-group-btn').removeClass('open');
                 return false;
@@ -113,7 +249,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
             });
             
             $('.type-test tbody tr textarea, input[type!=checkbox]:not([name=term]), select').live('change', function(){
-                $(this).closest('tr').find('.save-row').show();
+                //$(this).closest('tr').find('.save-row').show();
+                saveRow();
             });
             
             $('.type-test tbody tr .save-row').live('click', function(){
@@ -155,7 +292,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
                     return false;
                 }
                 if(editing.val()!=data)
-                    editing.val(data).siblings('.for-editor-field').html(data).closest('tr').find('.save-row').show();
+                    editing.val(data).siblings('.for-editor-field').html(data).closest('tr');
+                    saveRow()
                 $('#htmlEditor').modal('hide');
             });
             
@@ -221,6 +359,19 @@ $form = $this->beginWidget('CActiveForm', array(
 <script type="text/javascript" src="/js/swfupload/handlers.js"></script>
 <script type="text/javascript" src="/js/uploader.js"></script>
 <script src="/js/jquery.html5_upload.js" type="text/javascript"></script>
+<a href="#" style="float: right; margin-right: 10px" id="delete_for_selected" class="btn btn-danger btn-icon"><i class="glyphicon glyphicon-remove"></i>Удалить умения</a>
+<div id="addSkillForSelected" style="float: right" class="col-lg-3 col-md-2">
+    <div class="input-group mydrop" id="courseSkill">
+        <?php echo CHtml::textField("searchSkillForSelected", '', array('placeholder'=>'Введите название умения', 'class'=>'form-control input-sm')); ?>
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-info btn-sm dropdown-toggleForSelected" data-toggle="dropdown" tabindex="-1">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+            </ul>
+        </div>
+    </div>
+</div>
 <?php
 $file = CHtml::fileField('ImportFile', '', array('onchange' => '$(this).hide();', 'style' => 'width:100%;'));
 $this->widget('ZGridView', array(

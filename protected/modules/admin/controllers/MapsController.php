@@ -70,16 +70,19 @@ class MapsController extends Controller
                 }
                 if($model->save())
                 {
-                    foreach($_POST['Tags'] as $id_tag)
-                    {
-                        if(MapTags::model()->exists('id=:id_tag', array('id_tag'=>$id_tag)))
+                    if (isset($_POST['Tags'])) {
+                        foreach($_POST['Tags'] as $id_tag)
                         {
-                            $newMapsAndTags = new MapsAndTags;
-                            $newMapsAndTags->id_map = $model->id;
-                            $newMapsAndTags->id_tag = $id_tag;
-                            $newMapsAndTags->save();
+                            if(MapTags::model()->exists('id=:id_tag', array('id_tag'=>$id_tag)))
+                            {
+                                $newMapsAndTags = new MapsAndTags;
+                                $newMapsAndTags->id_map = $model->id;
+                                $newMapsAndTags->id_tag = $id_tag;
+                                $newMapsAndTags->save();
+                            }
                         }
                     }
+
                     
                     if(isset($imageFile))
                     {
@@ -158,16 +161,18 @@ class MapsController extends Controller
             
             if($model->save())
             {
-                foreach($_POST['DeletedAreas'] as $id_area)
-                {
-                    $id_area = (int) $id_area;
-                    $area = MapAreas::model()->findByAttributes(array('id'=>$id_area, 'id_map'=>$model->id));
-                    if($area)
+                if ($_POST['DeletedAreas']) {
+                    foreach($_POST['DeletedAreas'] as $id_area)
                     {
-                        $area->delete();
+                        $id_area = (int) $id_area;
+                        $area = MapAreas::model()->findByAttributes(array('id'=>$id_area, 'id_map'=>$model->id));
+                        if($area)
+                        {
+                            $area->delete();
+                        }
                     }
                 }
-                
+
                 foreach($_POST['Areas'] as $areaAttrs)
                 {
                     $id_area = (int) $areaAttrs['id'];
@@ -188,27 +193,31 @@ class MapsController extends Controller
                         $newArea->save();
                     }
                 }
-                
-                foreach($_POST['DeletedTags'] as $id_tag)
-                {
-                    $id_tag = (int) $id_tag;
-                    $tag = MapsAndTags::model()->findByAttributes(array('id_tag'=>$id_tag, 'id_map'=>$model->id));
-                    if($tag)
+
+                if (isset($_POST['DeletedTags'])) {
+                    foreach($_POST['DeletedTags'] as $id_tag)
                     {
-                        $tag->delete();
+                        $id_tag = (int) $id_tag;
+                        $tag = MapsAndTags::model()->findByAttributes(array('id_tag'=>$id_tag, 'id_map'=>$model->id));
+                        if($tag)
+                        {
+                            $tag->delete();
+                        }
                     }
                 }
-                
-                foreach($_POST['Tags'] as $id_tag)
-                {
-                    if(!MapsAndTags::model()->exists('id_tag=:id_tag AND id_map=:id_map', array('id_tag'=>$id_tag, 'id_map'=>$model->id)))
+
+                if (isset($_POST['Tags'])) {
+                    foreach($_POST['Tags'] as $id_tag)
                     {
-                        if(MapTags::model()->exists('id=:id_tag', array('id_tag'=>$id_tag)))
+                        if(!MapsAndTags::model()->exists('id_tag=:id_tag AND id_map=:id_map', array('id_tag'=>$id_tag, 'id_map'=>$model->id)))
                         {
-                            $newMapsAndTags = new MapsAndTags;
-                            $newMapsAndTags->id_map = $model->id;
-                            $newMapsAndTags->id_tag = $id_tag;
-                            $newMapsAndTags->save();
+                            if(MapTags::model()->exists('id=:id_tag', array('id_tag'=>$id_tag)))
+                            {
+                                $newMapsAndTags = new MapsAndTags;
+                                $newMapsAndTags->id_map = $model->id;
+                                $newMapsAndTags->id_tag = $id_tag;
+                                $newMapsAndTags->save();
+                            }
                         }
                     }
                 }
