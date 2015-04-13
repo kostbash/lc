@@ -15,6 +15,7 @@
         
         <?php if($model->isNewRecord) : ?>
             $('.pick-map a').click(function(){
+                current = $(this);
                 $.ajax({
                     url: '<?php echo Yii::app()->createUrl('/admin/exercises/saveParams', array('id_visual'=>$model->id_visual)); ?>',
                     type: 'POST',
@@ -87,7 +88,7 @@
         <?php echo CHtml::label('Объекты маски', ''); ?>
     </div>
     <div class="col-lg-5 col-md-5">
-        <?php echo CHtml::dropDownList('Exercises[answers][]', $model->idsRightAreas, CHtml::listData($model->Map->Areas, 'id', 'name'), array('class'=>'form-control', 'empty'=>'Выберите правильный ответ', 'id'=>'select-area')); ?>
+        <?php echo @CHtml::dropDownList('Exercises[answers][]', $model->idsRightAreas, CHtml::listData($model->Map->Areas, 'id', 'name'), array('class'=>'form-control', 'empty'=>'Выберите правильный ответ', 'id'=>'select-area')); ?>
         <div class="errorMessage"></div>
         <div id="hidden-options">
             <?php foreach($model->idsRightAreas as $id_area) : ?>

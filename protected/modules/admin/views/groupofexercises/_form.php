@@ -586,6 +586,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
 
         });
         setInterval(function(){
+            if (".$exerciseGroup->type." == 1) {
                 $('.count_skills').each(function(i, arr){
                     count = 0;
                     id = $(this).data('skill-id');
@@ -597,6 +598,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                         });
                     $(this).html(count);
                 });
+            }
 
                 $('tr td .inputs-mini')
                         .each(function(i, arr){
@@ -692,7 +694,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                                 'name' => 'Skill.id',
                                 'header'=>'Число заданий',
                                 'type'=>'raw',
-                                'value'=> '"<span class=\'count_skills\' data-skill-id=\'$data->id_skill\' data-ex-id=\'$data->id\'>^_^</span>"',
+                                'value'=> '"<span class=\'count_skills\' data-skill-id=\'$data->id_skill\' data-ex-id=\'$data->id\'>".count($data->Skill->Exercises)."</span>"',
                                 'htmlOptions'=>array('width'=>'10%'),
                             ),
                             array(

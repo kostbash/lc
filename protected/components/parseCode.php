@@ -74,7 +74,7 @@ class parseCode {
         $code = "if isBlockPassed then \n inc(BlockIndex) \nendif \n\n";
         $code .= "switch(BlockIndex) {\n";
         $step = 0;
-        if (isset($blocks[0])) unset($blocks[0]); //Убрать при необходимост отображения проверочного теста
+        //if (isset($blocks[0])) unset($blocks[0]); //Убрать при необходимост отображения проверочного теста
             foreach ($blocks as $block) {
                 $step++;
                 $code .= "case $step:\n";
@@ -170,7 +170,7 @@ class parseCode {
             $name = $var['var']->name;
             $$name = $var['user_value']->value;
             $code = preg_replace('/'.$name.'/', '\$'.$name, $code);
-            $code = mb_substr($code, 12);
+            $code = mb_substr($code, 47);
         }
 
 

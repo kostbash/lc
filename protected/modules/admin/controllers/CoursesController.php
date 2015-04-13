@@ -16,7 +16,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
+				'actions'=>array('DeleteBlocks', 'showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -24,6 +24,38 @@ class CoursesController extends Controller
 			),
 		);
 	}
+
+    function actionDeleteBlocks(){
+        $all_courses = Courses::model()->findAll();
+        foreach ($all_courses as $course) {
+            $model=Courses::CourseById($course->id);
+
+            $steps = $model->LessonsGroups;
+
+            $lesson = GroupOfLessons::model()->findByPk($steps[0]->id);
+            $lessons = $lesson->LessonsRaw;
+
+
+            $block = Lessons::model()->findByPk($lessons[0]->id);
+            $blocks = $block->ExercisesGroups;
+            //print_r($blocks);
+            if ($blocks) {
+                foreach ($blocks as $block) {
+                    $block->delete();
+                }
+            }
+
+
+            $lessons = $lessons[0];
+            if ($lessons) {
+                $lessons->delete();
+            }
+
+
+        }
+
+        echo '<div style="font-size: 40px; color: darkgray; text-align: center; margin-top:10%">Проверочные уроки удалены!</div>';
+    }
         
 	public function actionCreate()
 	{

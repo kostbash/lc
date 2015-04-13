@@ -114,7 +114,7 @@ class PartsOfTest extends CActiveRecord
         }
         
         public function afterDelete() {
-            $this->Group->changeDate();
+            //$this->Group->changeDate();
             PartsOfTestAndExercises::model()->deleteAllByAttributes(array('id_part'=>$this->id));
             parent::afterDelete();
         }

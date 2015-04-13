@@ -237,7 +237,7 @@
             return false;
         });
 
-        if (<?=$user->is_dub?>) {
+        if (<?=$user->is_dub or 'false'?>) {
 
             $('.block-name').addClass('dub');
 
