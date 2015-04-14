@@ -48,6 +48,7 @@ class CoursesController extends Controller
             $this->_course = $id;
             $this->render('view',array(
                 'course'=>$course,
+                'skills'=>$course->Skills,
             ));
         }
         
@@ -188,7 +189,8 @@ class CoursesController extends Controller
 
 
             }
-            
+
+
             $this->render('index',array(
                     'course'=>$course,
                     'userLesson'=>$userAndLesson,
@@ -197,6 +199,7 @@ class CoursesController extends Controller
                     'newParent' => $newParent,
                     'nodes'=>$nodes,
                     'edges'=>$edges,
+                    'skills'=>$course->Skills,
             ));
 	}
         

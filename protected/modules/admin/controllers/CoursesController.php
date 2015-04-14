@@ -132,6 +132,15 @@ class CoursesController extends Controller
                                 }
                             }
 
+                            if(!$var = Variables::model()->findByAttributes(array('name'=>'BlockIndex', 'id_course'=>$model->id))) {
+                                $var = new Variables();
+                                $var->name='BlockIndex';
+                                $var->type='int';
+                                $var->id_course = $model->id;
+                                $var->default_value=1;
+                                $var->save();
+                            }
+
 
                                 $n_lesson=new Lessons;
                                 $n_lesson->name = 'Проверочный тест';

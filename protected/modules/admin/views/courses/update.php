@@ -850,7 +850,7 @@ $form=$this->beginWidget('CActiveForm', array(
 </table>
 <div id="additional" class="clearfix">
     <div id="select-skills">
-        <div class="input-group mydrop" id="courseSkill">
+        <div class="input-group mydrop dropup" id="courseSkill">
             <?php echo CHtml::textField("Skills[name]", '', array('placeholder'=>'Введите название умения', 'class'=>'form-control input-sm', 'id'=>'searchSkill')); ?>
             <div class="input-group-btn">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1">

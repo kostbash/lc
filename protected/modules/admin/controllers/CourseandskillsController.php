@@ -100,7 +100,7 @@ class CourseandskillsController extends Controller
             echo CJSON::encode($res);
 	}
 
-	public function actionSkillsByAjax($id_course, $with_used=true)
+	public function actionSkillsByAjax($id_course, $with_used=false)
 	{
             $course = Courses::CourseById($id_course);
             if($course)

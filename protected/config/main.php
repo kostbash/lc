@@ -49,7 +49,7 @@ return array(
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
 			'urlFormat'=>'path',
-                        'baseUrl' => 'http://test-cursys.ru',
+                        'baseUrl' => 'http://cursys',
                         'showScriptName' => false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -68,10 +68,10 @@ return array(
                 ),
             
 		'db'=>array(
-			'connectionString' => 'mysql:host=u409930.mysql.masterhost.ru;dbname=u409930_cur_tst',
+			'connectionString' => 'mysql:host=localhost;dbname=education',
 			'emulatePrepare' => true,
-			'username' => 'u409930_v',
-			'password' => 'M--4o2ICAl',
+			'username' => 'root',
+			'password' => '',
 			'charset' => 'utf8',
                         'enableProfiling'=>true,
 		),

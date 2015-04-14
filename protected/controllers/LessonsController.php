@@ -227,20 +227,34 @@ class LessonsController extends Controller
                 ));
                 return;
             } else {
-                $level = current($block['skill_levels'])*100;
-                $count = 0;
-                $right = 0;
-                foreach ($_POST['Exercises'] as $key=>$exercise) {
-                    $count++;
-                    $exe = Exercises::model()->findByPk($key);
-                    if ($exe->correct_answers == $_POST['Exercises'][$key]['answers']) {
-                        $right++;
-                    }
-                }
-                if($right*100/$count >= $level) {
-                    $this->actionNextBlock($id);
-                }
-
+//                $level = current($block['skill_levels'])*100;
+//                $count = 0;
+//                $right = 0;
+//                foreach ($_POST['Exercises'] as $key=>$exercise) {
+//                    $count++;
+//                    $exe = Exercises::model()->findByPk($key);
+//                    if ($exe->correct_answers == $_POST['Exercises'][$key]['answers']) {
+//                        $right++;
+//                    }
+//                    if (!$exe->correct_answers) {
+//                        $answer = ExercisesListOfAnswers::model()->findByAttributes(
+//                            array(
+//                                'id_exercise'=>$key,
+//                                'answer'=>$_POST['Exercises'][$key]['answers']
+//                            ));
+//                        if ($answer->is_right) {
+//                            $right++;
+//                        }
+//                    }
+//                }
+//                if($right*100/$count >= $level) {
+//                    $this->actionNextBlock($id);
+//                    return;
+//                }
+//                $_SESSION['error_'. $id] = 'Вы дали недостаточное количество правильных ответов для прохождения блока\n Попробуйте еще раз';
+//                $this->redirect('/lessons/newlesson/'.$id);
+//                return;
+                $this->actionNextBlock($id);
                 return;
             }
 
@@ -263,9 +277,14 @@ class LessonsController extends Controller
                 'user_id'=>Yii::app()->user->id,
                 'id_course'=>$id
             ));
+        $course = CoursesAndUsers::model()->findByAttributes(array('id_course'=> $id));
+        if (!$course->is_begin) {
+            $course->is_begin = 1;
+            $course->save();
+        }
         $var->value++;
         $var->save();
-        $this->redirect('/lessons/newlesson/'.$id);
+        //$this->redirect('/lessons/newlesson/'.$id);
     }
         
         public function actionCheck($course, $step=1)

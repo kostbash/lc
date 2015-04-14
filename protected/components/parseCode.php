@@ -166,12 +166,14 @@ class parseCode {
         $test_section = 'tasks';
         $count = 0;
 
-        foreach ($all_vars as $var) {
-            $name = $var['var']->name;
-            $$name = $var['user_value']->value;
-            $code = preg_replace('/'.$name.'/', '\$'.$name, $code);
-            $code = mb_substr($code, 47);
+        if ($all_vars) {
+            foreach ($all_vars as $var) {
+                $name = $var['var']->name;
+                $$name = $var['user_value']->value;
+                $code = preg_replace('/'.$name.'/', '\$'.$name, $code);
+            }
         }
+
 
 
         $code = preg_replace('/SetBlockType\((.{1,})\)/', '\$block[\'type\'] = \'$1\';', $code);
@@ -181,6 +183,7 @@ class parseCode {
         $code = preg_replace('/SetULevel\((.{1,}),(.{1,})\)/', '\$block[\'skill_levels\'][$1] = (float)\'$2\';', $code);
         $code = preg_replace('/AddTestSection/', '\$test_section = \'section_\'.++\$count;', $code);
         $code = preg_replace('/SetTestSectionVisibleTasks\((.{1,})\)/', '\$block[\$test_section.\'_visible\'] = \'$1\';', $code);
+        $code = preg_replace('/if([\s\S]*)endif/m', '', $code);
 
         $code = preg_replace('/SetBlockTitle\(\)/', '\$block[\'title\'] = \' \';', $code);
 

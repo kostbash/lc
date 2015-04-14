@@ -56,7 +56,7 @@
         </h2>
         <div id="top-buttons">
             <?php echo CHtml::link(Yii::t('course-unauth', $messages[11]->message), '#', array('class'=>'next-button begin-learning', 'data-toggle'=>"modal", 'data-target'=>"#regLogin", 'onclick'=>Yii::app()->user->isGuest?"reachGoal('AnyCourseStartGuest')":'' )); ?>
-            <?php echo CHtml::link(Yii::t('course-pages', $messages[12]->message), array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
+<!--            --><?php //echo CHtml::link(Yii::t('course-pages', $messages[12]->message), array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
         </div>
         <div id="course-info" class="clearfix">
             <div class="get">
@@ -122,42 +122,26 @@
         <h2 class="main-title"><?php echo Yii::t('course-unauth', $messages[16]->message); ?></h2>
         
         <?php if ($course->LessonsGroups) : $posLesson = 1; $isSkipLesson = false; ?>
-            <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
-                <h1 class='theme-name'><?php echo "Шаг $groupNum: \"$lessonGroup->name\""; ?></h1>
-                <?php
-                    $themeLessons = $lessonGroup->LessonsRaw;
-                    if(!$isSkipLesson && $posLesson==1) {
-                        $isSkipLesson=true;
-                        unset($themeLessons[0]);
-                    }
-                ?>
-                <table class="lessons-table">
-                    <thead>
-                        <tr>
-                            <th class='number'>Номер</th>
-                            <th class='name'>Название урока</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php if ($themeLessons) : ?>
-                        <?php foreach ($themeLessons as $lesson) : ?>
-                            <tr>
-                                <td class="number">
-                                    <?php echo $posLesson++; ?>
-                                </td>
-                                <td class="name">
-                                    <?php echo $lesson->name; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="2">Нет уроков</td>
-                        </tr>
-                    <?php endif; ?>
-                    </tbody>
-                </table>
-            <?php endforeach; ?>
+            <table class='lessons-table' style="margin-top: 10px;">
+                <colgroup>
+                    <col width="15%">
+                    <col width="85%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="status">Номер умения</th>
+                    <th class='name'>Название умения</th>
+                </tr>
+                </thead>
+                <?php if($skills):?>
+                    <?php foreach($skills as $skillNum=>$skill): ++$skillNum?>
+                        <tr><td><?=$skillNum?></td><td><?=$skill->name?></td></tr>
+                    <?php endforeach?>
+                <?php else:?>
+
+                <?php endif?>
+            </table>
+
         <?php else : ?>
             Курс пуст
         <?php endif; ?>

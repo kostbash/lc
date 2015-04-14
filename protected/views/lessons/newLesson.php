@@ -1,6 +1,15 @@
 <?php
 $this->renderPartial("_pass_scripts", array('user'=>$user));
 ?>
+
+<?if (isset($_SESSION['error_'.$course_id])):?>
+    <script>
+        $(document).ready(function(){
+            alert('<?=$_SESSION['error_'.$course_id]?>');
+            <? unset($_SESSION['error_'.$course_id])?>
+        });
+    </script>
+<?endif?>
 <div class="music" style="display: none"></div>
 <div id="separate-header-part">
     <img src="/images/separate-two-part.png" width="1026" height="14" />
