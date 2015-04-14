@@ -1,7 +1,7 @@
 <?php
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . "/js/ckeditor/ckeditor.js");
 Yii::app()->clientScript->registerScript("skills-grid",
-        "$(function(){
+    "$(function(){
 
             $('#skills-grid .update-record').live('change', function(){
                 current = this;
@@ -324,8 +324,8 @@ Yii::app()->clientScript->registerScript("skills-grid",
             });
             
         });"
-        
-    );
+
+);
 ?>
 <div class="page-header clearfix">
     <?php echo CHtml::link('<i class="glyphicon glyphicon-arrow-left"></i>К тесту', array('/admin/groupofexercises/update', 'id'=>$part->Group->id), array('class'=>'btn btn-success btn-icon', 'style'=>'float:left; margin-right: 2%')); ?>
@@ -333,26 +333,26 @@ Yii::app()->clientScript->registerScript("skills-grid",
 </div>
 
 <div class="modal fade" id="htmlEditor" role="dialog" aria-labelledby="htmlEditorLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="htmlEditorLabel">Html-редактор</h4>
-      </div>
-      <div class="modal-body">
-          <textarea id="editor-text" class="ckeditor" name="editor"></textarea>
-      </div>
-      <div class="modal-footer">
-        <?php echo CHtml::Button('Внести изменения', array("class"=>"btn btn-primary", 'id'=>'amend')); ?>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="htmlEditorLabel">Html-редактор</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="editor-text" class="ckeditor" name="editor"></textarea>
+            </div>
+            <div class="modal-footer">
+                <?php echo CHtml::Button('Внести изменения', array("class"=>"btn btn-primary", 'id'=>'amend')); ?>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <?php
 $form = $this->beginWidget('CActiveForm', array(
     'id' => 'exercises-form',
     'enableAjaxValidation' => false,
-        ));
+));
 ?>
 <script type="text/javascript" src="/js/swfupload/swfupload.queue.js"></script>
 <script type="text/javascript" src="/js/swfupload/fileprogress.js"></script>
@@ -420,55 +420,55 @@ $this->widget('ZGridView', array(
             'htmlOptions' => array('width' => '12%'),
         ),
         array(
-                'class'=>'CButtonColumn',
-                'template'=>'{save}{update}{delete}',
-                'buttons'=>array(
-                    'delete'=>array(
-                        'url' => 'Yii::app()->createUrl("/admin/partsoftest/deleteexercise", array("id_part"=>'.$part->id.', "id_exercise"=>$data->id))',
-                    ),
-                    'update'=>array(
-                        'url'=>'Yii::app()->createUrl("/admin/exercises/update", array("id"=>$data->id, "id_part"=>'.$part->id.'))',
-                    ),
-                    'save'=>array(
-                        'label'=>'<i class="glyphicon glyphicon-floppy-disk"></i>',
-                        'url'=>'Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>'.$part->Group->id.', "id_part"=>'.$part->id.'))',
-                        'options'=>array('class'=>'save-row', 'title'=>'Сохранить изменения'),
-                    ),
+            'class'=>'CButtonColumn',
+            'template'=>'{save}{update}{delete}',
+            'buttons'=>array(
+                'delete'=>array(
+                    'url' => 'Yii::app()->createUrl("/admin/partsoftest/deleteexercise", array("id_part"=>'.$part->id.', "id_exercise"=>$data->id))',
                 ),
-                'htmlOptions'=>array('style'=>'width: 6%'),
+                'update'=>array(
+                    'url'=>'Yii::app()->createUrl("/admin/exercises/update", array("id"=>$data->id, "id_part"=>'.$part->id.'))',
+                ),
+                'save'=>array(
+                    'label'=>'<i class="glyphicon glyphicon-floppy-disk"></i>',
+                    'url'=>'Yii::app()->createUrl("admin/exercises/savechange", array("id_group"=>'.$part->Group->id.', "id_part"=>'.$part->id.'))',
+                    'options'=>array('class'=>'save-row', 'title'=>'Сохранить изменения'),
+                ),
+            ),
+            'htmlOptions'=>array('style'=>'width: 6%'),
         ),
     ),
 )); ?>
 
 <div class="clearfix">
-<?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_part'=>$part->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon','style'=>'float: left; margin: 0 5px')) ?>
+    <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить локальные задания', array('/admin/exercises/index', 'id_part'=>$part->id, 'local'=>1), array('class'=>'btn btn-sm btn-success btn-icon','style'=>'float: left; margin: 0 5px')) ?>
 
-<div id="dropdown-generators">
-    <div class="input-group-btn">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
-        <ul class="dropdown-menu" role="menu">
-            <?php echo Generators::ListGenerators($part->id, 'part'); ?>
-        </ul>
+    <div id="dropdown-generators">
+        <div class="input-group-btn">
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить с помощью генератора <b class="caret"></b>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle', 'id'=>'generators-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+            <ul class="dropdown-menu" role="menu">
+                <?php echo Generators::ListGenerators($part->id, 'part'); ?>
+            </ul>
+        </div>
     </div>
-</div>
-<div id="dropdown-types_of_exercises" style="width: 136px;">
-    <div class="input-group-btn">
-        <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
-        <ul class="dropdown-menu" role="menu">
-            <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
-                <?php if($type->id == 4) continue; // убераем вывод типа контент т.к. он не имеет ответ ?>
+    <div id="dropdown-types_of_exercises" style="width: 136px;">
+        <div class="input-group-btn">
+            <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i><p>Новое задание</p><p class="caret-cont"><b class="caret"></b></p>', "#", array('class'=>'btn btn-sm btn-success btn-icon dropdown-toggle clearfix', 'id'=>'types-link', 'data-toggle'=>"dropdown", "tabindex"=>"-1")) ?>
+            <ul class="dropdown-menu" role="menu">
+                <?php foreach(ExercisesTypes::model()->findAll() as $type) : ?>
+                    <?php if($type->id == 4) continue; // убераем вывод типа контент т.к. он не имеет ответ ?>
                     <li class='type'>
                         <?php echo CHtml::link($type->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_part'=>$part->id)); ?>
                     </li>
-                <?php foreach($type->Visuals as $visual) : ?>
-                    <li class='visual'>
-                        <?php echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_part'=>$part->id)); ?>
-                    </li>
+                    <?php foreach($type->Visuals as $visual) : ?>
+                        <li class='visual'>
+                            <?php echo CHtml::link($visual->name, array('/admin/exercises/create', 'id_type'=>$type->id, 'id_visual'=>$visual->id, 'id_part'=>$part->id)); ?>
+                        </li>
+                    <?php endforeach; ?>
                 <?php endforeach; ?>
-            <?php endforeach; ?>
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 </div>
 
 <?php
