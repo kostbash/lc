@@ -17,7 +17,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('skillByAjax','list','index', 'nextlesson', 'print', 'toPdf', 'congratulation', 'unavailable'),
+				'actions'=>array('list','index', 'nextlesson', 'print', 'toPdf', 'congratulation', 'unavailable'),
 				'roles'=>array('student'),
 			),
 			array('allow',
@@ -25,7 +25,7 @@ class CoursesController extends Controller
                                 'users'=>array('?'),
 			),
                         array('allow',
-				'actions'=>array('view', 'test'),
+				'actions'=>array('view'),
                                 'users'=>array('*'),
 			),
 			array('deny',
@@ -48,7 +48,6 @@ class CoursesController extends Controller
             $this->_course = $id;
             $this->render('view',array(
                 'course'=>$course,
-                'skills'=>$course->Skills,
             ));
         }
         
@@ -177,29 +176,13 @@ class CoursesController extends Controller
                 }
                 unset($_SESSION['checkNewParent']);
             }
-
-            $nodes = null;
-            $edges = null;
-            foreach($course->Skills as $skill) {
-
-                $nodes .= "{ data: { id: '$skill->id', name: '$skill->name', width: ".mb_strlen($skill->name, 'utf-8')*10 ." } },";
-                foreach ($skill->TopSkills as $top) {
-                    $edges .= "{ data: { source: '$skill->id', target: '$top->id' } },";
-                }
-
-
-            }
-
-
+            
             $this->render('index',array(
                     'course'=>$course,
                     'userLesson'=>$userAndLesson,
                     'courseUser'=>$courseUser,
                     'currentLesson'=>$userAndLesson->Lesson,
                     'newParent' => $newParent,
-                    'nodes'=>$nodes,
-                    'edges'=>$edges,
-                    'skills'=>$course->Skills,
             ));
 	}
         
@@ -335,69 +318,6 @@ class CoursesController extends Controller
 			'model'=>$model,
 		));
 	}
-
-    public function actionSkillByAjax($id) {
-        $skill = Skills::model()->findByPk($id);
-        echo $skill->condition;
-    }
-
-    public function actionTest() {
-        $string = '
-        switch(BlockIndex) {
-        case 1:
-            SetBlockType(btExersice)
-            SetBlockTitle(тестовый блок)
-            addTask(lol)
-        break;
-        case 2:
-            SetBlockType(btExersice)
-            SetBlockTitle(второй блок)
-        break;
-        case 3:
-            SetBlockTitle(Числа до 20 и цифры - проверка)
-AddControlledU(17)
-SetULevel(17, 0.7)
-AddControlledU(49)
-SetULevel(49, 0.7)
-
- addTask(5610)
- addTask(5611)
- addTask(5612)
- addTask(5613)
- addTask(5614)
- addTask(5615)
- addTask(5616)
- addTask(5617)
- addTask(5631)
- addTask(5632)
- addTask(5633)
- addTask(5634)
- addTask(5635)
- addTask(5636)
- addTask(5637)
- addTask(5638)
- addTask(5639)
- addTask(5640)
- addTask(5641)
- addTask(5642)
- addTask(5643)
- addTask(5644)
- addTask(5645)
- addTask(5646)
- addTask(5647)
- addTask(5648)
- addTask(5649)
-        break;
-        }
-        ';
-
-
-
-        echo '<pre>';
-        $code = new parseCode($string);
-        $block = $code->getBlock(11);
-        print_r($block);
-    }
 
 	public function loadModel($id)
 	{

@@ -16,7 +16,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('DeleteBlocks', 'showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
+				'actions'=>array('DeleteBlocks', 'create','update','delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -132,44 +132,19 @@ class CoursesController extends Controller
                                 }
                             }
 
-                            if(!$var = Variables::model()->findByAttributes(array('name'=>'BlockIndex', 'id_course'=>$model->id))) {
-                                $var = new Variables();
-                                $var->name='BlockIndex';
-                                $var->type='int';
-                                $var->id_course = $model->id;
-                                $var->default_value=1;
-                                $var->save();
-                            }
-
 
                                 $n_lesson=new Lessons;
                                 $n_lesson->name = 'Проверочный тест';
                                 $n_lesson->change_date = date('Y-m-d H:i:s');
                                 $n_lesson->course_creator_id = $model->id;
 
-
-
-
                             if($n_lesson->save())
                             {
-                                $n_step = new GroupOfLessons;
-                                $n_step->name = 'Тестовый блок';
-                                $n_step->save();
-
-
-
-
-                                $c_step = new GroupAndLessons;
-                                $c_step->id_group = $n_step->id;
-                                $c_step->id_lesson = $n_lesson->id;
-                                $c_step->order = 1;
-                                $c_step->save();
-
-                                $courseAndStep = new CourseAndLessonGroup;
-                                $courseAndStep->id_course = $model->id;
-                                $courseAndStep->id_group_lesson = $n_step->id;
-                                $courseAndStep->order = 1;
-                                $courseAndStep->save();
+                                $courseAndLesson = new CoursesAndLessons;
+                                $courseAndLesson->id_course = $model->id;
+                                $courseAndLesson->id_lesson = $n_lesson->id;
+                                $courseAndLesson->order = CoursesAndLessons::maxValueOrder($model->id);
+                                $courseAndLesson->save();
                             }
 
                             $name = 'Проверочный тест';
@@ -197,14 +172,6 @@ class CoursesController extends Controller
 		));
 	}
 
-    public function actionNewUpdate($id = 31){
-        $model=$this->loadModel($id);
-
-        $this->render('new_update', array(
-            'model' => $model,
-        ));
-    }
-
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -224,7 +191,6 @@ class CoursesController extends Controller
 			if($model->validate() && $lessonValid)
                         {
                             $model->change_date = date('Y-m-d H:i:s');
-                            $model->code = parseCode::GenerateCourseCode($model->id);
                             $model->save(false);
                             foreach($lessonsGroups as $lessonGroup)
                                 $lessonGroup->save(false);
@@ -236,23 +202,9 @@ class CoursesController extends Controller
 			'model'=>$model,
 		));
 	}
-
-    public function actionShowCode($id_course){
-        $model=$this->loadModel($id_course);
-        $this->render('show_code', array('course'=>$model));
-    }
         
 	public function actionParams($id_course)
 	{
-        if(!$var = Variables::model()->findByAttributes(array('name'=>'BlockIndex', 'id_course'=>$id_course))) {
-            $var = new Variables();
-            $var->name='BlockIndex';
-            $var->type='int';
-            $var->id_course = $id_course;
-            $var->default_value=1;
-            $var->save();
-        }
-
 		$model=$this->loadModel($id_course);
                 
                 $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));

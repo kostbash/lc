@@ -2,16 +2,6 @@
     $this->pageTitle="$course->name. ".Yii::app()->name.".";
     $messages = SourceMessages::MessagesByCategories(array('course-pages'));
 ?>
-<?php Yii::app()->clientScript->registerScriptFile(
-    Yii::app()->assetManager->publish(
-        Yii::getPathOfAlias('ext.visJs') . "/cytoscape.min.js"
-    )
-); ?>
-<?php Yii::app()->clientScript->registerCssFile(
-    Yii::app()->assetManager->publish(
-        Yii::getPathOfAlias('ext.visJs').'/vis.min.css'
-    )
-);?>
     <div id="separate-header-part">
         <img src="/images/separate-two-part.png" width="1026" height="14" />
     </div>
@@ -45,111 +35,6 @@
     });
 </script>
 
-
-<?php if (false): //true в случае ностальгии?>
-<a class="btn btn-success" href="<?php echo Yii::app()->createUrl('lessons/newLesson', array('id'=>$course->id)); ?>">Начать прохождение курса</a>
-
-
-<div id="cy" style="width: 100%; height: 900px"></div>
-<script type="text/javascript">
-    $(function(){ // on dom ready
-
-        $('#cy').cytoscape({
-            style: cytoscape.stylesheet()
-                .selector('node')
-                .css({
-                    'content': 'data(name)',
-                    'text-valign': 'center',
-                    'color': 'white',
-                    'shape': 'rectangle',
-                    'width': "data(width)",
-                    'height': '50'
-                })
-                .selector('edge')
-                .css({
-                    'target-arrow-shape': 'triangle',
-                    'width': '1',
-                    'line-color': '#333',
-                    'target-arrow-color': '#000'
-                })
-                .selector(':selected')
-                .css({
-                    'background-color': 'black',
-                    'line-color': 'black',
-                    'target-arrow-color': 'black',
-                    'source-arrow-color': 'black'
-                })
-                .selector('.faded')
-                .css({
-                    'opacity': 0.5,
-                    'text-opacity': 1
-                }),
-            elements: {
-                nodes: [
-                    <?=$nodes?>
-                ],
-                edges: [
-                    <?=$edges?>
-                ]
-            },
-
-            layout: {
-                name: 'breadthfirst',
-
-            },
-
-            // on graph initial layout done (could be async depending on layout...)
-            ready: function(){
-                window.cy = this;
-
-                // giddy up...
-
-                cy.elements().unselectify();
-
-                cy.on('tap', 'node', function(e){
-                    var node = e.cyTarget;
-                    var neighborhood = node.neighborhood().add(node);
-
-                    cy.elements().addClass('faded');
-                    neighborhood.removeClass('faded');
-                });
-
-                cy.on('tap', function(e){
-                    if( e.cyTarget === cy ){
-                        cy.elements().removeClass('faded');
-                    }
-                });
-
-                cy.on('mouseover', 'node', function(e){
-
-                    var id = e.cyTarget._private.data.id;
-                    $.ajax({
-                        url: "/courses/skillbyajax/"+id,
-                        cache: true,
-                        success: function(html){
-                            if (html) {
-                                $("#skillPanel").html(html);
-                            }
-                            $('#skillPanel').css('left', e.cyRenderedPosition.x).css('top', e.cyRenderedPosition.y + 170).show();
-                        }
-                    });
-                });
-                cy.on('mouseout', 'node', function(e){
-                    $('#skillPanel').hide();
-                    $("#skillPanel").html('Описание отсутствует');
-
-                });
-            }
-        });
-
-    }); // on dom ready
-</script>
-
-    <div class="panel" id="skillPanel" style="display: none; padding: 10px 20px; position: absolute; z-index: 100000000">
-        Описание отсутствует
-    </div>
-<?php endif?>
-    <?php if (true): //true в случае ностальгии?>
     <div id="back-header-bottom">
         <div id="header-bottom">
                 <div id="head-col-left" class="head-column">
@@ -160,12 +45,7 @@
                                     <div class="status current"><?php echo CHtml::link('Курсы', array('courses/list')); ?> <i class="glyphicon glyphicon-arrow-right" style="top:2px;"></i>Текущий курс:</div>
                                     <div class="name"><?php echo $course->name; ?></div>
                                 </div>
-                                    <?php if(!$courseUser->is_begin) : ?>
-                                        <a class="course-state-button" href="<?=Yii::app()->createUrl('lessons/newLesson', array('id'=>$course->id))?>">Начать прохождение</a>
-                                    <?php else:?>
-                                        <a class="course-state-button" href="<?=Yii::app()->createUrl('lessons/newLesson', array('id'=>$course->id))?>">Продолжить курс</a>
-                                    <?php endif?>
-
+                                <?php echo $course->stateButton(); ?>
                             </div>
                             <div class="content clearfix">
                                 <div class="passed-lessons">
@@ -192,7 +72,7 @@
                     <div class="content">
                         <div class="text">
                             <?php if(!$courseUser->is_begin) : ?>
-                                <?php //echo CHtml::link(Yii::t('course-pages', $messages[12]->message), array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
+<!--                                --><?php //echo CHtml::link(Yii::t('course-pages', $messages[12]->message), array('lessons/check', 'course'=>$course->id), array('class'=>'send-result-button')); ?>
                             <?php endif; ?>
                             <?php /* ?>
                             <div class="export-button">
@@ -287,110 +167,88 @@
             }
         ?> 
         <?php if ($course->LessonsGroups) : $posLesson = 1; $isSkipLesson = false; ?>
-
-        <table class='lessons-table' style="margin-top: 10px;">
-            <colgroup>
-                <col width="15%">
-                <col width="85%">
-            </colgroup>
-            <thead>
-            <tr>
-                <th class="status">Номер умения</th>
-                <th class='name'>Название умения</th>
-            </tr>
-            </thead>
-            <?php if($skills):?>
-                    <?php foreach($skills as $skillNum=>$skill): ++$skillNum?>
-                        <tr><td><?=$skillNum?></td><td><?=$skill->name?></td></tr>
-                    <?php endforeach?>
-            <?php else:?>
-
-            <?php endif?>
-        </table>
-
-<!--            --><?php //foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
-<!--                <h1 class='theme-name'>--><?php //echo "Шаг $groupNum: \"$lessonGroup->name\""; ?><!--</h1>-->
-<!--                    <table class='lessons-table'>-->
-<!--                        <colgroup>-->
-<!--                         <col width="100%">-->
-<!--<!--                         <col width="18%">-->
-<!--<!--                         <col width="10%">-->
-<!--<!--                         <col width="22%">-->
-<!--                        </colgroup>-->
-<!--                        <thead>-->
-<!--                            <tr>-->
-<!--                                <th class='name'>Название умения</th>-->
-<!--<!--                                <th colspan="2" class='status'>Состояние</th>-->
-<!--<!--                                <th class="export">Экспорт урока</th>-->
-<!--                            </tr>-->
-<!--                        </thead>-->
-<!--                        -->
-<!--                        --><?php
-//                            $themeLessons = $lessonGroup->LessonsRaw;
-//                            if(!$isSkipLesson && $posLesson==1) {
-//                                $isSkipLesson=true;
-//                                unset($themeLessons[0]);
-//                            }
-//                        ?>
-<!--                        -->
-<!--                        --><?php //if ($themeLessons) : ?>
-<!--                            --><?php //foreach ($themeLessons as $keyLesson => $lesson) : ?>
-<!--                                --><?php //if($userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id)) : ?>
-<!--                                    <tr>-->
-<!--                                        <td>-->
-<!--                                            --><?php //echo CHtml::link("<span>Умение $posLesson : </span>".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
-<!--                                        </td>-->
-<!--<!--                                        <td style="text-align: center;">-->
-<!--<!--                                            --><?php ////if ($userAndLesson->passed) : ?>
-<!--<!--                                                <p class="passed">Пройден</p>-->
-<!--<!--                                            --><?php ////else : ?>
-<!--<!--                                                <div class="percent">-->
-<!--<!--                                                    --><?php ////echo $userAndLesson->LessonProgress; ?>
-<!--<!--                                                    <span>%</span>-->
-<!--<!--                                                </div>-->
-<!--<!--                                            --><?php ////endif; ?>
-<!--<!--                                        </td>-->
-<!--<!--                                        <td style="text-align: center;">-->
-<!--<!--                                            --><?php ////$imageName = $userAndLesson->passed ? 'repeat' : 'play'; ?>
-<!--<!--                                            --><?php ////echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson', 'onclick'=>"reachGoal('AnyCourseLessonStartIndex')")); ?>
-<!--<!--                                        </td>-->
-<!--<!--                                        <td style="text-align: center;">-->
-<!--<!--                                            <div class="export-button">-->
-<!--<!--                                                <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт<span class="caret"></span></button>-->
-<!--<!--                                                <ul class="dropdown-menu pull-right" role="menu">-->
-<!--<!--                                                    <li><a href="--><?php ////echo Yii::app()->createUrl('lessons/printLesson', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?><!--<!--" target="_blank">Печать</a></li>-->
-<!--<!--                                                    <li><a href="--><?php ////echo Yii::app()->createUrl('lessons/lessonToPdf', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?><!--<!--" target="_blank">PDF</a></li>-->
-<!--<!--                                                </ul>-->
-<!--<!--                                                --><?php ////if(Yii::app()->user->checkAccess('editor')) : ?>
-<!--<!--                                                    <div class='with-right-cont'>-->
-<!--<!--                                                        <input id='with-right---><?php ////echo $posLesson; ?><!--<!--' type='checkbox' class='with-right' name value='0' />-->
-<!--<!--                                                        <label for='with-right---><?php ////echo $posLesson; ?><!--<!--'>С ответами</label>-->
-<!--<!--                                                    </div>-->
-<!--<!--                                                --><?php ////endif; ?>
-<!--<!--                                            </div>-->
-<!--<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                --><?php //else : ?>
-<!--                                    <tr>-->
-<!--                                        <td>--><?php //echo "Урок $posLesson : $lesson->name"; ?><!--</td>-->
-<!--                                        <td style="text-align: center;">-->
-<!--                                            <p class="unaccess">Не пройден</p>-->
-<!--                                        </td> -->
-<!--                                        <td></td> -->
-<!--                                        <td></td> -->
-<!--                                    </tr>-->
-<!--                                --><?php //endif; ++$posLesson; ?>
-<!--                            --><?php //endforeach; ?>
-<!--                        --><?php //else : ?>
-<!--                            <tr>-->
-<!--                                <td class="no-lessons" colspan="4">Нет уроков</td>-->
-<!--                            </tr>-->
-<!--                        --><?php //endif; ?>
-<!--                    </table>-->
-<!--            --><?php //endforeach; ?>
+            <?php foreach ($course->LessonsGroups as $groupNum => $lessonGroup) : ++$groupNum; ?>
+                <h1 class='theme-name'><?php echo "Шаг $groupNum: \"$lessonGroup->name\""; ?></h1>
+                    <table class='lessons-table'>
+                        <colgroup>
+                         <col width="50%">
+                         <col width="18%">
+                         <col width="10%">
+                         <col width="22%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class='name'>Название урока</th>
+                                <th colspan="2" class='status'>Состояние</th>
+                                <th class="export">Экспорт урока</th>
+                            </tr>
+                        </thead>
+                        
+                        <?php
+                            $themeLessons = $lessonGroup->LessonsRaw;
+                            if(!$isSkipLesson && $posLesson==1) {
+                                $isSkipLesson=true;
+                                unset($themeLessons[0]);
+                            }
+                        ?>
+                        
+                        <?php if ($themeLessons) : ?>
+                            <?php foreach ($themeLessons as $keyLesson => $lesson) : ?>
+                                <?php if($userAndLesson = UserAndLessons::existLesson($course->id, $lessonGroup->id, $lesson->id)) : ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo CHtml::link("<span>Урок $posLesson : </span>".$lesson->name, array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'lesson-name')); ?>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <?php if ($userAndLesson->passed) : ?>
+                                                <p class="passed">Пройден</p>
+                                            <?php else : ?>
+                                                <div class="percent">
+                                                    <?php echo $userAndLesson->LessonProgress; ?>
+                                                    <span>%</span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <?php $imageName = $userAndLesson->passed ? 'repeat' : 'play'; ?>
+                                            <?php echo CHtml::link("<img src='/images/$imageName.png' width='37' height='36' />", array('lessons/pass', 'id' => $userAndLesson->id), array('class'=>'to-lesson', 'onclick'=>"reachGoal('AnyCourseLessonStartIndex')")); ?>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <div class="export-button">
+                                                <button type="button" class="dropdown-toggle" data-toggle="dropdown">Экспорт<span class="caret"></span></button>
+                                                <ul class="dropdown-menu pull-right" role="menu">
+                                                    <li><a href="<?php echo Yii::app()->createUrl('lessons/printLesson', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?>" target="_blank">Печать</a></li>
+                                                    <li><a href="<?php echo Yii::app()->createUrl('lessons/lessonToPdf', array('id'=>$userAndLesson->id, 'with_right'=>0)); ?>" target="_blank">PDF</a></li>
+                                                </ul>
+                                                <?php if(Yii::app()->user->checkAccess('editor')) : ?>
+                                                    <div class='with-right-cont'>
+                                                        <input id='with-right-<?php echo $posLesson; ?>' type='checkbox' class='with-right' name value='0' />
+                                                        <label for='with-right-<?php echo $posLesson; ?>'>С ответами</label>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php else : ?>
+                                    <tr>
+                                        <td><?php echo "Урок $posLesson : $lesson->name"; ?></td>
+                                        <td style="text-align: center;">
+                                            <p class="unaccess">Не пройден</p>
+                                        </td> 
+                                        <td></td> 
+                                        <td></td> 
+                                    </tr>
+                                <?php endif; ++$posLesson; ?>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td class="no-lessons" colspan="4">Нет уроков</td>
+                            </tr>
+                        <?php endif; ?>
+                    </table>
+            <?php endforeach; ?>
         <?php else : ?>
             Курс пуст
         <?php endif; ?>
     </div>
-    <?php endif?>
 </div>

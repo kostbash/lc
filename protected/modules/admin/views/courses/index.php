@@ -1,11 +1,11 @@
 <script>
-    $('.delete_button').live('click', function(){
-        result = confirm('Вы действительно ходите удалить первые блоки во ВСЕХ курсах?');
-        if (result) {
-            window.location.href = '/admin/courses/deleteblocks';
-        }
-        return false;
-    });
+$('.delete_button').live('click', function(){
+result = confirm('Вы действительно ходите удалить первые блоки во ВСЕХ курсах?');
+if (result) {
+window.location.href = '/admin/courses/deleteblocks';
+}
+return false;
+});
 </script>
 
 <div class="page-header clearfix">
