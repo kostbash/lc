@@ -21,7 +21,7 @@ class LessonsController extends Controller
                             'users'=>array('*'),
                     ),
                     array('allow',
-                            'actions'=>array('NextBlock', 'pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf', 'GetDubByAjax', 'newLesson'),
+                            'actions'=>array('pass', 'nextgroup', 'saverightanswers', 'printBlock', 'blockToPdf', 'printLesson', 'lessonToPdf', 'GetDubByAjax'),
                             'roles'=>array('student'),
                     ),
                     array('deny',  // deny all users
@@ -195,97 +195,6 @@ class LessonsController extends Controller
                     'user' => $user,
             ));
         }
-
-    public function actionNewLesson($id) {
-
-        $course = Courses::model()->findByPk($id);
-        $user_block = UserAndCourse::model()->findByAttributes(array('course_id'=>$id, 'user_id'=>Yii::app()->user->id));
-        if (!$user_block) {
-            $user_block = new UserAndCourse();
-            $user_block->user_id = Yii::app()->user->id;
-            $user_block->course_id = $id;
-            $user_block->block_number = 0;
-            $user_block->save();
-        }
-        $code = new parseCode($course->code);
-        $block = $code->getBlock($id);
-
-        if (!$block) {
-
-            $block['null_block'] = true;
-        }
-
-        if (isset($_POST['Exercises'])) {
-            if (isset($_POST['Exercises'][0])) {
-                $data_test = $course->check_test($_POST['Exercises'], $_SESSION['test_tasks'], $block['skill_levels']);
-                $this->render('successtest',array(
-                    'user' => $user = Users::model()->findByPk(Yii::app()->user->id),
-                    'skills' => $data_test,
-                    'test_name' => $block['title'],
-                    'id_course' => $id,
-                    'fail'=>$data_test['fail_pass'],
-                ));
-                return;
-            } else {
-//                $level = current($block['skill_levels'])*100;
-//                $count = 0;
-//                $right = 0;
-//                foreach ($_POST['Exercises'] as $key=>$exercise) {
-//                    $count++;
-//                    $exe = Exercises::model()->findByPk($key);
-//                    if ($exe->correct_answers == $_POST['Exercises'][$key]['answers']) {
-//                        $right++;
-//                    }
-//                    if (!$exe->correct_answers) {
-//                        $answer = ExercisesListOfAnswers::model()->findByAttributes(
-//                            array(
-//                                'id_exercise'=>$key,
-//                                'answer'=>$_POST['Exercises'][$key]['answers']
-//                            ));
-//                        if ($answer->is_right) {
-//                            $right++;
-//                        }
-//                    }
-//                }
-//                if($right*100/$count >= $level) {
-//                    $this->actionNextBlock($id);
-//                    return;
-//                }
-//                $_SESSION['error_'. $id] = 'Вы дали недостаточное количество правильных ответов для прохождения блока\n Попробуйте еще раз';
-//                $this->redirect('/lessons/newlesson/'.$id);
-//                return;
-                $this->actionNextBlock($id);
-                return;
-            }
-
-        }
-
-        $_SESSION['test_tasks'] = $block['tasks'];
-        $this->render('newLesson', array(
-            'block' => $block,
-            'user' => $user = Users::model()->findByPk(Yii::app()->user->id),
-            'course_id'=> $course->id,
-            'block_type' => ($block['type']=='btExersice')?1:2,
-        ));
-    }
-
-    public function actionNextBlock($id) {
-        $variable = Variables::model()->findByAttributes(array('id_course'=>$id, 'name'=>'BlockIndex'));
-        $var = VarUserValue::model()->findByAttributes(
-            array(
-                'variable_id'=>$variable->id,
-                'user_id'=>Yii::app()->user->id,
-                'id_course'=>$id
-            ));
-        $course = CoursesAndUsers::model()->findByAttributes(array('id_course'=> $id));
-        if (!$course->is_begin) {
-            $course->is_begin = 1;
-            $course->save();
-        }
-        $var->value++;
-        $var->save();
-        //$this->redirect('/lessons/newlesson/'.$id);
-    }
         
         public function actionCheck($course, $step=1)
         {
