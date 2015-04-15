@@ -187,8 +187,8 @@
                         <?php
                             $themeLessons = $lessonGroup->LessonsRaw;
                             if(!$isSkipLesson && $posLesson==1) {
-                                $isSkipLesson=true;
-                                unset($themeLessons[0]);
+                                //$isSkipLesson=true;
+                                //unset($themeLessons[0]);
                             }
                         ?>
                         

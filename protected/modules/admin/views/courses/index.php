@@ -11,7 +11,7 @@ return false;
 <div class="page-header clearfix">
     <h2>Курсы</h2>
     <?php echo CHtml::link('<i class="glyphicon glyphicon-plus"></i>Добавить', array('courses/create'), array('class'=>'btn btn-primary btn-icon')); ?>
-    <?php echo CHtml::link('<i class="glyphicon glyphicon-minus"></i>Удалить первые блоки', array('#'), array('style'=>'margin-right:20px','class'=>'btn btn-danger btn-icon delete_button')); ?>
+<!--    --><?php //echo CHtml::link('<i class="glyphicon glyphicon-minus"></i>Удалить первые блоки', array('#'), array('style'=>'margin-right:20px','class'=>'btn btn-danger btn-icon delete_button')); ?>
 </div>
 <?php $this->widget('ZGridView', array(
 	'id'=>'courses-grid',

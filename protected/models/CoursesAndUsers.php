@@ -107,16 +107,17 @@ class CoursesAndUsers extends CActiveRecord
                 $lastUserLesson = $this->Course->lastUserLesson;
 
                 // убираем проверочный урок
-                if($lessonsAttrs[0])
-                {
-                    $lessonsAttrs[0]['id_user'] = $this->id_user;
-                    $testLesson = UserAndLessons::model()->findByAttributes($lessonsAttrs[0]);
-                    if($testLesson)
-                    {
-                        $testLesson->delete();
-                    }
-                    unset($lessonsAttrs[0]);
-                }
+
+//                if($lessonsAttrs[0])
+//                {
+//                    $lessonsAttrs[0]['id_user'] = $this->id_user;
+//                    $testLesson = UserAndLessons::model()->findByAttributes($lessonsAttrs[0]);
+//                    if($testLesson)
+//                    {
+//                        $testLesson->delete();
+//                    }
+//                    unset($lessonsAttrs[0]);
+//                }
                 
                 if($lastUserLesson)
                 {

@@ -191,8 +191,8 @@ class Courses extends CActiveRecord
             $themesIds = array();
             foreach($themes as $n => $theme)
             {
-                if($n == 0)
-                    continue; // убераем проверочный тест
+                //if($n == 0)
+                    //continue; // убераем проверочный тест
                 $themesIds[] = $theme['id_group_lesson'];
             }
             if(!$themesIds)
@@ -493,7 +493,7 @@ class Courses extends CActiveRecord
         
         public function getNearestAvailableLesson()
         {
-            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 1";
+            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1";
             return Lessons::model()->findBySql($query);
         }
         
@@ -515,10 +515,10 @@ class Courses extends CActiveRecord
                     WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id='$this->id'
                     ORDER BY themes.order ASC, lessons.order ASC";
             $lessonsAttrs = Yii::app()->db->createCommand($query)->queryAll();
-            if($lessonsAttrs[0])
-            {
-                unset($lessonsAttrs[0]);
-            }
+//            if($lessonsAttrs[0])
+//            {
+//                unset($lessonsAttrs[0]);
+//            }
             return $lessonsAttrs;
         }
         

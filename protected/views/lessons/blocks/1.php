@@ -368,6 +368,23 @@
             }
         });
 
+        function checkBagType(bag)
+        {
+            bag = $(bag);
+            items = bag.find('.items .item');
+            exerciseCont = bag.closest('.exercise');
+            if(items.length)
+            {
+                exerciseCont.addClass('without-answer');
+                return false;
+            }
+            else
+            {
+                exerciseCont.removeClass('without-answer');
+                return true;
+            }
+        }
+
         $('.bags-type .item').draggable({cursor: 'move', revert: true});
         $('.bags-type .bag-drop').droppable({
             accept: function(item) {
