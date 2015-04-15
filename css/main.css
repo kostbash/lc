@@ -3017,6 +3017,20 @@ z-index:10000000;
     
 }
 
+.an_number {
+    border: 2px solid #98c1e7;
+    border-radius: 30px;
+    float: left;
+    font-family: "PT Sans";
+    font-size: 22px;
+    font-weight: bold;
+    height: 52px;
+    line-height: 48px;
+    text-align: center;
+    vertical-align: middle;
+    width: 52px;
+}
+
 .pick-blocks .block
 {
     display: inline-block;

@@ -28,6 +28,20 @@
 
 <script type="text/javascript">
     $(function(){
+
+        $('.head .condition').each(function(i, arr){
+            string = $(arr).html().replace(/(&nbsp;)|[\s{2,}]+/g, '');
+            if(!string.length) {
+                number = $(arr).parent().find('.number').html();
+                answer = $(arr).parent().parent().find('.answer');
+                $(arr).parent().remove();
+                $(answer).prepend('<div class="an_number" style="position: relative; left: -16px">'+number+'</div>');
+                $(answer).css('position', 'relative').css('left', '-53px');
+            }
+        });
+
+
+
         $(document).bind('keyup keydown keypress', function (e) {
             focused = $("input[type='text']:focus");
             if(!focused.length && e.which === 8)
@@ -103,7 +117,7 @@
                 dropdownLists.each(function(n, dropdownList) {
                     if(!checkDropdownList(dropdownList))
                     {
-                        result = false;
+                        //result = false;
                     }
                 });
             }
@@ -224,7 +238,7 @@
                 universals.each(function(n, universal) {
                     if(!checkUniversal(universal))
                     {
-                        result = false;
+                        //result = false;
                     }
                 });
             }
@@ -237,7 +251,7 @@
             return false;
         });
 
-        if (<?=$user->is_dub or 'false'?>) {
+        if (<?=($user->is_dub)?'true':'false'?>) {
 
             $('.block-name').addClass('dub');
 

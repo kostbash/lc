@@ -67,9 +67,20 @@ class parseCode {
         if (!$id) {
             return false;
         }
-        $blocks = GroupOfExercises::model()->findAllByAttributes(array('id_course'=>$id));
+        $blocks = array();
 
 
+        $course = Courses::model()->findByPk($id);
+        $steps = $course->LessonsGroups;
+        $lessons = array();
+        foreach ($steps as $step) {
+            $lessons = array_merge($lessons, $step->LessonsRaw);
+        }
+        $lessons = array_merge($lessons, $course->Lessons);
+
+        foreach ($lessons as $lesson) {
+            $blocks = array_merge($blocks, $lesson->ExercisesGroups);
+        }
 
         $code = "if isBlockPassed then \n inc(BlockIndex) \nendif \n\n";
         $code .= "switch(BlockIndex) {\n";
@@ -87,15 +98,18 @@ class parseCode {
                 $code .= "SetBlockTitle($model->name)\n";
                 $skills = $model->Skills;
                 $percent_skills = $model->GroupAndSkills;
-                foreach($skills as $skill) {
-                    $code .= "AddControlledU($skill->id)\n";
-                    foreach ($percent_skills as $percent) {
-                        if ($percent->id_skill == $skill->id) {
-                            $code .= "SetULevel($skill->id, $percent->pass_percent)\n";
+                if ($skills) {
+                    foreach($skills as $skill) {
+                        $code .= "AddControlledU($skill->id)\n";
+                        foreach ($percent_skills as $percent) {
+                            if ($percent->id_skill == $skill->id) {
+                                $code .= "SetULevel($skill->id, $percent->pass_percent)\n";
+                            }
                         }
-                    }
 
+                    }
                 }
+
                 if ($model->type == 1) {
                     foreach($model->Exercises as $exerce) {
                         $code .= " addTask($exerce->id)\n";

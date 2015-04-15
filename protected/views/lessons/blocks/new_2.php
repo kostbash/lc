@@ -15,7 +15,7 @@ $this->renderPartial("//lessons/blocks/_2_scripts");
                 </div>
                 <div class="answer clearfix">
                     <?php if($exercise->id_visual) : ?>
-                        <?php $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key+1)); ?>
+                        <?=nl2br($this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model'=>$exercise, 'key'=>$key, 'index'=>$key+1))); ?>
                     <?php endif; ?>
                 </div>
                 <input class="duration" type="hidden" name="Exercises[<?php echo $key; ?>][duration]" value="0" />

@@ -93,8 +93,8 @@
             editing = $('#editing');
             if(!$.trim(data))
             {
-                alert('Задание не может быть пустым !');
-                return false;
+                //alert('Задание не может быть пустым !');
+                //return false;
             }
             if(editing.val()!=data)
             {

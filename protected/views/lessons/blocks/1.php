@@ -736,7 +736,7 @@
                 </div>
                 <div class="answer clearfix">
                     <?php if ($exercise->id_visual) : ?>
-                        <?php $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model' => $exercise, 'key' => $exercise->id, 'index' => $i)); ?>
+                        <?=nl2br($this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model' => $exercise, 'key' => $exercise->id, 'index' => $i),true)); ?>
                     <?php endif; ?>
                 </div>
                 <input class="duration" type="hidden" name="Exercises[<?php echo $exercise->id; ?>][duration]" value="0" />
