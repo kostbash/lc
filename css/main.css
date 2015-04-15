@@ -2040,12 +2040,12 @@ z-index:10000000;
     background: #ffe582;
     -moz-border-radius: 6px 0 0 0;
     -webkit-border-radius: 6px 0 0 0;
-    border-radius: 6px 0 0 0;
 }
 
 #course-page .lessons-table thead .status
 {
     background: #afdb98;
+    border-radius: 6px 0 0 0;
 }
 
 #course-page .lessons-table thead .export

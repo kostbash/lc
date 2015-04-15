@@ -66,6 +66,32 @@
             }
             return false;
         });
+        $('#new-variables').click(function(){
+            current = this;
+            field = $('#new-variables-field');
+            type = $('#new-var_type-field');
+            defau = $('#new-var_default-field');
+            if(field.val())
+            {
+                $.ajax({
+                    url:'<?php echo Yii::app()->createUrl("admin/variables/create", array('id_course'=>$model->id)); ?>',
+                    type: 'POST',
+                    data: { Variables:{ name: field.val(), type:type.val(), default_value:defau.val() } },
+                    dataType: 'json',
+                    success: function(result) {
+                        if(result.success)
+                            $('#variables-grid').yiiGridView('update');
+                        else
+                            alert(result.errors);
+                    }
+                });
+            }
+            else
+            {
+                alert('Введите название, что получите');
+            }
+            return false;
+        });
 
         $('#yougets-grid .update-record').live('change', function(){
             current = this;
@@ -291,6 +317,65 @@ $form=$this->beginWidget('CActiveForm', array(
         </div>
         <div class="col-lg-2 col-md-2" style="text-align: right;">
             <a id="new-yougets" class="btn btn-success" href="#">Добавить строку</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-md-2"><label>Переменные</label></div>
+        <div class="col-lg-6 col-md-6">
+            <?php $this->widget('ZGridView', array(
+                'id'=>'variables-grid',
+                'dataProvider'=> new CArrayDataProvider($model->Variables),
+                'columns'=>array(
+                    array(
+                        'header'=>'Имя',
+                        'name'=>'name',
+                        'type'=>'textField',
+                        'htmlOptions'=>array('style'=>'width: 50%'),
+                    ),
+                    array(
+                        'header'=>'Тип',
+                        'name'=>'type',
+                        'type'=>'textField',
+                        'htmlOptions'=>array('style'=>'width: 25%'),
+                    ),
+                    array(
+                        'header'=>'По умолчанию',
+                        'name'=>'default_value',
+                        'type'=>'textField',
+                        'htmlOptions'=>array('style'=>'width: 25%'),
+                    ),
+                    array(
+                        'class'=>'CButtonColumn',
+                        'template'=>'{delete}',
+                        'buttons'=>array(
+                            'delete'=>array(
+                                'url' => 'Yii::app()->createUrl("admin/variables/delete", array("id"=>$data->id))',
+                                'options'=>array('class'=>'delete'),
+                            ),
+                        ),
+
+                        'htmlOptions'=>array('style'=>'width: 10%'),
+                    ),
+                ),
+            ));?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-offset-2 col-md-offset-2 col-lg-5 col-md-4">
+            <input id="new-variables-field" class="form-control" type="text" value="" placeholder="Введите название" />
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-lg-5 col-md-4">
+            <input id="new-var_default-field" class="form-control" type="text" value="" placeholder="Введите значение по умолчанию" />
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-lg-5 col-md-4">
+            <select id="new-var_type-field" class="form-control">
+                <option value="int">Число</option>
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-2" style="text-align: right;">
+            <a id="new-variables" class="btn btn-success" href="#">Добавить переменную</a>
         </div>
     </div>
     

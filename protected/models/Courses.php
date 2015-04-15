@@ -87,6 +87,7 @@ class Courses extends CActiveRecord
                 'Classes'=>array(self::MANY_MANY, 'CourseClasses', 'oed_courses_and_classes(id_course, id_class)'),
                 'NeedKnows'=>array(self::HAS_MANY, 'CourseNeedknows', 'id_course'),
                 'YouGets'=>array(self::HAS_MANY, 'CourseYougets', 'id_course'),
+                'Variables'=>array(self::HAS_MANY, 'Variables', 'id_course'),
             );
 	}
 
@@ -191,8 +192,8 @@ class Courses extends CActiveRecord
             $themesIds = array();
             foreach($themes as $n => $theme)
             {
-                //if($n == 0)
-                    //continue; // убераем проверочный тест
+                if($n == 0)
+                    continue; // убераем проверочный тест
                 $themesIds[] = $theme['id_group_lesson'];
             }
             if(!$themesIds)
@@ -493,7 +494,7 @@ class Courses extends CActiveRecord
         
         public function getNearestAvailableLesson()
         {
-            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1";
+            $query = "SELECT lesson.* FROM `oed_courses` course, `oed_course_and_lesson_group` themes, `oed_group_and_lessons` lessons, `oed_lessons` as lesson WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND lesson.id=lessons.id_lesson AND course.id=$this->id ORDER BY themes.order ASC, lessons.order ASC LIMIT 1, 1";
             return Lessons::model()->findBySql($query);
         }
         
@@ -515,10 +516,10 @@ class Courses extends CActiveRecord
                     WHERE themes.id_course=course.id AND lessons.id_group=themes.id_group_lesson AND course.id='$this->id'
                     ORDER BY themes.order ASC, lessons.order ASC";
             $lessonsAttrs = Yii::app()->db->createCommand($query)->queryAll();
-//            if($lessonsAttrs[0])
-//            {
-//                unset($lessonsAttrs[0]);
-//            }
+            if($lessonsAttrs[0])
+            {
+                unset($lessonsAttrs[0]);
+            }
             return $lessonsAttrs;
         }
         
@@ -575,4 +576,44 @@ class Courses extends CActiveRecord
                 }
             }
         }
+
+    public function check_test($exercises, $tasks, $levels){
+//        print_r($exercises);
+//        print_r($levels);
+//        print_r($tasks);
+//        foreach ($tasks as $task) {
+//            print_r($task->Skills);
+//        }
+
+        $skills = array();
+        foreach ($tasks as $key => $task) {
+            $skill = $task->Skills;
+            foreach ($skill as $val) {
+                if ($task->correct_answers == $exercises[$key]['answers']) {
+                    //echo '++++++++'.$task->correct_answers . ' - ' . $exercises[$key]['answers'].'<br>';
+                    $skills[$val->id]['correct'] += 1;
+                } else { //echo '---------'.$task->correct_answers . ' - ' . $exercises[$key]['answers'].'<br>';
+                    $skills[$val->id]['incorrect'] += 1;
+                }
+                $skills[$val->id]['name'] = $val->name;
+            }
+        }
+
+
+
+        foreach ($skills as $key=>$skill) {
+            $skills[$key]['need'] = $levels[$key]* 100;
+            $skills[$key]['achieved'] = $skills[$key]['correct']*100/($skills[$key]['correct']+$skills[$key]['incorrect']);
+            if ($skills[$key]['need'] <= $skills[$key]['achieved']) {
+                $skills[$key]['passed'] = 1;
+            } else {
+                $skills[$key]['passed'] = 0;
+                $skills['fail_pass'] = 1;
+            }
+        }
+        //print_r($skills); print_r($levels);
+        return $skills;
+
+
+    }
 }

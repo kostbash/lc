@@ -490,7 +490,7 @@ Yii::app()->clientScript->registerScript('#courses', "
             axis: 'y',
             connectWith: '.blocks > tbody',
             cursor: 'move',
-            items:'>*:not(.notSort)',
+            //items:'>*:not(.notSort)',
             update: function(event, ui) {
                 current = $(this);
                 blocks = $(this).closest('.blocks');
@@ -524,7 +524,6 @@ Yii::app()->clientScript->registerScript('#courses', "
             }
         });
     }
-
     sortBlocks();
     
     function sortLessons()
@@ -534,7 +533,7 @@ Yii::app()->clientScript->registerScript('#courses', "
             axis: 'y',
             connectWith: '.lessons-container > table > tbody',
             cursor: 'move',
-            //items: 'tr:not(:first)',
+            items: '>*:not(.notSort)',
             update: function(event, ui) {
                 positions = new Array();
                 itemId = ui.item.data('id');
@@ -764,6 +763,7 @@ $form=$this->beginWidget('CActiveForm', array(
         <div class="col-lg-4 col-md-4">
             <?php echo CHtml::link('Умения курса', array('/admin/skills/index', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
             <?php echo CHtml::link('<i class="glyphicon glyphicon-cog"></i>Параметры курса', array('/admin/courses/params', 'id_course'=>$model->id), array('class'=>'btn btn-primary btn-sm btn-icon')); ?>
+            <?php echo CHtml::link('Код курса', array('/admin/courses/showcode', 'id_course'=>$model->id), array('class'=>'btn btn-success btn-sm')); ?>
         </div>
     </div>
 </div>
@@ -850,9 +850,9 @@ $form=$this->beginWidget('CActiveForm', array(
 </table>
 <div id="additional" class="clearfix">
     <div id="select-skills">
-        <div class="input-group mydrop" id="courseSkill">
+        <div class="input-group mydrop dropup" id="courseSkill">
             <?php echo CHtml::textField("Skills[name]", '', array('placeholder'=>'Введите название умения', 'class'=>'form-control input-sm', 'id'=>'searchSkill')); ?>
-            <div class="input-group-btn dropup">
+            <div class="input-group-btn">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                     <span class="caret"></span>
                 </button>
