@@ -28,7 +28,7 @@ class SkillsController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'showtree', 'delete','create','update', 'skillsbyajax', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
+				'actions'=>array('index','delete','create','update', 'skillsbyajax', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -148,26 +148,6 @@ class SkillsController extends Controller
                 }
             }
 	}
-
-    public function actionShowtree($id_course) {
-        $course = Courses::model()->findByPk($id_course);
-        $nodes = null;
-        $edges = null;
-        $skills_tmp = ($course->Skills) ? $course->Skills : array();
-        $skills = array_merge($skills_tmp, Skills::model()->findAllByAttributes(array('id_course'=>$id_course)));
-
-        foreach($skills as $skill) {
-
-            $nodes .= "{ data: { id: '$skill->id', name: '$skill->name', width: ".mb_strlen($skill->name, 'utf-8')*10 ." } },";
-            foreach ($skill->TopSkills as $top) {
-                $edges .= "{ data: { source: '$skill->id', target: '$top->id' } },";
-            }
-        }
-        $this->render('tree', array(
-            'nodes' => $nodes,
-            'edges' => $edges,
-        ));
-}
 
 	public function actionDelete($id)
 	{

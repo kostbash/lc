@@ -368,6 +368,23 @@
             }
         });
 
+        function checkBagType(bag)
+        {
+            bag = $(bag);
+            items = bag.find('.items .item');
+            exerciseCont = bag.closest('.exercise');
+            if(items.length)
+            {
+                exerciseCont.addClass('without-answer');
+                return false;
+            }
+            else
+            {
+                exerciseCont.removeClass('without-answer');
+                return true;
+            }
+        }
+
         $('.bags-type .item').draggable({cursor: 'move', revert: true});
         $('.bags-type .bag-drop').droppable({
             accept: function(item) {
@@ -736,7 +753,7 @@
                 </div>
                 <div class="answer clearfix">
                     <?php if ($exercise->id_visual) : ?>
-                        <?=nl2br($this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model' => $exercise, 'key' => $exercise->id, 'index' => $i),true)); ?>
+                        <?php $this->renderPartial("//exercises/visualizations/{$exercise->id_visual}", array('model' => $exercise, 'key' => $exercise->id, 'index' => $i)); ?>
                     <?php endif; ?>
                 </div>
                 <input class="duration" type="hidden" name="Exercises[<?php echo $exercise->id; ?>][duration]" value="0" />

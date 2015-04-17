@@ -2040,12 +2040,12 @@ z-index:10000000;
     background: #ffe582;
     -moz-border-radius: 6px 0 0 0;
     -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
 }
 
 #course-page .lessons-table thead .status
 {
     background: #afdb98;
-    border-radius: 6px 0 0 0;
 }
 
 #course-page .lessons-table thead .export
@@ -3015,20 +3015,6 @@ z-index:10000000;
 .pick-blocks
 {
     
-}
-
-.an_number {
-    border: 2px solid #98c1e7;
-    border-radius: 30px;
-    float: left;
-    font-family: "PT Sans";
-    font-size: 22px;
-    font-weight: bold;
-    height: 52px;
-    line-height: 48px;
-    text-align: center;
-    vertical-align: middle;
-    width: 52px;
 }
 
 .pick-blocks .block

@@ -99,7 +99,7 @@ class ExercisesController extends Controller {
 
                 if ($id_visual == 9) {
                     $question = new ExercisesQuestions;
-                    $question->attributes = $_POST['Exercises']['questions'][0];
+                    $question->attributes = nl2br($_POST['Exercises']['questions'][0]);
                     $question->id_exercise = $model->id;
                     if ($question->save()) {
                         preg_match_all('#sp(\d+)#ui', $question->text, $matches);
@@ -1107,9 +1107,6 @@ class ExercisesController extends Controller {
                 }
             }
         }
-        $course = Courses::model()->findByPk($group->id_course);
-        $course->code = parseCode::GenerateCourseCode($group->id_course);
-        $course->save(false);
     }
 
     public function loadModel($id) {

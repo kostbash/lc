@@ -96,7 +96,6 @@ class GroupofexercisesController extends Controller
                 foreach($_POST['GroupOfExercises'] as $id_group => $attributes)
                 {
                     $model=$this->loadModel($id_group);
-                    $course = Courses::model()->findByPk($model->id_course);
                     if($attributes['name'])
                         $model->name = trim($attributes['name']);
                     
@@ -146,8 +145,6 @@ class GroupofexercisesController extends Controller
                     } else {
                         $res['success'] = 0;
                     }
-                    $course->code = parseCode::GenerateCourseCode($model->id_course); echo $course->code;
-                    $course->save(false);
                 }
                 echo CJSON::encode($res);
             }
