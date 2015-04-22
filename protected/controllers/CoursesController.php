@@ -176,6 +176,8 @@ class CoursesController extends Controller
                 }
                 unset($_SESSION['checkNewParent']);
             }
+
+            $course->title = str_replace('{name}', $course->name, $course->title);
             
             $this->render('index',array(
                     'course'=>$course,

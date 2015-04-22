@@ -60,7 +60,7 @@ class Courses extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('name, learning_time', 'length', 'max'=>255),
+			array('name, learning_time, title', 'length', 'max'=>255),
 			array('description, congratulation', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
                         array('difficulty, visible', 'numerical'),
@@ -104,6 +104,7 @@ class Courses extends CActiveRecord
                     'learning_time' => 'Предполагаемое время обучения',
                     'congratulation' => 'Страница завершения курса',
                     'visible'=> 'Виден',
+                    'title' => 'Заголовок',
 		);
 	}
         

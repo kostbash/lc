@@ -188,6 +188,14 @@ $form=$this->beginWidget('CActiveForm', array(
             <?php echo $form->error($model,'name'); ?>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'title'); ?></div>
+        <div class="col-lg-6 col-md-6">
+            <?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите заголовок курса')); ?>
+            <?php echo $form->error($model,'title'); ?>
+        </div>
+    </div>
     
     <div class="row">
         <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'learning_time'); ?></div>

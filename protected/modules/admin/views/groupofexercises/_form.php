@@ -694,7 +694,7 @@ Yii::app()->clientScript->registerScript("skills-grid",
                                 'name' => 'Skill.id',
                                 'header'=>'Число заданий',
                                 'type'=>'raw',
-                                'value'=> '"<span class=\'count_skills\' data-skill-id=\'$data->id_skill\' data-ex-id=\'$data->id\'>".count($data->Skill->Exercises)."</span>"',
+                                'value'=> '"<span class=\'count_skills\' data-skill-id=\'$data->id_skill\' data-ex-id=\'$data->id\'>".count($data->Skill->ExercisesGroups)."</span>"',
                                 'htmlOptions'=>array('width'=>'10%'),
                             ),
                             array(

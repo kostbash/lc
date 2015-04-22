@@ -1,5 +1,6 @@
 <?php 
     $this->renderPartial("_pass_scripts", array('user'=>$user));
+$this->pageTitle="$title";
 ?>
 <div class="music" style="display: none"></div>
     <div id="separate-header-part">
