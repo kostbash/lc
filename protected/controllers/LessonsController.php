@@ -61,7 +61,10 @@ class LessonsController extends Controller
         {   
             $user = Users::model()->findByPk(Yii::app()->user->id);
             $userAndLesson = UserAndLessons::model()->findByAttributes(array('id'=>$id, 'id_user'=>Yii::app()->user->id));
-            
+
+            $course = Courses::model()->findByPk($userAndLesson->id_course);
+            $title = $course->title;
+
             if(!($userAndLesson and $userAndLesson->Course->haveAccess))
                 $this->redirect('/');
             
@@ -184,7 +187,9 @@ class LessonsController extends Controller
                     die; // не рендерим дальше
                 }
             }
-            
+
+            $title = str_replace('{name}', $course->name, $title);
+
             $this->_lesson = $userAndLesson->Lesson->id;
             $this->_block = $group;
             $this->render('pass',array(
@@ -193,6 +198,7 @@ class LessonsController extends Controller
                     'exerciseGroup'=>$currentExerciseGroup,
                     'exercisesTest' => $exercisesTest,
                     'user' => $user,
+                    'title'=> $title,
             ));
         }
 
@@ -260,12 +266,15 @@ class LessonsController extends Controller
 
         }
 
+        $title = str_replace('{name}', $course->name, $course->title);
+
         $_SESSION['test_tasks'] = $block['tasks'];
         $this->render('newLesson', array(
             'block' => $block,
             'user' => $user = Users::model()->findByPk(Yii::app()->user->id),
             'course_id'=> $course->id,
             'block_type' => ($block['type']=='btExersice')?1:2,
+            'title' => $title,
         ));
     }
 

@@ -1,5 +1,5 @@
 <?php
-    $this->pageTitle="$course->name. ".Yii::app()->name.".";
+    $this->pageTitle="$course->title";
     $messages = SourceMessages::MessagesByCategories(array('course-pages'));
 ?>
 <?php Yii::app()->clientScript->registerScriptFile(

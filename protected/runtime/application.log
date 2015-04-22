@@ -39335,3 +39335,22 @@ in D:\sites\education\www\index.php (13)
 2015/01/15 14:30:18 [warning] [application] РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРёСЃРІРѕРёС‚СЊ РЅРµР±РµР·РѕРїР°СЃРЅС‹Р№ Р°С‚СЂРёР±СѓС‚ "questions" РєР»Р°СЃСЃР° "Exercises".
 in D:\sites\education\www\protected\modules\admin\controllers\ExercisesController.php (475)
 in D:\sites\education\www\index.php (13)
+2015/04/22 18:24:19 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2002] Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера.
+' in D:\OpenServer\domains\cursys\framework\db\CDbConnection.php:382
+Stack trace:
+#0 D:\OpenServer\domains\cursys\framework\db\CDbConnection.php(330): CDbConnection->open()
+#1 D:\OpenServer\domains\cursys\framework\db\CDbConnection.php(308): CDbConnection->setActive(true)
+#2 D:\OpenServer\domains\cursys\framework\base\CModule.php(387): CDbConnection->init()
+#3 D:\OpenServer\domains\cursys\framework\cli\commands\MigrateCommand.php(442): CModule->getComponent('db')
+#4 D:\OpenServer\domains\cursys\framework\cli\commands\MigrateCommand.php(451): MigrateCommand->getDbConnection()
+#5 D:\OpenServer\domains\cursys\framework\cli\commands\MigrateCommand.php(482): MigrateCommand->getMigrationHistory(-1)
+#6 D:\OpenServer\domains\cursys\framework\cli\commands\MigrateCommand.php(84): MigrateCommand->getNewMigrations()
+#7 [internal function]: MigrateCommand->actionUp(Array)
+#8 D:\OpenServer\domains\cursys\framework\console\CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#9 D:\OpenServer\domains\cursys\framework\console\CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#10 D:\OpenServer\domains\cursys\framework\console\CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#11 D:\OpenServer\domains\cursys\framework\base\CApplication.php(180): CConsoleApplication->processRequest()
+#12 D:\OpenServer\domains\cursys\framework\yiic.php(33): CApplication->run()
+#13 D:\OpenServer\domains\cursys\protected\yiic.php(7): require_once('D:\\OpenServer\\d...')
+#14 {main}
+---

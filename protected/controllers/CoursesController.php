@@ -190,6 +190,7 @@ class CoursesController extends Controller
 
             }
 
+            $course->title = str_replace('{name}', $course->name, $course->title);
 
             $this->render('index',array(
                     'course'=>$course,

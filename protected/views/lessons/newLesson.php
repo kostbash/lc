@@ -1,5 +1,6 @@
 <?php
 $this->renderPartial("_pass_scripts", array('user'=>$user));
+$this->pageTitle="$title";
 ?>
 
 <?if (isset($_SESSION['error_'.$course_id])):?>
