@@ -112,6 +112,19 @@ class GeneratorsController extends Controller
                                 $exerciseSkills->isNewRecord = true;
                             }
                         }
+
+                        if($attributes['SecondSkillsIds'])
+                        {
+                            $exerciseSecondSkills = new ExerciseAndSecondSkills;
+                            foreach($attributes['SecondSkillsIds'] as $skill_id)
+                            {
+                                $exerciseSecondSkills->id_exercise = $exercise->id;
+                                $exerciseSecondSkills->id_skill = $skill_id;
+                                $exerciseSecondSkills->save();
+                                $exerciseSecondSkills->id = false;
+                                $exerciseSecondSkills->isNewRecord = true;
+                            }
+                        }
                         
                         if($attributes['answers'])
                         {

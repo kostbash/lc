@@ -108,6 +108,26 @@
                 }
             });
         });
+
+        $('.param-vars').live('change', function(){
+            current = this;
+            $.ajax({
+                url:'<?php echo Yii::app()->createUrl("admin/courses/paramvarsupdate"); ?>',
+                type: 'POST',
+                data: {paramVars:{
+                    name:$(current).data('name'),
+                    value:$(current).val(),
+                    id_course: <?=$model->id?>
+                }},
+                dataType: 'json',
+                success: function(result) {
+
+                },
+                error: function(res) {
+                    alert(res.responseText)
+                }
+            });
+        });
         
         $('#searchStudent').keyup(function(e){
             current = $(this);
@@ -378,6 +398,37 @@ $form=$this->beginWidget('CActiveForm', array(
             <a id="new-variables" class="btn btn-success" href="#">Добавить переменную</a>
         </div>
     </div>
+
+    <?php if($model->type == 2):?>
+    <div class="row">
+        <div class="col-lg-2 col-md-2"><label>Константы курса</label></div>
+        <div class="col-lg-6 col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <td>Название</td>
+                    <td>Значение</td>
+                </tr>
+                </thead>
+                <?php foreach($paramsVars as $name=>$value):?>
+                    <?php if (in_array($name, array('id', 'id_course'))) continue; ?>
+                    <tr>
+                        <td>
+                            <h4><?=$name?><?php echo ($name=="Threshold")?', %':''?></h4>
+                        </td>
+                        <td>
+                            <input class="form-control param-vars" data-name="<?=$name?>" type="text" value="<?=$value?>" placeholder="" />
+                        </td>
+
+                    </tr>
+                <?php endforeach ?>
+            </table>
+
+        </div>
+    </div>
+    <?php endif?>
+
+
     
     <div class="row">
         <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'congratulation'); ?></div>

@@ -53,7 +53,9 @@ class Exercises extends CActiveRecord
 	{
 		return array(
                     'Skills' => array(self::MANY_MANY, 'Skills', 'oed_exercise_and_skills(id_exercise, id_skill)'),
+                    'SecondSkills' => array(self::MANY_MANY, 'Skills', 'oed_exercise_and_second_skills(id_exercise, id_skill)'),
                     'ExerciseAndSkills'=>array(self::HAS_MANY, 'ExerciseAndSkills', 'id_exercise'),
+                    'ExerciseAndSecondSkills'=>array(self::HAS_MANY, 'ExerciseAndSecondSkills', 'id_exercise'),
                     'ExercisesGroup' => array(self::MANY_MANY, 'GroupOfExercises', 'oed_group_and_exercises(id_exercise, id_group)'),
                     'Answers'=>array(self::HAS_MANY, 'ExercisesListOfAnswers', 'id_exercise', 'order'=>'Answers.id ASC'),
                     'Type'=>array(self::BELONGS_TO, 'ExercisesTypes', 'id_type'),

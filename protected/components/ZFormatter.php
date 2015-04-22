@@ -21,9 +21,30 @@ class ZFormatter extends CFormatter
 	public function formatTextAreaSkill($value, $data, $name)
 	{
             if($data->isNewRecord)
-                return CHtml::textArea(get_class($data)."[$name]", $value, array('id'=>false, 'class'=>"form-control new-record", 'data-type'=>$data->type, 'placeholder'=>"Введите ".mb_strtolower($data->getAttributeLabel($name), 'UTF-8') ) );
+                return CHtml::textArea(get_class($data)."[$name]", $value, array('id'=>false, 'class'=>"form-control new-record", 'data-type'=>1, 'placeholder'=>"Введите ".mb_strtolower($data->getAttributeLabel($name), 'UTF-8') ) );
             return CHtml::textArea(get_class($data)."[$data->id][$name]", $value, array('class'=>"form-control update-record", 'placeholder'=>"Введите ".mb_strtolower($data->getAttributeLabel($name), 'UTF-8') ) );
 	}
+
+    public function formatSelectGroup($value, $data, $name)
+    {
+        if(!$data->isNewRecord) {
+            $model = SkillsGroups::model()->findAllByAttributes(array('id_course'=>$value));
+            $output = '<select data-id="'.$data->id.'" class="form-control skillsGroupSelect">
+                        <option value="0">Группа умений</option>';
+
+            foreach ($model as $group) {
+                $selected = '';
+                if ($data->skillsGroup == $group->id) {
+                    $selected = ' selected';
+                }
+                $output .= '<option value="'.$group->id.'" '.$selected.'>'.$group->name.'</option>';
+            }
+
+
+            $output .= '</select>';
+        }
+        return $output;
+    }
         
 	public function formatTextFieldCourse($value, $data, $name)
 	{
@@ -34,7 +55,7 @@ class ZFormatter extends CFormatter
         
 	public function formatTextArea($value, $data, $name)
 	{
-            if($data->isNewRecord)
+            if(!$data->isNewRecord)
                 return CHtml::textArea(get_class($data)."[$name]", $value, array('id'=>false, 'class'=>"form-control new-record", 'placeholder'=>"Введите ".mb_strtolower($data->getAttributeLabel($name), 'UTF-8') ) );
             return CHtml::textArea(get_class($data)."[$data->id][$name]", $value, array('class'=>"form-control update-record", 'rows'=>3, 'placeholder'=>"Введите ".mb_strtolower($data->getAttributeLabel($name), 'UTF-8') ) );
 	}

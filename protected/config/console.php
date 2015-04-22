@@ -13,10 +13,10 @@ return array(
 	'components'=>array(
                 // Соединение с СУБД
                 'db'=>array(
-                    'connectionString' => 'mysql:host=localhost;dbname=education',
+                    'connectionString' => 'mysql:host=u409930.mysql.masterhost.ru;dbname=u409930_cur_tst',
                     'emulatePrepare' => true,
-                    'username' => 'root',
-                    'password' => 'root',
+                    'username' => 'u409930_v',
+                    'password' => 'M--4o2ICAl',
                     'charset' => 'utf8',
                     'enableProfiling'=>true,
                 ),

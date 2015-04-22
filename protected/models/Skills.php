@@ -37,7 +37,8 @@ class Skills extends CActiveRecord
             array('condition', 'length', 'max'=>65535),
 			array('name, type', 'required'),
 			array('name', 'length', 'max'=>255),
-			array('id_course', 'numerical', 'integerOnly'=>true),
+            array('n1, n2, n3', 'numerical', 'min'=>0),
+			array('id_course, skillsGroup', 'numerical', 'integerOnly'=>true),
 			array('type', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -57,6 +58,8 @@ class Skills extends CActiveRecord
                     'UnderSkills'=>array(self::MANY_MANY, 'Skills', 'oed_relation_skills(id_main_skill, id_skill)'),
                     'Courses'=>array(self::MANY_MANY, 'Courses', 'oed_course_and_skills(id_skill, id_course)'),
                     'CourseAndSkills'=>array(self::HAS_MANY, 'CourseAndSkills', 'id_skill'),
+                    'SkillsGroups'=>array(self::MANY_MANY, 'SkillsGroups', 'oed_skills_groups(id_course)'),
+                    'SkillsSteps'=>array(self::HAS_MANY, 'SkillsSteps', 'id_skill'),
 		);
 	}
 
@@ -69,6 +72,10 @@ class Skills extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Название',
             'condition' => 'Html текст',
+            'n1' => 'N1',
+            'n2' => 'N2',
+            'n3' => 'N3',
+            'skillsGroup' => 'Группа',
 			'type' => 'Type',
                         'countExercises'=>'Число заданий',
                         'UnderSkills'=> 'Требуемое умение',

@@ -49,6 +49,30 @@
         
         });
 
+        $('#add-second-skills .dropdown-toggle').click(function(e) {
+            current = $(this);
+            skills = current.closest('#add-second-skills').find('.skills .skill');
+            skillsIds = new Array();
+            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
+            skills.each(function(i, skill){
+                skillsIds[i] = $(skill).data('id');
+            });
+
+            $.ajax({
+                url:'<?php echo Yii::app()->createUrl('admin/exercises/skillsnotidsajax', array('id_course'=>$groupExercise->id_course)); ?>',
+                type:'POST',
+                data: { term: current.val(), Exercises:{0:{SkillsIds: skillsIds, firstIds: firstIds}} },
+                dataType: 'json',
+                success: function(result) {
+                    if(result) {
+                        current.siblings('.dropdown-menu').find('li').remove();
+                        current.siblings('.dropdown-menu').append(result.html);
+                    }
+                }
+            });
+
+        });
+
         $('#add-skills .dropdown-menu li').live('click', function(){
             current = $(this);
             id = current.data('id');
@@ -61,6 +85,32 @@
                     data: { id: id },
                     dataType: 'json',
                     success: function(result) { 
+                        if(result.success) {
+                            skillExist = skillsContainer.find('.skill');
+                            if (!skillExist.length) {
+                                skillsContainer.append(result.html);
+                            }
+
+                        }
+                    }
+                });
+            }
+            current.closest('.input-group-btn').removeClass('open');
+            return false;
+        });
+
+        $('#add-second-skills .dropdown-menu li').live('click', function(){
+            current = $(this);
+            id = current.data('id');
+            if(id)
+            {
+                skillsContainer = current.closest('#add-second-skills').find('.skills');
+                $.ajax({
+                    url:'<?php echo Yii::app()->createUrl('admin/skills/gethtmlsecondmini'); ?>',
+                    type:'POST',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function(result) {
                         if(result.success) {
                             skillsContainer.append(result.html);
                         }
@@ -227,7 +277,7 @@
 ?>
 <div class="row">
     <div class="col-lg-3 col-md-3">
-        <?php echo CHtml::label('Умения', ''); ?>
+        <?php echo CHtml::label('Основные умения', ''); ?>
     </div>
     <div class="col-lg-5 col-md-5">
         <div id="add-skills">
@@ -253,6 +303,35 @@
         </div>
     </div>
 </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-3">
+            <?php echo CHtml::label('Второстепенные умения', ''); ?>
+        </div>
+        <div class="col-lg-5 col-md-5">
+            <div id="add-second-skills">
+                <div class="skills-mini">
+                    <div class="skills">
+                        <?php
+                        if($model->Skills)
+                            foreach($model->SecondSkills as $skill)
+                                $this->renderPartial("../skills/_second_skills", array('model'=>$skill));
+                        ?>
+                    </div>
+                </div>
+                <div class="input-group mydrop ">
+                    <?php echo CHtml::textField("Skills[name]", '', array('placeholder'=>'Введите название умения', 'class'=>'form-control input-sm', 'id'=>'searchSkill', 'autocomplete'=>'off')); ?>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
 <div class="row">
     <div class="col-lg-3 col-md-3">

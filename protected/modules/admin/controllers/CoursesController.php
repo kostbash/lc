@@ -16,7 +16,7 @@ class CoursesController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('DeleteBlocks', 'showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
+				'actions'=>array('ParamVarsUpdate', 'DeleteBlocks', 'showCode', 'create','generateCourseCode', 'update', 'newUpdate', 'delete','index', 'changeorderlessongroup', 'changepositions', 'coursesbyajax', 'params'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -141,6 +141,15 @@ class CoursesController extends Controller
                                 $var->save();
                             }
 
+                            if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$model->id))) {
+                                $var = new Variables();
+                                $var->name='DiagnosticMode';
+                                $var->type='boolean';
+                                $var->id_course = $model->id;
+                                $var->default_value='false';
+                                $var->save();
+                            }
+
 
                                 $n_lesson=new Lessons;
                                 $n_lesson->name = 'Проверочный тест';
@@ -205,6 +214,21 @@ class CoursesController extends Controller
         ));
     }
 
+    public function actionParamVarsUpdate(){
+        if (isset($_POST['paramVars'])) {
+            $data = $_POST['paramVars'];
+            $model = ParamsCourseVars::model()->findByPk($data['id_course']);
+            if ($model) {
+                $model->$data['name'] = $data['value'];
+                if (!$model->save()) {
+                    foreach($model->getErrors() as $error) {
+                        echo $error[0];
+                    }
+                }
+            }
+        }
+    }
+
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -250,6 +274,14 @@ class CoursesController extends Controller
             $var->type='int';
             $var->id_course = $id_course;
             $var->default_value=1;
+            $var->save();
+        }
+        if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$id_course))) {
+            $var = new Variables();
+            $var->name='DiagnosticMode';
+            $var->type='boolean';
+            $var->id_course = $id_course;
+            $var->default_value='false';
             $var->save();
         }
 
@@ -334,8 +366,17 @@ class CoursesController extends Controller
                     }
 		}
 
+
+        $paramsVars = ParamsCourseVars::model()->findByPk($model->id);
+        if (!$paramsVars) {
+            $paramsVars = new ParamsCourseVars;
+            $paramsVars->id_course = $model->id;
+            $paramsVars->save(false);
+        }
+
 		$this->render('params',array(
 			'model'=>$model,
+            'paramsVars' => $paramsVars,
 		));
 	}
 

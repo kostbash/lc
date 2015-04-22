@@ -404,6 +404,19 @@ class ExercisesController extends Controller {
                     }
                 }
 
+                if ($_POST['SecondSkills']['ids']) {
+                    foreach ($model->ExerciseAndSecondSkills as $eSkill)
+                        $eSkill->delete();
+                    $exerciseSkills = new ExerciseAndSecondSkills();
+                    foreach ($_POST['SecondSkills']['ids'] as $id_skill) {
+                        $exerciseSkills->id_exercise = $model->id;
+                        $exerciseSkills->id_skill = $id_skill;
+                        $exerciseSkills->save();
+                        $exerciseSkills->isNewRecord = true;
+                        $exerciseSkills->id = false;
+                    }
+                }
+
                 if ($model->id_visual == 9) {
                     $question = $model->Questions[0];
                     $question->attributes = nl2br($_POST['Exercises']['questions'][0]);

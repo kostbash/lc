@@ -28,7 +28,7 @@ class SkillsController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'showtree', 'delete','create','update', 'skillsbyajax', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini'),
+				'actions'=>array('index', 'group', 'showtree', 'delete','create','update', 'skillsbyajax', 'skillsbyidajax', 'addcourseskill', 'gethtmlmini', 'gethtmlsecondmini'),
 				'roles'=>array('editor'),
 			),
 			array('deny',  // deny all users
@@ -68,6 +68,21 @@ class SkillsController extends Controller
             }
             echo CJSON::encode($result);
 	}
+
+    public function actionGetHtmlSecondMini()
+    {
+        $id = (int) $_POST['id'];
+        $result = array();
+        if($id)
+        {
+            $model= $this->loadModel($id);
+            $result['success'] = 1;
+            $result['html'] = $this->renderPartial('_second_skills', array('model'=>$model), true);
+        } else {
+            $result['success'] = 0;
+        }
+        echo CJSON::encode($result);
+    }
         
 	public function actionAddCourseSkill($id_course)
 	{
@@ -143,11 +158,28 @@ class SkillsController extends Controller
                         $model->attributes=$attributes;
                         if($model->save())
                                 echo true;
-                        else
-                            echo 'Название не может быть пустым';
+                        else {
+                            $message = null;
+                            if ($model->errors) {
+                                foreach($model->errors as $error) {
+                                    $message .= $error[0] . "\n";
+                                }
+                                echo $message;
+                            } else {
+                                echo 'Произошла ошибка при сохранении';
+                            }
+                        }
                 }
             }
 	}
+
+    public function actionGroup($id_course) {
+
+
+        $this->render('group', array(
+
+        ));
+    }
 
     public function actionShowtree($id_course) {
         $course = Courses::model()->findByPk($id_course);
@@ -210,6 +242,7 @@ class SkillsController extends Controller
 	public function actionIndex($id_course=null)
 	{
             $model=new Skills('search');
+
             $model->unsetAttributes();  // clear any default values
             if($id_course)
                 $course = Courses::model()->findByPk($id_course);
@@ -220,10 +253,12 @@ class SkillsController extends Controller
             else
                 $model->id_course = 0;
             $id_course = $course ? $course->id : 0;
-            $this->render('index',array(
+
+        $this->render('index',array(
                     'model'=>$model,
                     'course'=>$course,
                     'id_course'=> $id_course,
+                    //'skillsGroups' => SkillsGroups::model()->findAllByAttributes(array('id_course'=>$id_course))
             ));
 	}
 

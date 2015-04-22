@@ -52,8 +52,8 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                 $.ajax({
                     'url':'".Yii::app()->createUrl("admin/skills/create")."',
                     'type':'POST',
-                    'data': {'Skills':{'name':$(this).val(), 'type':$(this).data('type'), id_course:". $id_course ."}},
-                    'success': function(result) { 
+                    'data': {'Skills':{'name':$(this).val(), 'type':2, id_course:". $id_course ."}},
+                    'success': function(result) {
                                     if(result==1)
                                         $(current).parents('.zgrid').yiiGridView('update');
                                     else if(result!='')
@@ -68,7 +68,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                     'url':'".Yii::app()->createUrl("admin/skills/update")."',
                     'type':'POST',
                     'data':$(this).serialize(),
-                    'success': function(result) { 
+                    'success': function(result) {
                                     if(result==1)
                                         $(current).parents('.zgrid').yiiGridView('update');
                                     else if(result!='')
@@ -83,28 +83,28 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                     'url':'".Yii::app()->createUrl('admin/skills/skillsbyidajax')."',
                     'type':'POST',
                     'data': { id: current.data('id'), term: current.val() },
-                    'success': function(result) { 
+                    'success': function(result) {
                             current.siblings('.input-group-btn').children('.dropdown-menu').children('li').remove();
                             current.siblings('.input-group-btn').children('.dropdown-menu').append(result);
                             current.siblings('.input-group-btn').addClass('open');
                     }
                 });
             });
-            
+
             $('.mydrop .dropdown-toggle').live('click', function(){
                 current = $(this);
                     $.ajax({
                         'url':'".Yii::app()->createUrl('admin/skills/skillsbyidajax')."',
                         'type':'POST',
                         'data': {id: current.parents('.mydrop').children('input').data('id')},
-                        'success': function(result) { 
+                        'success': function(result) {
                             if(result!='')
                                 current.siblings('.dropdown-menu').children('li').remove();
                                 current.siblings('.dropdown-menu').append(result);
                         }
                     });
             });
-            
+
             $('.mydrop .dropdown-menu li').live('click', function(){
                 current = $(this);
                 input = current.parents('.input-group-btn').siblings('input');
@@ -112,7 +112,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                     'url':'".Yii::app()->createUrl('admin/Relationskills/create')."',
                     'type':'POST',
                     'data':{ 'id_main': input.data('id'), 'id': current.data('id') },
-                    'success': function(result) { 
+                    'success': function(result) {
                         if(result==1) {
                             $(current).parents('.zgrid').yiiGridView('update');
                         }
@@ -123,7 +123,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                 current.parents('.input-group-btn').removeClass('open');
                 return false;
             });
-            
+
             $('.delete-main-skill').live('click', function() {
                 current = $(this);
                 if(current.closest('tr').data('candelete') === 1)
@@ -132,16 +132,33 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                       $.ajax({
                          'url': current.attr('href'),
                          'type':'POST',
-                         'success': function(result) { 
+                         'success': function(result) {
                                          if(result==1)
                                              current.parents('.zgrid').yiiGridView('update');
                                          else if(result!=='')
                                              alert(result);
                           }
-                     }); 
+                     });
                 return false;
             });
-            
+
+            $('.skillsGroupSelect option').live('click', function(){
+                elem = $(this);
+                current = $(this).parent();
+                $.ajax({
+                    'url':'".Yii::app()->createUrl('admin/skillsgroups/changebyajax')."',
+                    'type':'POST',
+                    'data': { skillId: current.data('id'), groupId: elem.val() },
+                    'success': function(result) {
+                            if (result == false) {
+                                alert('Произошла ошибка при сохранении');
+                            } else {
+                                current.parents('.zgrid').yiiGridView('update');
+                            }
+                    }
+                });
+            });
+
             $('.input-mini-container .close').live('click', function() {
                 current = $(this);
                 if(!confirm('Вы уверены, что хотите удалить данное умение ?'))
@@ -149,15 +166,15 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
                 $.ajax({
                    'url': current.attr('href'),
                    'type':'POST',
-                   'success': function(result) { 
+                   'success': function(result) {
                                    if(result==1)
                                        current.closest('.zgrid').yiiGridView('update');
                                    else if(result!=='')
                                        alert(result);
                     }
-                }); 
+                });
                 return false;
-             });    
+             });
         });"
     );
 ?>
@@ -178,13 +195,13 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
         </div>
     </div>
 </div>
-
 <div class="page-header clearfix">
     <h2>Умения<?php if($course) echo " курса \"$course->name\""; ?></h2>
     <a class="btn btn-success btn-sm" href="/admin/skills/showtree/id_course/<?=$course->id?>">Посмотреть дерево умений</a>
+    <a style="margin-right: 10px;" class="btn btn-success btn-sm" href="/admin/skillsgroups/index/id_course/<?=$course->id?>">Группы умений</a>
 </div>
 <div class="row">
-<div class="pull-left col-lg-6 col-md-6">
+<div class="pull-left col-lg-12 col-md-10">
 <h3 class="head-data">Навыки</h3>
 <div class="well">
 <?php Yii::beginProfile('index3'); $this->widget('ZGridView', array(
@@ -195,13 +212,52 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
             array(
                 'name'=>'name',
                 'type'=>'textAreaSkill',
+                'htmlOptions'=>array('style'=>'width: 15%'),
+            ),
+
+        array(
+            'name'=>'skillsGroup',
+            'header'=> 'Группа',
+            'type'=>'selectGroup',
+            'value'=>$id_course,
+            'htmlOptions'=>array('style'=>'width: 15%'),
+        ),
+        array(
+            'header'=> 'Шаги',
+            'type'=>'raw',
+            'value'=>'"<a href=\"/admin/skillssteps/index/id_skill/$data->id\">".count($data->SkillsSteps)."</a>"',
+            'htmlOptions'=>array('style'=>'width: 3%'),
+            'visibleCell'=>'!$data->isNewRecord',
+        ),
+            array(
+                'name'=>'condition',
+                'header'=>'Html текст',
+                'type'=>'forEditor',
                 'htmlOptions'=>array('style'=>'width: 30%'),
+                'visibleCell'=>'!$data->isNewRecord',
+            ),
+            array(
+                'name'=>'n1',
+                'header'=>'N1',
+                'type'=>'raw',
+                'value'=>'CHtml::activeTextField($data, "[$data->id]n1", array("class"=>"form-control update-record"))',
+                'htmlOptions'=>array('style'=>'width: 5%'),
+                'visibleCell'=>'!$data->isNewRecord',
             ),
         array(
-            'name'=>'condition',
-            'header'=>'Html текст',
-            'type'=>'forEditor',
-            'htmlOptions'=>array('style'=>'width: 30%'),
+            'name'=>'n2',
+            'header'=>'N2',
+            'type'=>'raw',
+            'value'=>'CHtml::activeTextField($data, "[$data->id]n2", array("class"=>"form-control update-record"))',
+            'htmlOptions'=>array('style'=>'width: 5%'),
+            'visibleCell'=>'!$data->isNewRecord',
+        ),
+        array(
+            'name'=>'n3',
+            'header'=>'N3',
+            'type'=>'raw',
+            'value'=>'CHtml::activeTextField($data, "[$data->id]n3", array("class"=>"form-control update-record"))',
+            'htmlOptions'=>array('style'=>'width: 5%'),
             'visibleCell'=>'!$data->isNewRecord',
         ),
             array(
@@ -212,7 +268,7 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
             ),
             array(
                 'name'=>'countExercises',
-                'htmlOptions'=>array('style'=>'width: 23%'),
+                'htmlOptions'=>array('style'=>'width: 1%'),
                 'visibleCell'=>'!$data->isNewRecord',
             ),
             
@@ -234,47 +290,56 @@ Yii::app()->clientScript->registerScript("UpdateByAjax",
 </div>
 </div>
 
-<div class="pull-right col-lg-6 col-md-6">
-<h3 class="head-data">Знания</h3>
-<div class="well">
-<?php Yii::beginProfile('index2'); $this->widget('ZGridView', array(
-	'id'=>'skills-grid',
-	'dataProvider'=>$model->searchKnowledge(),
-        'rowHtmlOptionsExpression' => 'array("data-candelete"=>$data->canDelete)',
-	'columns'=>array(
-            array(
-                'name'=>'name',
-                'type'=>'textAreaSkill',
-                'htmlOptions'=>array('style'=>'width: 30%'),
-            ),
-            array(
-                'name'=>'UnderSkills',
-                'header'=>'Требуемые знания',
-                'type'=>'labelSkill',
-                'htmlOptions'=>array('style'=>'width: 30%'),
-                'visibleCell'=>'!$data->isNewRecord',
-            ),
-            array(
-                'name'=>'countExercises',
-                'htmlOptions'=>array('style'=>'width: 23%'),
-                'visibleCell'=>'!$data->isNewRecord',
-            ),
-            
-            array(
-                    'class'=>'CButtonColumn',
-                    'template'=>'{delete}',
-                    'buttons'=>array(
-                        'delete'=>array(
-                            'visible'=>'!$data->isNewRecord',
-                            'click'=>'false',
-                            'options'=>array('class'=>'delete-main-skill'),
-                        ),
-                    ),
-                    
-                    'htmlOptions'=>array('style'=>'width: 10%'),
-            ),
-	),
-)); Yii::endProfile('index2'); Yii::endProfile('index'); ?>
-</div>
-</div>
+
+
+
+
+
+
+
+
+<!---->
+<!--<div class="pull-right col-lg-6 col-md-6">-->
+<!--<h3 class="head-data">Знания</h3>-->
+<!--<div class="well">-->
+<?php //Yii::beginProfile('index2'); $this->widget('ZGridView', array(
+//	'id'=>'skills-grid',
+//	'dataProvider'=>$model->searchKnowledge(),
+//        'rowHtmlOptionsExpression' => 'array("data-candelete"=>$data->canDelete)',
+//	'columns'=>array(
+//            array(
+//                'name'=>'name',
+//                'type'=>'textAreaSkill',
+//                'htmlOptions'=>array('style'=>'width: 30%'),
+//            ),
+//            array(
+//                'name'=>'UnderSkills',
+//                'header'=>'Требуемые знания',
+//                'type'=>'labelSkill',
+//                'htmlOptions'=>array('style'=>'width: 30%'),
+//                'visibleCell'=>'!$data->isNewRecord',
+//            ),
+//            array(
+//                'name'=>'countExercises',
+//                'htmlOptions'=>array('style'=>'width: 23%'),
+//                'visibleCell'=>'!$data->isNewRecord',
+//            ),
+//
+//            array(
+//                    'class'=>'CButtonColumn',
+//                    'template'=>'{delete}',
+//                    'buttons'=>array(
+//                        'delete'=>array(
+//                            'visible'=>'!$data->isNewRecord',
+//                            'click'=>'false',
+//                            'options'=>array('class'=>'delete-main-skill'),
+//                        ),
+//                    ),
+//
+//                    'htmlOptions'=>array('style'=>'width: 10%'),
+//            ),
+//	),
+//)); Yii::endProfile('index2'); Yii::endProfile('index'); ?>
+<!--</div>-->
+<!--</div>-->
 </div>

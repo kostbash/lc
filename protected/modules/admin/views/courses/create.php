@@ -143,6 +143,14 @@
             </div>
 
             <div class="row">
+                <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'type'); ?></div>
+                <div class="col-lg-6 col-md-6">
+                    <?php echo $form->dropDownList($model,'type', Courses::$typeValues, array('class'=>'form-control')); ?>
+                    <?php echo $form->error($model,'type'); ?>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-2 col-md-2"><?php echo $form->labelEx($model,'learning_time'); ?></div>
                 <div class="col-lg-6 col-md-6">
                     <?php echo $form->textField($model,'learning_time',array('size'=>60, 'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Введите время обучения')); ?>

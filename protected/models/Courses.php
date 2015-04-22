@@ -51,6 +51,11 @@ class Courses extends CActiveRecord
             2 => 'Только ученикам из списка',
         );
 
+        public static $typeValues = array(
+            1 => 'Блоки',
+            2 => 'Умения',
+        );
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -59,7 +64,7 @@ class Courses extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
+			array('name, type', 'required'),
 			array('name, learning_time', 'length', 'max'=>255),
 			array('description, congratulation', 'safe'),
                         array('change_date', 'date', 'format'=>'yyyy-mm-dd hh:mm:ss'),
@@ -105,6 +110,7 @@ class Courses extends CActiveRecord
                     'learning_time' => 'Предполагаемое время обучения',
                     'congratulation' => 'Страница завершения курса',
                     'visible'=> 'Виден',
+                    'type' => 'Тип курса',
 		);
 	}
         
@@ -181,7 +187,7 @@ class Courses extends CActiveRecord
             foreach($this->LessonsGroups as $group)
                 $mass[] = $group->id;
             $countLessons = GroupAndLessons::model()->countByAttributes(array('id_group'=>$mass));
-            return $countLessons ? $countLessons-1 : 0;
+            return $countLessons ? $countLessons : 0;
         }
         
         public function getCountBlocks($type=1)
@@ -282,7 +288,7 @@ class Courses extends CActiveRecord
 
         public function stateButton() {
             $lastLesson = $this->lastUserLesson;
-            $number = $lastLesson->Lesson->position;
+            $number = $lastLesson->Lesson->position+1;
             $exerciseGroup = UserAndExerciseGroups::model()->exists('id_user_and_lesson=:id_user_and_lesson AND passed=:passed', array('id_user_and_lesson'=>$lastLesson->id, 'passed'=>1));
             if($exerciseGroup)
             {
