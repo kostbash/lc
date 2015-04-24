@@ -6,7 +6,7 @@
             current = $(this);
             skills = current.closest('#add-skills').find('.skills .skill');
             skillsIds = new Array();
-            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
+            firstIds = [<?php echo @implode(',', $groupExercise->IdsUsedSkills); ?>];
             skills.each(function(i, skill){
                 skillsIds[i] = $(skill).data('id');
             });
@@ -29,7 +29,7 @@
             current = $(this);
             skills = current.closest('#add-skills').find('.skills .skill');
             skillsIds = new Array();
-            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
+            firstIds = [<?php echo @implode(',', $groupExercise->IdsUsedSkills); ?>];
             skills.each(function(i, skill){
                 skillsIds[i] = $(skill).data('id');
             });
@@ -53,7 +53,7 @@
             current = $(this);
             skills = current.closest('#add-second-skills').find('.skills .skill');
             skillsIds = new Array();
-            firstIds = [<?php echo implode(',', $groupExercise->IdsUsedSkills); ?>];
+            firstIds = [<?php echo @implode(',', $groupExercise->IdsUsedSkills); ?>];
             skills.each(function(i, skill){
                 skillsIds[i] = $(skill).data('id');
             });

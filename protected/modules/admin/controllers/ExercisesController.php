@@ -960,7 +960,7 @@ class ExercisesController extends Controller {
         echo Skills::skillsForAjax($id_course, $exercise['SkillsIds'], $exercise['firstIds']);
     }
 
-    public function actionSkillsByIdsAjax($id_group) {
+    public function actionSkillsByIdsAjax($id_group=null, $id_course=null) {
         $criteria = new CDbCriteria;
         $group = GroupOfExercises::model()->findByPk($id_group);
         $res = '';
@@ -968,8 +968,10 @@ class ExercisesController extends Controller {
             $criteria->condition = '`name` LIKE :name';
             $criteria->params['name'] = '%' . $_POST['term'] . '%';
         }
+        if ($id_course) {
+            $criteria->compare('id_course',$id_course);
+        }
 
-        $criteria->compare('id_course',$group->id_course);
         $criteria->compare('type',2);
 
         if ($_POST['Exercises']['SkillsIds'])

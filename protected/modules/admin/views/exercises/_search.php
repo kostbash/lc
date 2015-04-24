@@ -9,7 +9,7 @@
         $('.search-form .mydrop input').live('keyup', function(){
             current = $(this);
             $.ajax({
-                url: '".Yii::app()->createUrl('admin/exercises/skillsbyidsajax', array('id_group'=>$group->id))."',
+                url: '".Yii::app()->createUrl('admin/exercises/skillsbyidsajax', array('id_group'=>$group->id,'id_course'=>$course->id))."',
                 type:'POST',
                 data: current.closest('form').serialize(),
                 success: function(result) { 
@@ -23,7 +23,7 @@
         $('.search-form .mydrop .dropdown-toggle').live('click', function(){
             current = $(this);
             $.ajax({
-                url: '".Yii::app()->createUrl('admin/exercises/skillsbyidsajax', array('id_group'=>$group->id))."',
+                url: '".Yii::app()->createUrl('admin/exercises/skillsbyidsajax', array('id_group'=>$group->id, 'id_course'=>$course->id))."',
                 type: 'POST',
                 data: current.closest('form').serialize(), 
                 success: function(result) { 
@@ -64,7 +64,6 @@
 ?>
 
 <div class="well clearfix">
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'method'=>'POST',
 )); ?>

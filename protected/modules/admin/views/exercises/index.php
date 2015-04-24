@@ -216,6 +216,7 @@ Yii::app()->clientScript->registerScript('exercises', "
         $this->renderPartial('_search', array(
             'model' => $model,
             'group' => $group,
+            'course' => $course
         ));
         ?>
     </div><!-- search-form -->
