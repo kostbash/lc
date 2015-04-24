@@ -46,6 +46,7 @@ class CoursesController extends Controller
             $course = $this->loadModel($id);
             $_SESSION['id_course'] = $id;
             $this->_course = $id;
+            $course->title = str_replace('{name}', $course->name, $course->title);
             $this->render('view',array(
                 'course'=>$course,
             ));

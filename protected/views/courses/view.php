@@ -1,5 +1,5 @@
 <?php
-    $this->pageTitle="$course->name. ".Yii::app()->name.".";
+    $this->pageTitle="$course->title";
     $messages = SourceMessages::MessagesByCategories(array('main-page-unauth', 'course-unauth', 'course-pages'));
 ?>
     <div id="separate-header-part">

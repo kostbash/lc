@@ -31,7 +31,11 @@ class WidgetMultCol extends GraphicWidget
             $text .= "<tr>";
             $text .="<td style=\"position:relative;\"><div class='minus'>x</div><div class='under'> " . $this->values['mul2'] . "</div></td>";
             $text .= "</tr>";
-            if (!($this->values['mul2'] < 10 and $this->values['mul2'] > -10)) {
+            if ($this->values['mul2'] < 10 and $this->values['mul2'] > -9) {
+                $text .= "<tr>";
+                $text .= "<td colspan='" . $this->values['mul1Length'] . "' class='residue'>" . $this->values['rightAnswer'] . "</td>";
+                $text .= "</tr>";
+            } else {
                 foreach ($this->values['subs'] as $k => $sub)
                 {
                     {
@@ -44,11 +48,13 @@ class WidgetMultCol extends GraphicWidget
                     }
                     $k++;
                 }
+
+
+                $text .= "<tr>";
+                $text .= "<td colspan='" . $this->values['mul1Length'] . "' class='residue'>" . $this->values['rightAnswer'] . "</td>";
+                $text .= "</tr>";
             }
 
-            $text .= "<tr>";
-            $text .= "<td colspan='" . $this->values['mul1Length'] . "' class='residue'>" . $this->values['rightAnswer'] . "</td>";
-            $text .= "</tr>";
             $text .= "</tbody>";
             $text .= "</table>";
         }
