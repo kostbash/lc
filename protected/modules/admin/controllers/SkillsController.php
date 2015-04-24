@@ -128,8 +128,13 @@ class SkillsController extends Controller
                     }
                     $criteria->addNotInCondition('id', $mainSkill->idsUsed);
                     $criteria->limit = 10;
-                    if($mainSkill->type == 1)
+                    if($mainSkill->type == 1) {
                         $criteria->compare('type',1);
+                    } else {
+                        $criteria->compare('type',2);
+                    }
+
+                    $criteria->compare('id_course',$mainSkill->id_course);
                     $skills = Skills::model()->findAll($criteria);
                     $res = '';
                     foreach ($skills  as $skill)

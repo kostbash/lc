@@ -969,6 +969,9 @@ class ExercisesController extends Controller {
             $criteria->params['name'] = '%' . $_POST['term'] . '%';
         }
 
+        $criteria->compare('id_course',$group->id_course);
+        $criteria->compare('type',2);
+
         if ($_POST['Exercises']['SkillsIds'])
             $criteria->addNotInCondition('id', $_POST['Exercises']['SkillsIds']);
         if ($group && Courses::existCourseById($group->id_course) && $group->Skills) {

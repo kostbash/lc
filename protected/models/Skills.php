@@ -218,7 +218,7 @@ class Skills extends CActiveRecord
                 $sql .= "SELECT * FROM `oed_skills` WHERE `id` IN (".implode(',', $firstIds).") UNION ";
                 $ids = array_merge($ids, $firstIds);
             }
-            
+
             if($id_course && Courses::existCourseById($id_course))
             {
                 if($ids)
@@ -228,6 +228,9 @@ class Skills extends CActiveRecord
                 
                 $condition[] = '`id_course`=:id_course';
                 $params['id_course'] = $id_course;
+
+                $condition[] = '`type`=:type';
+                $params['type'] = 2;
             }
             
             $sql .= "SELECT * FROM `oed_skills` WHERE ".implode(' AND ', $condition);
