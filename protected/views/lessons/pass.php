@@ -34,7 +34,8 @@ $this->pageTitle="$title";
                                     $contentSkills .= "</table>";
                                 ?>
                                 <div id="lesson-name">
-                                    <?php echo "УРОК {$userLesson->Lesson->position}: ".$userLesson->Lesson->name; ?>
+                                    <?php $pos = $userLesson->Lesson->position + 1?>
+                                    <?php echo "УРОК ".$pos.": ".$userLesson->Lesson->name; ?>
                                     <div id="skills" data-toggle="popover" data-trigger ="hover" data-html='true' data-container="#lesson-name" data-placement="right" data-content="<?php echo $contentSkills; ?>"></div>
                                 </div>
                                 <?php echo CHtml::link('Курсы:', array('courses/list'), array('style'=>'color:#263870;')); ?>
