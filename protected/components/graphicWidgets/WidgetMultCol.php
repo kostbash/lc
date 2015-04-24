@@ -81,12 +81,18 @@ class WidgetMultCol extends GraphicWidget
 
                 $this->values['subs'][$k]['subtrahend'] = $subtrahend;
                 $k++;
+                if (isset($this->params['a']['l'.$k])) {
+                    $this->params['a']['l'.$k] = array_slice($this->params['a']['l'.$k], 0, strlen($subtrahend));
+                }
+
             }
         }
+        //print_r($this->params);
         $this->values['mul1'] = $mul1;
         $this->values['mul2'] = $mul2;
         $this->values['mul2Length'] = $mul2Length;
         $this->values['rightAnswer'] = $rightAnswer;
+
     }
 
     // заменяет на инпуты
@@ -95,7 +101,6 @@ class WidgetMultCol extends GraphicWidget
         $inps = $this->clearInps();
         if ($inps)
         {
-
             foreach ($inps as $k => $inp)
             {
 
