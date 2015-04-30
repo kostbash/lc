@@ -343,61 +343,94 @@ class CoursesController extends Controller
     }
 
     public function actionTest() {
-        $string = '
-        switch(BlockIndex) {
-        case 1:
-            SetBlockType(btExersice)
-            SetBlockTitle(тестовый блок)
-            addTask(lol)
-        break;
-        case 2:
-            SetBlockType(btExersice)
-            SetBlockTitle(второй блок)
-        break;
-        case 3:
-            SetBlockTitle(Числа до 20 и цифры - проверка)
-AddControlledU(17)
-SetULevel(17, 0.7)
-AddControlledU(49)
-SetULevel(49, 0.7)
+        $string = 'if isBlockPassed then
+ inc(BlockIndex)
+endif
 
- addTask(5610)
- addTask(5611)
- addTask(5612)
- addTask(5613)
- addTask(5614)
- addTask(5615)
- addTask(5616)
- addTask(5617)
- addTask(5631)
- addTask(5632)
- addTask(5633)
- addTask(5634)
- addTask(5635)
- addTask(5636)
- addTask(5637)
- addTask(5638)
- addTask(5639)
- addTask(5640)
- addTask(5641)
- addTask(5642)
- addTask(5643)
- addTask(5644)
- addTask(5645)
- addTask(5646)
- addTask(5647)
- addTask(5648)
- addTask(5649)
-        break;
-        }
+switch(BlockIndex) {
+case 1:
+SetBlockType(btExersice)
+SetBlockTitle(Посчитай до 100)
+AddControlledU(19)
+SetULevel(19, 0.6)
+AddControlledU(66)
+SetULevel(66, 0)
+ addTask(6513)
+ addTask(6514)
+ addTask(18286)
+ addTask(18287)
+ addTask(18288)
+ addTask(18289)
+ addTask(18290)
+ addTask(18291)
+ addTask(18292)
+ addTask(18293)
+ addTask(18294)
+ addTask(18295)
+ addTask(18296)
+ addTask(18297)
+ addTask(18298)
+ addTask(18299)
+ addTask(18300)
+ addTask(18301)
+ addTask(18302)
+ addTask(18303)
+ addTask(18304)
+ addTask(18305)
+ addTask(18306)
+break;
+}
         ';
 
+echo '<pre>';
+
+        $u = 103;
+        $result = 0;
+        $block_type = 'btExercise';
+
+        $skill_exercises = ExerciseAndSkills::model()->findAllByAttributes(array('id_skill'=>$u));
+        $sql = 'SELECT * FROM oed_user_exercises_logs WHERE id_user = '.Yii::app()->user->id . ' and (';
+
+        foreach($skill_exercises as $key => $skill_and_exercise) {
+            if ($block_type != 'all') {
+                $group_and_ex = GroupAndExercises::model()->findByAttributes(array('id_exercise'=>$skill_and_exercise->id_exercise));
+                $block = GroupOfExercises::model()->findByPk($group_and_ex->id_group);
+                if ($block) {
+                    if ($block_type == 'btExercise' and $block->type != 1) {
+                        continue;
+                    }
+                    if ($block_type == 'btTest' and $block->type != 2) {
+                        continue;
+                    }
+                }
+
+            }
 
 
-        echo '<pre>';
-        $code = new parseCode($string);
-        $block = $code->getBlock(11);
-        print_r($block);
+            $sql .= 'id_exercise = ' . $skill_and_exercise->id_exercise;
+            $count = $key;
+            if (isset($skill_exercises[++$count])) {
+                $sql .= ' or ';
+            }
+        }
+
+        $sql .= ') and `right` = ' . $result;
+        if ($period != 0) {
+            $sql .= ' and TO_DAYS(NOW()) - TO_DAYS(date) <= '.$period;
+        }
+
+
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        if (!$result) {
+            return -1;
+        }
+        $date = $result[count($result)-1]['date'] . ' ' . $result[count($result)-1]['time'];
+        $P = 7 * (count($result) + 1);
+        if (time() - strtotime($date) < $P) {
+            return 0;
+        }
+
+        return 10/(count($result)+1);
     }
 
 	public function loadModel($id)

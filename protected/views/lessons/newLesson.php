@@ -11,6 +11,15 @@ $this->pageTitle="$title";
         });
     </script>
 <?endif?>
+
+<?if (isset($block['message'])):?>
+    <script>
+        $(document).ready(function(){
+            alert('<?=$block['message']?>');
+        });
+    </script>
+<?endif?>
+
 <div class="music" style="display: none"></div>
 <div id="separate-header-part">
     <img src="/images/separate-two-part.png" width="1026" height="14" />

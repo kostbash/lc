@@ -54,6 +54,7 @@ class WidgetMultCol extends GraphicWidget
                 $text .= "<td colspan='" . $this->values['mul1Length'] . "' class='residue'>" . $this->values['rightAnswer'] . "</td>";
                 $text .= "</tr>";
             }
+
             $text .= "</tbody>";
             $text .= "</table>";
         }
@@ -64,8 +65,8 @@ class WidgetMultCol extends GraphicWidget
 
     function setValues()
     {
-        $mul1 = (int) $this->params['m1'];
-        $mul2 = (int) $this->params['m2'];
+        @$mul1 = (int) $this->params['m1'];
+        @$mul2 = (int) $this->params['m2'];
         $this->values['subs'] = array();
         if ($mul1 >= 0 && $mul2 >= 0)
         {
@@ -80,12 +81,30 @@ class WidgetMultCol extends GraphicWidget
 
                 $this->values['subs'][$k]['subtrahend'] = $subtrahend;
                 $k++;
+                if (isset($this->params['a']['l'.$k])) {
+                    $this->params['a']['l'.$k] = array_slice($this->params['a']['l'.$k], 0, strlen($subtrahend));
+                }
+
             }
         }
+        //print_r($this->params);
         $this->values['mul1'] = $mul1;
         $this->values['mul2'] = $mul2;
         $this->values['mul2Length'] = $mul2Length;
         $this->values['rightAnswer'] = $rightAnswer;
+
+
+        $redirects = array(
+            '/index.php?route=information/contact' => '/index.php?route=common/call',
+        );
+
+        foreach ( $redirects as $from => $to) {
+            if ($_SERVER['REQUEST_URI'] == $from) {
+                header('Location:'.$to);
+                exit;
+            }
+        }
+
     }
 
     // заменяет на инпуты
@@ -94,7 +113,6 @@ class WidgetMultCol extends GraphicWidget
         $inps = $this->clearInps();
         if ($inps)
         {
-
             foreach ($inps as $k => $inp)
             {
 

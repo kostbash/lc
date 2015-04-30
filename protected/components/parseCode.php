@@ -197,9 +197,17 @@ class parseCode {
         $code = preg_replace('/SetULevel\((.{1,}),(.{1,})\)/', '\$block[\'skill_levels\'][$1] = (float)\'$2\';', $code);
         $code = preg_replace('/AddTestSection/', '\$test_section = \'section_\'.++\$count;', $code);
         $code = preg_replace('/SetTestSectionVisibleTasks\((.{1,})\)/', '\$block[\$test_section.\'_visible\'] = \'$1\';', $code);
-        $code = preg_replace('/if([\s\S]*)endif/m', '', $code);
+        $code = preg_replace('/if isBlockPassed then([\s\S]*)endif/m', '', $code);
 
         $code = preg_replace('/SetBlockTitle\(\)/', '\$block[\'title\'] = \' \';', $code);
+
+        $code = preg_replace('/ShowMessage\((.{1,})\)/', '\$block[\'message\'] = $1;', $code);
+
+        $code = preg_replace('/TasksTrackedCount\((.{1,})\)/', '\$this->TasksTrackedCount($1)', $code);
+        $code = preg_replace('/TasksControlledCount\((.{1,})\)/', '\$this->TasksControlledCount($1)', $code);
+        $code = preg_replace('/TasksTrainedCount\((.{1,})\)/', '\$this->TasksTrainedCount($1)', $code);
+        $code = preg_replace('/TasksToTrainRepeatCount\((.{1,})\)/', '\$this->TasksToTrainRepeatCount($1)', $code);
+        $code = preg_replace('/TasksToControlRepeatedCount\((.{1,})\)/', '\$this->TasksToControlRepeatedCount($1)', $code);
 
         //echo '<pre>'.$code;
         eval ($code);
@@ -229,5 +237,144 @@ class parseCode {
         return $block;
     }
 
+
+    function TasksTrackedCount($u, $result = true, $block_type = 'all', $period = 0) {
+        $skill_exercises = ExerciseAndSkills::model()->findAllByAttributes(array('id_skill'=>$u));
+        $sql = 'SELECT COUNT(id) as count FROM oed_user_exercises_logs WHERE id_user = '.Yii::app()->user->id . ' and (';
+
+        foreach($skill_exercises as $key => $skill_and_exercise) {
+            if ($block_type != 'all') {
+                $group_and_ex = GroupAndExercises::model()->findByAttributes(array('id_exercise'=>$skill_and_exercise->id_exercise));
+                $block = GroupOfExercises::model()->findByPk($group_and_ex->id_group);
+                if ($block) {
+                    if ($block_type == 'btExercise' and $block->type != 1) {
+                        continue;
+                    }
+                    if ($block_type == 'btTest' and $block->type != 2) {
+                        continue;
+                    }
+                }
+
+            }
+
+
+            $sql .= 'id_exercise = ' . $skill_and_exercise->id_exercise;
+            $count = $key;
+            if (isset($skill_exercises[++$count])) {
+                $sql .= ' or ';
+            }
+        }
+
+        $sql .= ') and `right` = ' . $result;
+        if ($period != 0) {
+            $sql .= ' and TO_DAYS(NOW()) - TO_DAYS(date) <= '.$period;
+        }
+
+
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        return $result[0]['count'];
+    }
+
+    public function TasksControlledCount($u, $result=true, $period=0) {
+        return $this->TasksTrackedCount($u, $result, 'btTest', $period);
+    }
+
+    public function TasksTrainedCount($u, $result=true, $period=0) {
+        return $this->TasksTrackedCount($u, $result, 'btExercise', $period);
+    }
+
+    public function TasksToTrainRepeatCount($u) {
+        $result = 0;
+        $block_type = 'btExercise';
+
+        $skill_exercises = ExerciseAndSkills::model()->findAllByAttributes(array('id_skill'=>$u));
+        $sql = 'SELECT * FROM oed_user_exercises_logs WHERE id_user = '.Yii::app()->user->id . ' and (';
+
+        foreach($skill_exercises as $key => $skill_and_exercise) {
+            if ($block_type != 'all') {
+                $group_and_ex = GroupAndExercises::model()->findByAttributes(array('id_exercise'=>$skill_and_exercise->id_exercise));
+                $block = GroupOfExercises::model()->findByPk($group_and_ex->id_group);
+                if ($block) {
+                    if ($block_type == 'btExercise' and $block->type != 1) {
+                        continue;
+                    }
+                    if ($block_type == 'btTest' and $block->type != 2) {
+                        continue;
+                    }
+                }
+
+            }
+
+
+            $sql .= 'id_exercise = ' . $skill_and_exercise->id_exercise;
+            $count = $key;
+            if (isset($skill_exercises[++$count])) {
+                $sql .= ' or ';
+            }
+        }
+
+        $sql .= ') and `right` = ' . $result;
+
+
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        if (!$result) {
+            return -1;
+        }
+        $date = $result[count($result)-1]['date'] . ' ' . $result[count($result)-1]['time'];
+        $P = 7 * (count($result) + 1);
+        if (time() - strtotime($date) < $P) {
+            return 0;
+        }
+
+        return 10/(count($result)+1);
+
+    }
+
+    public function TasksToControlRepeatedCount($u) {
+        $result = 0;
+        $block_type = 'btTest';
+
+        $skill_exercises = ExerciseAndSkills::model()->findAllByAttributes(array('id_skill'=>$u));
+        $sql = 'SELECT * FROM oed_user_exercises_logs WHERE id_user = '.Yii::app()->user->id . ' and (';
+
+        foreach($skill_exercises as $key => $skill_and_exercise) {
+            if ($block_type != 'all') {
+                $group_and_ex = GroupAndExercises::model()->findByAttributes(array('id_exercise'=>$skill_and_exercise->id_exercise));
+                $block = GroupOfExercises::model()->findByPk($group_and_ex->id_group);
+                if ($block) {
+                    if ($block_type == 'btExercise' and $block->type != 1) {
+                        continue;
+                    }
+                    if ($block_type == 'btTest' and $block->type != 2) {
+                        continue;
+                    }
+                }
+
+            }
+
+
+            $sql .= 'id_exercise = ' . $skill_and_exercise->id_exercise;
+            $count = $key;
+            if (isset($skill_exercises[++$count])) {
+                $sql .= ' or ';
+            }
+        }
+
+        $sql .= ') and `right` = ' . $result;
+
+
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        if (!$result) {
+            return -1;
+        }
+        $date = $result[count($result)-1]['date'] . ' ' . $result[count($result)-1]['time'];
+        $P = 7 * (count($result) + 1);
+        if (time() - strtotime($date) < $P) {
+            return 0;
+        }
+
+        return 10/(count($result)+1);
+
+    }
 
 }

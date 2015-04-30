@@ -141,13 +141,15 @@ class CoursesController extends Controller
                                 $var->save();
                             }
 
-                            if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$model->id))) {
-                                $var = new Variables();
-                                $var->name='DiagnosticMode';
-                                $var->type='boolean';
-                                $var->id_course = $model->id;
-                                $var->default_value='false';
-                                $var->save();
+                            if ($model->type == 2) {
+                                if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$model->id))) {
+                                    $var = new Variables();
+                                    $var->name='DiagnosticMode';
+                                    $var->type='boolean';
+                                    $var->id_course = $model->id;
+                                    $var->default_value='false';
+                                    $var->save();
+                                }
                             }
 
 
@@ -234,7 +236,7 @@ class CoursesController extends Controller
 		$model=$this->loadModel($id);
                 
                 $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));
-                
+
 		if(isset($_POST['Courses']))
 		{
                     $lessonValid = true;
@@ -248,13 +250,22 @@ class CoursesController extends Controller
 			if($model->validate() && $lessonValid)
                         {
                             $model->change_date = date('Y-m-d H:i:s');
-                            $model->code = parseCode::GenerateCourseCode($model->id);
+                            if ($model->type == 1) {
+                                $model->code = parseCode::GenerateCourseCode($model->id);
+                            }
                             $model->save(false);
                             foreach($lessonsGroups as $lessonGroup)
                                 $lessonGroup->save(false);
                             $this->redirect(array('/admin/courses/update', 'id'=>$model->id));
                         }
 		}
+
+        if ($model->type==2) {
+            $this->render('course_skills',array(
+                'model'=>$model,
+            ));
+            return;
+        }
 
 		$this->render('update',array(
 			'model'=>$model,
@@ -268,6 +279,8 @@ class CoursesController extends Controller
         
 	public function actionParams($id_course)
 	{
+        $model=$this->loadModel($id_course);
+
         if(!$var = Variables::model()->findByAttributes(array('name'=>'BlockIndex', 'id_course'=>$id_course))) {
             $var = new Variables();
             $var->name='BlockIndex';
@@ -276,16 +289,18 @@ class CoursesController extends Controller
             $var->default_value=1;
             $var->save();
         }
-        if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$id_course))) {
-            $var = new Variables();
-            $var->name='DiagnosticMode';
-            $var->type='boolean';
-            $var->id_course = $id_course;
-            $var->default_value='false';
-            $var->save();
+        if ($model->type == 2) {
+            if(!$var = Variables::model()->findByAttributes(array('name'=>'DiagnosticMode', 'id_course'=>$id_course))) {
+                $var = new Variables();
+                $var->name='DiagnosticMode';
+                $var->type='boolean';
+                $var->id_course = $id_course;
+                $var->default_value='false';
+                $var->save();
+            }
         }
 
-		$model=$this->loadModel($id_course);
+
                 
                 $this->menu[] = array('label'=>'Задания курса', 'url'=>array('/admin/exercises/index', 'id_course'=>$id));
                 

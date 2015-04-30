@@ -1,5 +1,9 @@
 <script type='text/javascript'>
     $(function(){
+
+
+        $('.select-on-check').attr('checked', 'checked');
+
         $('#searchSkill').keyup(function(e){
         e.preventDefault();
         current = $(this);
